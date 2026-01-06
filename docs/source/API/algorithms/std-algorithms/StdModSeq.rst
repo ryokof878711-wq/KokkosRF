@@ -1,5 +1,5 @@
 
-Modifying Sequence
+シーケンス変更
 ##################
 
 .. toctree::
