@@ -1,5 +1,5 @@
 
-Partitioning
+パーティショニング
 ############
 
 .. toctree::
