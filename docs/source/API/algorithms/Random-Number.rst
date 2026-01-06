@@ -68,27 +68,27 @@ Function specializations for ``gen_data_type``、 ``gen_func_type``および``ty
 | complex<double>   | complex<double>   | 1.0,1.0                   |  ?                    |
 +-------------------+-------------------+---------------------------+-----------------------+
 
-where the maximum values of the XorShift function values are given by the following enums.
+XorShift関数の値の最大値が、以下の列挙型によって与えられる場合。
 
 * enum {MAX_URAND = 0xffffffffU};
 * enum {MAX_URAND64 = 0xffffffffffffffffULL-1};
 * enum {MAX_RAND = static_cast<int>(0xffffffffU/2)};
 * enum {MAX_RAND64 = static_cast<int64_t>(0xffffffffffffffffULL/2-1)};
 
-Generator
+ジェネレータ
 =========
 
-Header Files: ``<Kokkos_Core.hpp>`` ``<Kokkos_Random.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>`` ``<Kokkos_Random.hpp>``
 
-Synopsis
+概要
 --------
 
-Kokkos_Random provides the structure necessary for pseudorandom number generators. These generators are based on Vigna, Sebastiano (2014). [*"An experimental exploration of Marsaglia's xorshift generators, scrambled." See: http://arxiv.org/abs/1402.6246*].
+Kokkos_Randomは擬似乱数ジェネレータに必要な構造を提供します。Sebastiano (2014)これらのジェネレータは、Vigna, Sebastiano (2014) に基づいています。[*"マルサーリアのXORシフト生成器に関する実験的探求、スクランブル処理されています。" 以下を参照: http://arxiv.org/abs/1402.6246*]。
 
-The Random number generators themselves have two components:
-a state-pool and the actual generator. A state-pool manages
-a number of generators so that each active thread is able
-to grab its own. This allows the generation of random numbers
+乱数生成器自体には、ステートプールと実際のジェネレータの二つの構成要素があります:
+ステートプールは複数のジェネレータを管理し、
+各アクティブなスレッドが自身のジェネレータを取得できるようにします。
+This allows the generation of random numbers取得できるようにします。
 which are independent between threads. Note that in contrast
 to **CuRAND**, none of the functions of the pool (or the generator)
 are collectives, i.e. all functions can be called inside conditionals.
