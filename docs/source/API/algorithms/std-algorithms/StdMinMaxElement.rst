@@ -1,4 +1,4 @@
-Minimum/maximum
+最小値/最大値
 ###############
 
 .. toctree::
