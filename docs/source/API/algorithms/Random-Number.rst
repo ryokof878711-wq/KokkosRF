@@ -1,4 +1,4 @@
-Random-Number
+乱数
 =============
 
 .. role:: cpp(code)
@@ -7,7 +7,7 @@ Random-Number
 Rand
 ----
 
-Header Files: ``<Kokkos_Core.hpp>``, ``<Kokkos_Random.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``, ``<Kokkos_Random.hpp>``
 
 .. code-block:: cpp
 
@@ -37,8 +37,8 @@ Header Files: ``<Kokkos_Core.hpp>``, ``<Kokkos_Random.hpp>``
        return gen_data_type(gen.rand(start,end));
      }
 
-Function specializations for ``gen_data_type``, ``gen_func_type`` and ``type_value``.
-All functions and classes listed here are part of the ``Kokkos::`` namespace.
+Function specializations for ``gen_data_type``、 ``gen_func_type``および``type_value``の機能仕様。
+この一覧にあるすべての関数およびクラスは、 ``Kokkos::`` namespaceの一部です。
 
 +-------------------+-------------------+---------------------------+-----------------------+
 | gen_data_type     | gen_func_type     | type_value                | gen_return_value      |
