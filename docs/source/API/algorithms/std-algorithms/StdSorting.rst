@@ -1,5 +1,5 @@
 
-Sorting
+ソーティング
 #######
 
 .. toctree::
