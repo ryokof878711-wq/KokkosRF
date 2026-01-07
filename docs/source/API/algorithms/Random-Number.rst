@@ -87,11 +87,11 @@ Kokkos_Randomは擬似乱数ジェネレータに必要な構造を提供しま�
 
 乱数ジェネレータ自体には、ステートプールと実際のジェネレータの二つの構成要素があります:
 ステートプールは複数のジェネレータを管理し、
-各アクティブなスレッドが自身のジェネレータを取得できるようにします。
-This allows the generation of random numbers取得できるようにします。
-which are independent between threads. Note that in contrast
-to **CuRAND**, none of the functions of the pool (or the generator)
-are collectives, i.e. all functions can be called inside conditionals.
+各アクティブなスレッドが自身のジェネレータを
+取得できるようにします。これにより、スレッド間で独立した乱数を生成することが可能になります。
+これにより、スレッド間で独立した乱数を生成することが可能になります。
+**CuRAND**とは対照的に、プール（またはジェネレータ）の関数はいずれも集合関数ではないことに注意してください。
+つまり、すべての関数は条件式内で呼び出すことができます。
 
 .. code-block:: cpp
 
@@ -99,8 +99,8 @@ are collectives, i.e. all functions can be called inside conditionals.
     class Pool {
       public:
 
-      using device_type = DeviceType;
-      using generator_type = Generator<DeviceType>;
+      device_type使用 = DeviceType;
+      generator_type使用 = Generator<DeviceType>;
 
       Pool();
       Pool(uint64_t seed);
@@ -113,11 +113,11 @@ are collectives, i.e. all functions can be called inside conditionals.
       void free_state(generator_type Gen);
     }
 
-Construction and Initialization
+構築および初期化
 -------------------------------
 
-A Pool of Generators are initialized using a starting seed and establishing
-a pool_size of num_states. The Random_XorShift64 generator is used in serial
+ジェネレータのプールでは、開始シードを用いてnum_states のプールサイズが設定されて、初期化されます。
+The Random_XorShift64 generator is used in serial
 to initialize all states making the initialization process platform independent
 and deterministic. Requesting a generator locks its state guaranteeing that
 each thread has a private (independent) generator. (Note, getting a state on a Cuda
