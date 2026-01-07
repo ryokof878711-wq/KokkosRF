@@ -31,29 +31,29 @@
 
 * 返されたイテレーターは、パフォーマンス上の理由からランダムアクセスです。
 
-* ``view`` is taken as ``const`` because, within each function, we are not changing the view itself: the returned iterator operates on the view without changing its structure.
+* 各関数内ではviewそのものを変更しないため、``view``は``const``として扱われます: 返されたイテレータは、構造を変更せずにview上で動作します。
 
-* dereferencing an iterator must be done within an execution space where ``view`` is accessible
+* イテレータの参照解除は、``view``がアクセス可能な実行空間内で行う必要があります。
 
-Parameters and Requirements
+パラメータと要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``view``: must be a rank-1 view with ``LayoutLeft``, ``LayoutRight``, or ``LayoutStride``
+* ``view``: ``LayoutLeft``、 ``LayoutRight``、または ``LayoutStride`` を持つランク1 viewでなければなりません。
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
 
     namespace KE = Kokkos::Experimental;
-    using view_type = Kokkos::View<int*>;
+    view_type使用= Kokkos::View<int*>;
     view_type a("a", 15);
 
     auto it = KE::begin(a);
-    // if dereferenced (within a proper execution space), can modify the content of `a`
+    // （適切な実行空間内で）間接参照された場合、`a`の内容を変更できます。
 
     auto itc = KE::cbegin(a);
-    // if dereferenced (within a proper execution space), can only read the content of `a`
+    // （適切な実行空間内で）間接参照された場合、`a`の内容の読み取りのみが可能です。
 
 ------------------
 
@@ -62,21 +62,21 @@ Example
 
 .. cpp:function:: template <class IteratorType> KOKKOS_INLINE_FUNCTION constexpr typename IteratorType::difference_type distance(IteratorType first, IteratorType last);
 
-   Returns the number of steps needed to go from ``first`` to ``last``.
+   ``first``から``last``に行くまでに必要なステップ数を返します。
 
-Parameters and Requirements
+パラメータと要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``first, last``: range to calculate the distance of
+* ``first, last``: 距離を計算するための範囲
 
-Return
+リターン
 ~~~~~~
 
-The number of steps needed to go from ``first`` to ``last``.
-The value may be negative if random-access iterators are used.
+``first``から``last``に行くまでに必要なステップ数。
+ランダムアクセスイテレータを使用する場合、値が負になることがあります。
 
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
@@ -99,24 +99,24 @@ Example
 
 .. cpp:function:: template <class IteratorType> void iter_swap(IteratorType first, IteratorType last);
 
-   Swaps the values of the elements the given iterators are pointing to.
+   指定されたイテレータが指す要素の値を入れ替えます。
 
-Parameters and Requirements
+パラメータと要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``first, last``: iterators to swap
+* ``first, last``: 入れ替えるためのイテレータ
 
-Notes
+注意事項
 ~~~~~
 
-Currently, the API does not have an execution space parameter because the operation is performed in the *default execution space*. The operation fences the default execution space.
+現在、操作がデフォルトの実行スペースで実行されるため、APIには実行スペースパラメータがありません。この操作はデフォルトの実行領域をフェンスします。
 
-Return
+リターン
 ~~~~~~
 
-None
+無し
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
