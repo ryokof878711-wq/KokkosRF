@@ -25,7 +25,7 @@
     template<class ViewType> void sort( ViewType const & view ) { }
     template<class ViewType> void sort( ViewType view, size_t const begin, size_t const end ) {  }
 
-Sorting with nested policies (team- and thread-level)
+ネストされたポリシーによるソート（チームレベルおよびスレッドレベル）
 =====================================================
 
 Parallel sort functions for use within ``TeamPolicy`` kernels. These perform sorting using team-level (``TeamThreadRange``) or thread-level (``ThreadVectorRange``) parallelism.
