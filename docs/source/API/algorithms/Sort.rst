@@ -1,4 +1,4 @@
-Sort
+ソート
 ====
 
 .. role:: cpp(code)
