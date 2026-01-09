@@ -28,11 +28,11 @@
 ネストされたポリシーによるソート（チームレベルおよびスレッドレベル）
 =====================================================
 
-Parallel sort functions for use within ``TeamPolicy`` kernels. These perform sorting using team-level (``TeamThreadRange``) or thread-level (``ThreadVectorRange``) parallelism.
+``TeamPolicy``カーネル内で使用する並列ソート関数。これらは、チームレベル（``TeamThreadRange``）またはスレッドレベル（ThreadVectorRange）の並列処理を使用してソートを実行します。These perform sorting using team-level (``TeamThreadRange``) or thread-level (``ThreadVectorRange``) parallelism.
 
-Header: ``<Kokkos_NestedSort.hpp>``
+ヘッダー: ``<Kokkos_NestedSort.hpp>``
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
@@ -70,11 +70,11 @@ Synopsis
     KOKKOS_INLINE_FUNCTION void sort_by_key_thread(
         const TeamMember& t, const KeyViewType& keyView, const ValueViewType& valueView, const Comparator& comp);
 
-``sort_team`` and ``sort_by_key_team`` internally use the entire team, so they may be called inside the top level of ``TeamPolicy`` lambdas and functors. ``sort_thread`` and ``sort_by_key_thread`` use the vector lanes of a thread, so they may be called within either ``TeamPolicy`` or ``TeamThreadRange`` loops.
+``sort_team`` と ``sort_by_key_team``は内部的にチーム全体を使用するため、``TeamPolicy``ラムダと関数の最上位レベル内で呼び出すことができます。``sort_thread``と ``sort_by_key_thread``はスレッドのベクターレーンを使用するため、``TeamPolicy``ループまたは ``TeamThreadRange``ループ内で呼び出すことができます。
 
-The ``sort_by_key`` functions sort ``keyView``, while simultaneously applying the same permutation to the elements of ``valueView``. It is equivalent to sorting ``(key[i], value[i])`` tuples according to key. An example of where this is commonly used is to sort the entries and values in each row of a CRS (compressed row sparse) matrix. These functions require that ``keyView.extent(0) == valueView.extent(0)``.
+``sort_by_key``関数は、``keyView``をソートすると同時に、``valueView``の要素にも同じ順列を適用します。これは、``(key[i], value[i])``タプルをキーに従ってソートするのと同等です。この関数がよく使用される例としては、CRS（圧縮行スパース）行列の各行のエントリと値をソートする場合が挙げられます。これらの関数では、``keyView.extent(0) == valueView.extent(0)``である必要があります。
 
-Versions taking a ``Comparator`` object will use it to order the keys. ``Comparator::operator()`` should be a const member function that accepts two keys ``a`` and ``b``, and returns a bool that is true if and only if ``a`` goes before ``b`` in the sorted list. For versions not taking a ``Comparator`` object, keys are sorted into ascending order (according to ``operator<``). For example, this comparator will sort a view of ``int`` in *descending* order:
+``Comparator``オブジェクトを取得するバージョンでは、それを使用してキーを順序付けます。``Comparator::operator()``は、2つのキー``a``と``b``を受け入れ、ソートされたリストで``a``が``b``の前にある場合にのみ、trueとなる bool を返すconstメンバー関数である必要があります。``Comparatorオブジェクト``を受け取らないバージョンの場合、キーは昇順 (operator< に従って) にソートされます。例えば、次のコンパレータは、``int``のビューを降順でソートします。:
 
 .. code-block:: cpp
 
@@ -84,16 +84,16 @@ Versions taking a ``Comparator`` object will use it to order the keys. ``Compara
         }
     };
 
-Additional Information
+追加情報
 ----------------------
 
-* All functions include a final barrier at their level of parallelism, so all elements of ``view`` / ``keyView`` / ``valueView`` may be accessed immediately after they return.
+* すべての関数には並列処理レベルでの最終バリアーが含まれているため、``view`` / ``keyView`` / ``valueView`` のすべての要素は返された直後にアクセスできます。
 
-* These functions can operate on views in both global and scratch memory spaces.
+* これらの関数は、グローバルメモリとスクラッチメモリの両方のビューに対して操作できます。
 
-* These functions use the bitonic sorting algorithm, which is not stable. This means if a key is repeated in the input, then the values corresponding to that key might be in any order after doing a sort by key.
+* これらの関数は、安定していないビットニックソートアルゴリズムを使用します。つまり、入力内でキーが重複している場合、キーによるソート後、そのキーに対応する値は任意の順序になる可能性があります。
 
-Example
+例
 -------
 
 .. code-block:: cpp
@@ -103,9 +103,9 @@ Example
     #include <Kokkos_Random.hpp>
 
     int main(int argc, char* argv[]) {
-        using ExecSpace = Kokkos::DefaultExecutionSpace;
-        using TeamPol = Kokkos::TeamPolicy<ExecSpace>;
-        using TeamMem = typename TeamPol::member_type;
+        ExecSpace使用 = Kokkos::DefaultExecutionSpace;
+        TeamPol使用 = Kokkos::TeamPolicy<ExecSpace>;
+        TeamMem使用 = typename TeamPol::member_type;
         Kokkos::initialize(argc, argv);
         {
             int n = 10;
@@ -154,7 +154,7 @@ Example
         return 0;
     }
 
-Sample output
+サンプル出力
 ~~~~~~~~~~~~~
 
 .. code-block:: cpp
