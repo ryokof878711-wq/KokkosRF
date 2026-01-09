@@ -1,4 +1,4 @@
-Std Algorithms
+Stdアルゴリズム
 ##############
 
 .. toctree::
