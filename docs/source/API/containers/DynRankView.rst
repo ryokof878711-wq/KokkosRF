@@ -7,9 +7,9 @@
 ``DynRankView``
 ===============
 
-Header file: ``<Kokkos_DynRankView.hpp>``
+ヘッダーファイル: ``<Kokkos_DynRankView.hpp>``
 
-Usage
+使用
 -----
 
 ``DynRankView`` is a potential reference counted multidimensional array with
