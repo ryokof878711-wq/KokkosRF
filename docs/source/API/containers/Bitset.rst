@@ -40,62 +40,62 @@
 
   .. cpp:member:: static constexpr符号なしBIT_SCAN_REVERSE_MOVE_HINT_BACKWARD = BIT_SCAN_REVERSE | MOVE_HINT_BACKWARD
 
-    :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` or :cpp:`find_any_reset_near(...)`, scans for the bit in the reverse (decreasing index) direction. If the bit was not found, selects a new hint before the current hint.
+    :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)`又は :cpp:`find_any_reset_near(...)`は、 逆（減少するインデックス）方向のビットをスキャンします。ビットが見つからなかった場合、現在のヒントの前にある新しいヒントを選択します。
 
-  .. rubric:: Constructors
+  .. rubric:: コンストラクタ
 
-  .. cpp:function:: Bitset(unsigned arg_size = 0u)
+  .. cpp:function:: Bitset(符号なしarg_size = 0u)
 
-    Host/Device: Construct a bitset with :cpp:`arg_size` bits.
+    ホスト/デバイス: :cpp:`arg_size` bitsを持つビットセットを構築します。
 
-  .. rubric:: Data Access Functions
+  .. rubric:: データアクセス機能
 
-  .. cpp:function:: unsigned size() const
+  .. cpp:function:: 符号なしsize() const
 
-    Host/Device: return the number of bits.
+    ホスト/デバイス: ビット数を返します。
 
-  .. cpp:function:: unsigned count() const
+  .. cpp:function:: 符号count() const
 
-    Host: return the number of bits which are set to ``1``.
+    ホスト: ``1``に設定されたビット数を返します。
 
   .. cpp:function:: void set()
 
-    Host: set all the bits to ``1``.
+    ホスト: すべてのビットを``1``に設定します。
 
   .. cpp:function:: void reset();
   .. cpp:function:: void clear();
 
-    Host/Device: set all the bits to ``0``.
+    ホスト/デバイス: すべてのビットを``0``に設定します。
 
-  .. cpp:function:: void set(unsigned i)
+  .. cpp:function:: void set(符号なし i)
 
-    Device: set the ``i``\ 'th bit to ``1``.
+    デバイス: ``i``\ 'th bitを``1``に設定します。
 
-  .. cpp:function:: void reset(unsigned i)
+  .. cpp:function:: void reset(符号なし i)
 
-    Device: set the ``i``\ 'th bit to ``0``.
+    デバイス: ``i``\ 'th bitを to ``0``に設定します。
 
   .. cpp:function:: bool test(unsigned i) const
 
-    Device: return :cpp:`true` if and only if the ``i``\ 'th bit is set to ``1``.
+    デバイス: return :cpp:`true` if and only if the ``i``\ 'th bit is set to ``1``.
 
   .. cpp:function:: unsigned max_hint() const
 
-    Host/Device: used with :cpp:`find_any_set_near(...)` & :cpp:`find_any_reset_near(...)` functions.
+    ホスト/デバイス: used with :cpp:`find_any_set_near(...)` & :cpp:`find_any_reset_near(...)` functions.
 
-    Returns the max number of times those functions should be call when searching for an available bit.
+    利用可能なビットを検索する際に、それらの関数を呼び出すべき最大回数を返します。
 
-  .. cpp:function:: Kokkos::pair<bool, unsigned> find_any_set_near(unsigned hint, unsigned scan_direction = BIT_SCAN_FORWARD_MOVE_HINT_FORWARD) const
+  .. cpp:function:: Kokkos::pair<bool, unsigned> find_any_set_near(符号なしhint, 符号なしscan_direction = BIT_SCAN_FORWARD_MOVE_HINT_FORWARD) const
 
-    Host/Device: starting at the :cpp:`hint` position, find the first bit set to ``1``.
+    ホスト/デバイス: starting at the :cpp:`hint` position, find the first bit set to ``1``.
 
-    Returns a :cpp:`pair<bool, unsigned>`.
+    :cpp:`pair<bool, unsigned>`を返します。
 
-    When :cpp:`result.first` is :cpp:`true` then :cpp:`result.second` is the bit position found.
+    :cpp:`result.first` が :cpp:`true` の場合、:cpp:`result.second` は検出されたビット位置です。
 
-    When :cpp:`result.first` is :cpp:`false` then :cpp:`result.second` is a new hint position.
+    :cpp:`result.first` が :cpp:`false` の場合、:cpp:`result.second` は新しいヒント位置です。
 
-    If :cpp:`scan_direction & BIT_SCAN_REVERSE`\ , then the scanning for the bit happens in decreasing index order;
+    :cpp:`scan_direction & BIT_SCAN_REVERSE`\の場合、その次に、ビットのスキャンはインデックスの降順で行われます。 then the scanning for the bit happens in decreasing index order;
     otherwise, it happens in increasing index order.
 
     If :cpp:`scan_direction & MOVE_HINT_BACKWARDS`\ , then the new hint position occurs at a smaller index than :cpp:`hint`\ ;
