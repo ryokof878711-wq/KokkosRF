@@ -91,79 +91,79 @@
 
     :cpp:`pair<bool, unsigned>`を返します。
 
-    :cpp:`result.first` が :cpp:`true` の場合、:cpp:`result.second` は検出されたビット位置です。
+    :cpp:`result.first` が :cpp:`true` の場合、その後:cpp:`result.second` は検出されたビット位置です。
 
-    :cpp:`result.first` が :cpp:`false` の場合、:cpp:`result.second` は新しいヒント位置です。
+    :cpp:`result.first` が :cpp:`false` の場合、その後:cpp:`result.second` は新しいヒント位置です。
 
-    :cpp:`scan_direction & BIT_SCAN_REVERSE`\の場合、その次に、ビットのスキャンはインデックスの降順で行われます。 then the scanning for the bit happens in decreasing index order;
-    otherwise, it happens in increasing index order.
+    :cpp:`scan_direction & BIT_SCAN_REVERSE`\の場合、その後、ビットのスキャンはインデックスの降順で行われます;
+    それ以外の場合は、インデックスの昇順で発生します。
 
-    If :cpp:`scan_direction & MOVE_HINT_BACKWARDS`\ , then the new hint position occurs at a smaller index than :cpp:`hint`\ ;
-    otherwise, it occurs at a larger index than :cpp:`hint`.
+   `scan_direction & MOVE_HINT_BACKWARDS`\の場合、 その後、新しいヒント位置は :cpp:`hint`\ よりも小さいインデックスで発生します;
+   それ以外の場合は、:cpp:`hint`より大きいインデックス位置で発生します。
 
-  .. cpp:function:: Kokkos::pair<bool, unsigned> find_any_unset_near(unsigned hint, unsigned scan_direction = BIT_SCAN_FORWARD_MOVE_HINT_FORWARD) const;
+  .. cpp:function:: Kokkos::pair<bool, unsigned> find_any_unset_near(符号なし, 符号なしscan_direction = BIT_SCAN_FORWARD_MOVE_HINT_FORWARD) const;
 
-    Host/Device: starting at the :cpp:`hint` position, find the first bit set to ``0``.
+    ホスト/デバイス::cpp:`hint` 位置から開始し、最初に ``0`` に設定されたビットを検出します。
 
-    Returns a :cpp:`pair<bool, unsigned>`.
+    :cpp:`pair<bool, unsigned>`を返します。
 
-    When :cpp:`result.first` is :cpp:`true` then :cpp:`result.second` is the bit position found.
+    :cpp:`result.first`が:cpp:`true` then :cppの場合、その後:result.second` は検出されたビット位置です。
 
-    When :cpp:`result.first` is :cpp:`false` then :cpp:`result.second` is a new hint position.
+    :cpp:`result.first`が:cpp:`false`の場合、その後:cpp:`result.second`は、新しいヒント位置です。
 
-    If :cpp:`scan_direction & BIT_SCAN_REVERSE`\ , then the scanning for the bit happens in decreasing index order; otherwise, it happens in increasing index order.
+    :cpp:`scan_direction & BIT_SCAN_REVERSE`\の場合、その後、ビットのスキャンはインデックスの降順で行われます;それ以外の場合は、インデックスの昇順で発生します。
 
-    If :cpp:`scan_direction & MOVE_HINT_BACKWARDS`\ , then the new hint position occurs at a smaller index than :cpp:`hint`\ ; otherwise, it occurs at a larger index than :cpp:`hint`.
+    :cpp:`scan_direction & MOVE_HINT_BACKWARDS`\の場合には、その後新しいヒント位置は :cpp:`hint`\よりも小さいインデックスで発生します; otherwise, それ以外の場合は、:cpp:`hint`より大きいインデックス位置で発生します。
 
-  .. cpp:function:: constexpr bool is_allocated() const
+  .. cpp:function:: constexpr bool は、_allocated() constです。
 
-    Host/Device: the bits are allocated on the device.
+    ホスト/デバイス: ビットはデバイス上に配分されます。
 
 ``ConstBitset``
 ===============
 
-Class Interface
+クラスインターフェース
 ---------------
 
 .. cpp:class:: template <typename Device> ConstBitset
 
   :tparam Device: Device that physically contains the bits.
 
-  .. rubric:: Constructors / assignment
+  .. rubric:: constructor/assignment 
 
   .. cpp:function:: ConstBitset()
 
-    Host/Device: Construct a bitset with no bits.
+    ホスト/デバイス: Construct a bitset with no bits.ビットを持たないビットセットを構築します。
 
   .. cpp:function:: ConstBitset(ConstBitset const& rhs) = default
   .. cpp:function:: ConstBitset& operator=(ConstBitset const& rhs) = default
 
-    Copy constructor/assignment operator.
+    constructor/assignmentオペレータを複製します。
 
   .. cpp:function:: ConstBitset(Bitset<Device> const& rhs)
   .. cpp:function:: ConstBitset& operator=(Bitset<Device> const& rhs)
 
-    Host/Device: Copy/assign a :cpp:`Bitset` to a :cpp:`ConstBitset`.
+    ホスト/デバイス: :cpp:`Bitset`を a :cpp:`ConstBitset`に複製/配分します。
 
   .. cpp:function:: unsigned size() const
 
-    Host/Device: return the number of bits.
+    ホスト/デバイス: ビット数を返します。
 
-  .. cpp:function:: unsigned count() const
+  .. cpp:function:: 符号なしcount() const
 
-     Host/Device: return the number of bits which are set to ``1``.
+     ホスト/デバイス: ``1``に設定されたビット数を返します。
 
   .. cpp:function:: bool test(unsigned i) const
 
-    Host/Device: Return ``true`` if and only if the ``i``\ 'th bit set to ``1``.
+    ホスト/デバイス: i``\ 'thビットが``1``に設定されている場合、またはその場合に限り、``true``を返します。
 
-Non-Member Functions
+非メンバ関数
 --------------------
 
   .. cpp:function:: template <typename DstDevice, typename SrcDevice> void deep_copy(Bitset<DstDevice>& dst, Bitset<SrcDevice> const& src)
 
-    Copy a ``Bitset`` from ``src`` on ``SrcDevice`` to ``dst`` on ``DstDevice``.
+    ``SrcDevice``上の``src``から``DstDevice``上の``dst``に``Bitset``を複製します。 
 
   .. cpp:function:: template <typename DstDevice, typename SrcDevice> void deep_copy(Bitset<DstDevice>& dst, ConstBitset<SrcDevice> const& src)
 
-    Copy a ``ConstBitset`` from ``src`` on ``SrcDevice`` to a ``Bitset`` ``dst`` on ``DstDevice``.
+    ``SrcDevice``上の``src``から ``DstDevice``上の``Bitset`` ``dst``に``ConstBitset``を複製します。
