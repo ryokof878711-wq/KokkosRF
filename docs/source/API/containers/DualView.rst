@@ -2,52 +2,52 @@
 ``DualView``
 ============
 
-Header file: ``<Kokkos_DualView.hpp>``
+ヘッダーファイル: ``<Kokkos_DualView.hpp>``
 
 |
 
-Container to manage mirroring a ``Kokkos::View`` that references device memory with
-a ``Kokkos::View`` that is host-accessible. The class provides capabilities to manage
-data which exists in two different memory spaces at the same time. It supports Views with
-the same layout on two memory spaces as well as modified flags for both allocations.
-Users are responsible for updating the modified flags manually if they change the data in either memory space, by calling the ``modify()`` function, which is templated on the device with the modified data.
-Users may also synchronize data by calling the ``sync()`` method, which is templated on the device that requires synchronization (i.e., the target of the one-way copy operation).
+デバイスメモリを参照するKokkos::Viewとホストから
+アクセス可能な``Kokkos::View``間のミラーリングを管理するコンテナです。このクラスは、同時に2つの異なるメモリ空間に存在する
+データを管理する機能を提供します。
+両方の割り当てに対して変更フラグ同様に、同一レイアウトのViewを2つのメモリ空間上でサポートします。
+ユーザーは、いずれかのメモリ空間でデータを変更した場合、modify()関数を呼び出すことで、変更フラグを手動で更新する責任を負いますが、それは変更されたデータを用いてデバイス上でテンプレート化されます。
+ユーザーは``sync()``メソッドを呼び出すことでデータを同期することもできますが、それは同期を必要とするデバイス上でテンプレート化されます（すなわち、一方向コピー操作の対象）。
 
-The DualView class also provides convenience methods such as realloc, resize and capacity
-which call the appropriate methods of the underlying `Kokkos::View <../core/view/view.html>`_ objects.
+DualViewクラスは、基盤となる`Kokkos::View <../core/view/view.html>`_ objectsの適切なメソッドを呼び出す
+realloc、resize、capacityなどの便利なメソッドも提供します。
 
-The four template arguments are the same as those of ``Kokkos::View``.
+4つのテンプレート引数は、``Kokkos::View``の引数と同じです。
 
-* DataType, The type of the entries stored in the container.
+* DataType、 コンテナに格納されるエントリの型。
 
-* Layout, The array's layout in memory.
+* Layout、メモリ上の配列の配置。
 
-* Device, The Kokkos Device type. If its memory space is not host-accessible,
-  then DualView will contain two separate Views: one in device memory,
-  and one in host memory. Otherwise, DualView will only store one View.
+* Device, Kokkos Device型。そのメモリ領域がホストからアクセス不可の場合、
+デュアルビューは2つの独立したビューを含む：1つはデバイスメモリ内、
+もう1つはホストメモリ内。それ以外の場合、DualViewは1つのビューのみを保存します。
 
-* MemoryTraits (optional) The user's intended memory access behavior. Please see the documentation
-  of `Kokkos::View <../core/view/view.html>`_ for examples. The default suffices for most users.
+* MemoryTraits (オプショナル) ユーザーの意図するメモリアクセス動作。 
+例については、`Kokkos::View <../core/view/view.html>`_ のドキュメントを参照してください。ほとんどのユーザーにとって、デフォルト設定で十分です。
 
-Usage
+使用
 -----
 
 .. code-block:: cpp
 
-    using view_type = Kokkos::DualView<Scalar**,
+    view_type = Kokkos::DualView<Scalar**　使用、
                                        Kokkos::LayoutLeft,
                                        Device>
     view_type a("A", n, m);
 
-    Kokkos::deep_copy(a.view_device(), 1); // set device-side entries to 1
+    Kokkos::deep_copy(a.view_device(), 1); １への// set device-side entries
     a.template modify<typename view_type::execution_space>(); // mark device-side as modified
     a.template sync<typename view_type::host_mirror_space>(); // sync modified data to host
 
-    Kokkos::deep_copy(a.view_host(), 2); // set host-side entries to 2
+    Kokkos::deep_copy(a.view_host(), 2); ２への// set host-side entries
     a.template modify<typename ViewType::host_mirror_space>(); // mark host-side as modified
     a.template sync<typename ViewType::execution_space>(); // sync modified data to device
 
-Description
+ディスクリプション
 -----------
 
 
@@ -60,59 +60,59 @@ Description
 
     .. cpp:type:: ViewTraits<DataType, Arg1Type, Arg2Type, Arg3Type> traits
 
-       Typedefs for device types and various ``Kokkos::View`` specializations.
+       デバイスタイプと様々な ``Kokkos::View`` の特殊化に対する型定義。
 
     .. cpp:type:: traits::host_mirror_space host_mirror_space
 
-       The Kokkos Host Device type
+       Kokkosホストデバイス型
 
     .. cpp:type:: View<typename traits::data_type, Arg1Type, Arg2Type, Arg3Type> t_dev
 
-       The type of a ``Kokkos::View`` on the device.
+       デバイス上の``Kokkos::View``の型。
 
     .. cpp:type:: typename t_dev::HostMirror t_host
 
-       The type of a ``Kokkos::View`` host mirror of ``t_dev``.
+       ``t_dev``の``Kokkos::View``ホストミラーの型。
 
     .. cpp:type:: View<typename traits::const_data_type, Arg1Type, Arg2Type, Arg3Type> t_dev_const
 
-       The type of a const View on the device.
+       デバイス上のconst Viewの型。
 
     .. cpp:type:: typename t_dev_const::HostMirror t_host_const
 
-       The type of a const View host mirror of ``t_dev_const``.
+       ``t_dev_const``のconst Viewホストミラーの型。
 
     .. cpp:type:: View<typename traits::const_data_type, typename traits::array_layout, typename traits::device_type, Kokkos::MemoryTraits<Kokkos::RandomAccess> > t_dev_const_randomread
 
-       The type of a const, random-access View on the device.
+       デバイス上の const、 random-access Viewの型。
 
     .. cpp:type:: typename t_dev_const_randomread::HostMirror t_host_const_randomread
 
-       The type of a const, random-access View host mirror of ``t_dev_const_randomread``.
+       ``t_dev_const_randomread``のconst, random-access Viewホストミラーの型。
 
     .. cpp:type:: View<typename traits::data_type, typename traits::array_layout, typename traits::device_type, MemoryUnmanaged> t_dev_um
 
-       The type of an unmanaged View on the device.
+       デバイス上の被管理Viewの型。
 
     .. cpp:type:: View<typename t_host::data_type, typename t_host::array_layout, typename t_host::device_type, MemoryUnmanaged> t_host_um
 
-       The type of an unmanaged View host mirror of \\c t_dev_um.
+       \\c t_dev_umの非管理Viewホストミラーの型。
 
     .. cpp:type:: View<typename traits::const_data_type, typename traits::array_layout, typename traits::device_type, MemoryUnmanaged> t_dev_const_um
 
-       The type of a const unmanaged View on the device.
+       デバイス上のconst非管理Viewの型。
 
     .. cpp:type:: View<typename t_host::const_data_type, typename t_host::array_layout, typename t_host::device_type, MemoryUnmanaged> t_host_const_um
 
-       The type of a const unmanaged View host mirror of \\c t_dev_const_um.
+       \\c t_dev_const_umのconst非管理ホストミラーの型。
 
-    .. cpp:type:: View<typename t_host::const_data_type, typename t_host::array_layout, typename t_host::device_type, Kokkos::MemoryTraits<Kokkos::Unmanaged | Kokkos::RandomAccess> > t_dev_const_randomread_um
+　　.. cpp:type:: View<typename t_host::const_data_type, typename t_host::array_layout, typename t_host::device_type, Kokkos::MemoryTraits<Kokkos::Unmanaged | Kokkos::RandomAccess> > t_dev_const_randomread_um
 
-       The type of a const, random-access View on the device.
+       デバイス上のconst, random-access Viewの型。
 
     .. cpp:type:: typename t_dev_const_randomread::HostMirror t_host_const_randomread_um
 
-       The type of a const, random-access View host mirror of ``t_dev_const_randomread``.
+       ``t_dev_const_randomread``のconst, random-access Viewミラーの型。
 
     .. cpp:type:: View<unsigned int[2], LayoutLeft, typename t_host::execution_space> t_modified_flags;
 
@@ -122,7 +122,7 @@ Description
 
     .. cpp:member:: t_dev d_view
 
-       The view instance on the *device*, public access deprecated from Kokkos 4.6 on.
+       The view instance on the *device*状の public access deprecated from Kokkos 4.6 on
 
     .. cpp:member:: t_host h_view
 
