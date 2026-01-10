@@ -188,21 +188,21 @@ realloc、resize、capacityなどの便利なメソッドも提供します。
 
     .. cpp:function:: テンプレート <class Device> static int get_device_side();
 
-       * Return a View on a specific device ``Device``. ``Device`` can be a ``Kokkos::Device`` type, a memory space or a execution space corresponding to either the device View or the host-accessible View.
-       * For example, suppose you create a DualView on Cuda, like this:
+       * 特定のデバイス ``Device`` 上のビューを返します。 ``Device`` は、``Kokkos::Device`` 型、メモリ空間、またはデバイスビューもしくはホストアクセス可能ビューに対応する実行空間のいずれかである。
+       * 例えば、Cuda上で次のようにDualViewを作成するとします：
 
          .. code-block:: cpp
 
            using dual_view_type = Kokkos::DualView<float, Kokkos::Cuda>;
            dual_view_type DV ("my dual view", 100);
 
-         If you want to get the CUDA device View, do this:
+         CUDAデバイスのビューを取得したい場合は、次の操作を行ってください：
 
          .. code-block:: cpp
 
            dual_view_type::t_dev cudaView = DV.view<dual_view_type::t_dev::memory_space>();
 
-         and if you want to get the host mirror of that View, do this:
+         そのビューのホストミラーを取得したい場合は、次のようにします：
 
          .. code-block:: cpp
 
@@ -210,20 +210,20 @@ realloc、resize、capacityなどの便利なメソッドも提供します。
 
     .. cpp:function:: const t_host& view_host() const;
 
-       *  Return the host-accessible View. Returns the View by value with `Kokkos_ENABLE_DEPRECATED_CODE_4=ON`
+       *  ホストがアクセス可能なビューを返します。 `Kokkos_ENABLE_DEPRECATED_CODE_4=ON`を持つ値によりViewを返します。
 
     .. cpp:function:: const t_dev& view_device() const;
 
-       * Return the View on the device. Returns the View by value with `Kokkos_ENABLE_DEPRECATED_CODE_4=ON`.
+       * Return the View on the device.デバイス上のViewを返します。 `Kokkos_ENABLE_DEPRECATED_CODE_4=ON`を持つ値によりViewを返します。
 
     .. cpp:function:: template <class Device> void sync(const typename Impl::enable_if<(std::is_same<typename traits::data_type, typename traits::non_const_data_type>::value) || (std::is_same<Device, int>::value), int>::type& = 0);
 
     .. cpp:function:: template <class Device> void sync(const typename Impl::enable_if<(!std::is_same<typename traits::data_type, typename traits::non_const_data_type>::value) || (std::is_same<Device, int>::value), int>::type& = 0);
 
-       * Update data on device or host only if data in the other space has been marked as modified.
-       * If ``Device`` is the same as this DualView's device type, then copy data from host to device. Otherwise, copy data from device to host. In either case, only copy if the source of the copy has been modified.
-       * This is a one-way synchronization only. If the target of the copy has been modified, this operation will discard those modifications. It will also reset both device and host modified flags.
-       * This method doesn't know on its own whether you modified the data in either View. You must manually mark modified data as modified, by calling the ``modify()`` method with the appropriate template parameter.
+       * デバイスまたはホスト上のデータは、他方の領域のデータが変更済みとしてマークされた場合にのみ更新します。
+       * ``デバイス``がこのDualViewのデバイスタイプと同じ場合、ホストからデバイスへデータを複製します。それ以外の場合には、デバイスからホストへデータをコピーします。いずれの場合も、コピー元のソースが変更された場合にのみコピーしてください。
+       * これは一方向の同期のみです。コピー先の対象が変更されている場合、この操作はその変更を破棄します。また、デバイスとホストの変更フラグの両方をリセットします。
+       * このメソッドでは、どちらのビューでデータを変更したかを独自に判断できません。貴方は、変更されたデータを、適切なテンプレートパラメータを指定して``modify()``メソッドを呼び出すことで、手動で変更済みとしてマークする必要があります。
 
     .. cpp:function:: template <class Device> bool need_sync() const;
 
@@ -231,49 +231,54 @@ realloc、resize、capacityなどの便利なメソッドも提供します。
 
     .. cpp:function:: inline void clear_sync_state();
 
-       Mark data as modified on the given device \\c Device. If ``Device`` is the same as this
-       DualView's device type, then mark the device's data as modified. Otherwise, mark the host's data as modified.
+       特定のdevice \\c Device上でデータを変更済みとしてマークします。 ``Device``が　本DualViewのデバイスタイプと同一の場合、
+そのデバイスのデータを変更済みとしてマークしてください。
+        そうでない場合は、ホストのデータを変更済みとしてマークしてください。
 
     |
 
-    .. rubric:: *Public* Methods for reallocating or resizing the View objects
+    .. rubric:: *Public*メソッド：View オブジェクトの再割り当てまたはサイズ変更。
 
-    .. cpp:function:: constexpr bool is_allocated() const;
+    .. cpp:function:: constexpr boolは、_allocated() constです。;
 
-       Return allocation state of underlying views. Returns true if both the host and device
-       views points to a valid memory location. This function works for both managed and unmanaged views.
-       With the unmanaged view, there is no guarantee that referenced address is valid, only that it is a non-null pointer.
+       基底ビューの割り当て状態を返します。 ホストビューとデバイスビューの両方が、
+       有効なメモリ位置を指している場合に真を返します。この関数は、管理ビューと非管理ビューの両方で動作します。
+       非管理ビューでは、参照されるアドレスが有効である保証はなく、単にヌルポインタでないことのみが保証されます。
 
     .. cpp:function:: void realloc(const size_t n0 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n1 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n2 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n3 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n4 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n5 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n6 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n7 = KOKKOS_IMPL_CTOR_DEFAULT_ARG);
 
-       Reallocate both View objects. This discards any existing contents of the objects,
-       and resets their modified flags. It does *not* copy the old contents of either View into the new View objects.
+       両方のビューオブジェクトを再割り当てします。これにより、オブジェクトの既存の内容はすべて破棄され、
+       その変更されたフラグはリセットされます。古いViewのどちらの内容も、新しいViewオブジェクトにはコピー*されません*。
 
     .. cpp:function:: void resize(const size_t n0 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n1 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n2 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n3 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n4 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n5 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n6 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n7 = KOKKOS_IMPL_CTOR_DEFAULT_ARG);
 
-       Resize both views, copying old contents into new if necessary. This method only copies the old
-       contents into the new View objects for the device which was last marked as modified. Thus, users are required to call ``sync()`` before using the resized object.
+       両方のビューのサイズを変更し、必要に応じて古い内容を新しいビューにコピーします。このメソッドでは、
+       最後に変更済みとマークされたデバイスの古い内容を新しいViewオブジェクトにのみコピーします。
+　　　　従って、ユーザーはサイズ変更されたオブジェクトを使用する前に``sync()``を呼び出す必要があります。
 
     |
 
-    .. rubric:: *Public* Methods for querying capacity, stride, or dimension(s).
+    .. rubric:: *Public* Methods for querying capacity, stride, or dimension(s).キャパシティ、ストライド、または次元を問い合わせのための*Pubilic* メソッド。
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION constexpr size_t span() const;
 
-       Return the allocation size (same as ``Kokkos::View::span``).
+       
+
+
+(same as ``Kokkos::View::span``と同様)。
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION bool span_is_contiguous();
 
-       Return true if the span is contiguous
+       スパンが連続している場合に true を返します。
 
     .. cpp:function:: template <typename iType> void stride(iType* stride_) const;
 
-       Get stride(s) for each dimension. Sets ``stride_`` [rank] to span().
+       各次元ごとにストライドを取得します。 ``stride_`` [rank] をspan()に設定します。
 
     .. cpp:function:: template <typename iType> KOKKOS_INLINE_FUNCTION constexpr typename std::enable_if<std::is_integral<iType>::value, size_t>::type extent(const iType& r) const;
 
-       Return the extent for the requested rank
+       要求されたランクの範囲を返します。
 
     .. cpp:function:: template <typename iType> KOKKOS_INLINE_FUNCTION constexpr typename std::enable_if<std::is_integral<iType>::value, int>::type extent_int(const iType& r) const;
 
-       Return integral extent for the requested rank
+       要求されたランクに対する整数の範囲を返します。
