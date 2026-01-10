@@ -5,40 +5,40 @@
 ``Bitset``
 ==========
 
-Header file: ``<Kokkos_Bitset.hpp>``
+ヘッダーファイル: ``<Kokkos_Bitset.hpp>``
 
-Class Interface
+クラスインターフェース
 ---------------
 
 .. cpp:class:: template <typename Device> Bitset
 
-  :cpp:`Kokkos::Bitset` represents a thread safe view to a fixed-size (at run-time) sequence of N bits.
+  :cpp:`Kokkos::Bitset` は、固定サイズ（実行時）のNビットシーケンスへのスレッドセーフビューを表します。
 
-  :tparam Device: Device that physically contains the bits.
+  :tparam Device: ビットを物理的に収容するデバイス。
 
-  .. rubric:: Static Constants
+  .. rubric:: 静的定数
 
-  .. cpp:member:: static constexpr unsigned BIT_SCAN_REVERSE = 1u
+  .. cpp:member:: static constexpr符号なしBIT_SCAN_REVERSE = 1u
 
-    :cpp:`BIT_SCAN_REVERSE` : Bit mask for scanning direction
+    :cpp:`BIT_SCAN_REVERSE` : スキャン方向ビットマスク
 
-  .. cpp:member:: static constexpr unsigned MOVE_HINT_BACKWARD = 2u
+  .. cpp:member:: static constexpr符号なしMOVE_HINT_BACKWARD = 2u
 
-    :cpp:`MOVE_HINT_BACKWARD` : Bit mask for hint direction
+    :cpp:`MOVE_HINT_BACKWARD` : ヒント方向ビットマスク
 
-  .. cpp:member:: static constexpr unsigned BIT_SCAN_FORWARD_MOVE_HINT_FORWARD = 0u
+  .. cpp:member:: static constexpr符号なしBIT_SCAN_FORWARD_MOVE_HINT_FORWARD = 0u
 
-    :cpp:`BIT_SCAN_FORWARD_MOVE_HINT_FORWARD` : When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` or :cpp:`find_any_reset_near(...)`, scans for the bit in the forward (increasing index) direction. If the bit was not found, selects a new hint past the current hint.
+    :cpp:`BIT_SCAN_FORWARD_MOVE_HINT_FORWARD` : When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)`又は :cpp:`find_any_reset_near(...)`は、 前方（増加するインデックス）方向のビットをスキャンします。ビットが見つからなかった場合、現在のヒントの先にある新しいヒントを選択します。
 
-  .. cpp:member:: static constexpr unsigned BIT_SCAN_REVERSE_MOVE_HINT_FORWARD = BIT_SCAN_REVERSE
+  .. cpp:member:: static constexpr符号なしBIT_SCAN_REVERSE_MOVE_HINT_FORWARD = BIT_SCAN_REVERSE
 
-    :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_FORWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` or :cpp:`find_any_reset_near(...)`, scans for the bit in the reverse (decreasing index) direction. If the bit was not found, selects a new hint past the current hint.
+    :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_FORWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)`又は :cpp:`find_any_reset_near(...)`は、逆（減少するインデックス）方向のビットをスキャンします。ビットが見つからなかった場合、現在のヒントの先にある新しいヒントを選択します。
 
-  .. cpp:member:: static constexpr unsigned BIT_SCAN_FORWARD_MOVE_HINT_BACKWARD = MOVE_HINT_BACKWARD
+  .. cpp:member:: static constexpr符号なしBIT_SCAN_FORWARD_MOVE_HINT_BACKWARD = MOVE_HINT_BACKWARD
 
-    :cpp:`BIT_SCAN_FORWARD_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` or :cpp:`find_any_reset_near(...)`, scans for the bit in the forward (increasing index) direction. If the bit was not found, selects a new hint before the current hint.
+    :cpp:`BIT_SCAN_FORWARD_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` 又は、:cpp:`find_any_reset_near(...)`は、 前方（増加するインデックス）方向のビットをスキャンします。ビットが見つからなかった場合、現在のヒントの前にある新しいヒントを選択します。
 
-  .. cpp:member:: static constexpr unsigned BIT_SCAN_REVERSE_MOVE_HINT_BACKWARD = BIT_SCAN_REVERSE | MOVE_HINT_BACKWARD
+  .. cpp:member:: static constexpr符号なしBIT_SCAN_REVERSE_MOVE_HINT_BACKWARD = BIT_SCAN_REVERSE | MOVE_HINT_BACKWARD
 
     :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)` or :cpp:`find_any_reset_near(...)`, scans for the bit in the reverse (decreasing index) direction. If the bit was not found, selects a new hint before the current hint.
 
