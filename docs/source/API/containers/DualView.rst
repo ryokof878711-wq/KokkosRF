@@ -122,11 +122,12 @@ realloc、resize、capacityなどの便利なメソッドも提供します。
 
     .. cpp:member:: t_dev d_view
 
-       The view instance on the *device*状の public access deprecated from Kokkos 4.6 on
+       *device*上のビューインスタンスは、 Kokkos 4.6 以降、public アクセスは非推奨となります。
+
 
     .. cpp:member:: t_host h_view
 
-       The view instance on the *host*, public access deprecated from Kokkos 4.6 on.
+       *host*上のビューインスタンスは、 Kokkos 4.6 以降、public アクセスは非推奨となります。
 
     .. cpp:member:: t_modified_flags modified_flags
 
@@ -140,50 +141,52 @@ realloc、resize、capacityなどの便利なメソッドも提供します。
 
     .. cpp:function:: DualView();
 
-       Empty constructor. Both device and host View objects are constructed using their default constructors.
-       The "modified" flags are both initialized to "unmodified."
+       空のコンストラクタ。デバイスとホストの両方のビューオブジェクトは、それぞれのデフォルトコンストラクタを使用して構築されます。
+       "修正済み"フラグは両方とも"未修正"として初期化される。
 
     .. cpp:function:: DualView(const std::string& label, const size_t n0 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n1 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n2 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n3 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n4 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n5 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n6 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n7 = KOKKOS_IMPL_CTOR_DEFAULT_ARG);
 
-       Constructor that allocates View objects on both host and device.
-       The first argument is a string label, which is entirely for your benefit. (Different DualView objects may have the same label if you like.)
-       The arguments that follow are the dimensions of the View objects. For example, if the View has three dimensions,
-       the first three integer arguments will be nonzero, and you may omit the integer arguments that follow.
+       ホストとデバイスの両方でビューオブジェクトを割り当てるコンストラクタ。
+       最初の引数は文字列ラベルであり、これは完全にあなたの便宜のために用意されています。 (異なるDualViewオブジェクトは、必要に応じて同じラベルを持つことができます。)
+       以下に示す引数は、Viewオブジェクトの次元です。例えば、Viewが3次元であれば、
+       最初の3つの整数引数はゼロ以外になり、また、続く整数引数は省略できます。
 
     .. cpp:function:: DualView(ALLOC_PROP const& arg_prop, const size_t n0 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n1 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n2 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n3 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n4 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n5 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n6 = KOKKOS_IMPL_CTOR_DEFAULT_ARG, const size_t n7 = KOKKOS_IMPL_CTOR_DEFAULT_ARG);
 
-       Constructor that allocates View objects on both host and device allowing to pass an object created by ``Kokkos::view_alloc`` as first argument,
-       e.g., to provide a label, avoid initialization, or specifying an execution space instance.
-       The arguments that follow are the dimensions of the View objects.
-       For example, if the View has three dimensions, the first three integer arguments will be nonzero, and you may omit the integer arguments that follow.
+       ホストとデバイスの両方でViewオブジェクトを割り当てるコンストラクタ。最初の引数として``Kokkos::view_alloc``で作成されたオブジェクトを渡すことを可能にします。
+       例えば、ラベルを提供し、初期化を回避し、または実行空間インスタンスを指定します。
+       以下の引数は、Viewオブジェクトの次元です。
+       例えば、Viewが3次元であれば、
+       最初の3つの整数引数はゼロ以外になり、
+　　　　また、続く整数引数は省略できます。
 
     .. cpp:function:: DualView(const DualView<SS, LS, DS, MS>& src);
 
-       Copy constructor (shallow copy)
+       コピーコンストラクタ (シャローコピー)
 
     .. cpp:function:: DualView(const DualView<SD, S1, S2, S3>& src, const Arg0& arg0, Args... args);
 
-       Subview constructor
+       サブビューコンストラクタ
 
     .. cpp:function:: DualView(const t_dev& d_view_, const t_host& h_view_);
 
-       Create DualView from existing device and host View objects.
-       This constructor assumes that the device and host View objects are synchronized. You, the caller, are responsible for making sure this
-       is the case before calling this constructor. After this constructor returns, you may use DualView's ``sync()`` and ``modify()``
-       methods to ensure synchronization of the View objects. In case the DualView only stores one View, i.e., DualView's memory space is host-accessible,
-       both arguments must reference the same allocation.
+       既存のデバイスおよびホストビューオブジェクトからデュアルビューを作成します。
+       このコンストラクタは、デバイスとホストのViewオブジェクトが同期されていることを前提としています。 発信者である貴方は、このコンストラクタを呼び出す前にこれが事実であることを
+       確認する責務を負います。このコンストラクタが戻った後、DualViewの``sync()``および``modify()``メソッドを使用して、
+       Viewオブジェクトの同期を確保できます。デュアルビューが1つのビューのみを格納する場合、すなわちデュアルビューのメモリ領域がホストからアクセス可能な場合、
+       両引数は同一の割り当てを参照しなければなりません。
 
-       - ``d_view_`` Device View
+       - ``d_view_`` デバイスビュー
 
-       - ``h_view_`` Host View (must have type ``t_host = t_dev::HostMirror``)
+       - ``h_view_`` ホストビュー (``t_host = t_dev::HostMirror``型を持つ必要があります)
 
     |
 
-    .. rubric:: *Public* Methods for synchronizing, marking as modified, and getting Views.
+    .. rubric:: 同期化、変更済みとしてマーク、およびビューの取得のための*Public*メソッド。
 
-    .. cpp:function:: template <class Device> KOKKOS_INLINE_FUNCTION const auto& view();
+    .. cpp:function:: テンプレート <class Device> KOKKOS_INLINE_FUNCTION const auto& view();
 
-    .. cpp:function:: template <class Device> static int get_device_side();
+    .. cpp:function:: テンプレート <class Device> static int get_device_side();
 
        * Return a View on a specific device ``Device``. ``Device`` can be a ``Kokkos::Device`` type, a memory space or a execution space corresponding to either the device View or the host-accessible View.
        * For example, suppose you create a DualView on Cuda, like this:
