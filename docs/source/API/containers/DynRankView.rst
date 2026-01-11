@@ -12,50 +12,50 @@
 使用
 -----
 
-``DynRankView`` is a potential reference counted multidimensional array with
-compile time layouts and memory space. Its semantics are similar to that of ``std::shared_ptr``.
-The ``DynRankView`` differs from the [[View|Kokkos::View]] in that its rank is not provided
-with the ``DataType`` template parameter; it is determined dynamically based on the
-number of extent arguments passed to the constructor. The rank has an upper bound of 7 dimensions.
+``DynRankView``は、コンパイル時にレイアウトとメモリ空間が確保される、
+参照カウント型の多次元配列です。そのセマンティクスは std::shared_ptr に似ています。
+``DynRankView`` は、ランクが ``DataType``テンプレート パラメータで提供されない点で 
+[[View|Kokkos::View]] とは異なります; それは、コンストラクタに渡された引数の数に基づいて動的に決定されます。
+動的に決定されます。ランクの上限は 7 次元です。
 
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: template <class DataType, class LayoutType, class MemorySpace, class MemoryTraits> DynRankView;
 
-   :tparam DataType: Defines the fundamental scalar type of the ``DynRankView``
+   :tparam DataType: ``DynRankView``の基本的なスカラー型を定義します。
 
-		     .. attention:: This parameter is mandatory
+		     .. attention:: 本パラメータは、必須です。
 
-		     The basic structure is ``ScalarType``.
-		     Examples:
+		     基本構造は、 ``ScalarType``です。
+		     例:
 
-		     * ``double``: a ``DynRankView`` of ``double``, dimensions are passed as arguments to the constructor, the number of which determine the rank.
+		     * ``double``: a ``DynRankView``で、 次元数はコンストラクタの引数として渡され、その数がランクを決定します。
 
-   :tparam LayoutType: Determines the mapping of indices into the underlying 1D memory storage
+   :tparam LayoutType: インデックスの基盤となる1次元メモリストレージへのマッピングを決定します。
 
-		       .. important:: This parameter is optional
+		       .. important:: 本パラメータは、オプションです。
 
-		       Custom Layouts can be implemented, but Kokkos comes with some built-in ones:
+		       カスタムレイアウトは実装可能ですが、Kokkosにはいくつかの組み込みレイアウトが付属しています:
 
-		       * ``LayoutRight``: Strides increase from the right most to the left most dimension.
-			 The last dimension has a stride of one. This corresponds to how C multi dimensional arrays (``[][][]``) are laid out in memory.
+		       * ``LayoutRight``: ストライドは、右端から左端に向かって増加します。
+			 最後の次元は、ストライドが1です。これはC言語の多次元配列（``[][][]``）がメモリ上に配置される方法に対応します。
 
-		       * ``LayoutLeft``: Strides increase from the left most to the right most dimension.
-			 The first dimension has a stride of one. This is the layout Fortran uses for its arrays.
+		       * ``LayoutLeft``: ストライドは、右端から左端に向かって増加します。
+			 最初の次元は、ストライドが1です。これはFortranが配列に使用するレイアウトです。
 
-		       * ``LayoutStride``: Strides can be arbitrary for each dimension.
+		       * ``LayoutStride``: ストライドは各次元で任意に設定できます。
 
-   :tparam MemorySpace: Controls the storage location
+   :tparam MemorySpace: 保管場所を管理します。
 
-			.. important:: This parameter is optional
+			.. important:: 本パラメータは、オプションです。
 
-			If omitted, the default memory space of the default execution space is used (i.e. ``Kokkos::DefaultExecutionSpace::memory_space``)
+			省略された場合、デフォルトの実行領域のデフォルトメモリ領域が使用されます　（つまり、``Kokkos::DefaultExecutionSpace::memory_space``)
 
-   :tparam MemoryTraits: Finer-grained control on the memory access
+   :tparam MemoryTraits: メモリアクセスに対するより細かい制御
 
-			 .. important:: This parameter is optional
+			 .. important:: 本パラメータは、オプションです。
 
 			 * ``Unmanaged``: The DynRankView will not be reference counted. The allocation has to be provided to the constructor.
 			 * ``Atomic``: All accesses to the view will use atomic operations.
