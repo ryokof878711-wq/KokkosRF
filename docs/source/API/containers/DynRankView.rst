@@ -65,22 +65,22 @@
    .. important::
 
       ``DataType``以外のテンプレートパラメータはオプションですが、順序は強制されます。
-      That means for example that ``LayoutType`` can be omitted but if both ``MemorySpace`` and ``MemoryTraits``
-      are specified, ``MemorySpace`` must come before ``MemoryTraits``.
+      つまり、例えば、``LayoutType``は省略可能ですが、 ``MemorySpace`` および ``MemoryTraits``の両方が
+      特定されれば、 ``MemoryTraits`` の前に ``MemorySpace``が来なければなりません。
 
 
    .. rubric:: Public Static Variables
 
-   * ``rank``: Rank of the view (i.e. the dimensionality).
-   * ``rank_dynamic``: Number of runtime determined dimensions.
-   * ``reference_type_is_lvalue_reference``: Whether the reference type is a C++ lvalue reference.
+   * ``rank``: ビューのランク (つまり、次元性).
+   * ``rank_dynamic``: 実行時に決定される次元の数です。
+   * ``reference_type_is_lvalue_reference``: 参照型がC++の左辺値参照であるかどうか。
 
 
-   .. rubric:: Public Data Types Typedefs
+   .. rubric:: パブリックデータタイプ 型定義
 
    .. cpp:type:: data_type
 
-      The ``DataType`` of the DynRankView.
+      DynRankView の ``DataType``　
 
    .. cpp:type:: const_data_type
 
