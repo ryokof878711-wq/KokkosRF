@@ -57,7 +57,7 @@
 
 			 .. important:: 本パラメータは、オプションです。
 
-			 * ``Unmanaged``: The DynRankView will not be reference counted. The allocation has to be provided to the constructor.
+			 * ``Unmanaged``: DynRankViewは参照カウントされません。割り当てはコンストラクタに提供されなければなりません。
 			 * ``Atomic``: All accesses to the view will use atomic operations.
 			 * ``RandomAccess``: Hint that the view is used in a random access manner.
 			   If the view is also ``const``, this will trigger special load operations on GPUs (i.e. texture fetches).
