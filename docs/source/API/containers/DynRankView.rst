@@ -57,14 +57,14 @@
 			 .. important:: 本パラメータは、オプションです。
 
 			 * ``Unmanaged``: DynRankViewは参照カウントされません。割り当てはコンストラクタに提供されなければなりません。
-			 * ``Atomic``: All accesses to the view will use atomic operations.
-			 * ``RandomAccess``: Hint that the view is used in a random access manner.
-			   If the view is also ``const``, this will trigger special load operations on GPUs (i.e. texture fetches).
-			 * ``Restrict``: There is no aliasing of the view by other data structures in the current scope.
+			 * ``Atomic``: ビューへのすべてのアクセスはアトミック操作を使用する。
+			 * ``RandomAccess``: ビューがランダムアクセス方式で使用されていることを示唆します。
+			   ビューもまた　``const``であれば、これにより、GPU上で特別なロード操作（すなわちテクスチャフェッチ）がトリガーされます。
+			 * ``Restrict``: 現在のスコープ内で、他のデータ構造によるビューのアリアシングは存在しません
 
    .. important::
 
-      Template parameters other than ``DataType`` are optional, but ordering is enforced.
+      ``DataType``以外のテンプレートパラメータはオプションですが、順序は強制されます。
       That means for example that ``LayoutType`` can be omitted but if both ``MemorySpace`` and ``MemoryTraits``
       are specified, ``MemorySpace`` must come before ``MemoryTraits``.
 
