@@ -84,144 +84,144 @@
 
    .. cpp:type:: const_data_type
 
-      Const version of ``DataType``, same as ``data_type`` if that is already const.
+      ``DataType`` の定数バージョンであり、 それがすでに定数である場合には、 ``data_type``　と同じです。
 
    .. cpp:type:: non_const_data_type
 
-      Non-const version of ``DataType``, same as ``data_type`` if that is already non-const.
+      ``DataType``　の非定数バージョンであり、それがすでに非定数である場合には、 ``data_type``　と同じです。
 
    .. cpp:type:: scalar_array_type
 
-      If ``DataType`` represents some properly specialised array data type such as Sacado FAD types, ``scalar_array_type`` is the underlying fundamental scalar type.
+      もし　``DataType``　が、Sacado FAD型のような適切に特化した配列データ型を表す場合、 ``scalar_array_type`` は、基礎となる基本的なスカラー型です。
 
    .. cpp:type:: const_scalar_array_type
 
-      The const version of ``scalar_array_type``, same as ``scalar_array_type`` if that is already const
+      ``scalar_array_type``　の定数バージョンであり、 それがすでに定数である場合には、``scalar_array_type`` と同じです。
 
    .. cpp:type:: non_const_scalar_array_type
 
-      The non-Const version of ``scalar_array_type``, same as ``scalar_array_type`` if that is already non-const.
+      ``scalar_array_type``　の非定数バージョンであり、 それがすでに非定数である場合には、 ``scalar_array_type`` と同じです。
 
-   .. rubric:: Public Scalar Typedefs
+   .. rubric:: パブリックスカラー型定義
 
    .. cpp:type:: value_type
 
-      The ``data_type`` stripped of its array specifiers, i.e. the scalar type of the
-      data the view is referencing (e.g. if ``data_type`` is ``const int*******``, ``value_type`` is ``const int``).
+      配列指定子を削除した　``data_type`` で、つまりビューが参照しているデータの
+スカラー型です (例えば、 ``data_type`` が ``const int*******``　である場合、 ``value_type`` は ``const int``　です)。
 
    .. cpp:type:: const_value_type
 
-      Const version of ``value_type``.
+      ``value_type``　の定数バージョン。
 
    .. cpp:type:: non_const_value_type
 
-      Non-const version of ``value_type``.
+      ``value_type``　の非定数バージョン。
 
-   .. rubric:: Public Spaces Typedefs
+   .. rubric:: パブリックスペース型定義
 
    .. cpp:type:: execution_space
 
-      Execution space associated with the view, will be used for performing view initialization, and certain deep_copy operations.
+      ビューに関連付けられた実行領域は、ビューの初期化を実行するために使用され、そして特定の deep_copy 演算です。
 
    .. cpp:type:: memory_space
 
-      Data storage location type.
+      データ保存場所の種類。
 
    .. cpp:type:: device_type
 
-      The compound type defined by ``Device<execution_space,memory_space>``.
+      ``Device<execution_space,memory_space>``　に定義された複合型。
 
    .. cpp:type:: memory_traits
 
-      The memory traits of the view.
+      ビューの記憶特性。
 
    .. cpp:type:: host_mirror_space
 
-      Host accessible memory space used in ``HostMirror``.
+      ``HostMirror``　に使用されるホストがアクセス可能なメモリ空間。
 
-   .. rubric:: Public View Typedefs
+   .. rubric:: Public View Typedefsパブリックビュー型定義
 
    .. cpp:type:: non_const_type
 
-      This view type with all template parameters explicitly defined.
+      すべてのテンプレートパラメータが明示的に定義されたこのビュータイプ。
 
    .. cpp:type:: const_type
 
-      This view type with all template parameters explicitly defined using a ``const`` data type.
+      ``const`` data type　を使用してすべてのテンプレートパラメータが明示的に定義されたこのビュータイプ。
 
    .. cpp:type:: HostMirror
 
-      Compatible view type with the same ``DataType`` and ``LayoutType`` stored in host accessible memory space.
+      ホストアクセス可能メモリ空間に格納された、同一の　``DataType``　および　``LayoutType``　を持つ互換ビュータイプ。
 
-   .. rubric:: Public Data Handles Typedefs
+   .. rubric:: パブリックデータハンドルズ型定義
 
    .. cpp:type:: reference_type
 
-      Return type of the view access operators.
+      ビューアクセス演算子の戻り値の型。
 
    .. cpp:type:: pointer_type
 
-      Pointer to scalar type.
+      スカラー型へのポインタ。
 
-   .. rubric:: Other Public Typedefs
+   .. rubric:: 他のパブリック型定義
 
    .. cpp:type:: array_layout
 
-      The layout of the ``DynRankView``.
+      ``DynRankView``　のレイアウト。
 
    .. cpp:type:: size_type
 
-      Index type associated with the memory space of this view.
+      このビューのメモリ空間に関連付けられたインデックス型。
 
    .. cpp:type:: dimension
 
-      An integer array like type, able to represent the extents of the view.
+      型のような整数配列で、ビューの範囲を表現できます。
 
    .. cpp:type:: specialize
 
-      A specialization tag used for partial specialization of the mapping construct underlying a Kokkos ``DynRankView``.
+     ``DynRankView``.Kokkosの　``DynRankView``　の基盤となるマッピング構造の部分的な特殊化に使用される特殊化タグです。
 
-   .. rubric:: Constructors
+   .. rubric:: コンストラクタ
 
    .. cpp:function:: DynRankView()
 
-       Default constructor. No allocations are made, no reference counting happens. All extents are zero and its data pointer is ``nullptr`` and its rank is set to 0.
+       デフォルトコンストラクタ。 割り当ては行われず、参照カウントも発生しません。すべてのエクステントはゼロであり、そのデータポインタは　``nullptr``　であり、そのランクは0に設定されます。
 
    .. cpp:function:: DynRankView(const DynRankView<DT, Prop...>& rhs)
 
-       Copy constructor with compatible DynRankViews. Follows DynRankView assignment rules.
+       互換性のある　DynRankView　を持つコピーコンストラクタ。 DynRankViewの割り当てルールに従います。
 
    .. cpp:function:: DynRankView(DynRankView&& rhs)
 
-       Move constructor.
+       コンストラクタを移動します。
 
    .. cpp:function:: DynRankView(const View<RT,RP...> & rhs)
 
-       Copy constructor taking View as input.
+       Viewを入力とするコピーコンストラクタ。
 
    .. cpp:function:: DynRankView(const std::string& name, const IntType& ... indices)
 
-       Requires: ``array_layout::is_regular == true``
+       ``array_layout::is_regular == true``　を必要とします。
 
-       Standard allocating constructor.
+       標準的な割り当てコンストラクタ。
 
-       * ``name``: a user provided label, which is used for profiling and debugging purposes. Names are not required to be unique.
-       * ``indices``: runtime dimensions of the view.
+       * ``name``: ユーザーが提供したラベル。プロファイリングおよびデバッグ目的で使用されます。名前は一意である必要はありません。
+       * ``indices``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const std::string& name, const array_layout& layout)
 
-       Standard allocating constructor.
+        標準的な割り当てコンストラクタ。
 
-       * ``name``: a user provided label, which is used for profiling and debugging purposes. Names are not required to be unique.
-       * ``layout``: an instance of a layout class.
+       * ``name``: ユーザーが提供したラベル。プロファイリングおよびデバッグ目的で使用されます。名前は一意である必要はありません。
+       * ``layout``: レイアウトクラスのインスタンス。
 
    .. cpp:function:: DynRankView(const AllocProperties& prop, const IntType& ... indices)
 
        Requires: ``array_layout::is_regular == true``
 
-       Allocating constructor with allocation properties. An allocation properties object is returned by the ``view_alloc`` function.
+       割り当てプロパティを持つ割り当てコンストラクタ。 割り当てプロパティオブジェクトは、``view_alloc``　関数によって返されます。
 
-       * ``indices``: runtime dimensions of the view.
+       * ``indices``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const AllocProperties& prop, const array_layout& layout)
 
@@ -404,7 +404,7 @@ Furthermore there are rules which must be met if ``DstType::array_layout`` is no
 * If either ``DstType::array_layout`` or ``SrcType::array_layout`` is ``LayoutStride``
     - For each dimension ``k`` it must hold that ``dst_view.extent(k) == src_view.extent(k)``
 
-Examples
+例
 --------
 
 .. code-block:: cpp
