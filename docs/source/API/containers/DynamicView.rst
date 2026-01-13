@@ -5,10 +5,10 @@
 ``DynamicView``
 ===============
 
-Header file: ``<Kokkos_DynamicView.hpp>``
+ヘッダーファイル　: ``<Kokkos_DynamicView.hpp>``
 
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: template<typename DataType , typename ... P> DynamicView : public Kokkos::ViewTraits<DataType , P ...>
