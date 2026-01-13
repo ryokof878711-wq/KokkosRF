@@ -225,9 +225,9 @@
 
    .. cpp:function:: DynRankView(const AllocProperties& prop, const array_layout& layout)
 
-       Allocating constructor with allocation properties and a layout object.
+       割り当てプロパティとレイアウトオブジェクトを持つ割り当てコンストラクタ。
 
-       * ``layout``: an instance of a layout class.
+       * ``layout``: レイアウトクラスのインスタンス。
 
    .. cpp:function:: DynRankView(const pointer_type& ptr, const IntType& ... indices)
 
