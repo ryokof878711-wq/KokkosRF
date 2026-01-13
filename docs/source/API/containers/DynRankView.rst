@@ -233,155 +233,153 @@
 
        Requires: ``array_layout::is_regular == true``
 
-       Unmanaged data wrapping constructor.
+       管理対象外データのラップコンストラクタ
 
-       * ``ptr``: pointer to a user provided memory allocation. Must provide storage of size ``DynRankView::required_allocation_size(n0,...,nR)``.
-       * ``indices``: runtime dimensions of the view.
+       * ``ptr``: ユーザーが提供したメモリ割り当てへのポインタ。``DynRankView::required_allocation_size(n0,...,nR)`` のストレージを提供する必要があります。
+       * ``indices``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const pointer_type& ptr, const array_layout& layout)
 
-       Unmanaged data wrapper constructor.
+       管理対象外データのラップコンストラクタ。
 
-       * ``ptr``: pointer to a user provided memory allocation. Must provide storage of size ``DynRankView::required_allocation_size(layout)`` (\ *NEEDS TO BE IMPLEMENTED*\ )
-       * ``layout``: an instance of a layout class.
+       * ``ptr``: ユーザーが提供したメモリ割り当てへのポインタ。 Must provide storage of size ``DynRankView::required_allocation_size(layout)`` (\ *NEEDS TO BE IMPLEMENTED*\ )　ののストレージを提供する必要があります。
+       * ``layout``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const ScratchSpace& space, const IntType& ... indices)
 
        Requires: ``sizeof(IntType...)==rank_dynamic()`` and ``array_layout::is_regular == true``
 
-       Constructor which acquires memory from a Scratch Memory handle.
+       スクラッチメモリハンドルからメモリを取得するコンストラクタ。
 
-       * ``space``: scratch memory handle. Typically returned from ``team_handles`` in ``TeamPolicy`` kernels.
-       * ``indices``: runtime dimensions of the view.
+       * ``space``: スクラッチメモリハンドル。通常、``TeamPolicy``　カーネルの　``team_handles``　から返されます。
+       * ``indices``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const ScratchSpace& space, const array_layout& layout)
 
-       Constructor which acquires memory from a Scratch Memory handle.
+       スクラッチメモリハンドルからメモリを取得するコンストラクタ。
 
-       * ``space``: scratch memory handle. Typically returned from ``team_handles`` in ``TeamPolicy`` kernels.
-       * ``layout``: an instance of a layout class.
+       * ``space``: スクラッチメモリハンドル。通常、``TeamPolicy``　カーネルの　``team_handles``　から返されます。
+       * ``layout``: レイアウトクラスのインスタンス。
 
    .. cpp:function:: DynRankView(const DynRankView<DT, Prop...>& rhs, Args ... args)
 
-       Subview constructor. See ``subview`` function for arguments.
+       サブビューコンストラクタ。引数については、　``subview``　関数を参照してください。
 
-   .. rubric:: Data Access Functions
+   .. rubric:: データアクセル機能
 
    .. cpp:function:: reference_type operator() (const IntType& ... indices) const
 
-      Returns a value of ``reference_type`` which may or not be reference itself.
-      The number of index arguments must match the ``rank`` of the view. See notes on ``reference_type`` for properties of the return type.
+      参照型である場合もそうでない場合もある ``reference_type`` の値を返します。
+      インデックス引数の数は、ビューの ``rank`` と一致する必要があります。リターン型の特性については、``reference_type`` の注記を参照してください。
 
    .. cpp:function:: reference_type access (const IntType& i0=0, const IntType& i1=0, \
 			   const IntType& i2=0, const IntType& i3=0, const IntType& i4=0, \
 			   const IntType& i5=0, const IntType& i6=0) const
 
-      Returns a value of ``reference_type`` which may or not be reference itself.
-      The number of index arguments must be equal or larger than the ``rank`` of the view.
-      Index arguments beyond ``rank`` must be ``0`` , which will be enforced if ``KOKKOS_DEBUG`` is defined.
-      See notes on ``reference_type`` for properties of the return type.
+      参照型である場合もそうでない場合もある ``reference_type`` の値を返します。
+      インデックス引数の数は、ビューの　``rank``　以上でなければなりません。
+      ``rank``を超えるインデックス引数は``0``でなければならず、 ``KOKKOS_DEBUG`` が定義されている場合に有効になります。
+      戻り値の型の特性については、``reference_type`` の注記を参照してください。
 
 
-   .. rubric:: Data Layout, Dimensions, Strides
+   .. rubric:: データレイアウト、ディメンション、ストライド
 
    .. cpp:function:: constexpr array_layout layout() const
 
-      Returns the layout object. Can be used to to construct other views with the same dimensions.
+      レイアウトオブジェクトを返します。 同じディメンションを持つ他のビューを構築するために使用できます。
 
    .. cpp:function:: template<class iType> constexpr size_t extent(const iType& dim) const
 
-      Returns the extent of the specified dimension. ``iType`` must be an integral type, and ``dim`` must be smaller than ``rank``.
+      指定されたディメンションの範囲を返します。 ``iType`` は整数型でなければならず、``dim`` は ``rank`` より小さくなければならない。
 
    .. cpp:function:: template<class iType> constexpr int extent_int(const iType& dim) const
 
-      Returns the extent of the specified dimension as an ``int``. ``iType`` must be an integral type,
-      and ``dim`` must be smaller than ``rank``. Compared to ``extent`` this function can be useful
-      on architectures where ``int`` operations are more efficient than ``size_t``.
-      It also may eliminate the need for type casts in applications which otherwise perform all index operations with ``int``.
+    　``int``　として、指定されたディメンションの範囲を返します。 ``iType`` は整数型でなければならず、``dim`` は ``rank`` より小さくなければならない。``extent`` と比較して、この関数は　``int``　演算が　``size_t``　よりも効率的なアーキテクチャで有用である。
+      また、そうでなければすべてのインデックス操作を　``int``　で行っているアプリケーションにおいて、型キャストの必要性を排除する可能性があります。
 
    .. cpp:function:: template<class iType> constexpr size_t stride(const iType& dim) const
 
-       Returns the stride of the specified dimension. ``iType`` must be an integral type, and ``dim`` must be smaller than ``rank``. Example: ``a.stride(3) == (&a(i0,i1,i2,i3+1,i4)-&a(i0,i1,i2,i3,i4))``
+       指定されたディメンションの範囲を返します。 ``iType`` は整数型でなければならず、``dim`` は ``rank`` より小さくなければならない。 例　: ``a.stride(3) == (&a(i0,i1,i2,i3+1,i4)-&a(i0,i1,i2,i3,i4))``
 
    .. cpp:function:: constexpr size_t stride_0() const
 
-       Return the stride of dimension 0.
+       指定されたディメンション 0　の範囲を返します。
 
    .. cpp:function:: constexpr size_t stride_1() const
 
-       Return the stride of dimension 1.
+       ディメンション 1　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_2() const
 
-       Return the stride of dimension 2.
+       ディメンション 2　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_3() const
 
-       Return the stride of dimension 3.
+       ディメンション 3　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_4() const
 
-       Return the stride of dimension 4.
+       ディメンション 4　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_5() const
 
-       Return the stride of dimension 5.
+       ディメンション 5　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_6() const
 
-       Return the stride of dimension 6.
+       ディメンション 6　のストライドを返します。
 
    .. cpp:function:: constexpr size_t stride_7() const
 
-       Return the stride of dimension 7.
+       ディメンション 7　のストライドを返します。
 
    .. cpp:function:: constexpr size_t span() const
 
-       Return the memory span in elements between the element with the lowest and the highest address.
-       This can be larger than the product of extents due to padding, and or non-contiguous data layout as for example ``LayoutStride`` allows.
+       最下位アドレスと最上位アドレスを持つエレメントの間にあるエレメント内のメモリスパンを返します。
+       これはパディングによりエクステントの積よりも大きくなる可能性があり、 またはおよび、たとえば ``LayoutStride`` が許容するような、非連続的なデータレイアウトです。
 
    .. cpp:function:: constexpr pointer_type data() const
 
-       Return the pointer to the underlying data allocation.
+       基盤となるデータ割り当てへのポインタを返します。
 
    .. cpp:function:: bool span_is_contiguous() const
 
-       Whether the span is contiguous (i.e. whether every memory location between in span belongs to the index space covered by the view).
+       スパンが連続しているかどうか (つまり、スパン内の各メモリ位置が、ビューによってカバーされるインデックス空間に属するか否か)。
 
    .. cpp:function:: static constexpr size_t required_allocation_size(size_t N0 = 0, size_t N1 = 0, \
 			   size_t N2 = 0, size_t N3 = 0, size_t N4 = 0, \
 			   size_t N5 = 0, size_t N6 = 0);
 
-       Returns the number of bytes necessary for an unmanaged view of the provided dimensions. This function is only valid if ``array_layout::is_regular == true``.
+       指定された次元の非管理ビューに必要なバイト数を返します。 この関数は、 ``array_layout::is_regular == true``　である場合にのみ有効です。
 
    .. cpp:function:: static constexpr size_t required_allocation_size(const array_layout& layout);
 
-       :return: the number of bytes necessary for an unmanaged view of the provided layout.
+       :return: 提供されたレイアウトのの非管理ビューに必要なバイト数を返します。
 
-   .. rubric:: Other Public Methods
+   .. rubric:: 他のパブリックメソッド
 
    .. cpp:function:: int use_count() const
 
-       :return: the current reference count of the underlying allocation.
+       :return: 基盤となる割り当ての現在の参照カウント。
 
    .. cpp:function:: const char* label() const;
 
-       :return: the label of the ``DynRankView``.
+       :return:  ``DynRankView``　のラベル。
 
    .. cpp:function:: constexpr unsigned rank() const
 
-       :return: the dynamic rank of the ``DynRankView``.
+       :return:  ``DynRankView``　のダイナミックランク。
 
    .. cpp:function:: constexpr bool is_allocated() const
 
-       :return: true if the view points to a valid memory location.
-		This function works for both managed and unmanaged views.
-		With the unmanaged view, there is no guarantee that referenced address is valid, only that it is a non-null pointer.
+       :return: ビューが有効なメモリ領域を指している場合に真となります。
+		この関数は管理ビューと非管理ビューの両方で機能します。
+		非管理ビューでは、参照されるアドレスが有効である保証はなく、単にヌルポインタでないことのみが保証されます。
 
-Assignment Rules
+割当ルール
 ----------------
 
-Assignment rules cover the assignment operator as well as copy constructors. We aim at making all logically legal assignments possible, while intercepting illegal assignments if possible at compile time, otherwise at runtime. In the following, we use ``DstType`` and ``SrcType`` as the type of the destination view and source view respectively. ``dst_view`` and ``src_view`` refer to the runtime instances of the destination and source views, i.e.:
+割当ルールは割り当て演算子とコピー構造体の両方を網羅します。 すべての論理的かた合法な割り当てを可能にする一方で、可能であればコンパイル時に、そうでなければ実行時に不正な割り当てを傍受することを目指しています。 以下では、それぞれ ``DstType`` と ``SrcType`` を宛先ビューとソースビューの型として使用します。 ``dst_view`` および ``src_view`` は、宛先ビューとソースビューの実行時インスタンスを示しています。すなわち、:
 
 .. code-block:: cpp
 
@@ -389,20 +387,21 @@ Assignment rules cover the assignment operator as well as copy constructors. We 
     DstType dst_view(src_view);
     dst_view = src_view;
 
-The following conditions must be met at and are evaluated at compile time:
+以下の条件はコンパイル時に満たされ、評価されます :
 
 * ``DstType::rank == SrcType::rank``
-* ``DstType::non_const_value_type`` is the same as ``SrcType::non_const_value_type``
-* If ``std::is_const<SrcType::value_type>::value == true`` than ``std::is_const<DstType::value_type>::value == true``.
+* ``DstType::non_const_value_type`` は、 ``SrcType::non_const_value_type``　と同じです。
+*  ``std::is_const<DstType::value_type>::value == true``　よりも ``std::is_const<SrcType::value_type>::value == true`` である場合。
 * ``MemorySpaceAccess<DstType::memory_space,SrcType::memory_space>::assignable == true``
 
-Furthermore there are rules which must be met if ``DstType::array_layout`` is not the same as ``SrcType::array_layout``. These rules only cover cases where both layouts are one of ``LayoutLeft`` , ``LayoutRight`` or ``LayoutStride``
+さらに、``DstType::array_layout`` が ``SrcType::array_layout``と同じでない場合、充足すべきルールもあります。これらのルールは、両方のレイアウトが、 ``LayoutLeft`` , ``LayoutRight`` or ``LayoutStride``、``LayoutRight`` または ``LayoutStride``　のいずれかの場合のみを対象としています。
 
-* If neither ``DstType::array_layout`` nor ``SrcType::array_layout`` is ``LayoutStride``:
-    - If ``DstType::rank > 1`` than ``DstType::array_layout`` must be the same as ``SrcType::array_layout``.
+* ``DstType::array_layout`` も ``SrcType::array_layout`` も ``LayoutStride``　ではない場合　:
 
-* If either ``DstType::array_layout`` or ``SrcType::array_layout`` is ``LayoutStride``
-    - For each dimension ``k`` it must hold that ``dst_view.extent(k) == src_view.extent(k)``
+    -  ``DstType::array_layout``　よりも``DstType::rank > 1`` である場合、 ``SrcType::array_layout``　と同じである必要があります。
+
+*  ``DstType::array_layout`` または ``SrcType::array_layout`` が ``LayoutStride``　である場合　：
+    - 各ディメンション ``k`` については、その ``dst_view.extent(k) == src_view.extent(k)``　を保持する必要があります。
 
 例
 --------
