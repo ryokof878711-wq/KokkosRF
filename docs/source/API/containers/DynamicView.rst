@@ -13,77 +13,77 @@
 
 .. cpp:class:: template<typename DataType , typename ... P> DynamicView : public Kokkos::ViewTraits<DataType , P ...>
 
-    A potentially reference-counted rank 1 array, without layout, that can be dynamically resized on the host.
+    ホスト上で動的にサイズ変更可能であり、レイアウトを持たない、参照カウント可能なランク1配列。
 
-    .. rubric:: Public Member Variables
+    .. rubric:: パブリックメンバー変数
 
-    .. cpp:member:: static constexpr bool reference_type_is_lvalue_reference
+    .. cpp:member:: 静的定数コンストラクタ付きブール値　reference_type_is_lvalue_reference
 
-        Whether the reference type is a C++ lvalue reference.
+        レファレンス型が、 C++ lvalueレファレンスかどうか。
 
-    .. rubric:: Public Nested Typedefs
+    .. rubric:: パブリックネスティッド型定義
 
     .. cpp:type:: Kokkos::ViewTraits< DataType , P ... > traits
 
-        ``Kokkos::ViewTraits`` parent class type.
+        ``Kokkos::ViewTraits`` 親クラス型
 
     .. cpp:type:: array_type
 
-        ``DynamicView`` type templated on ``traits::data_type`` and ``traits::device_type``.
+        ``traits::data_type`` および ``traits::device_type``　上にテンプレートされた ``DynamicView`` 型。
 
     .. cpp:type:: const_type
 
-        ``DynamicView`` type templated on ``traits::const_data_type`` and ``traits::device_type``.
+        ``traits::const_data_type`` および ``traits::device_type``　上にテンプレートされた ``DynamicView`` 型。
 
     .. cpp:type:: non_const_type
 
-        ``DynamicView`` type templated on ``traits::non_const_data_type`` and ``traits::device_type``.
+        ``traits::non_const_data_type`` および ``traits::device_type``　上にテンプレートされた ``DynamicView`` 型。
 
     .. cpp:type:: HostMirror
 
-        The compatible view type with the same ``DataType`` and ``LayoutType`` stored in host accessible memory space.
+        ホストアクセス可能メモリ空間に格納された、同一の``DataType``　および　``LayoutType``　を持つ互換性のあるビュータイプ
 
-    .. rubric:: Public Data Handle Types
+    .. rubric:: パブリックデータハンドル型
 
     .. cpp:type:: reference_type
 
-        The return type of the view access operators.
+        ビューアクセス演算子の戻り値の型。
 
     .. cpp:type:: pointer_type
 
-        The pointer to scalar type.
+       スカラー型へのポインタ。
 
-    .. rubric:: Constructors
+    .. rubric:: コンストラクタ
 
     .. cpp:function:: DynamicView()
 
-        The default Constructor. No allocations are made, no reference counting happens. All extents are zero and its data pointer is NULL.
+        デフォルトコンストラクタ。割り当ては行われず、参照カウントも発生しません。 すべてのエクステントはゼロであり、そのデータポインタはNULLです。
 
     .. cpp:function:: DynamicView(const DynamicView<RT, RP...>& rhs)
 
-        The copy constructor from a compatible View. Follows View assignment rules.
+        互換性のあるViewからのコピーコンストラクタ。View　代入ルールに従ってください。
 
     .. cpp:function:: DynamicView(DynamicView&& rhs)
 
-        The move constructor.
+        ムーブコンストラクタ。
 
     .. cpp:function:: DynamicView(const std::string & arg_label, \
 			    const unsigned min_chunk_size,  \
 			    const unsigned max_extent)
 
-        The standard allocating constructor.
+        標準の割り当てコンストラクタ。
 
-        :param arg_label: a user-provided label, which is used for profiling and debugging purposes. Names are not required to be unique.
-        :param min_chunk_size: a user-provided minimum chunk size needed for memory allocation, will be raised to nearest power-of-two for more efficient memory access operations.
-        :param max_extent: a user-provided maximum size, required to allocate a chunk-pointer array.
+        :param arg_label: ユーザーに提供されたレベルで、プロファイリングおよびデバッグ目的に使用されます。 名前が一意である必要はありません。
+        :param min_chunk_size: メモリ割り当てに必要なユーザー指定の最小チャンクサイズで、 より効率的なメモリアクセスのため、2乗に最も近い数値に丸められます。
+        :param max_extent: ユーザーに提供された最大サイズで、 チャンクポインタ配列を割り当てる必要があります。
 
-        The ``resize_serial`` method must be called after construction to reserve the desired amount of memory, bound by ``max_extent``.
+        必要な量のメモリを確保するために、 ``max_extent``で制限し、``resize_serial``　メソッドを構築後に呼び出す必要があります。
 
-    .. rubric:: Public Data Access Functions
+    .. rubric:: パブリックデータアクセス機能
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION reference_type operator() (const I0 & i0 , const Args & ... args) const
 
-        :return: A value of ``reference_type`` which may or not be referenceable itself. The number of index arguments must be 1 (for non-deprecated code).
+        :return: それ自身が参照可能であるか否かに関わらず、`reference_type`型の値。 The number of index arguments must be 1 (for non-deprecated code).
 
     .. rubric:: Data Resizing, Dimensions, Strides
 
