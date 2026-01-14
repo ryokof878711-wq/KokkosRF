@@ -83,18 +83,17 @@
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION reference_type operator() (const I0 & i0 , const Args & ... args) const
 
-        :return: それ自身が参照可能であるか否かに関わらず、`reference_type`型の値。 The number of index arguments must be 1 (for non-deprecated code).
+        :return: それ自身が参照可能であるか否かに関わらず、`reference_type`型の値。 インデックス引数の数は 1 である必要があります (非推奨ではないコードについて)。
 
-    .. rubric:: Data Resizing, Dimensions, Strides
+    .. rubric:: データリサイズ、ディメンション、ストライド
 
 
     .. cpp:function:: template< typename IntType > inline void resize_serial(IntType const & n)
 
-       Resizes the DynamicView with sufficient chunks of memory of ``chunk_size`` to store the requested number of elements ``n``.
-       This method can only be called outside of parallel regions.
-       ``n`` is restricted to be smaller than the ``max_extent`` value passed to the DynamicView constructor.
-       This method must be called after the construction of the DynamicView as the constructor
-       sets the requested sizes for ``chunk_size`` and ``max_extent``, but does not take input for the actual amount of memory to be used.
+       要求された要素数 `n` を格納するのに十分な `chunk_size` のメモリチャンクで、ダイナミックビューをリサイズします。
+       この方法は並列領域の外側からのみ呼び出し可能です。
+       ``n`` は、DynamicView コンストラクタに渡された ``max_extent`` 値よりも小さい値に制限されます。
+       コンストラクタが　``chunk_size`` および ``max_extent``　について要求サイズを設定するので、このメソッドはDynamicViewの構築後に呼び出さなければなりませんが、 実際の使用メモリ量についての入力は選択しません。
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION size_t allocation_extent() const noexcept;
 
