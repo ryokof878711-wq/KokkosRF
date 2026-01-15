@@ -6,56 +6,56 @@
 
 ヘッダー ``<Kokkos_ErrorReporter.hpp>``　において定義
 
-``ErrorReporter`` is a class that can collect error reports in a thread safe manner.
-The report type is user defined, and it will only store errors up to a defined capacity.
+``ErrorReporter`` は、スレッドセーフな方法でエラーレポートを収集できるクラスです。
+レポートの型はユーザー定義であり、定義された容量までしかエラーを保存しません。
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: template<class ReportType, class DeviceType> ErrorReporter
 
-   A class to collect error reports in a thread-safe manner.
+   スレッドセーフな方法でエラーレポートを収集するクラス。
 
-   :tparam ReportType: The type of the reported error data. Must be a valid element type for :cpp:struct:`View`.
+   :tparam ReportType: 報告されたエラーデータの型。 :cpp:struct:`View`　について有効な要素型でなければなりません。
 
-   :tparam DeviceType: The device type of the ``ErrorReporter``. Default is ``DefaultExecutionSpace::device_type``. 
+   :tparam DeviceType:  ``ErrorReporter``　のデバイス型。 デフォルトは、 ``DefaultExecutionSpace::device_type``です。 
 
    |
 
-   .. rubric:: *Public* typedefs
+   .. rubric:: *Public* 型定義。
 
    .. cpp:type:: report_type
 
-      :cpp:any:`ReportType` This is the type for the stored error data, which can be user defined.
+      :cpp:any:`ReportType` これは、保存されたエラーデータの型であり、ユーザーが定義可能です。
 
    .. cpp:type:: device_type
 
-      :cpp:any:`DeviceType` The device type defining in which execution space reports can be added.
+      :cpp:any:`DeviceType` どの実行空間レポートを追加できるかを定義するデバイス型です。
 
    .. cpp:type:: execution_space
 
       :cpp:type:`device_type::execution_space`
 
 
-   .. rubric:: *Public* constructors
+   .. rubric:: *Public* コンストラクタ
 
    .. cpp:function:: ErrorReporter(const std::string& label, int size)
 
-      Constructs a new ErrorReporter instance with capacity of size.
+      特定の大きさおよび規模を持つ新たな ErrorReporter インスタンスを構築します。
    
    .. cpp:function:: ErrorReporter(int size)
 
-      Constructs a new ErrorReporter instance with capacity of size.
+      特定の大きさおよび規模を持つ新たな ErrorReporter インスタンスを構築します。
 
    .. rubric:: member functions
 
    .. cpp:function:: int capacity() const
 
-      :returns: The maximum number of errors the instance can store.
+      :returns: インスタンスが保存可能なエラーの最大数。
    
    .. cpp:function:: int num_reports() const
 
-      :returns: The number of errors that were recorded.
+      :returns: 記録されたエラー数。
 
    .. cpp:function:: int num_report_attempts() const
 
