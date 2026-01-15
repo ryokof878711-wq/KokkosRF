@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_ErrorReporter.hpp>``
+ヘッダー ``<Kokkos_ErrorReporter.hpp>``　において定義
 
 ``ErrorReporter`` is a class that can collect error reports in a thread safe manner.
 The report type is user defined, and it will only store errors up to a defined capacity.
