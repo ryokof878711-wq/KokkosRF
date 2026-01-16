@@ -4,11 +4,11 @@
 .. role:: cpp(code)
 	:language: cpp
 
-Header File: ``<Kokkos_ScatterView.hpp>``
+ヘッダーファイル: ``<Kokkos_ScatterView.hpp>``
 
 .. warning::
 
-   ``ScatterView`` is still in the namespace ``Kokkos::Experimental``
+   ``ScatterView`` はKokkos::Experimental　という名前空間にまだ存在しています。
 
 
 .. _parallelReduce: ../core/parallel-dispatch/parallel_reduce.html
@@ -27,7 +27,7 @@ Header File: ``<Kokkos_ScatterView.hpp>``
 
 .. |create_scatter_view| replace:: ``create_scatter_view()``
 
-Usage
+使用例
 -----
 
 A Kokkos ScatterView serves as an interface for a standard Kokkos::|View|_ implementing a scatter-add pattern either via atomics or data replication.
