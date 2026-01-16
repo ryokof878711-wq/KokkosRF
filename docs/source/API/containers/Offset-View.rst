@@ -4,17 +4,17 @@
 
 ヘッダーファイル: ``<Kokkos_OffsetView.hpp>``
 
-An ``OffsetView`` can be used when the indices of an array begin at something other than zero.
+配列の添字が0以外から始まる場合、``OffsetView``　を使用できます。
 
 .. warning::
 
-   The OffsetView is in the Experimental namespace.
+   OffsetView は、Experimental namespace　にあります。
 
 
-Construction
+構築
 ------------
 
-An OffsetView must have a label, and at least one dimension. Only runtime extents are supported, but otherwise the semantics of an OffsetView are similar to those of a View.
+OffsetView　にはラベルと、少なくとも1つのディメンションが必要です。実行時範囲のみがサポートされますが、それ他では　OffsetView　のセマンティクスはViewのそれと同様です。 
 
 .. code-block:: cpp
 
@@ -27,13 +27,13 @@ An OffsetView must have a label, and at least one dimension. Only runtime extent
 
    OffsetView<int***> a("someLabel", {min0, max0}, {min1, max1},{min2, max2});
 
-Construction from a layout is also allowed.
+レイアウトからの構築も認められます。
 
 .. code-block:: cpp
 
     OffsetView<int***> a("someLabel", LayoutLeft, {min0, min1, min2});
 
-An OffsetView may also be created from a View that has the same underlying type. Since the View already has extents, the beginning indices must be passed to the constructor.
+OffsetView　は、同じ基底型を持つ　View　から作成することもできます。 ビューには既に範囲が設定されているため、開始インデックスをコンストラクタに渡す必要があります。
 
 .. code-block:: cpp
 
@@ -41,18 +41,18 @@ An OffsetView may also be created from a View that has the same underlying type.
    Array<int64_t, 2> begins = {-10, -20};
    OffsetView<double**> ov(b, begins);
 
-The OffsetView ov has the same extents as b and must be indexed from [-10,-1] and [-20,-11].
+OffsetView ov は b と同じ範囲を持ち、[-10,-1] および [-20,-11] からインデックス付けされる必要があります。
 
-A std::initializer_list may also be used instead of an Array.
+配列の代わりに　std::initializer_list　を使用することもできます。
 
 .. code-block:: cpp
 
     OffsetView<double**> ov(b, {-10, -20});
 
-Interface
+インターフェイス
 ---------
 
-The beginning indices may be obtained as an array. The begin and end of iteration may be found for each rank.
+開始インデックスは配列として取得可能です。 各ランクについて、イテレーションの開始位置と終了位置を特定できます。
 
 .. code-block:: cpp
 
@@ -62,15 +62,15 @@ The beginning indices may be obtained as an array. The begin and end of iteratio
    const int64_t begin0 = ov.begin(0);
    const int64_t end0= ov.end(0);
 
-Note that
+以下にご注意ください
 
 .. code-block:: cpp
 
-   OffsetView::end(const size_t i)
+   OffsetView::end(const size_t i)は、
 
-returns a value that is not a legal index:  It is exactly one more than the maximum allowable index for the given dimension i.
+正当なインデックスではない値を返します:  それは、既定の次元 i に対する最大許容インデックスを正に 1 つ上回る値です。
 
-Subviews are supported, and the result of taking a subview of an OffsetView is another OffsetView. If ALL() is passed to the subview function, then the offsets for that rank are preserved, otherwise they are dropped.
+ サブビューはサポートされており、OffsetViewのサブビューを取得した結果は、別のOffsetViewです。 サブビュー関数に ALL() が渡された場合、そのランクのオフセットは保持され、そうでない場合は破棄されます。
 
 .. code-block:: cpp
 
@@ -83,17 +83,17 @@ Subviews are supported, and the result of taking a subview of an OffsetView is a
    ASSERT_EQ(offsetSubview.begin(1) , 0);
    ASSERT_EQ(offsetSubview.end(1) , 9);
 
-The following deep copies are also supported: from a constant value to an OffsetView; from a compatible OffsetView to another OffsetView; from a compatible View to an OffsetView; from a compatible OffsetView to a View.
+以下のディープコピーもサポートされています: 定数値から　OffsetView へ; 互換性のある　OffsetView　から別のOffsetViewへ; from a compatible View to an OffsetView; 互換性のある　View から　OffsetViewへ; 互換性のある OffsetView から Viewへ。
 
-A compatible View with the same label is obtained from the view() method.
+同じラベルを持つ互換性のあるビューは、view()メソッドから取得されます。
 
 .. code-block:: cpp
 
    OffsetView<int***> ov("someLabel", {-1,1}, {-2,2}, {-3,3});
    View<int***> v = ov.view();
 
-A copy constructor and an assignment operator from a View to an OffsetView are also provided.
+ビューから　OffsetView　へのコピーコンストラクタと代入演算子も提供されています。
 
-Equivalence operators "==" and "!=" are defined. Given an OffsetView and a View, they are equivalent in the same sense that two Views are equivalent. Similarly, two OffsetViews are equivalent in the same sense if their begins also match.
+等価演算子　"==" および "!="　が定義されています。 OffsetView と View を前提とすれば、それらは 2 つの View が同等であるのと同様の意味で同等です。　同様に、れらの開始位置も一致する場合、2つのOffsetView　は、同様の意味で同等です。
 
-Mirrors are also supported.
+ミラーもサポートされています。
