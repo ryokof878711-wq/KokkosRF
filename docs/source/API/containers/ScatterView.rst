@@ -124,27 +124,29 @@ ScatterView　を直接アドレスすることはできません: 並列領域�
 
     .. cpp:function:: constexpr bool is_allocated() const
 
-        :return: true if the ``internal_view`` points to a valid memory location. This function works for both managed and unmanaged views. With the unmanaged view, there is no guarantee that referenced address is valid, only that it is a non-null pointer.
+        :return: ビューが有効なメモリ領域を指している場合に真となります。この関数は管理ビューと非管理ビューの両方で機能します。
+		非管理ビューでは、参照されるアドレスが有効である保証はなく、単にヌルポインタであることのみが保証されます。
+
 
     .. _access:
 
     .. cpp:function:: access() const
 
-       use within a kernel to return a ``ScatterAccess`` member; this member accumulates a given thread's contribution to the reduction.
+       カーネル内で使用し、``ScatterAccess``　メンバーを返します; このメンバーは、指定されたスレッドの削減への貢献度を蓄積します。
 
     .. cpp:function:: subview() const
 
-        :return: a subview of a ``ScatterView``
+        :return: ``ScatterView``　のサブビュー。
 
     .. cpp:function:: contribute_into(View<DT, RP...> const& dest) const
 
-       contribute ``ScatterView`` array's results into the input View ``dest``
+       ``ScatterView``　の配列の結果を、入力ビュー　``dest``　に貢献します。
 
     .. _reset:
 
     .. cpp:function:: reset()
 
-       performs reset on destination array
+       目的の配列に対してリセットを実行します。
 
     .. cpp:function:: reset_except(View<DT, RP...> const& view)
 
@@ -152,11 +154,11 @@ ScatterView　を直接アドレスすることはできません: 並列領域�
 
     .. cpp:function:: resize(const size_t n0 = 0, const size_t n1 = 0, const size_t n2 = 0, const size_t n3 = 0, const size_t n4 = 0, const size_t n5 = 0, const size_t n6 = 0, const size_t n7 = 0)
 
-       resize a view with copying old data to new data at the corresponding indices
+       ビューのサイズを変更し、対応するインデックスで古いデータを新しいデータにコピーします。
 
     .. cpp:function:: realloc(const size_t n0 = 0, const size_t n1 = 0, const size_t n2 = 0, const size_t n3 = 0, const size_t n4 = 0, const size_t n5 = 0, const size_t n6 = 0, const size_t n7 = 0)
 
-       resize a view with discarding old data
+       古いデータを破棄してビューのサイズを変更します。
 
 
     .. rubric:: *Private* Members
@@ -165,24 +167,24 @@ ScatterView　を直接アドレスすることはできません: 並列領域�
     :member: internal_view_type internal_view;
 
 
-.. rubric:: Free Functions
+.. rubric:: フリー関数
 
 .. _create_scatter_view:
 
 .. cpp:function:: template <typename Operation, typename Duplication, typename Contribution> create_scatter_view(const View<DT1, VP...>& view)
 
-   create a new ScatterView interfacing the View ``view``.
-   Default value for ``Operation`` is ``Kokkos::Experimental::ScatterSum``, ``Duplication`` and ``Contribution`` are chosen to make the ScatterView as efficient as possible when running on its ``ExecSpace``.
+   ``view`` をインターフェースとする新しい ScatterView を作成します。
+   `Operation``　のデフォルト値は、 is ``Kokkos::Experimental::ScatterSum``であり、 ``Duplication`` および ``Contribution`` は、ScatterView　が``ExecSpace``　上で動作する際に可能な限り効率的になるよう選択されます。
 
 .. _contribute:
 
 .. cpp:function:: contribute(View<DT1, VP...>& dest, Kokkos::Experimental::ScatterView<DT2, LY, ES, OP, CT, DP> const& src)
 
-   convenience function to perform final reduction of ScatterView
-   results into a resultant View; may be called following |parallelReduce|_.
+   ScatterView　の結果を最終的に結果のViewに還元するための便利関数; 
+|parallelReduce|_　の後に呼び出される場合があります。
 
 
-Example
+例
 -------
 
 .. code-block:: cpp
