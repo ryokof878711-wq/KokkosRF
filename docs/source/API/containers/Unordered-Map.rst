@@ -5,58 +5,56 @@
 ``UnorderedMap``
 ================
 
-Header file: ``<Kokkos_UnorderedMap.hpp>``
+ヘッダーファイル: ``<Kokkos_UnorderedMap.hpp>``
 
-Kokkos's unordered map is designed to efficiently handle tens of thousands of concurrent insertions.
-Consequently, the API is significantly different from the standard unordered_map.
-The two key differences are *fixed capacity* and *index based*.
+Kokkos　の無順序マップは、数万件の同時挿入を効率的に処理するよう設計されています。
+そのため、APIは、標準　unordered_map　とは大きく異なります。
+2つの主な違いは、*固定容量*　および　*指数ベース*　です。
 
-- *Fixed capacity*: The capacity of the unordered_map is fixed when inside a parallel algorithm.
-  This means that an insert can fail when the capacity of the map is exceeded.
-  The capacity of the map can be changed (rehash) from the host.
+- *固定容量*: 並列アルゴリズム内では、unordered_map　の容量は固定されます。
+  つまり、マップの容量を超えると、インサートが失敗する可能性があるということです。
+  マップの容量はホストから変更(リハッシュ)可能です。
 
-- *Index based*: Instead of returning pointers or iterators (which would not work when moving
-  between memory spaces) the map uses integer indexes. This also allows the map to store data
-  in cache friendly ways. The availability of indexes is managed by an internal atomic bitset based on ``uint32_t``.
+- *インデックスベース*: ポインタやイテレーターを返す代わりに(メモリ空間間の移動時に動作しません)、整数インデックスを使用します。 これにより、マップはキャッシュに適した方法でデータを保存できます。 インデックスの利用可能性は、``uint32_t``　に基づく内部の原子ビットセットによって管理されます。
 
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: template <typename Key, typename Value, typename Device = Kokkos::DefaultExecutionSpace> UnorderedMap
 
-   :tparam Key: Must be a POD (Plain Old Data type)
+   :tparam Key: POD　である必要があります (POD)
 
-   :tparam Value: `void` indicates an unordered set. Otherwise the :cpp:any:`Value` must be trivially copyable. If the map is created with the :cpp:any:`SequentialHostInit` property, :cpp:any:`Value` can be :cpp:class:`View`.
+   :tparam Value: `void` は順序のない集合を示します。 そうでなければ、 :cpp:any:`Value` は簡単にコピー可能でなければなりません。 マップが :cpp:any:`SequentialHostInit` プロパティで作成された場合、:cpp:any:`Value` は :cpp:class:`View`　である可能性があります。
    
      .. versionchanged:: 4.7
            :cpp:any:`Value` can now be :cpp:class:`View`
 
-   :tparam Device: Device is any class or struct with the following public typedefs or type aliases: `execution_space`, `memory_space`, and `device_type`
+   :tparam Device: デバイスとは、以下のパブリックな型定義または型エイリアスを持つクラスまたは構造体を指します　: `execution_space`、 `memory_space`、および `device_type`
 
-   .. rubric:: Constructor
+   .. rubric:: コンストラクタ
 
    .. cpp:function:: UnorderedMap(uint32_t capacity_hint);
 
-      Create map with enough space for at least capacity_hint number of objects
+      少なくとも　capacity_hint　数のオブジェクトを収容できる十分なスペースを確保するマップを作成します。
 
-      .. warning:: Host Only
+      .. warning:: ホストのみ
 
    .. cpp:function:: UnorderedMap(const ALLOC_PROP &prop, uint32_t capacity_hint);
 
-      Create map using the properties with enough space for at least capacity_hint number of objects
+      少なくとも　capacity_hint　数のオブジェクトを収容できる十分なスペースをを持つプロパティを使用しているマップを作成します。
 
       .. warning:: Host Only
 
       .. versionadded:: 4.2
       
       .. versionchanged:: 4.7
-              :cpp:any:`prop` can now contain :cpp:type:`SequentialHostInit`
-   .. rubric:: Public Member Functions
+              :cpp:any:`prop` は、現在 :cpp:type:`SequentialHostInit`　を含むことが可能です。
+   .. rubric:: Public Member Functionsパブリックメンバー関数
 
    .. cpp:function:: clear();
 
-      Clear the map
+      マップをクリアします。
 
       .. warning:: Host Only
 
