@@ -242,7 +242,7 @@
 
        管理対象外データのラップコンストラクタ。
 
-       * ``ptr``: ユーザーが提供したメモリ割り当てへのポインタ。 Must provide storage of size ``DynRankView::required_allocation_size(layout)`` (\ *NEEDS TO BE IMPLEMENTED*\ )　ののストレージを提供する必要があります。
+       * ``ptr``: ユーザーが提供したメモリ割り当てへのポインタ。  ``DynRankView::required_allocation_size(layout)`` (\ *NEEDS TO BE IMPLEMENTED*\ )　のストレージを提供する必要があります。
        * ``layout``: ビューのランタイムディメンション。
 
    .. cpp:function:: DynRankView(const ScratchSpace& space, const IntType& ... indices)
