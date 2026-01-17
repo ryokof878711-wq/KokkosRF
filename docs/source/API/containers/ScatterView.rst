@@ -117,11 +117,10 @@ ScatterView　を直接アドレスすることはできません: 並列領域�
 
     .. cpp:function:: ScatterView(ALLOC_PROP const& arg_prop, Dims... dims)
 
-        Constructor from variadic pack of dimension arguments. Constructs ``internal_view`` member.
-        This constructor allows passing an object created by ``Kokkos::view_alloc`` as first argument, e.g., for specifying an execution space via
-        ``Kokkos::view_alloc(exec_space, "label")``.
+        可変長のディメンション引数パックからのコンストラクタ。 ``internal_view`` memberを構築します。
+        このコンストラクタは、最初の引数として、``Kokkos::view_alloc``　で作成されたオブジェクトを渡すことを可能にします。例えば、実行空間を指定するために　``Kokkos::view_alloc(exec_space, 「label」)``　のように使用します。
 
-    .. rubric:: Public Methods
+    .. rubric:: パブリックメソッド
 
     .. cpp:function:: constexpr bool is_allocated() const
 
