@@ -30,30 +30,30 @@
 使用例
 -----
 
-A Kokkos ScatterView serves as an interface for a standard Kokkos::|View|_ implementing a scatter-add pattern either via atomics or data replication.
+Kokkos ScatterView　は、標準的な　Kokkos::|View|_　のインターフェースとして機能し、原子またはデータレプリケーションを通じて散乱加算パターンを実装します。
 
-Construction of a ScatterView can be expensive, so you should try to reuse the same one if possible, in which case, you should call |reset|_ between uses.
+ScatterView　の構築は  コストがかかることがあるため、可能であれば同じものを再利用するようにし、その場合は  使用の間に　|reset|_　を呼び出してください。
 
-ScatterView can not be addressed directly: each thread inside a parallel region needs to make a call to |access|_ and access the underlying View through the return value of |access|_.
+ScatterView　を直接アドレスすることはできません: 並列領域内の各スレッドは　|access|　に呼び出しを行い、|access|_　の返却値を通じて基礎となるViewにアクセスする必要があります。
 
-Following the parallel region, a call to the free function Kokkos::Experimental::|contribute|_ should be made to perform the final reduction.
+並列領域の後、最終還元を行うために自由関数　Kokkos::Experimental::contribute()　を呼び出します。
 
-Interface
+インターフェイス
 ---------
 .. code-block:: cpp
 
     template <typename DataType [, typename Layout [, typename ExecSpace [, typename Operation [, typename Duplication [, typename Contribution]]]]]>
     class ScatterView
 
-Parameters
+パラメータ
 ~~~~~~~~~~
-Template parameters other than ``DataType`` are optional, but if one is specified, preceding ones must also be specified.
-That means for example that ``Operation`` can be omitted but if it is specified, ``Layout`` and ``ExecSpace`` must also be specified.
+``DataType`` 以外のテンプレートパラメータは任意ですが、指定されている場合は、前のパラメータも指定しなければなりません。
+つまり、例えば動作は省略できますが、指定されている場合は、　``Layout`` and ``ExecSpace`` も指定しなければなりません。
 
-* ``DataType``, ``Layout`` and ``ExecSpace`` need to be the same types as the one from the Kokkos::View this ScatterView is interfacing.
+*  ``DataType``, ``Layout`` および ``ExecSpace``　は、Kokkos　のものと同じ型である必要があります::このScatterViewはインターフェースされています。
 
 * ``Operation``:
-  Can take the values:
+  次の値を選択可能です:
 
   - ``Kokkos::Experimental::ScatterSum``: performs a Sum. It is the default value.
 
