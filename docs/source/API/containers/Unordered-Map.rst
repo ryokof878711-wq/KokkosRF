@@ -56,23 +56,23 @@ Kokkos　の無順序マップは、数万件の同時挿入を効率的に処�
 
       マップをクリアします。
 
-      .. warning:: Host Only
+      .. warning:: ホストのみ
 
    .. cpp:function:: bool rehash(uint32_t requested_capacity);
 
-      Rehash map to given capacity, the current size is used as a lower bound O(capacity)
+      指定された容量に合わせてマップを再構成します。現在のサイズは、下限０　（容量）として使用されます。
 
-      .. warning:: Host Only
+      .. warning:: ホストのみ
 
    .. cpp:function:: uint32_t size() const;
 
-      Current size of the map, O(capacity)
+      マップの現在のサイズ、０（容量）
 
-      .. warning:: Host Only
+      .. warning:: ホストのみ
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION uint32_t capacity() const;
 
-       Capacity of the map, O(1)
+       マップの容量、 O(1)
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION UnorderedMapInsertResult insert(key) const;
 
