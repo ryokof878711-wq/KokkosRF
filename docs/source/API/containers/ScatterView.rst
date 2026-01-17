@@ -55,66 +55,65 @@ ScatterView　を直接アドレスすることはできません: 並列領域�
 * ``Operation``:
   次の値を選択可能です:
 
-  - ``Kokkos::Experimental::ScatterSum``: performs a Sum. It is the default value.
+  - ``Kokkos::Experimental::ScatterSum``: は、Sum　を実行します。それがデフォルトの値です。
 
-  - ``Kokkos::Experimental::ScatterProd``: performs a Multiplication.
+  - ``Kokkos::Experimental::ScatterProd``: は、乗算を実行します。
 
-  - ``Kokkos::Experimental::ScatterMin``: takes the min.
+  - ``Kokkos::Experimental::ScatterMin``: が、minを選択します。
 
-  - ``Kokkos::Experimental::ScatterMax``: takes the max.
+  - ``Kokkos::Experimental::ScatterMax``: が、maxを選択します。
 
 * ``Duplication``:
   Whether to duplicate the grid or not; defaults to ``Kokkos::Experimental::ScatterDuplicated``, other option is ``Kokkos::Experimental::ScatterNonDuplicated``.
 
 * ``Contribution``:
-  Whether to contribute to use atomics; defaults to ``Kokkos::Experimental::ScatterAtomics``, other option is ``Kokkoss::Experimental::ScatterNonAtomic``.
+  アトミック使用に貢献するかどうか；グリッドを複製するかどうか; デフォルトは、Kokkos::Experimental::ScatterDuplicated、もう一つの選択肢は、Kokkos::Experimental::ScatterNonDuplicated　です。
 
-Creating a ScatterView with non default ``Operation``, ``Duplication`` or ``Contribution`` using this interface can become complicated, because you need to specify the exact type for ``DataType``, ``Layout`` and ``ExecSpace``. This is why it is advised that you instead use the function Kokkos::Experimental::|create_scatter_view|_.
+このインターフェースを使って、デフォルトでない``Operation``, ``Duplication`` または　``Contribution``　を持つ　ScatterView　を作成するのは複雑になることがあります。なぜなら、DataType、Layout、ExecSpaceの正確なタイプを指定する必要があるからです。 そのため、代わりに　Kokkos::Experimental::|create_scatter_view|_　という関数を使うことをお勧めします。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: template <typename DataType, typename Layout, typename ExecSpace, typename Op, typename Duplication, typename Contribution> ScatterView
 
-    .. rubric:: Public Member Variables
+    .. rubric:: パブリックメンバー変数
 
     .. cpp:type:: original_view_type
 
-        Type of View passed to ScatterView constructor.
+        コンストラクタに渡されたビュー型。
 
     .. cpp:type:: original_value_type
 
-        Value type of the original_view_type.
+        Value type of the original_view_type　の値型。
 
     .. cpp:type:: original_reference_type
 
-        Reference type of the original_view_type.
+       original_view_type　の参照型。
 
     .. cpp:type:: data_type_info
 
-        DuplicatedDataType, a newly created DataType that has a new runtime dimension which becomes the largest-stride dimension, from the given View DataType.
-
+        DuplicatedDataType で、指定されたビューデータ型から新たなランタイム次元を持つ、新規作成されたデータ型。この新たなディメンションが最大ストライドディメンションとなります。
     .. cpp:type:: internal_data_type
 
-        Value type of data_type_info.
+        data_type_info　の値型。
 
     .. cpp:type:: internal_view_type
 
-        A View type created from the internal_data_type.
+        A View type created from the internal_data_type　から作成したビュー型。
 
-    .. rubric:: Constructors
+    .. rubric:: コンストラクタ
 
     .. cpp:function:: ScatterView()
 
-        The default constructor. Default constructs members.
+        デフォルトコンストラクタで、デフォルトがメンバーを構築します。
 
     .. cpp:function:: ScatterView(View<RT, RP...> const&)
 
-        Constructor from a ``Kokkos::View``. ``internal_view`` member is copy constructed from this input view.
+        ``Kokkos::View``　からのコンストラクタ。 ``internal_view`` メンバーは、この入力ビューから構築されたコピーです。
 
     .. cpp:function:: ScatterView(std::string const& name, Dims ... dims)
 
-        Constructor from variadic pack of dimension arguments. Constructs ``internal_view`` member.
+        可変長のディメンション引数パックからのコンストラクタ。 ``internal_view`` member　を構築します。
 
     .. cpp:function:: ScatterView(ALLOC_PROP const& arg_prop, Dims... dims)
 
