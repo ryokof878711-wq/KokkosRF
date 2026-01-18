@@ -31,7 +31,7 @@
    ``tmp = *ptr_to_value; *ptr_to_value &= value; return tmp;``　を原子的に実行します。
 
    :param ptr_to_value: 更新対象の値のアドレス
-   :param value: 元の値を組み合わせるための価値。
+   :param value: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T>  T atomic_fetch_div(T* const ptr_to_value, const T value);
 
@@ -85,20 +85,20 @@
    ``tmp = *ptr_to_value; *ptr_to_value %= value; return tmp;``　を原子的に実行します。
 
    :param ptr_to_value: 更新対象の値のアドレス
-　 :param value: value to be used as modulus.
+　 :param value: モジュラスとして使用する値。
 
 .. cpp:function:: template<class T> T atomic_fetch_nand(T* const ptr_to_value, const T value);
 
  ``tmp = *ptr_to_value; *ptr_to_value = ~(*ptr_to_value & val); return tmp;``　を原子的に実行します。
 
-   :param ptr_to_value: address of the value to be updated
+   :param ptr_to_value: 更新対象の値のアドレス
    :param value: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> T atomic_fetch_or(T* const ptr_to_value, const T value);
 
    ``tmp = *ptr_to_value; *ptr_to_value |= value; return tmp;``　を原子的に実行します。
 
-   :param ptr_to_value: address of the value to be updated更新対象の値のアドレス
+   :param ptr_to_value: 更新対象の値のアドレス
    :param value: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> T atomic_fetch_rshift(T* const ptr_to_value, const unsigned shift);
