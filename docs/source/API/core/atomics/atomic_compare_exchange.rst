@@ -22,7 +22,7 @@
 
 .. cpp:function:: template<class T> T atomic_compare_exchange(T* ptr, std::type_identity_t<T> expected, std::type_identity_t<T> desired);
 
-   原子的に、 ``*ptr``　を ``expected``　と比較し、 それらがビット単位で等しい場合には、 前者をreplaces the former with ``desired``　と置換し、そして、呼び出し前に　``ptr``が指していた実際の値を常に返します。
+   原子的に、 ``*ptr``　を ``expected``　と比較し、 それらがビット単位で等しい場合には、 前者を ``desired``　と置換し、そして、呼び出し前に　``ptr``が指していた実際の値を常に返します。
 
    ``{ old = *ptr; if (old == expected) *ptr = desired; return old; }``
 
