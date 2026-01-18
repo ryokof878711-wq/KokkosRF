@@ -26,7 +26,7 @@
 
    :param ptr: 値を変更するオブジェクトのアドレス
    :param val: 参照されるオブジェクトに保存する値
-   :returns: the value held previously by the object pointed to by ``ptr``
+   :returns: ``ptr``　が指すオブジェクトが以前に保持していた値
 
 
 See also
