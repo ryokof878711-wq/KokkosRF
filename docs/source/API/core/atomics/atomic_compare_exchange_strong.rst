@@ -30,7 +30,7 @@
 
    If ``desired`` is written into ``*ptr`` then ``true`` is returned.
 
-   ``if (*ptr == expected) { *ptr = desired; return true; } else return false;``
+   `` (*ptr == expected) { *ptr = desired; return true; } であれば、false　を返します。;``
 
    :param ptr: address of the object to test and to modify
    :param expected: value expected to be found in the object
