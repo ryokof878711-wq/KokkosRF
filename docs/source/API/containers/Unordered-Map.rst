@@ -76,112 +76,109 @@ Kokkos　の無順序マップは、数万件の同時挿入を効率的に処�
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION UnorderedMapInsertResult insert(key) const;
 
-      Insert the given key into the map with a default constructed value
+      指定されたキーをデフォルト値で構築された値と共にマップに挿入します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION UnorderedMapInsertResult insert(Key key, Value value, Insert op = NoOp) const;
 
-      Insert the given key/value pair into the map and optionally specify
-      the operator, op, used for combining values if key already exists
-
+      指定されたキー/値のペアをマップに挿入し、オプションで
+      キーが既に存在する場合に値を結合するために使用する演算子 op を指定します。
+     
    .. cpp:function:: KOKKOS_INLINE_FUNCTION uint32_t find(Key key) const
 
-      Return the index of the key if it exist, otherwise return invalid_index
+      キーが存在する場合、そのインデックスを返し、存在しない場合はinvalid_indexを返します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION bool exists(Key key) const;
 
-      Does the key exist in the map
+      マップ内にキーが存在しますか。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION bool valid_at(uint32_t index) const;
 
-      Is the current index a valid key/value pair
+      現在のインデックスは有効なキー/値ペアですか？
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION Key key_at(uint32_t index) const;
 
-      Return the current key at the index
+      インデックスの現在のキーを返します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION Value value_at(uint32_t index) const;
 
-      Return the current value at the index
+      インデックスの現在の値を返します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION constexpr bool is_allocated() const;
 
-      Return true if the internal views (keys, values, hashmap) are allocated
+      内部ビュー（キー、値、ハッシュマップ）が割り当てられている場合に true を返します。
 
    .. cpp:function:: create_copy_view(UnorderedMap<SKey, SValue, SDevice, Hasher, EqualTo> const &src);
 
-      For the calling ``UnorderedMap``, allocate views to have the same capacity as ``src``, and copy data from ``src``.
+      ``UnorderedMap``　を呼び出すために、 ビューを割り当てて、　``src``　と同じ容量を持たせ、``src``　からデータをコピーします。
 
    .. cpp:function:: allocate_view(UnorderedMap<SKey, SValue, SDevice, Hasher, EqualTo> const &src);
 
-      Allocate views of the calling ``UnorderedMap`` to have the same capacity as ``src``.
+      ``src``　と同じ容量を持たせるために、 ``UnorderedMap`` の呼び出しを配分します。
 
    .. cpp:function:: deep_copy_view(UnorderedMap<SKey, SValue, SDevice, Hasher, EqualTo> const &src);
 
-      Copy data from ``src`` to the calling ``UnorderedMap``.
+      ``src`` から ``UnorderedMap``　呼び出しにデータをコピーします。
 
    .. rubric:: Non-Member Functions
 
    .. cpp:function:: inline void deep_copy(UnorderedMap<DKey, DT, DDevice, Hasher, EqualTo> &dst, const UnorderedMap<SKey, ST, SDevice, Hasher, EqualTo> &src);
 
-      Copy an ``UnorderedMap`` from ``src`` to ``dst``.
+      ``src`` から ``dst``　に　``UnorderedMap``　をコピーします。
 
-      .. warning::  From Kokkos 4.4, ``src.capacity() == dst.capacity()`` is required
+      .. warning::  Kokkos 4.4　から ``src.capacity() == dst.capacity()`` が必要です。
 
    .. cpp:function:: UnorderedMap<Key, ValueType, Device, Hasher, EqualTo>::HostMirror create_mirror(const UnorderedMap<Key, ValueType, Device, Hasher, EqualTo> &src);
 
-      Create a ``HostMirror`` for an ``UnorderedMap``.
+      ``UnorderedMap``のために、``HostMirror``　を作成します。
 
 .. cpp:class:: UnorderedMapInsertResult
 
-   .. rubric:: Public Methods
+   .. rubric:: Public Methodsパブリックメソッド
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION bool success() const;
 
-      Was the key/value pair successfully inserted into the map
+     キーと値のペアはマップに正常に挿入されていましたか？
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION bool existing() const;
 
-      Is the key already present in the map
+      キーは既にマップ内に存在しますか？
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION bool failed() const;
 
-      Did the insert fail?
+      挿入は出来ませんでしたか・
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION uint32_t index() const;
 
-      Index where the key exists in the map as long as failed() == false
+      failed() == falsefailed() == false である限りにおいて、キーがマップ内に存在するインデックス
 
 .. cpp:struct:: template <class ValueTypeView, class ValuesIdxType> UnorderedMapInsertOpTypes
 
-   :tparam ValueTypeView: The UnorderedMap value array type.
+   :tparam ValueTypeView: UnorderedMap 値配列型。
 
    :tparam ValuesIdxType: The index type for lookups in the value array.
 
-   .. rubric:: *Public* Insertion Operator Types
+   .. rubric:: *Public* 挿入演算子の型
 
    .. cpp:struct:: NoOp
 
-        Insert the given key/value pair into the map
-
+        既定のキー/値をマップ内に挿入します。
    .. cpp:struct:: AtomicAdd
 
-       Duplicate key insertions sum values together.
+       キー挿入合計値を、合わせて複写転送します。
 
 
 .. _unordered_map_insert_op_types_noop:
 
-Insertion using default ``UnorderedMapInsertOpTypes::NoOp``
+デフォルト　``UnorderedMapInsertOpTypes::NoOp``　使用による挿入。
 -----------------------------------------------------------
 
-There are 3 potential states for every insertion which are reported by the ``UnorderedMapInsertResult``:
+``UnorderedMapInsertResult``:　によって報告されるすべての挿入に対して、3つの状態の可能性が報告されます:
 
-- ``success``: implies that the current thread has successfully inserted its key/value pair
+- ``success``: 現在のスレッドがキー/値ペアを正常に挿入したことを意味します。
 
-- ``existing``: implies that the key is already in the map and its current value is unchanged
+- ``existing``: キーはすでにマップ上にあり、現在の値が変わっていないことを意味します。
 
-- ``failed`` means that either the capacity of the map was exhausted or that a free index was not found
-  with a bounded search of the internal atomic bitset. A ``failed`` insertion requires the user to increase
-  the capacity (``rehash``) and restart the algorithm.
+- ``failed`` は、マップの容量が使い果たされたか、内部原子　bitset　の有界探索で自由インデックスが見つからなかったことを意味します。 挿入が、``failed``　の場合、ユーザーは容量を増やして(rehash)し、アルゴリズムを再起動する必要があります。 
 
 .. code-block:: cpp
 
@@ -197,18 +194,18 @@ There are 3 potential states for every insertion which are reported by the ``Uno
       map.insert(i, values(i));
     });
   
-Insertion using ``UnorderedMapInsertOpTypes::AtomicAdd``
+Insertion using ``UnorderedMapInsertOpTypes::AtomicAdd``を用いた挿入 
 --------------------------------------------------------
 
-The behavior from :ref:`unordered_map_insert_op_types_noop` holds true with the
-exception that the ``UnorderedMapInsertResult``:
+:ref:`unordered_map_insert_op_types_noop` からの挙動は :ref:'unordered_map_insert_op_types_noop' は、 
+``UnorderedMapInsertResult``を除き真実です :
 
-- ``existing`` implies that the key is already in the map and the existing value at key was summed
-  with the new value being inserted.
+- ``existing`` は、キーがすでにマップに存在し、
+  キーの既存の値を新しい値と合計したことを意味します。 
 
 .. code-block:: cpp
 
-    // use the AtomicAdd insert operation
+    // AtomicAdd 挿入演算を使用
     using map_op_type     = Kokkos::UnorderedMapInsertOpTypes<value_view_type, size_type>;
     using atomic_add_type = typename map_op_type::AtomicAdd;
     atomic_add_type atomic_add;
@@ -217,10 +214,10 @@ exception that the ``UnorderedMapInsertResult``:
     });
 
 
-Iteration
+イテレーション
 ---------
 
-Iterating over Kokkos' ``UnorderedMap`` is different from iterating over a standard container. The pattern is to iterate over the capacity of the map and check if the current index is valid.
+ Kokkosの　``UnorderedMap``　を反復することは、標準的なコンテナに対するイテレーションとは異なります。パターンとしては、マップの容量を反復し、現在のインデックスが有効かどうかを確認します。
 
 Example
 ~~~~~~~
