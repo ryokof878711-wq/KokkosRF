@@ -25,7 +25,7 @@
    ``{ auto old = *ptr; *ptr = val; return old; }``
 
    :param ptr: 値を変更するオブジェクトのアドレス
-   :param val: the value to store in the referenced object
+   :param val: 参照されるオブジェクトに保存する値
    :returns: the value held previously by the object pointed to by ``ptr``
 
 
