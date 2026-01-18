@@ -13,9 +13,9 @@
 
    auto old = atomic_exchange(&obj, desired);
 
-Atomically replaces the value of ``obj`` with ``desired`` and returns the value before the call.
+原子レベルでは、``obj``　の現在の値を、``desired``　に置き換え、呼び出し前に値を返します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> T atomic_exchange(T* ptr, std::type_identity_t<T> val);
