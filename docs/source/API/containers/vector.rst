@@ -181,28 +181,28 @@ Kokkos Vector　は意味的に　std::vector　に似ていますが、異な�
 
    .. cpp:function:: iterator find(Scalar val) const;
 
-      Return iterator pointing to element matching ``val``
+      ``val``　に一致する要素を指すイテレータを返します。
 
    .. cpp:function:: void device_to_host();
 
-      Copy data from device to host
+      デバイスからホストへデータをコピーします。
 
    .. cpp:function:: void host_to_device() const;
 
-      Copy data from host to device
+      ホストからデバイスにデータをコピーします。
 
    .. cpp:function:: void on_host();
 
-      Update/synchronize data in dual view from host perspective
+      ホスト側の観点からデュアルビューのデータを更新/同期します。
 
    .. cpp:function:: void on_device();
 
-      Update/synchronize data in dual view from the device perspective
+      デバイス側の観点からデュアルビューのデータを更新/同期します。
 
    .. cpp:function:: void set_overallocation(float extra);
 
-      Set the data buffer available at the end of the vector
+      ベクトルの末尾に利用可能なデータバッファを設定します。
 
    .. cpp:function:: constexpr bool is_allocated() const;
 
-      Returns true if the internal views (host and device) are allocated (non-null pointers).
+      内部ビュー（ホストとデバイス）が割り当てられている場合（NULLでないポインタの場合）、trueを返します。
