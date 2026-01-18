@@ -2,35 +2,35 @@
 =================
 
 .. warning::
-   Deprecated since Kokkos 4.5,
-   use :cpp:func:`atomic_store` instead.
+   Kokkos 4.5より、非推奨なので、
+   代わりに、:cpp:func:`atomic_store` をご使用ください。
 
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Atomic.hpp>`` which is included from ``<Kokkos_Core.hpp>``
+<Kokkos_Core.hpp>から含まれているヘッダー　``<Kokkos_Atomic.hpp>``　により、定義されています。
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
     atomic_assign(&obj, desired);
 
-Atomically replaces the current value of ``obj`` with ``desired``.
+原子レベルでは、``obj``　の現在の値を、``desired``　に置き換えます
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> void atomic_assign(T* ptr, std::type_identity_t<T> val);
 
-   Atomically writes ``val`` into ``*ptr``.
+   原子レベルでは、``val`` をinto ``*ptr``　に挿入します。
 
    ``{ *ptr = val; }``
 
-   :param ptr: address of the object whose value is to be replaced
-   :param val: the value to store in the referenced object
-   :returns: (nothing)
+   :param ptr: 値が置換されるオブジェクトのアドレス
+   :param val: 参照されるオブジェクトに保存する値
+   :returns: (無し)
 
-   .. deprecated:: 4.5
-      Use :cpp:func:`atomic_store` instead.
+   .. 4.5より、非推奨なので、
+      代わりに、:cpp:func:`atomic_store` をご使用ください。
