@@ -4,9 +4,9 @@
 .. role:: cpp(code)
    :language: cpp
 
-Defined in header ``<Kokkos_Atomic.hpp>`` which is included from ``<Kokkos_Core.hpp>``
+ ``<Kokkos_Core.hpp>``　から含まれているヘッダー　``<Kokkos_Atomic.hpp>``　により、定義されています。
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
