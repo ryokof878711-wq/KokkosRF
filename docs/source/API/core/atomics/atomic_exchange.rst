@@ -29,7 +29,7 @@
    :returns: ``ptr``　が指すオブジェクトが以前に保持していた値
 
 
-See also
+以下も参照
 --------
 * `atomic_load <atomic_load.html>`_: atomically obtains the value of the referenced object
 * `atomic_store <atomic_store.html>`_: atomically replaces the value of the referenced object with a non-atomic argument
