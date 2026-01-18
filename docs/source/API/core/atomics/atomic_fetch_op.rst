@@ -13,10 +13,10 @@
 
    old_value =  atomic_fetch_[op](ptr_to_value, update_value);
 
-Atomically updates the variable at the address given by ``ptr_to_value`` with ``update_value``
-according to the relevant operation ``op``, and returns the previous value found at that address.
+``ptr_to_value`` で与えられたアドレスの変数を、関連する操作　``op``　に従って、原子的に``update_value``　で更新し、
+そのアドレスで見つけた前の値を返します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> T atomic_fetch_add(T* const ptr_to_value, const T value);
