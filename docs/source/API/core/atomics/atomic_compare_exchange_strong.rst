@@ -2,26 +2,26 @@
 ==================================
 
 .. warning::
-   Deprecated since Kokkos 4.5,
-   use `atomic_compare_exchange <atomic_compare_exchange.html>`_ instead.
+   Kokkos 4.5　以降は非推奨なので、
+   代わりに　`atomic_compare_exchange <atomic_compare_exchange.html>`_ をお使いください。
 
 .. role:: cpp(code)
    :language: cpp
 
-Defined in header ``<Kokkos_Atomic.hpp>`` which is included from ``<Kokkos_Core.hpp>``
+``<Kokkos_Core.hpp>`` から含まれている、ヘッダー ``<Kokkos_Atomic.hpp>``  に定義されています。
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
    bool was_exchanged = atomic_compare_exchange_strong(&obj, expected, desired);
 
-Atomically compares the current value of ``obj`` with ``expected``
-and replaces its value with ``desired`` if equal.
-The function returns ``true`` if the exchange has happened, ``false`` otherwise.
+原子的に、 ``obj`` の現在値をwith ``expected``　と比較し、
+そして、等しければその値を　``desired``　値に置き換えます。
+交換が起こった場合には、関数は　``true``　を返しますが、そうでなければ、``false`` を返します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> bool atomic_compare_exchange_strong(T* ptr, std::type_identity_t<T> expected, std::type_identity_t<T> desired);
