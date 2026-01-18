@@ -20,7 +20,7 @@
 
 .. cpp:function:: template<class T> T atomic_exchange(T* ptr, std::type_identity_t<T> val);
 
-   Atomically writes ``val`` into ``*ptr`` and returns the original value of ``*ptr``.
+  原子レベルでは、``val`` をinto ``*ptr``　に挿入し、``*ptr`` のもとの値を返します。
 
    ``{ auto old = *ptr; *ptr = val; return old; }``
 
