@@ -33,7 +33,7 @@
    `` (*ptr == expected) { *ptr = desired; return true; } であれば、false　を返します。;``
 
    :param ptr: テストし、変更するオブジェクトのアドレス
-   :param expected: value expected to be found in the object
+   :param expected: オブジェクト内で見つかると予想される値
    :param desired: the value to store in the object if as expected
    :returns: the result of the comparison, ``true`` if ``*ptr`` was equal to ``expected``, ``false`` otherwise
 
