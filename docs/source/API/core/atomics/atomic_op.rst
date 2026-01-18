@@ -22,7 +22,7 @@
 
     ``*ptr_to_value += value``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス
 
    * ``value``: value to be added.
 
