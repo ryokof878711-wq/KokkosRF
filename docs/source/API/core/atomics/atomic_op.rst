@@ -4,23 +4,23 @@
 .. role:: cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
     atomic_[op](ptr_to_value,update_value);
 
-Atomically updates the ``value`` at the address given by ``ptr_to_value`` with ``update_value`` according to the relevant operation.
+``ptr_to_value`` と　``update_value``　で与えられたアドレスの　``value``　を、関連する操作に従って、原子的に更新します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> void atomic_add(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value += value``.
+    ``*ptr_to_value += value``　を原子的に実行します。
 
    * ``ptr_to_value``: address of the to be updated value.
 
