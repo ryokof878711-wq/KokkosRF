@@ -31,6 +31,6 @@
 
 以下も参照
 --------
-* `atomic_load <atomic_load.html>`_: atomically obtains the value of the referenced object
-* `atomic_store <atomic_store.html>`_: atomically replaces the value of the referenced object with a non-atomic argument
-* `atomic_compare_exchange <atomic_compare_exchange.html>`_: atomically compares the value of the referenced object with non-atomic argument and performs atomic exchange if equal or atomic load if not
+* `atomic_load <atomic_load.html>`_: 参照対象の値を、原子的に取得します
+* `atomic_store <atomic_store.html>`_:、原子的に、置き換えます
+* `atomic_compare_exchange <atomic_compare_exchange.html>`_: 原子的に、非原子的引数と 参照対象の値を比較し、等しければ原始的交換を実行し、等しくなければ原始的負荷を実行します 
