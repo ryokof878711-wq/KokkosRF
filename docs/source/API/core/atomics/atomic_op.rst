@@ -24,13 +24,13 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス
 
-   * ``value``: value to be added.
+   * ``value``: 追加する値。
 
 .. cpp:function:: template<class T> void atomic_and(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value &= value``.
+   ``*ptr_to_value &= value``を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value with which to combine the original value.
 
