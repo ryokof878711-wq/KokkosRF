@@ -35,7 +35,7 @@
    :param ptr: テストし、変更するオブジェクトのアドレス
    :param expected: オブジェクト内で見つかると予想される値
    :param desired: オブジェクトに格納する値が予想通りである場合
-   :returns: the result of the comparison, ``true`` if ``*ptr`` was equal to ``expected``, ``false`` otherwise
+   :returns: the result of the comparison, ``true`` if ``*ptr`` was equal to ``expected``, ``false`` otherwise``ptr``
 
    .. deprecated:: 4.5
       Prefer :cpp:expr:`expected == atomic_compare_exchange(&obj, expected, desired)`
