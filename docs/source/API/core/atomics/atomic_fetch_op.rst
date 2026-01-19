@@ -85,7 +85,7 @@
    ``tmp = *ptr_to_value; *ptr_to_value %= value; return tmp;``　を原子的に実行します。
 
    :param ptr_to_value: 更新対象の値のアドレス
-　　:param value: モジュラスを使用するための値
+:param value: モジュラスを使用するための値
 
 .. cpp:function:: template<class T> T atomic_fetch_nand(T* const ptr_to_value, const T value);
 
