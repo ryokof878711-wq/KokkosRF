@@ -48,13 +48,13 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``shift``: value by which to shift the original variable.
+   * ``shift``: 元の変数をシフトする値。
 
 .. cpp:function:: template<class T> T atomic_max_fetch(T* const ptr_to_value, const T value);
 
    Atomically executes ``*ptr_to_value = max(*ptr_to_value, value); return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value which to take the maximum with.
 
@@ -62,7 +62,7 @@
 
    Atomically executes ``*ptr_to_value = min(*ptr_to_value, value); return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value which to take the minimum with.
 
@@ -70,7 +70,7 @@
 
    Atomically executes ``*ptr_to_value *= value; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value by which to multiply the original value.
 
@@ -78,7 +78,7 @@
 
    Atomically executes ``*ptr_to_value %= value; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value with which to combine the original value.
 
@@ -86,7 +86,7 @@
 
    Atomically executes ``*ptr_to_value |= value; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value with which to combine the original value.
 
@@ -94,7 +94,7 @@
 
    Atomically executes ``*ptr_to_value >> shift; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``shift``: value by which to shift the original variable.
 
@@ -102,7 +102,7 @@
 
    Atomically executes ``*ptr_to_value -= value; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value to be subtracted.
 
@@ -110,6 +110,6 @@
 
    Atomically executes ``*ptr_to_value ^= value; return *ptr_to_value;``.
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value with which to combine the original value.
