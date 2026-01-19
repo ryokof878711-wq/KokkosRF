@@ -13,7 +13,7 @@
 
     new_value =  atomic_[op]_fetch(ptr_to_value,update_value);
 
-Atomically updates the variable at the address given by ``ptr_to_value`` with ``update_value`` according to the relevant operation, and returns the updated value found at that address.
+Atomically updates the variable at the address given by  with  according to the relevant operation, and returns the updated value found at that ``ptr_to_value`` で与えられたアドレスの変数を、関連する演算に従って、原子的に　``update_value``　で更新し、 そのアドレスで見つけた前の値を返します。
 
 Description
 -----------
