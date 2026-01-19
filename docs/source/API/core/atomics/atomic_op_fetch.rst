@@ -28,17 +28,17 @@
 
 .. cpp:function:: template<class T> T atomic_and_fetch(T* const ptr_to_value, const T value);
 
-   ``*ptr_to_value &= value; return *ptr_to_value;``を原子的に実行します。
+   ``*ptr_to_value &= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス
 
-   * ``value``: value with which to combine the original value.。
+   * ``value``: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> T atomic_div_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value /= value; return *ptr_to_value;``.
+   ``*ptr_to_value /= value; return *ptr_to_value;``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value by which to divide the original value..
 
