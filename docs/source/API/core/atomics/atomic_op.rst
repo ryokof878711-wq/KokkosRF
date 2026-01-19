@@ -44,7 +44,7 @@
 
    ``(*ptr_to_value)--`` or calls ``atomic_fetch_sub(ptr_to_value, T(-1))``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    .. 4.5　より廃止
       代わりに :cpp:func:'atomic_dec' を使ってください。
