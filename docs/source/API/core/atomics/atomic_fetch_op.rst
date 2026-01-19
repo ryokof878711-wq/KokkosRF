@@ -32,25 +32,13 @@
 
    :param ptr_to_value: 更新対象の値のアドレス
    :param value: 元の値を組み合わせるための値。
-
-.. cpp:function:: template<class T>  T atomic_fetch_div(T* const ptr_to_value, const T value);
-
-   ``tmp = *ptr_to_value; *ptr_to_value /= value; return tmp;``　を原子的に実行します。
-
-   :param ptr_to_value: 更新対象の値のアドレス
    
 .. cpp:function:: template<class T>  T atomic_fetch_div(T* const ptr_to_value, const T value);
 
- ``tmp = *ptr_to_value; *ptr_to_value /= value; return tmp;``　を原子的に実行します。
+   Atomically executes ``tmp = *ptr_to_value; *ptr_to_value /= value; return tmp;``.
 
- 　:param ptr_to_value: 更新対象の値のアドレス
-   :param value: 元の値を割るための値。
-
-.. cpp:function:: template<class T>  T atomic_fetch_inc(T* const ptr_to_value);
-
-　``tmp = *ptr_to_value; (*ptr_to_value)++; return tmp;``　を原子的に実行します。
-
- 　:param ptr_to_value: 更新対象の値のアドレス
+   :param ptr_to_value: address of the value to be updated
+   :param value: value by which to divide the original value..
 
 .. cpp:function:: template<class T> T atomic_fetch_lshift(T* const ptr_to_value, const unsigned shift);
 
