@@ -13,14 +13,14 @@
 
     new_value =  atomic_[op]_fetch(ptr_to_value,update_value);
 
-Atomically updates the variable at the address given by  with  according to the relevant operation, and returns the updated value found at that ``ptr_to_value`` で与えられたアドレスの変数を、関連する演算に従って、原子的に　``update_value``　で更新し、 そのアドレスで見つけた前の値を返します。
+ ``ptr_to_value`` で与えられたアドレスの変数を、関連する演算に従って、原子的に　``update_value``　で更新し、 そのアドレスで見つけた前の値を返します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class T> T atomic_add_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value += value; return *ptr_to_value;``.
+   Atomically executes ``*ptr_to_value += value; return *ptr_to_value;``
 
    * ``ptr_to_value``: address of the to be updated value.
 
