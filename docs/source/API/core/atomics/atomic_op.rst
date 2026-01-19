@@ -94,4 +94,4 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value to be subtracted.
+   * ``value``: 差し引かれる値
