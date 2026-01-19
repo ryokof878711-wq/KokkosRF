@@ -70,21 +70,21 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value which to take the maximum with.
+   * ``value``: 最大値を取るべき値。
 
 .. cpp:function:: template<class T> void atomic_min(T* const ptr_to_value, const T value);
 
-   Atomically executes ``if (value < *ptr_to_value) *ptr_to_value = value``.
+    ``if (value < *ptr_to_value) *ptr_to_value = value``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value which to take the minimum with.
+   * ``value``: 最小値を取るべき値。
 
 .. cpp:function:: template<class T> void atomic_or(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value |= value``.
+   ``*ptr_to_value |= value``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value with which to combine the original value.
 
