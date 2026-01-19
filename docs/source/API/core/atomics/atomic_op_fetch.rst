@@ -104,7 +104,7 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value to be subtracted.
+   * ``value``: 差し引かれる値。
 
 .. cpp:function:: template<class T> T atomic_xor_fetch(T* const ptr_to_value, const T value);
 
@@ -112,4 +112,4 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value with which to combine the original value.
+   * ``value``: 元の値を組み合わせるための値。
