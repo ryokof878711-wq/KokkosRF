@@ -40,13 +40,13 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value by which to divide the original value..
+   * ``value``: 元の値を割るための値..
 
 .. cpp:function:: template<class T> T atomic_lshift_fetch(T* const ptr_to_value, const unsigned shift);
 
-   Atomically executes ``*ptr_to_value << shift; return *ptr_to_value;``.
+   ``*ptr_to_value << shift; return *ptr_to_value;``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``shift``: value by which to shift the original variable.
 
