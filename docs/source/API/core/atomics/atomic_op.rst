@@ -32,43 +32,43 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value with which to combine the original value.
+   * ``value``: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> void atomic_dec(T* ptr_to_value);
 
-   Atomically executes ``(*ptr_to_value)--`` or calls ``atomic_fetch_sub(ptr_to_value, T(-1))``.
+   ``(*ptr_to_value)--`` or calls ``atomic_fetch_sub(ptr_to_value, T(-1))``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
 .. cpp:function:: template<class T> void atomic_decrement(T* const ptr_to_value);
 
-   Atomically executes ``(*ptr_to_value)--`` or calls ``atomic_fetch_sub(ptr_to_value, T(-1))``.
+   ``(*ptr_to_value)--`` or calls ``atomic_fetch_sub(ptr_to_value, T(-1))``　を原子的に実行します。
 
    * ``ptr_to_value``: address of the to be updated value.
 
-   .. deprecated:: 4.5
-      Use :cpp:func:`atomic_dec` instead.
+   .. 4.5　より廃止
+      代わりに :cpp:func:'atomic_dec' を使ってください。
 
 .. cpp:function:: template<class T> void atomic_inc(T* ptr_to_value);
 
-   Atomically executes ``(*ptr_to_value)++`` or calls ``atomic_fetch_add(ptr_to_value, T(1))``.
+   ``(*ptr_to_value)++`` or calls ``atomic_fetch_add(ptr_to_value, T(1))``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
 .. cpp:function:: template<class T> void atomic_increment(T* const ptr_to_value);
 
-   Atomically executes ``(*ptr_to_value)++`` or calls ``atomic_fetch_add(ptr_to_value, T(1))``.
+   ``(*ptr_to_value)++`` or calls ``atomic_fetch_add(ptr_to_value, T(1))``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   .. deprecated:: 4.5
-      Use :cpp:func:`atomic_inc` instead.
+   .. 4.5より廃止
+      代わりに　:cpp:func:`atomic_inc` を使ってください。
 
 .. cpp:function:: template<class T> void atomic_max(T* const ptr_to_value, const T value);
 
-   Atomically executes ``if (value > *ptr_to_value) *ptr_to_value = value``.
+    ``if (value > *ptr_to_value) *ptr_to_value = value``　を原子的に実行します。
 
-   * ``ptr_to_value``: address of the to be updated value.
+   * ``ptr_to_value``: 更新対象の値のアドレス。
 
    * ``value``: value which to take the maximum with.
 
