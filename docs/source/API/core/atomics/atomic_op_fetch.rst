@@ -52,23 +52,23 @@
 
 .. cpp:function:: template<class T> T atomic_max_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value = max(*ptr_to_value, value); return *ptr_to_value;``.
+   ``*ptr_to_value = max(*ptr_to_value, value); return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value which to take the maximum with.
+   * ``value``: 最大値を取るべき値。
 
 .. cpp:function:: template<class T> T atomic_min_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value = min(*ptr_to_value, value); return *ptr_to_value;``.
+   ``*ptr_to_value = min(*ptr_to_value, value); return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value which to take the minimum with.
+   * ``value``: 最小値を取るべき値。
 
 .. cpp:function:: template<class T> T atomic_mul_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value *= value; return *ptr_to_value;``.
+   ``*ptr_to_value *= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
@@ -76,7 +76,7 @@
 
 .. cpp:function:: template<class T> T atomic_mod_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value %= value; return *ptr_to_value;``.
+   Atomically executes ``*ptr_to_value %= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
@@ -84,7 +84,7 @@
 
 .. cpp:function:: template<class T> T atomic_or_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value |= value; return *ptr_to_value;``.
+  　``*ptr_to_value |= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
@@ -92,7 +92,7 @@
 
 .. cpp:function:: template<class T> T atomic_rshift_fetch(T* const ptr_to_value, const unsigned shift);
 
-   Atomically executes ``*ptr_to_value >> shift; return *ptr_to_value;``.
+   ``*ptr_to_value >> shift; return *ptr_to_value;``　を原子的に実行します。　
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
@@ -100,7 +100,7 @@
 
 .. cpp:function:: template<class T> T atomic_sub_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value -= value; return *ptr_to_value;``.
+   ``*ptr_to_value -= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
@@ -108,7 +108,7 @@
 
 .. cpp:function:: template<class T> T atomic_xor_fetch(T* const ptr_to_value, const T value);
 
-   Atomically executes ``*ptr_to_value ^= value; return *ptr_to_value;``.
+   ``*ptr_to_value ^= value; return *ptr_to_value;``　を原子的に実行します。
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
