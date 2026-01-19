@@ -72,7 +72,7 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value by which to multiply the original value.
+   * ``value``: 元の値に乗じる値。
 
 .. cpp:function:: template<class T> T atomic_mod_fetch(T* const ptr_to_value, const T value);
 
@@ -80,7 +80,7 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value with which to combine the original value.
+   * ``value``: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> T atomic_or_fetch(T* const ptr_to_value, const T value);
 
@@ -88,7 +88,7 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``value``: value with which to combine the original value.
+   * ``value``: 元の値を組み合わせるための値。
 
 .. cpp:function:: template<class T> T atomic_rshift_fetch(T* const ptr_to_value, const unsigned shift);
 
