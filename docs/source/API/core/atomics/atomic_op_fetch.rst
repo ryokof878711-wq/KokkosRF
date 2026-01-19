@@ -96,7 +96,7 @@
 
    * ``ptr_to_value``: 更新対象の値のアドレス。
 
-   * ``shift``: value by which to shift the original variable.
+   * ``shift``: 元の変数をシフトする値。
 
 .. cpp:function:: template<class T> T atomic_sub_fetch(T* const ptr_to_value, const T value);
 
