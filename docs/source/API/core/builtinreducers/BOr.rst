@@ -4,11 +4,11 @@
 .. role:: cpp(code)
     :language: cpp
 
-ビット単位でSpecific implementation of performing bitwise ``OR`` 演算を行う　`ReducerConcept <ReducerConcept.html>`_ の具体的な実装。
+ビット単位の ``OR`` 演算を行う　`ReducerConcept <ReducerConcept.html>`_ の具体的な実装。
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -16,7 +16,7 @@ Usage
    T result;
    parallel_reduce(N,Functor,BOr<T,S>(result));
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
@@ -24,7 +24,7 @@ Synopsis
    template<class Scalar, class Space>
    class BOr{
      public:
-       typedef BOr reducer;
+       型定義　BOr リデューサー；
        typedef typename std::remove_cv<Scalar>::type value_type;
        typedef Kokkos::View<value_type, Space> result_view_type;
 
@@ -47,12 +47,12 @@ Synopsis
        BOr(const result_view_type& value_);
    };
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: template<class Scalar, class Space> BOr
 
-   .. rubric:: Public Types
+   .. rubric:: パブリック型
 
    .. cpp:type:: reducer
 
