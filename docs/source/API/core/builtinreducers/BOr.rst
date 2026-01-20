@@ -84,7 +84,8 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void init(value_type& val) const;
 
-      Initialize ``val`` using the ``Kokkos::reduction_identity<Scalar>::land()`` method. The default implementation sets ``val=0``.
+       ``Kokkos::reduction_identity<Scalar>::land()`` メソッドを使用して、``val``　を初期化します。 デフォルト実装は、``val=(0)``　を設定します。
+
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION value_type& reference() const;
 
