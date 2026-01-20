@@ -89,7 +89,7 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION value_type& reference() const;
 
-      Returns a reference to the result provided in class constructor.
+      クラスコンストラクタで提供された結果への参照を返します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION result_view_type view() const;
 
