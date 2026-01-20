@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-Specific implementation of `ReducerConcept <ReducerConcept.html>`_ performing bitwise ``OR`` operation
+ビット単位でSpecific implementation of `ReducerConcept <ReducerConcept.html>`_ performing bitwise ``OR`` operation
 
 Header File: ``<Kokkos_Core.hpp>``
 
