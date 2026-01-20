@@ -60,7 +60,7 @@
 
    .. cpp:type:: value_type
 
-      The reduction scalar type.
+      還元スカラー型。
 
    .. cpp:type:: result_view_type
 
