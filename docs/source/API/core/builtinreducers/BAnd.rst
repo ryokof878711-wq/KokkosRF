@@ -104,4 +104,4 @@
 
 * 必要条件: ``Scalar`` は、 定義した　``operator =`` and ``operator &`` を持ちます。``Kokkos::reduction_identity<Scalar>::band()`` は有効な式です。
 
-* BAnd をカスタム型でしようするには、with a custom type, a template specialization of ``Kokkos::reduction_identity<CustomType>`` を定義する必要があります。詳細については、 `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ をご参照ください。
+* BAnd をカスタム型で使用するには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。詳細については、 `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ をご参照ください。
