@@ -80,7 +80,7 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void join(value_type& dest, const value_type& src) const;
 
-      Store logical ``and`` of ``src`` and ``dest`` into ``dest``:  ``dest = src && dest;``.
+      ``src``　の ``and``　および　``dest`` を ``dest``:  ``dest = src && dest;``　にビット単位で格納します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void init(value_type& val) const;
 
