@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-ビット単位のAND操作を実行する `ReducerConcept <ReducerConcept.html>`_ 具体的な実装
+ビット単位のAND演算を実行する `ReducerConcept <ReducerConcept.html>`_ 具体的な実装
 
 ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
