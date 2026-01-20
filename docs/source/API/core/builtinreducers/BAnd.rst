@@ -4,11 +4,11 @@
 .. role:: cpp(code)
     :language: cpp
 
-Specific implementation of `ReducerConcept <ReducerConcept.html>`_ performing bitwise ``AND`` operation
+ビット単位のAND操作を実行する `ReducerConcept <ReducerConcept.html>`_ 具体的な実装
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -16,7 +16,7 @@ Usage
     T result;
     parallel_reduce(N,Functor,BAnd<T,S>(result));
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
@@ -47,24 +47,24 @@ Synopsis
             BAnd(const result_view_type& value_);
     };
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: template<class Scalar, class Space> BAnd
 
-   .. rubric:: Public Types
+   .. rubric:: パブリック型。
 
-   .. cpp:type:: reducer
+   .. cpp:type:: リデューサー
 
-      The self type
+      自分型
 
    .. cpp:type:: value_type
 
-      The reduction scalar type.
+      還元スカラー型。
 
    .. cpp:type:: result_view_type
 
-      A ``Kokkos::View`` referencing the reduction result
+      還元結果を参照する ``Kokkos::View`` 
 
    .. rubric:: Constructors
 
