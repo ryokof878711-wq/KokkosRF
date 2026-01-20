@@ -4,11 +4,11 @@
 .. role:: cpp(code)
     :language: cpp
 
-Specific implementation of  performing 論理的 ``OR`` 演算を行う　`ReducerConcept <ReducerConcept.html>`_　の具体的な実装
+論理的 ``OR`` 演算を行う　`ReducerConcept <ReducerConcept.html>`_　の具体的な実装
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -16,7 +16,7 @@ Usage
    T result;
    parallel_reduce(N,Functor,LOr<T,S>(result));
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
@@ -24,7 +24,7 @@ Synopsis
    template<class Scalar, class Space>
    class LOr{
      public:
-       typedef LOr reducer;
+       型定義 LOr リデューサー;
        typedef typename std::remove_cv<Scalar>::type value_type;
        typedef Kokkos::View<value_type, Space> result_view_type;
 
@@ -47,16 +47,16 @@ Synopsis
        LOr(const result_view_type& value_);
    };
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: template<class Scalar, class Space> LOr
 
-   .. rubric:: Public Types
+   .. rubric:: パブリック型
 
-   .. cpp:type:: reducer
+   .. cpp:type:: リデューサー
 
-      The self type.
+      自己型。
 
    .. cpp:type:: value_type
 
