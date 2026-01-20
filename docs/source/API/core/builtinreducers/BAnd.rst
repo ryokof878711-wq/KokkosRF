@@ -56,7 +56,7 @@
 
    .. cpp:type:: リデューサー
 
-      自分型
+      自己型
 
    .. cpp:type:: value_type
 
