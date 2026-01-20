@@ -74,9 +74,9 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION LOr(const result_view_type& value_);
 
-      Constructs a reducer which references a specific view as its result location.
+      特定のビューを結果の位置として参照するリデューサーを構築します。
 
-   .. rubric:: Public Member Functions
+   .. rubric:: パブリックメンバー関数
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void join(value_type& dest, const value_type& src) const;
 
