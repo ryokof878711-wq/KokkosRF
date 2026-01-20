@@ -70,7 +70,7 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION LOr(value_type& value_);
 
-      Constructs a reducer which references a local variable as its result location.
+      結果の位置としてローカル変数を参照するリデューサを構築します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION LOr(const result_view_type& value_);
 
