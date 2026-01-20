@@ -104,4 +104,4 @@
 
 * 必要要件: ``Scalar`` は、 定義した ``operator =`` and ``operator |``　を持ちます。``Kokkos::reduction_identity<Scalar>::bor()`` は、有効な式です。
 
-* 　BOr をカスタム型で使用するには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。詳細については、`Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ for details　をご参照ください。
+* 　BOr をカスタム型で使用するには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。詳細については、`Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ 　をご参照ください。
