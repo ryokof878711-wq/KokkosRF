@@ -105,4 +105,4 @@
 
 * 必要条件: ``Scalar`` は、 定義した ``operator =`` and ``operator ||`` を持ちます。``Kokkos::reduction_identity<Scalar>::lor()`` は、有効な式です。
 
-* LOr をカスタム型で使用するには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。 See `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ for details.
+* LOr をカスタム型で使用するには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。 詳細については、 `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ をご参照ください。
