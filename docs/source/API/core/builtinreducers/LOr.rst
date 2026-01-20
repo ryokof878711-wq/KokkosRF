@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-Specific implementation of `ReducerConcept <ReducerConcept.html>`_ performing logical ``OR`` operation
+Specific implementation of `ReducerConcept <ReducerConcept.html>`_ performing 論理的 ``OR`` 演算
 
 Header File: ``<Kokkos_Core.hpp>``
 
