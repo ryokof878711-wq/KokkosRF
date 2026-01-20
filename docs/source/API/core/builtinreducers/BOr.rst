@@ -102,6 +102,6 @@
 
 * ``BOr<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。　S(メモリ空間)は結果が存在する空間と同じでなければならないことに、ご注意ください。
 
-* 必要要件: ``Scalar`` has ``operator =`` and ``operator |`` defined. ``Kokkos::reduction_identity<Scalar>::bor()`` is a valid expression.
+* 必要要件: ``Scalar`` は、 定義した ``operator =`` and ``operator |`` defined　を持ちます。``Kokkos::reduction_identity<Scalar>::bor()`` は、有効な式です。
 
 * In order to use BOr with a custom type, a template specialization of ``Kokkos::reduction_identity<CustomType>`` must be defined. See `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ for details
