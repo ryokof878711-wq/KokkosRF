@@ -93,14 +93,14 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION result_view_type view() const;
 
-      Returns a view of the result place provided in class constructor.
+      クラスコンストラクタで提供された結果の場所のビューを返します。
 
 追加情報
 ^^^^^^^^^^^^^^^^^^^^^^
 
-* ``BOr<T,S>::value_type`` is non-const ``T``
+* ``BOr<T,S>::value_type`` は、 non-const ``T``
 
-* ``BOr<T,S>::result_view_type`` is ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``. Note that the S (memory space) must be the same as the space where the result resides.
+* ``BOr<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。　Note that the S (memory space) must be the same as the space where the result resides.
 
 * Requires: ``Scalar`` has ``operator =`` and ``operator |`` defined. ``Kokkos::reduction_identity<Scalar>::bor()`` is a valid expression.
 
