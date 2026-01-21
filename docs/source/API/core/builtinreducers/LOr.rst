@@ -93,7 +93,7 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION result_view_type view() const;
 
-      クラスコンストラクタで提供された結果の場所のビューを返します。
+      クラスコンストラクタで提供された結果の保存先のビューを返します。
 
 
 追加情報
