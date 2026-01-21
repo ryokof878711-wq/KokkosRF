@@ -99,7 +99,7 @@
 
 * ``Sum<T,S>::value_type`` は、 非定数 ``T``　です。
 
-* ``Sum<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。  Note that the S (memory space) must be the same as the space where the result resides.
+* ``Sum<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。 S(メモリ空間)は結果が存在する空間と同じでなければならないことに、ご注意ください。
 
 * Requires: ``Scalar`` has ``operator =`` and ``operator +=`` defined. ``Kokkos::reduction_identity<Scalar>::sum()`` is a valid expression.
 
