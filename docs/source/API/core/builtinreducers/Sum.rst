@@ -4,11 +4,11 @@
 .. role:: cpp(code)
     :language: cpp
 
-Specific implementation of `ReducerConcept <ReducerConcept.html>`_ performing an ``add`` operation
+``add`` operation演算を行う `ReducerConcept <ReducerConcept.html>`_　の具体的な実装。
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -16,7 +16,7 @@ Usage
    T result;
    parallel_reduce(N,Functor,Sum<T,S>(result));
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
@@ -47,26 +47,26 @@ Synopsis
        Sum(const result_view_type& value_);
    };
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: template<class Scalar, class Space> Sum
 
-   .. rubric:: Public Types
+   .. rubric:: パブリック型
 
    .. cpp:type:: reducer
 
-      The self type.
+      自己型。
 
    .. cpp:type:: value_type
 
-      The reduction scalar type.
+      The reduction scalar type.還元スカラー型。
 
    .. cpp:type:: result_view_type
 
-      A ``Kokkos::View`` referencing the reduction result
+      還元結果を参照する　``Kokkos::View``。
 
-   .. rubric:: Constructors
+   .. rubric:: コンストラクタ
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION Sum(value_type& value_);
 
