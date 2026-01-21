@@ -70,11 +70,11 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION LAnd(value_type& value_);
 
-      結果の位置としてローカル変数を参照するリデューサを構築します。
+      結果の保存先としてローカル変数を参照するリデューサを構築します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION LAnd(const result_view_type& value_);
 
-      特定のビューを結果の位置として参照するリデューサーを構築します。
+      特定のビューを結果の保存先として参照するリデューサーを構築します。
 
    .. rubric:: パブリックメンバー関数
 
