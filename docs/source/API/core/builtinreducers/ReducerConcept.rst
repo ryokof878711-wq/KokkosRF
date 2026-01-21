@@ -4,11 +4,11 @@
 .. role:: cpp(code)
     :language: cpp
 
-Reducerの概念とは、並列　Reduce　実行パターンにおいて　"Reduction"　がどのように実行されるかを定義する抽象化です。Reducer　の概念とは、並列　Reduce　実行パターンにおいて　Reduce　が"how"「どのように」実行されるかを定義する抽象化である。抽象化「what」はテンプレート引数として与えられ、`parallel_reduce <../parallel-dispatch/parallel_reduce.html>`_ 操作において削減対象となる「what」に対応します。The concept of a Reducer is the abstraction that defines the  a  is performed during the parallel reduce execution pattern. The abstraction of "what" is given as a template parameter and corresponds to the "what" that is being reduced in the `parallel_reduce <../parallel-dispatch/parallel_reduce.html>`_ operation. This page describes the definitions and functions expected from a Reducer with a hypothetical 'Reducer' class definition. A brief description of built-in reducers is also included.
+Reducerの概念とは、並列　Reduce　実行パターンにおいて　"Reduction"　がどのように実行されるかを定義する抽象化です。Reducer　の概念とは、並列　Reduce　実行パターンの間に　Reduce　が　"how"　（どのように）　実行されるかを定義する抽象化である。抽象化　"what"　はテンプレート引数として与えられ、`parallel_reduce <../parallel-dispatch/parallel_reduce.html>`_ 操作において還元対象となる　"what" に対応します。本ページでは、仮説的な　'Reducer'クラス定義を用いたリデューサーに予想される定義と関数について説明します。組み込みリデューサーについての簡単なディスクリプションも含まれています。
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -17,12 +17,12 @@ Usage
     parallel_reduce(N,Functor,ReducerConcept<T>(result));
 
 
-Synopsis
+概要
 --------
 
 .. code-block:: cpp
 
-    class Reducer {
+    クラスリデューサー {
         public:
             //Required for Concept
             typedef Reducer reducer;
@@ -53,30 +53,30 @@ Synopsis
             Reducer(const result_view_type& value_);
     };
 
-Public Class Members
+パブリッククラスメンバー
 --------------------
 
-Typedefs
+型定義
 ~~~~~~~~
 
-* ``reducer``: The self type.
-* ``value_type``: The reduction scalar type.
-* ``result_view_type``: A ``Kokkos::View`` referencing where the reduction result should be placed. Can be an unmanaged view of a scalar or complex datatype (class or struct). Unmanaged views must specify the same memory space where the referenced scalar (or complex datatype) resides.
+* ``reducer``: 自己型。
+* ``value_type``: 還元スカラー型。
+* ``result_view_type``: 削減結果を配置すべき場所を参照する ``Kokkos::View``。 スカラーまたは複素データ型（クラスまたは構造体）の管理対象外ビューとなる可能性があります。管理対象外ビューは、参照されるスカラー（または複素データ型）が存在するのと同じメモリ領域を指定する必要があります。
 
-Constructors
+コンストラクタ
 ~~~~~~~~~~~~
 
-Constructors are not part of the concept. A custom reducer can have complex custom constructors. All Build-In reducers in Kokkos have the following two constructors:
+コンストラクタは概念の一部ではありません。 カスタムリデューサーは、複雑なユーザー定義コンストラクターを持つことができます。 Kokkosのすべてのビルトインリデューサーは、以下の2つのコンストラクタを持ちます:
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION Reducer(value_type& value_);
 
-    * Constructs a reducer which references a local variable as its result location.
+    * 結果の保存先としてローカル変数を参照するリデューサーを構築します。
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION Reducer(const result_view_type& value_);
 
-    * Constructs a reducer which references a specific view as its result location.
+    * 結果の保存先として特定ビューを参照するリデューサーを構築します。
 
-Functions
+関数
 ~~~~~~~~~
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION void join(value_type& dest, const value_type& src) const;
