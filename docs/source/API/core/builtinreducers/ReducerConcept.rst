@@ -81,29 +81,29 @@ Reducerの概念とは、並列　Reduce　実行パターンにおいて　"Red
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION void join(value_type& dest, const value_type& src) const;
 
-    * Combine ``src`` into ``dest``. For example, ``Add`` performs ``dest+=src;``.
+    * ``src``　を into ``dest``　に組み合わせます。 例えば、``Add`` は、 ``dest+=src;``　を実行します。
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION void init(value_type& val) const;
 
-    * Optional callback initializing ``val`` with appropriate initial value. For example, 'Add' assigns ``val = 0;``, but Prod assigns ``val = 1;``.
-      Defaults to calling the default constructor.
+    * 適切な初期値で　``val``　を初期化するオプションコールバック。　例えば、'Add'　は、``val = 0;``を代入するが、Prod　は、``val = 1;``　を代入します。
+      デフォルトではデフォルトコンストラクタの呼び出しを行います。
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION void final(value_type& val) const;
 
-    * Optional callback modifying the result ``val``. Defaults to a no-op.
+    * 結果 ``val`` を変更するオプションのコールバック。 デフォルトでは何もしない。
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION value_type& reference() const;
 
-    * Returns a reference to the result place.
+    * Returns a reference to the result place.結果の保存先への参照を返します。
 
 .. cpp:function:: KOKKOS_INLINE_FUNCTION result_view_type view() const;
 
-    * Returns a view of the result place.
+    * 結果の保存先のビューを返します。
 
-Requirements
+必要条件
 ~~~~~~~~~~~~
 
-The reducer is assumed to define a commutative monoid with respect to the value type it is used with, i.e., the binary operation
+リデューサーは、使用される値型に関して可交換半群を定義すると予測されますが、すなわち、それは二元演算です。
 
 .. code-block:: cpp
 
@@ -116,7 +116,7 @@ The reducer is assumed to define a commutative monoid with respect to the value 
 is commutative and associative with identity element that can be set by calling ``reducer.init(el)``.
 
 
-Built-In Reducers
+組み込みリデューサー
 ~~~~~~~~~~~~~~~~~
 
 Kokkos provides a number of built-in reducers that automatically work with the intrinsic C++ types as well as ``Kokkos::complex``. In order to use a Built-in reducer with a custom type, a template specialization of ``Kokkos::reduction_identity<CustomType>`` must be defined. A simple example is shown below and more information can be found under `Custom Reductions <../../../ProgrammingGuide/Custom-Reductions.html>`_.
