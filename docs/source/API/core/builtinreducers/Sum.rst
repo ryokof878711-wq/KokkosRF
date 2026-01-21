@@ -74,13 +74,13 @@
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION Sum(const result_view_type& value_);
 
-      Constructs a reducer which references a specific view as its result location.
+      特定のビューを結果の保存先として参照するリデューサーを構築します。
 
-   .. rubric:: Public Member Functions
+   .. rubric:: パブリックメンバー関数
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void join(value_type& dest, const value_type& src) const;
 
-      Add ``src`` into ``dest``:  ``dest+=src;``.
+      ``src``を ``dest``:  ``dest+=src;``　に追加します。
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION void init(value_type& val) const;
 
