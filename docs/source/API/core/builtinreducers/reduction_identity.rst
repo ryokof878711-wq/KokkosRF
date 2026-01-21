@@ -11,54 +11,54 @@
 .. cpp:struct:: template <typename ScalarType> reduction_identity
    :no-index-entry:
 
-   The ``reduction_identity`` class template provides static member functions
-   that return the identity value for various reduction types.
+   ``reduction_identity`` クラステンプレートは、
+様々な還元型に対する恒等値を返す静的メンバ関数を提供します。
 
-   .. rubric:: Static members available for integral and floating-point types:
+   .. rubric:: 整数型および浮動小数点型の両方で利用可能な静的メンバ:
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType sum()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`Sum`
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`Sum`
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType prod()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`Prod`
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`Prod`
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType min()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`Min`
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`Min`
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType max()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`Max`
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`Max`
    
    .. rubric:: Static members available for integral types:
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType land()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`LAnd` (Logical AND)
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`LAnd` (Logical AND)
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType lor()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`LOr` (Logical OR)
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`LOr` (Logical OR)
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType band()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`BAnd` (Bitwise AND)
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`BAnd` (Bitwise AND)
 
    .. cpp:function:: KOKKOS_FUNCTION static ScalarType bor()
 
-      :returns: Neutral element for built-in reducer :cpp:class:`BOr` (Bitwise OR)
+      :returns: 組み込みリデューサー用の中立要素 :cpp:class:`BOr` (Bitwise OR)
 
-Description
+ディスクリプション
 -----------
 
-The ``reduction_identity`` struct provides the identity element (also known as
-the neutral element) for various common reduction operations. In the context of
-a parallel reduction, the identity element is the starting value for the
-reduction variable on each thread. When combined with any other value using the
-reduction operation, it does not change the other value. For example, for a sum
-reduction, the identity is :math:`0`, because :math:`x+0=x`. For a product
+``reduction_identity``構造体は、様々な一般的な還元演算における  
+単位元（中立要素とも呼ばれる）を提供します。並列還元において、恒等要素は各スレッドにおける
+還元変数の開始値となる。
+他の値と還元演算を用いて組み合わせた場合、
+他の値を変化させません。
+For example, for a sum　reduction, the identity is :math:`0`, because :math:`x+0=x`. For a product
 reduction, the identity is :math:`1`, because :math:`x \times 1 = x`.
 
 Kokkos' built-in reducers (e.g., :doc:`Sum`, :doc:`Prod`, :doc:`Min`,
