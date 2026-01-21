@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-The concept of a Reducer is the abstraction that defines the "how" a "Reduction" is performed during the parallel reduce execution pattern. The abstraction of "what" is given as a template parameter and corresponds to the "what" that is being reduced in the `parallel_reduce <../parallel-dispatch/parallel_reduce.html>`_ operation. This page describes the definitions and functions expected from a Reducer with a hypothetical 'Reducer' class definition. A brief description of built-in reducers is also included.
+Reducerの概念とは、並列Reduce実行パターンにおいて "Reduction" がどのように実行されるかを定義する抽象化です。The abstraction of "what" is given as a template parameter and corresponds to the "what" that is being reduced in the `parallel_reduce <../parallel-dispatch/parallel_reduce.html>`_ operation. This page describes the definitions and functions expected from a Reducer with a hypothetical 'Reducer' class definition. A brief description of built-in reducers is also included.
 
 Header File: ``<Kokkos_Core.hpp>``
 
