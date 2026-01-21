@@ -103,4 +103,4 @@
 
 * 必要条件: ``Scalar`` は、 定義した　``operator =`` および ``operator +=``　を持ちます。``Kokkos::reduction_identity<Scalar>::sum()`` は、有効な式です。
 
-* Sum をカスタム型で使用するためには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。詳細については、  See `Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ for details
+* Sum をカスタム型で使用するためには、 ``Kokkos::reduction_identity<CustomType>`` のテンプレート仕様を定義する必要があります。詳細については、`Built-In Reducers with Custom Scalar Types <../../../ProgrammingGuide/Custom-Reductions-Built-In-Reducers-with-Custom-Scalar-Types.html>`_ をご参照ください。
