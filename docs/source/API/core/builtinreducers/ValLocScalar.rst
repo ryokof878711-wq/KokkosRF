@@ -4,18 +4,15 @@
 .. role::cpp(code)
     :language: cpp
 
-:cpp:struct:`ValLocScalar` is a class template that stores a **value** and its
-corresponding **location** (index) as a single, convenient unit. It is
-primarily designed to hold the result of :cpp:func:`parallel_reduce` operations
-using the :cpp:class:`MinLoc` and :cpp:class:`MaxLoc` builtin reducers.
+:cpp:struct:`ValLocScalar` は、 **value** およびそれに対応する　 **location** (インデックス) as 適切な単一単位として、格納するクラステンプレートです。それは、主に :cpp:class:`MinLoc` および :cpp:class:`MaxLoc` 組み込みリデューサーを使用する　:cpp:func:`parallel_reduce` 演算の結果を保持するように設計されています。
 
-It is generally recommended to get this type by using the reducer's
-``::value_type`` member (e.g., ``MaxLoc<Scalar,Index,Space>::value_type``) to
-ensure the correct template parameters are used.
+一般的には、正確なテンプレートパラメータが使用されることを確証するために、リデューサーの　``::value_type``　
+メンバー　（例えば、``MaxLoc<Scalar,Index,Space>::value_type``）を使用して、
+この型を取得することをお勧めします。
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
