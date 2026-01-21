@@ -119,7 +119,7 @@ is commutative and associative with identity element that can be set by calling 
 組み込みリデューサー
 ~~~~~~~~~~~~~~~~~
 
-Kokkos provides a number of built-in reducers that automatically work with the intrinsic C++ types as well as ``Kokkos::complex``. In order to use a Built-in reducer with a custom type, a template specialization of ``Kokkos::reduction_identity<CustomType>`` must be defined. A simple example is shown below and more information can be found under `Custom Reductions <../../../ProgrammingGuide/Custom-Reductions.html>`_.
+Kokkosは、C++　の組み込み型および　``Kokkos::complex``　と自動的に連携する、複数の組み込みリデューサーを提供します。カスタム型で組み込みリデューサーを使用するには、``Kokkos::reduction_identity<CustomType>`` のテンプレート特化型を定義する必要があります。簡単な例を以下に示します。詳細については、 `Custom Reductions <../../../ProgrammingGuide/Custom-Reductions.html>`_　をご参照ください。
 
 * `Kokkos::BAnd <BAnd.html>`_
 * `Kokkos::BOr <BOr.html>`_
@@ -134,7 +134,7 @@ Kokkos provides a number of built-in reducers that automatically work with the i
 * `Kokkos::Prod <Prod.html>`_
 * `Kokkos::Sum <Sum.html>`_
 
-Examples
+例
 --------
 
 .. code-block:: cpp
