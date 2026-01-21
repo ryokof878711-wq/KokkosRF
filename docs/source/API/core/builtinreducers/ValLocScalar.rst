@@ -10,7 +10,7 @@
 :cpp:func:`parallel_reduce` 演算の結果を保持するように設計されています。
 
 一般的には、正確なテンプレートパラメータが使用されることを確証するために、`　
-リデューサーの　``::value_type`　メンバー、（例えば、``MaxLoc<Scalar,Index,Space>::value_type``）
+リデューサーの　``::value_type`　例えば、``MaxLoc<Scalar,Index,Space>::value_type``）
 を使用して、この型を取得することをお勧めします。
 
 ヘッダーファイル: ``<Kokkos_Core.hpp>``
