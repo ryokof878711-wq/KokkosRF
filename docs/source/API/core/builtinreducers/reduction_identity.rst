@@ -70,30 +70,30 @@ floating-point types) as well as for :cpp:class:`complex\<T\> <complex>`.
 
 .. note::
 
-   ``Kokkos::reduction_identity`` is not intended for direct use in your
-   application code. Instead, it serves as a customization point within the
-   Kokkos framework. You should only specialize reduction_identity when you
-   need to enable Kokkos's built-in reducers (like ``Kokkos::Sum``,
-   ``Kokkos::Min``, ``Kokkos::Max``, etc.) to work seamlessly with your own
-   user-defined data types.  This allows Kokkos to correctly determine the
-   initial "identity" value for your custom type during parallel reduction
-   operations.
+   ``Kokkos::reduction_identity`` は、アプリケーションコードでの直接使用することを
+目的としたものではありません。その代わりに、 これは、Kokkos　フレームワーク内の
+カスタマイズポイントとして機能します。
+Kokkosの組み込みリデューサー（`Kokkos::Sum`、`Kokkos::Min`、`Kokkos::Max`等）
+をユーザー定義のデータ型とシームレスに動作させる必要がある場合のみ、
+`reduction_identity`を特化させる必要があります。これにより、
+Kokkosは並列削減処理中に
+カスタム型の初期 "identity" 値を、正確に決定できます。 
 
-Custom Scalar Types
+カスタムスカラー型
 -------------------
 
-For custom (user-defined) ``ScalarType``\s to be used with Kokkos' built-in
-reducers, a template specialization of
-``Kokkos::reduction_identity<CustomType>`` must be defined.  This
-specialization must provide static member functions corresponding to the
-desired reduction operations. These functions should return an instance of
-``CustomType`` initialized with the appropriate identity value.
+Kokkosの組み込みリデューサーで使用するカスタム（ユーザー定義）
+``ScalarType``については、``Kokkos::reduction_identity<CustomType>``
+　のテンプレート特化型を定義する必要があります。  この
+特殊化により、要求される削減演算に対応する
+静的メンバ関数を提供しなければならない。 これらの関数は、適切な識別値で初期化された
+``CustomType`` のインスタンスを返す必要があります。
 
-Example: Specializing ``reduction_identity`` for a Custom Array Type
+例: カスタム配列型のための ``reduction_identity`` を特化
 --------------------------------------------------------------------
 
-Consider a custom struct ``array_type`` that holds an an array of integers, for
-which we want to perform a sum reduction.
+整数の配列を保持するカスタム構造体 ``array_type`` を考慮し、
+この配列に対して和の還元の実行を望みます。
 
 .. code-block:: cpp
 
@@ -113,17 +113,17 @@ which we want to perform a sum reduction.
       }
     };
  
-    using ValueType = array_type<int, 4>;
+    ValueType = array_type<int, 4>;　使用
     } // namespace sample
  
-    // Specialization of Kokkos::reduction_identity for sample::ValueType
+    // Kokkos::reduction_identity for sample::ValueType　の特化
     template <>
     struct Kokkos::reduction_identity<sample::ValueType> {
       KOKKOS_FUNCTION static sample::ValueType sum() {
-        return sample::ValueType(); // Default constructor initializes to zeros
+        リターンサンプル::ValueType(); // デフォルトコンストラクタは、0に初期化します。
       }
-      // If other reduction types were needed (e.g., min, max, prod),
-      // their respective identity functions would also be defined here.
+      // 他の還元が必要であれば　（例えば、min, max, prod)
+　　　// それらの各関数もまた、ここでていぎされます。
     };
  
     int main(int argc, char* argv[]) {
