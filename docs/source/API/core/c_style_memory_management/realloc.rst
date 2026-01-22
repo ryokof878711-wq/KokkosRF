@@ -40,6 +40,6 @@
 
   :param new_size: 割り当てるバイト数。
 
-  :returns: On success, returns a pointer to the beginning of the newly allocated memory. To avoid a memory leak, the returned pointer must be deallocated with |Kokkos_kokkos_free|_, the original pointer ``ptr`` is invalidated and any access to it is undefined behavior (even if reallocation was in-place). On failure, returns a null pointer. The original pointer ptr remains valid and may need to be deallocated with |Kokkos_kokkos_free|_.
+  :returns: 成功した場合、新たに割り当てられたメモリの先頭へのポインタを返します。 メモリリークを避けるため、返されたポインタは |Kokkos_kokkos_free|_ で解放する必要があり、To avoid a memory leak, the returned pointer must be deallocated with |Kokkos_kokkos_free|_, 元のポインタ　 ``ptr`` は無効化され、それへのアクセスは未定義動作となります（再割り当てがインプレースで行われた場合でも）。On failure, returns a null pointer. The original pointer ptr remains valid and may need to be deallocated with |Kokkos_kokkos_free|_.
 
   :throws: On failure, throws ``Kokkos::Experimental::RawMemoryAllocationFailure``.
