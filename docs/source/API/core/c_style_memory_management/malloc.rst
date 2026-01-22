@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義
 
 .. _MemorySpace: ../memory_spaces.html
 
@@ -18,29 +18,29 @@ Defined in header ``<Kokkos_Core.hpp>``
 
 .. |Kokkos_realloc| replace:: ``Kokkos::kokkos_realloc()``
 
-Allocate ``size`` bytes of uninitialized storage on the specified memory space |MemorySpace|_ plus some extra space for metadata such as the label.
+指定されたメモリ空間 |MemorySpace|_ 上に、ラベルなどのメタデータ用に追加のスペースを加えた、初期化されていないストレージを ``size`` バイト分割り当てます。
 
-If allocation succeeds, returns a pointer to the lowest (first) byte in the allocated memory block that is suitably aligned for any scalar type.
+割り当てが成功した場合、任意のスカラー型に適したアラインメントを持つ割り当てメモリブロック内で、最下位（最初の）バイトへのポインタを返す。
 
-If allocation fails, an exception of type ``Kokkos::Experimental::RawMemoryAllocationFailure`` is thrown.
+割り当てに失敗した場合、``Kokkos::Experimental::RawMemoryAllocationFailure`` 型の例外がスローされます。
 
 .. warning::
 
-    Calling any function that manipulates the behavior of the memory (e.g. ``memAdvise``) on memory managed by ``Kokkos`` results in undefined behavior.
+    Kokkos　の管理対象外であるメモリに対して、メモリの動作を操作する関数（例：memAdvise）を呼び出すと、未定義の動作を引き起こします。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template <class MemorySpace = Kokkos::DefaultExecutionSpace::memory_space> void* kokkos_malloc(const string& label, size_t size);
 
 .. cpp:function:: template <class MemorySpace = Kokkos::DefaultExecutionSpace::memory_space> void* kokkos_malloc(size_t size);
 
-    :tparam MemorySpace: Controls the storage location. If omitted the memory space of the default execution space is used (i.e. ``Kokkos::DefaultExecutionSpace::memory_space``).
+    :tparam MemorySpace: ストレージ先をコントロールします。　省略された場合、デフォルトの実行領域のメモリ領域が使用されます (つまり、``Kokkos::DefaultExecutionSpace::memory_space``)。
 
-    :param label: A user provided string which is used in profiling and debugging tools via the KokkosP Profiling Tools.
+    :param ラベル: KokkosP プロファイリングツールを介してプロファイリングおよびデバッグツールで使用される、ユーザーが提供した文字列。
 
-    :param size: The number of bytes to allocate.
+    :param サイズ: 割り当てるバイト数。
 
-    :returns: On success, returns the pointer to the beginning of newly allocated memory. To avoid a memory leak, the returned pointer must be deallocated with |Kokkos_kokkos_free|_ or |Kokkos_realloc|_.
+    :returns: 成功した場合、新たに割り当てられたメモリの先頭へのポインタを返します。 メモリリークを避けるため、返されたポインタは |Kokkos_kokkos_free|_ または |Kokkos_realloc|_ で解放する必要があります。
 
-    :throws: On failure, throws ``Kokkos::Experimental::RawMemoryAllocationFailure``.
+    :throws: 失敗した場合、``Kokkos::Experimental::RawMemoryAllocationFailure`` をスローします。
