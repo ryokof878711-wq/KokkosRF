@@ -58,19 +58,19 @@
 還元変数の開始値となる。
 他の値と還元演算を用いて組み合わせた場合、
 他の値を変化させません。
-For example, for a sum　reduction, the identity is :math:`0`, because :math:`x+0=x`. For a product
-reduction, the identity is :math:`1`, because :math:`x \times 1 = x`.
+例えば、和の還元については、:math:`x+0=x`　であるため、恒等は、 :math:`0`です。プロダクト還元については、 、  
+:math:`x \times 1 = x`　であるため恒等は、 :math:`1`です。
 
-Kokkos' built-in reducers (e.g., :doc:`Sum`, :doc:`Prod`, :doc:`Min`,
-:doc:`Max`) implicitly use specializations of ``reduction_identity`` to
-initialize the thread-local reduction accumulators.
+Kokkos　の組み込みリデューサー　（例えば、 :doc:`Sum`, :doc:`Prod`, :doc:`Min`,
+:doc:`Max`) は、暗示的に　``reduction_identity``　の特殊化を使用して、
+スレッドローカルな還元アキュムレータを初期化します。
 
-Kokkos provides specializations for all arithmetic types (i.e. integral and
-floating-point types) as well as for :cpp:class:`complex\<T\> <complex>`.
+`Kokkosは、`complex\<T\> <complex>`　だけでなく、すべての算術型（つまり整数型および浮動小数点型）
+に対して特殊化を提供します。
 
 .. note::
 
-   ``Kokkos::reduction_identity`` は、アプリケーションコードでの直接使用することを
+``Kokkos::reduction_identity`` は、アプリケーションコードでの直接使用することを
 目的としたものではありません。その代わりに、 これは、Kokkos　フレームワーク内の
 カスタマイズポイントとして機能します。
 Kokkosの組み込みリデューサー（`Kokkos::Sum`、`Kokkos::Min`、`Kokkos::Max`等）
