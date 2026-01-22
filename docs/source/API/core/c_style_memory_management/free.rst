@@ -29,4 +29,4 @@
 
     :returns: (無し)
 
-    :throws: Throws ``std::runtime_error`` on failure to deallocate.解放に失敗した場合、``std::runtime_error`` をスローします。
+    :throws: 解放に失敗した場合、``std::runtime_error`` をスローします。
