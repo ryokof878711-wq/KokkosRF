@@ -22,15 +22,15 @@
 
 .. |Kokkos_kokkos_free| replace:: ``Kokkos::kokkos_free()``
 
-Reallocates the given area of memory. It must be previously allocated by |Kokkos_kokkos_malloc|_ or |Kokkos_kokkos_realloc|_
-on the same memory space |MemorySpace|_ and not yet freed with |Kokkos_kokkos_free|_, otherwise, the results are undefined.
+指定されたメモリ領域を再割り当てします。それは、同じメモリースペース |MemorySpace|_　上で、以前に |Kokkos_kokkos_malloc|_ または |Kokkos_kokkos_realloc|_　により割り当てられる必要があり、
+まだ |Kokkos_kokkos_free|_ で解放されておらず、そうでない場合には、結果は未定義となる。
 
 .. warning::
 
    Calling any function that manipulates the behavior of the memory (e.g. ``memAdvise``)
    on memory managed by ``Kokkos`` results in undefined behavior.
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template <class MemorySpace = Kokkos::DefaultExecutionSpace::memory_space> void* kokkos_realloc(void* ptr, size_t new_size);
