@@ -27,8 +27,7 @@
 
 .. warning::
 
-   Calling any function that manipulates the behavior of the memory (e.g. ``memAdvise``)
-   on memory managed by ``Kokkos`` results in undefined behavior.
+   Kokkos　の管理対象外であるメモリに対して、メモリの動作を操作する関数（例：memAdvise）を呼び出すと、未定義の動作を引き起こします。
 
 ディスクリプション
 -----------
