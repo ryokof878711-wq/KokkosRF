@@ -36,7 +36,7 @@
 
   :tparam MemorySpace: ストレージ先をコントロールします。　省略された場合、デフォルトの実行領域のメモリ領域が使用されます (つまり、``Kokkos::DefaultExecutionSpace::memory_space``)。
 
-  :param ptr: The pointer to the memory area to be reallocated.
+  :param ptr: The pointer to the memory area to be reallocated.再割り当てされるべきメモリ領域へのポインタ
 
   :param new_size: The new size in bytes.
 
