@@ -14,19 +14,19 @@
 
 .. |Kokkos_kokkos_realloc| replace:: ``Kokkos::kokkos_realloc()``
 
-Deallocates the space previously allocated by |Kokkos_kokkos_malloc|_ or |Kokkos_kokkos_realloc|_ on the specified memory space ``MemorySpace``.
+指定されたメモリ空間 ``MemorySpace`` 上で、|Kokkos_kokkos_malloc|_ または |Kokkos_kokkos_realloc|_ によって以前に割り当てられた領域を解放します。
 
-If ``ptr`` is a null pointer, the function does nothing.
+``ptr``　がヌルポインタの場合、この関数は何も行いません。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template <class MemorySpace = Kokkos::DefaultExecutionSpace::memory_space> void kokkos_free(void* ptr);
 
-    :tparam MemorySpace: Controls the storage location. If omitted the memory space of the default execution space is used (i.e. ``Kokkos::DefaultExecutionSpace::memory_space``).
+    :tparam MemorySpace: 保存先を制御します。 省略された場合、デフォルトの実行領域のメモリ領域が使用されます。 (つまり、 ``Kokkos::DefaultExecutionSpace::memory_space``　です).
 
-    :param ptr: The pointer to the memory to deallocate on the specified memory space.
+    :param ptr: 指定されたメモリ領域上で解放するメモリへのポインタ。
 
-    :returns: (none)
+    :returns: (無し)
 
-    :throws: Throws ``std::runtime_error`` on failure to deallocate.
+    :throws: Throws ``std::runtime_error`` on failure to deallocate.解放に失敗した場合、``std::runtime_error`` をスローします。
