@@ -28,9 +28,9 @@ Kokkosをプログラムで初期化する設定を定義するために使用�
 
    .. cpp:function:: InitializationSettings();
 
-      Constructs a new object that does not contain any value for any of the settings.
+      どの設定に対しても値を一切含まない、新しいオブジェクトを構築します。
 
-   .. cpp:function:: InitializationSettings(InitArguments const& arguments);
+   .. cpp:function:: InitializationSettings(InitArguments const& 引数);
 
       **DEPRECATED** Converts the deprecated structure to a new object. Data members from the structure that compare equal to their default value are assumed to be unset. Let ``PARAMETER-NAME`` be a valid setting of type ``PARAMETER-TYPE`` as defined in the table below.
 
