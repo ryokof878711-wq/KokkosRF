@@ -4,24 +4,24 @@
 .. role:: cpp(code)
    :language: cpp
 
-Defined in header ``<KokkosCore.cpp>``
+ヘッダー　``<KokkosCore.cpp>``　に定義。
 
-Usage:
+使用例:
 
 .. code-block:: cpp
 
-    auto settings = Kokkos::InitializationSettings()
+    自動設定 = Kokkos::InitializationSettings()
                     .set_num_threads(8)
                     .set_device_id(0)
                     .set_disable_warnings(false);
 
 .. versionadded:: 3.7
-   ``InitializationSettings`` is a class that can be used to define the settings for
-   initializing Kokkos programmatically without having to call the two parameter
-   form (``argc`` and ``argv``) of `Kokkos::initialize() <initialize.html#kokkosinitialize>`_.
-   It was introduced as a replacement for the `Kokkos::InitArguments <InitArguments.html#kokkosInitArguments>`_ structure.
+   ``InitializationSettings``  `Kokkos::initialize() <initialize.html#kokkosinitialize>`_　
+の2つのパラメータ形式　(``argc`` および ``argv``) を呼び出すことなく、 
+Kokkosをプログラムで初期化する設定を定義するために使用可能なクラスです。
+   それは、`Kokkos::InitArguments <InitArguments.html#kokkosInitArguments>`_ structure　の代わりに導入されました。
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:class:: InitializationSettings
