@@ -10,11 +10,11 @@ InitArguments
 .. _KokkosInitializationSetting: InitializationSettings.html
 .. |KokkosInitializationSetting| replace:: ``Kokkos::InitializationSettings``
 
-Defined in ``<Kokkos_Core.hpp>`` header.
+``<Kokkos_Core.hpp>`` ヘッダーに定義。
 
-.. warning:: Deprecated since 3.7, removed in 4.3, **use** ``Kokkos::InitializationSettings`` **instead**
+.. warning:: 3.7より非推奨、 4.3において削除、 **代わりに** ``Kokkos::InitializationSettings``　を　**使用** 
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:struct:: InitArguments
@@ -33,11 +33,11 @@ Interface
 
    .. cpp:function:: InitArguments()
 
-``InitArguments`` is a struct that can be used to programmatically define the arguments passed to |KokkosInitialize|_. It was deprecated in version 3.7 in favor of |KokkosInitializationSetting|_.
+``InitArguments`` は、|KokkosInitialize|_ に渡される引数をプログラムで定義するために使用可能な構造です。 Iバージョン3.7で廃止され、|KokkosInitializationSetting|_　が推奨されるようになりました。
 
-One of the main reasons for replacing it was that user-specified data members cannot be distinguished from defaulted ones.
+その置換の主な理由の一つは、ユーザー指定のデータメンバーがデフォルト値を持つものと区別できない点にあります。
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
@@ -55,7 +55,7 @@ Example
    }
 
 
-See also
+以下も参照
 ~~~~~~~~
 
 * |KokkosInitializationSetting|_
