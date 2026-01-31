@@ -15,35 +15,35 @@
     Kokkos::finalize();
 
 Kokkos　実行環境を終了。
-This functions cleans up all Kokkos states and released the associated
-resources.
-Once this function is called, no Kokkos API functions (not even
-`Kokkos::initialize <initialize.html>`_) may be called, except for
-:cpp:func:`Kokkos::is_initialized() <is_initialized()>` or
-:cpp:func:`Kokkos::is_finalized() <is_finalized()>`.
-The user must ensure that all Kokkos objects (e.g. ``Kokkos::View``) are destroyed
-before ``Kokkos::finalize`` gets called.
+この関数は、すべての　Kokkos　状態をクリーンアップし、関連するリソースを
+解放します。
+この関数が呼び出されると、いかなる　API　関数
+(`Kokkos::initialize <initialize.html>`_　さえも)、
+:cpp:func:`Kokkos::is_initialized() <is_initialized()>` または
+:cpp:func:`Kokkos::is_finalized() <is_finalized()>`　以外、呼び出すことはできません。
+ユーザーは、``Kokkos::finalize`` が呼び出される前に、すべての Kokkos オブジェクト (例えば、 ``Kokkos::View``) 
+破壊されていることを確認する必要があります。
 
-Programs are ill-formed if they do not call this function after calling `Kokkos::initialize <initialize.html>`_.
+プログラムは、 `Kokkos::initialize <initialize.html>`_　を呼び出した後、それらがこの関数を呼び出さなければ、不適格となります。
 
-Interface
+インターフェイス
 ---------
 
 .. code-block:: cpp
 
     Kokkos::finalize();
 
-Requirements
+必要要件
 ~~~~~~~~~~~~
-* ``Kokkos::finalize`` must be called before ``MPI_Finalize`` if Kokkos is used in an MPI context.
-* ``Kokkos::finalize`` must be called after user initialized Kokkos objects are out of scope.
+* ``Kokkos::finalize``　は、 Kokkos　が MPI コンテクスト内で使用される場合、``MPI_Finalize``　の前に呼び出される必要があります。
+* ``Kokkos::finalize`` は、ユーザーが初期化した　Kokkosオブジェクトが、スコープ外になった後に、呼び出される必要があります。
 
-Semantics
+セマンティクス
 ~~~~~~~~~
 
 * :cpp:func:`Kokkos::is_initialized() <is_initialized()>` should return false after calling ``Kokkos::finalize``
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
@@ -59,7 +59,7 @@ Example
     }
 
 
-See also
+以下も参照
 --------
-* `Kokkos::initialize <initialize.html>`_: initializes the Kokkos execution environment
-* `Kokkos::push_finalize_hook <push_finalize_hook.html>`_: registers a function to be called on ``Kokkos::finalize()`` invocation
+* `Kokkos::initialize <initialize.html>`_: は、Kokkos 実行環境を初期化します。
+* `Kokkos::push_finalize_hook <push_finalize_hook.html>`_: は、 ``Kokkos::finalize()`` 実行の際に呼び出される関数を登録します。
