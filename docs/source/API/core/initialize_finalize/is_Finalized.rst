@@ -4,9 +4,9 @@
 .. role::cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー　``<Kokkos_Core.hpp>``　に定義。
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:function:: bool is_finalized() noexcept
