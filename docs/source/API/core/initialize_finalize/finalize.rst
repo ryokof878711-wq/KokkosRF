@@ -6,15 +6,15 @@
 .. role::cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー　``<Kokkos_Core.hpp>``　に定義。
 
-Usage:
+使用例:
 
 .. code-block:: cpp
 
     Kokkos::finalize();
 
-Terminates the Kokkos execution environment.
+Kokkos　実行環境を終了。
 This functions cleans up all Kokkos states and released the associated
 resources.
 Once this function is called, no Kokkos API functions (not even
