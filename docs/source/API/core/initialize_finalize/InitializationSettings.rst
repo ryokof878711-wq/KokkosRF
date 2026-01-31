@@ -32,24 +32,24 @@ Kokkosをプログラムで初期化する設定を定義するために使用�
 
    .. cpp:function:: InitializationSettings(InitArguments const& 引数);
 
-      **DEPRECATED** Converts the deprecated structure to a new object. Data members from the structure that compare equal to their default value are assumed to be unset. Let ``PARAMETER-NAME`` be a valid setting of type ``PARAMETER-TYPE`` as defined in the table below.
+      **DEPRECATED** は、非推奨の構造体を新しいオブジェクトに変換します。構造体のデータメンバーでデフォルト値と等しいものは、設定されていないものとみなされます。 ``PARAMETER-NAME``を、以下の表で定義される　``PARAMETER-TYPE``　の有効な設定とします。
 
    .. cpp:function:: InitializationSettings& set_PARAMETER_NAME(PARAMETER_TYPE value);
 
-      Replaces the content of the ``PARAMETER_NAME`` setting with ``value`` and return a reference to the object. ``value`` must be a valid value for ``PARAMETER_NAME``.
+      ``PARAMETER_NAME``　設定の内容を　``value``で置き換え、オブジェクトへの参照を返します。 ``value`` は、 ``PARAMETER_NAME``　について有効な値である必要があります。
 
    .. cpp:function:: bool has_PARAMETER_NAME() const;
 
-      Checks whether the object contains a value for the ``PARAMETER_NAME`` setting. Returns ``true`` if it contains a value, ``false`` otherwise.
+      オブジェクトが、``PARAMETER_NAME``　設定の値を含むかどうかを確認します。 それが値を含む場合は、 ``true`` を返し、そうでない場合には、 ``false`` を返します。
 
    .. cpp:function:: PARAMETER_TYPE get_PARAMETER_NAME() const;
 
-      Accesses the contained value for the ``PARAMETER_NAME`` setting. The behavior is undefined if the object does not contain a value for setting ``PARAMETER_NAME``.
+      ``PARAMETER_NAME`` 設定に含まれる値にアクセスします。 オブジェクトが、``PARAMETER_NAME``　設定の値を含まない場合には、ビヘイビアは定義されません。
 
-The table below summarizes what settings are available.
+以下の表は、利用可能な設定を概説しています。
 
 =======================        ==================    ===========
-**PARAMETER_NAME**             **PARAMETER_TYPE**    Description
+**PARAMETER_NAME**             **PARAMETER_TYPE**    ディスクリプション
 =======================        ==================    ===========
 ``num_threads``                ``int``               Number of threads to use with the host parallel backend.  Must be greater than zero.
 ``device_id``                  ``int``               Device to use with the device parallel backend.  Valid IDs are zero to number of GPU(s) available for execution minus one.
