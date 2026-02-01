@@ -17,51 +17,50 @@
                                 .set_num_threads(1));
 
 
-``ScopeGuard`` is a class to initialize and finalize Kokkos using `RAII <https://en.cppreference.com/w/cpp/language/raii>`_.
-It calls `Kokkos::initialize <initialize.html#kokkosinitialize>`_ with the provided arguments in the
-constructor and `Kokkos::finalize <finalize.html#kokkosfinalize>`_ in the destructor.
-For correct usage, it is mandatory to create a named instance of a ``ScopeGuard`` before any calls to Kokkos are issued.
+``ScopeGuard`` は、`RAII <https://en.cppreference.com/w/cpp/language/raii>`_ を使用して Kokkos を初期化および最終処理するためのクラスです。
+それは、 コンストラクタ内の提供された引数およびデストラクタ内の　`Kokkos::finalize <finalize.html#kokkosfinalize>`_ で`Kokkos::initialize <initialize.html#kokkosinitialize>`_　を呼び出します。
+正しい使用法のためには、Kokkosへの呼び出しを発行する前に、必ず``ScopeGuard``の命名済みインスタンスを作成する必要があります。
 
 
-.. warning:: Change of behavior in version 3.7 (see below). ``ScopeGuard`` will abort if either :cpp:func:`is_initialized()` or :cpp:func:`is_finalized()` return ``true``.
+.. warning:: バージョン 3.7におけるビヘイビアの変更 (以下参照)。 ``ScopeGuard`` は、:cpp:func:`is_initialized()` または :cpp:func:`is_finalized()` のいずれかが ``true`` を返した場合に中断します。
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: ScopeGuard
 
-    A class calling ``Kokkos::initialize`` at the start of its lifetime and ``Kokkos::finalize`` at the end of its lifetime.
+     そのライフサイクルの開始時に　``Kokkos::initialize``　を呼び出し、終了時に、``Kokkos::finalize``　を呼び出すクラス。
 
-    .. rubric:: Constructors
+    .. rubric:: コンストラクタ
 
     .. cpp:function:: ScopeGuard(int& argc, char* argv[]);
 
-       :param argc: number of command line arguments
-       :param argv: array of character pointers to null-terminated strings storing the command line arguments
+       :param argc: コマンドライン引数の数。
+       :param argv: コマンドライン引数を格納するヌル終端文字列への文字ポインタの配列。
 
-       .. warning:: Valid until 3.7
+       .. warning:: 3.7まで有効。
 
     .. cpp:function:: ScopeGuard(InitArguments const& arguments = InitArguments());
 
-       :param arguments: ``struct`` object with valid initialization arguments
+       :param arguments: 有効な初期化引数を持つ　``struct`` オブジェクト。
 
-       .. warning:: Valid until 3.7
+       .. warning:: 3.7まで有効。
 
-    .. cpp:function:: template <class... Args> ScopeGuard(Args&&... args);
+    .. cpp:function:: テンプレート <class... Args> ScopeGuard(Args&&... args);
 
-        :param args: arguments to pass to `Kokkos::initialize <initialize.html#kokkosinitialize>`_
+        :param args: `Kokkos::initialize <initialize.html#kokkosinitialize>`_　に引き渡す引数。
 
-	Possible implementation:
+	可能な実装:
 
 	.. code-block:: cpp
 
-	   template <class... Args> ScopeGuard(Args&&... args){ initialize(std::forward<Args>(args)...); }
+	   テンプレート <class... Args> ScopeGuard(Args&&... args){ initialize(std::forward<Args>(args)...); }
 
     .. cpp:function:: ~ScopeGuard();
 
-       Destructor
+       デストラクタ
 
-       Possible implementation:
+       可能な実装:
 
        .. code-block:: cpp
 
@@ -69,51 +68,51 @@ Description
 
     .. cpp:function:: ScopeGuard(ScopeGuard const&) = delete;
 
-       Copy constructor
+       コピーコンストラクタ
 
     .. cpp:function:: ScopeGuard(ScopeGuard&&) = delete;
 
-       Move constructor
+       移動コンストラクタ
 
     .. cpp:function:: ScopeGuard& operator=(ScopeGuard const&) = delete;
 
-       Copy assignment operator
+       コピー代入演算子
 
     .. cpp:function:: ScopeGuard& operator=(ScopeGuard&&) = delete;
 
-       Move assignment operator
+       移動代入演算子
 
-Notes
+注意事項
 -----
 
-- In the constructors, all the parameters are passed to the ``Kokkos::initialize`` called internally.
-  See `Kokkos::initialize <initialize.html#kokkosinitialize>`_ for more details.
+- コンストラクタでは、すべてのパラメータが内部で呼び出される　``Kokkos::initialize``　に渡される。
+  詳細については、 `Kokkos::initialize <initialize.html#kokkosinitialize>`_ 参照。
 
 
-- Since Kokkos version 3.7, ``ScopeGuard`` unconditionally forwards the provided
-  arguments to `Kokkos::initialize <initialize.html#kokkosinitialize>`_, which means they have the same
-  preconditions.  Until version 3.7, ``ScopeGuard`` was calling
-  ``Kokkos::initialize`` in its constructor only if ``Kokkos::is_initialized()`` was
-  ``false``, and it was calling ``Kokkos::finalize`` in its destructor only if it
-  called ``Kokkos::initialize`` in its constructor.
+- Kokkos バージョン 3.7以来、 ``ScopeGuard`` は与えられた引数を無条件に`Kokkos::initialize <initialize.html#kokkosinitialize>`_　
+  に転送し、それは、それらが同じ必須条件を持つことを
+  意味します。  バージョン3.7まで、 ``ScopeGuard``は、
+ ``Kokkos::is_initialized()`` が 　``false``　であった場合にのみ、そのコンストラクタにおいて ``Kokkos::initialize`` を呼び出しており、
+ それは、そのコンストラクタにおいて、
+　``Kokkos::initialize``　を呼び出した場合にのみ、``Kokkos::finalize``　をそのデストラクタにおいて呼び出していました。
 
-  We dropped support for the old behavior.  If you think you really need it, you may do:
+  古いビヘイビアについてのサポートを停止しましが。それが実際に必要であるとお考えでしたら、そう考えて構いません:
 
   .. code-block:: cpp
 
       auto guard = std::unique_ptr<Kokkos::ScopeGuard>(
 	  Kokkos::is_initialized() ? new Kokkos::ScopeGuard() : nullptr);
 
-  or
+  又は
 
   .. code-block:: cpp
 
       auto guard = Kokkos::is_initialized() ? std::make_optional<Kokkos::ScopeGuard>()
 					  : std::nullopt;
 
-  with C++17.  This will work regardless of the Kokkos version.
+  C++17を用いて。  これは、Kokkos　バージョンに関わらず、機能します。
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
@@ -126,7 +125,7 @@ Example
     }
 
 
-See also
+以下も参照
 ~~~~~~~~
 
 `Kokkos::initialize <initialize.html#kokkosinitialize>`_, `Kokkos::finalize <finalize.html#kokkosfinalize>`_
