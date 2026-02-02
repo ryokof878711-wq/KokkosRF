@@ -11,7 +11,7 @@
 
 .. cpp:function:: bool is_initialized() noexcept
 
-   Kokkos　の初期化ステータスを照会し、Kokkos　を初期化している場合は、``true``　を、初期化していない場合は、``false``　を返します。 Kokkos の初期化または最終処理完了前後に、この関数を呼び出すことが可能です。:return: ``true`` if :cpp:func:`initialize` has been called; `false` otherwise. 
+   Kokkos　の初期化ステータスを照会し、Kokkos　を初期化している場合は、``true``　を、初期化していない場合は、``false``　を返します。 Kokkos の初期化または最終処理完了前後に、この関数を呼び出すことが可能です。 が呼び出されている場合には、 ``true`` ; そうでない場合には、`false` 。:return: ``true`` if :cpp:function:   `initialize`　が呼び出されている場合には、 ``true`` ; そうでない場合には、`false` 。
 
 Examples
 --------
