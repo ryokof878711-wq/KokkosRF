@@ -13,7 +13,7 @@
 
     Kokkos　の最終処理完了ステータスを照会し、Kokkos　の最終処理が完了している場合は、``true``　を、の最終処理が完了していない場合は、``false``　を返します。  Kokkos の初期化または最終処理完了前後に、この関数を呼び出すことが可能です。
    
-   :return:if :cpp:func:`finalize` が呼び出されている場合には、 ``true`` ; そうでない場合には、`false` 。
+   :return:if :cpp:func:　`finalize` が呼び出されている場合には、 ``true`` ; そうでない場合には、`false` 。
 
 例
 --------
