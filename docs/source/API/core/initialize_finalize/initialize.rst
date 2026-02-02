@@ -4,9 +4,9 @@
 .. role::cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
-Usage: 
+使用例: 
 
 .. code-block:: cpp
 
@@ -16,25 +16,25 @@ Usage:
                            .set_num_threads(8)
                            .set_map_device_id_by("random"));
 
-Initializes the Kokkos execution environment.
-This function must be called before any other Kokkos API functions or
-constructors.  There are a small number of exceptions, such as
-:cpp:func:`Kokkos::is_initialized() <is_initialized()>` or
-:cpp:func:`Kokkos::is_finalized() <is_finalized()>`.
-Kokkos can be initialized at most once; subsequent calls are erroneous.
+実行環境を初期化します。
+この関数は、他の　Kokkos API　関数やコンストラクタよりも先に呼び出す必要があります。
+:cpp:func:`Kokkos::is_initialized() <is_initialized()>` または
+:cpp:func:`Kokkos::is_finalized() <is_finalized()>`等の、少数の例外もあります。
 
-The function has two overloads.
-The first one takes the same two parameters as ``main()`` corresponding to
-the command line arguments passed to the program from the environment in which
-the program is run.  Kokkos parses the arguments for the flags that it
-recognizes.  Whenever a Kokkos flag is seen, it is removed from ``argv``, and
-``argc`` is decremented.
-The second one takes a `Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_ class object
-which allows for programmatic control of arguments.
-`Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_ is implicitly
-constructible from the ``Kokkos::InitArguments`` :sup:`deprecated in version 3.7`.
+Kokkos は最大で1回のみ初期化が可能です; その後の呼び出しは、誤っています。
 
-Interface
+関数には、2つのオーバーロードがあります。
+最初の関数は、プログラムが実行される環境からプログラムに渡されるコマンドライン引数に
+対応する、``main()`` と同じ2つのパラメータを取ります。Kokkos は、
+認識するフラグの引数を解析します。フラグが検出されるたびに、
+それは``argv``から削除され、
+``argc``が1減算される。
+2番目の関数は、 `Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_ class オブジェクトを選択し、
+引数のプログラムによる制御を可能にします。
+`Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_ は、暗示的に
+バージョン3.7において非推奨である ``Kokkos::InitArguments`` :sup:`　から暗示的に構築可能です。
+
+インターフェイス
 ---------
 
 .. code-block:: cpp
@@ -43,34 +43,34 @@ Interface
     Kokkos::initialize(InitArguments const& arguments);          // (until 3.7) (2)
     Kokkos::initialize(InitializationSettings const& settings);  // (since 3.7) (3)
     
-Parameters
+パラメータ
 ~~~~~~~~~~
 
-* ``argc``: Non-negative value, representing the number of command line
-  arguments passed to the program.
-* ``argv``: Pointer to the first element of an array of ``argc + 1`` pointers,
-  of which the last one is null and the previous, if any, point to
-  null-terminated multibyte strings that represent the arguments passed to the
-  program.
-* ``arguments``: (deprecated since version 3.7) C-style ``struct`` object is
-  converted to ``Kokkos::InitializationSettings`` for backward compatibility.
-* ``settings``: ``class`` object that contains settings to control the
-  initialization of Kokkos.
+* ``argc``: 非負の値で、プログラムに渡された
+  コマンドライン引数の数を表します。
+* ``argv``: ``argc + 1``　個のポインタの配列の最初の要素へのポインタで、
+  その最後のものは、ヌルであり、その1つ前のものは、もし存在するのであれば、 プログラムに渡された引数を表す
+　ヌル終端マルチバイト文字列を
+  指します。
+* ``arguments``: (バージョン3.7より非推奨) C-スタイル ``struct`` オブジェクトは、
+  後方互換性のため ``Kokkos::InitializationSettings`` に変換されました。
+* ``settings``: Kokkos　の初期化を制御する設定を含む
+  ``class``　オブジェクト。
 
-Requirements
+必要要件
 ~~~~~~~~~~~~
 
-* ``Kokkos::finalize`` must be called after ``Kokkos::initialize``.
-* ``Kokkos::initialize`` generally should be called after ``MPI_Init`` when Kokkos is initialized within an MPI context.
-* User-initiated Kokkos objects cannot be constructed until after ``Kokkos::initialize`` is called.
-* ``Kokkos::initialize`` may not be called after a call to ``Kokkos::finalize``.
+* ``Kokkos::finalize`` は、 ``Kokkos::initialize``　の後に呼び出される必要があります。
+* ``Kokkos::initialize`` は一般的には、 Kokkos が MPI コンテクスト内で初期化される際に、 ``MPI_Init``　の後に呼び出される必要があります。
+* ``Kokkos::initialize`` is called.ユーザーが開始したKokkosオブジェクトは、``Kokkos::initialize``が呼び出されるまで構築できません。
+* ``Kokkos::finalize``.``Kokkos::initialize`` は ``Kokkos::finalize`` の呼び出し後に呼び出すことはできません。
 
-Semantics
+セマンティクス
 ~~~~~~~~~
 
-* After calling ``Kokkos::initialize``, :cpp:func:`Kokkos::is_initialized() <is_initialized()>` should return true.
+* ``Kokkos::initialize``　呼出し後に、 :cpp:func:`Kokkos::is_initialized() <is_initialized()>` は、true　を返す必要があります。
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
@@ -79,13 +79,13 @@ Example
 
     int main(int argc, char* argv[]) {
         Kokkos::initialize(argc, argv);
-        {  // scope to ensure that my_view destructor is called before Kokkos::finalize
+        {  // my_view デストラクタが Kokkos::finalize　の前に呼ばれることを確認するための範囲
             Kokkos::View<double*> my_view("my_view", 10);
-        }  // scope of my_view ends here
+        }  // my_view　の範囲は、ここで終了。 
         Kokkos::finalize();
     }    
 
-See also
+以下も参照
 --------
 
 * `Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_
