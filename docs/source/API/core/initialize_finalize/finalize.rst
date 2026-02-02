@@ -36,12 +36,12 @@ Kokkos　実行環境を完了。
 必要要件
 ~~~~~~~~~~~~
 * ``Kokkos::finalize``　は、 Kokkos　が MPI コンテクスト内で使用される場合、``MPI_Finalize``　の前に呼び出される必要があります。
-* ``Kokkos::finalize`` は、ユーザーが初期化した　Kokkosオブジェクトが、スコープ外になった後に、呼び出される必要があります。
+* ``Kokkos::finalize`` は、ユーザーが初期化した　Kokkos　オブジェクトが、スコープ外になった後に、呼び出される必要があります。
 
 セマンティクス
 ~~~~~~~~~
 
-* :cpp:func:`Kokkos::is_initialized() <is_initialized()>` should return false after calling ``Kokkos::finalize``
+* :cpp:func:`Kokkos::is_initialized() <is_initialized()>` は、``Kokkos::finalize``　呼び出し後に　falseを返す必要があります。
 
 例
 ~~~~~~~
