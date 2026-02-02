@@ -1,13 +1,13 @@
 
-``Function Annotation Macros``
+``関数アノテーションマクロ``
 ==============================
 
 .. role::cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Macros.hpp>``
+ヘッダー ``<Kokkos_Macros.hpp>``　に定義。
 
-Usage:
+使用例:
 
 .. code-block:: cpp
 
