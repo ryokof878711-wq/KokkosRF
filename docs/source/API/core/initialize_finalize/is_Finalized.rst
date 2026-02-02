@@ -11,11 +11,11 @@
 
 .. cpp:function:: bool is_finalized() noexcept
 
-   Queries the finalization status of Kokkos and returns ``true`` if Kokkos is finalized and ``false`` if Kokkos is not finalized. This function can be called prior or after Kokkos initialization or finalization.
+    Kokkosの完了ステータスを照会し、Kokkos　の最終処理が完了している場合は、``true``　を、の最終処理が完了していない場合は、``false``　を返します。  Kokkos の初期化または最終処理完了前後に、この関数を呼び出すことが可能です。
    
-   :return: ``true`` if :cpp:func:`finalize` has been called; `false` otherwise.
+   :return:if :cpp:func:`finalize` が呼び出されている場合には、 ``true`` ; そうでない場合には、`false` 。
 
-Examples
+例
 --------
 
 .. code-block:: cpp
@@ -34,6 +34,6 @@ Examples
 .. seealso::
 
    `Kokkos::InitializationSettings <InitializationSettings.html#kokkosInitializationSettings>`_
-      Define the settings for initializing Kokkos programmatically.
+      Kokkos　をプログラムで初期化する設定を定義します。
    `Kokkos::ScopeGuard <ScopeGuard.html#kokkosScopeGuard>`_
-      A class to initialize and finalize Kokkos using RAII.
+      RAII　を使用して、Kokkos　を初期化および完了するクラス。
