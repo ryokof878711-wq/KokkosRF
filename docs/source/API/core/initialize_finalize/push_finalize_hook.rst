@@ -4,9 +4,9 @@
 .. role::cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
