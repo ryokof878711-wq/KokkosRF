@@ -57,18 +57,18 @@
 
     KOKKOS_INLINE_FUNCTION void foo() {}
 
-Note that it is NOT a bug to use this macro for inline-defined member function of classes, or
-templated free functions. It is simply redundant since they are by default inline.
+このマクロをクラスのインライン定義メンバー関数またはテンプレート化されたフリー関数に使用することはバグではないことに
+ご注意ください。 それはデフォルトでインラインになるため、単に冗長なだけです。
 
 ``KOKKOS_FORCEINLINE_FUNCTION``
 -------------------------------
 
-This macro is the equivalent of ``__host__ __device__`` markup in CUDA and HIP, but also uses
-compiler dependent hints (if available) to enforce inlining.
-This can help with some functions which are often used, but it may also hurt compilation time,
-as well as runtime performance due to code-bloat. In some instances using ``KOKKOS_FORCEINLINE_FUNCTION``
-excessively can even cause compilation errors due to compiler specific limits of maximum inline limits.
-Use this macro only in conjunction with performing extensive performance checks.
+このマクロは、CUDAおよびHIPにおける　``__host__ __device__``　マークアップに相当しますが、また 
+コンパイラ依存のヒント（利用可能な場合）を使用して、インライン化を強制します。
+これは頻繁に使用される一部の機能において役立ちますが。 しかし、コンパイル時間に悪影響を及ぼす可能性もあり、
+コードの肥大化により実行時のパフォーマンスも低下する恐れがあります。 一部の例においては、``KOKKOS_FORCEINLINE_FUNCTION``　を過剰に使用すると、
+コンパイラ固有の最大インライン制限によりコンパイルエラーが発生することさえあります。
+このマクロは、広範なパフォーマンスチェックの実施と併せてのみ使用してください。
 
 .. code-block:: cpp
 
@@ -89,9 +89,9 @@ Use this macro only in conjunction with performing extensive performance checks.
 ``KOKKOS_RELOCATABLE_FUNCTION``
 -------------------------------
 
-This macro is the equivalent of ``__host__ __device__`` markup in CUDA and HIP, and ``SYCL_EXTERNAL`` in SYCL.
-Use it for free functions that are compiled in one compilation unit but called from Kokkos
-parallel constructs defined in a different compilation unit.
+このマクロは、CUDAおよびHIPにおける　``__host__ __device__``　マークアップ、およびSYCLにおける ``SYCL_EXTERNAL`` に相当します。
+同一コンパイル単位でコンパイルされるが、別のコンパイル単位で定義されたKokkos　並列構造から
+呼び出される関数に対して使用します。
 
 .. code-block:: cpp
 
@@ -117,16 +117,16 @@ parallel constructs defined in a different compilation unit.
         count);
     }
 
-Note that this macro can only be used if Kokkos was configured with only host execution spaces
-or if relocatable device code support was explicitly enabled for the CUDA, HIP, or SYCL backend.
+このマクロは、Kokkosがホスト実行スペースのみで構成されている場合、またはCUDA、HIP、SYCLバックエンドで
+再配置可能デバイスコードサポートが明示的に有効化されている場合にのみ使用可能です。
 
 ``KOKKOS_LAMBDA``
 -----------------
 
-This macro provides default capture clause and host device markup for lambdas. It is the equivalent of
-``[=] __host__ __device__`` in CUDA and HIP.
-It is used than creating C++ lambdas to be passed to Kokkos parallel dispatch mechanisms such as
-``parallel_for``, ``parallel_reduce`` and ``parallel_scan``.
+このマクロは、ラムダ関数用のデフォルトのキャプチャ句とホストデバイスマークアップを提供します。 それは、CUDAおよびHIPにおける
+``[=] __host__ __device__`` に相当します。
+C++ラムダ式を作成するよりも、Kokkosの並列ディスパッチ機構
+``parallel_for``、 ``parallel_reduce`` および　``parallel_scan``　等に渡すために使用されます。
 
 .. code-block:: cpp
 
@@ -142,15 +142,15 @@ It is used than creating C++ lambdas to be passed to Kokkos parallel dispatch me
       ...
     }
 
-.. warning:: Do not use ``KOKKOS_LAMBDA`` inside functions marked as ``KOKKOS_FUNCTION`` etc. or within a lambda marked with ``KOKKOS_LAMBDA``. Specifically do not use ``KOKKOS_LAMBDA`` to define lambdas for nested parallel calls. CUDA does not support that. Use plain C++ syntax instead: ``[=] (int i) {...}``.
+.. warning:: ``KOKKOS_FUNCTION`` などのマークが付いた関数内や、``KOKKOS_LAMBDA`` でマークされたラムダ式内で ``KOKKOS_LAMBDA`` を使用しないでください。 特に、ネストされた並列呼び出し用のラムダ式を定義する際には、　``KOKKOS_LAMBDA``　を使用しないでください。CUDAはこれをサポートしていません。代わりに通常のC++構文を使用してください：``[=] (int i) {...}``。 
 
-.. warning:: When creating lambdas inside of class member functions you may need to use ``KOKKOS_CLASS_LAMBDA`` instead.
+.. warning:: クラスメンバ関数内でラムダ式を作成する場合、代わりに　``KOKKOS_CLASS_LAMBDA``　を使用する必要がある場合があります。
 
 ``KOKKOS_CLASS_LAMBDA``
 -----------------------
 
-This macro provides default capture clause and host device markup for lambdas created inside of class member functions. It is the equivalent of
-``[=, *this] __host__ __device__`` in CUDA and HIP, capturing the parent class by value instead of by reference.
+このマクロは、クラスメンバ関数内で作成されるラムダ式に対して、デフォルトのキャプチャ句とホストデバイスマークアップを提供します。 
+これはCUDAおよびHIPにおける　``[=, *this] __host__ __device__`` に相当し、親クラスを参照ではなく値でキャプチャします。
 
 .. code-block:: cpp
 
@@ -171,8 +171,7 @@ This macro provides default capture clause and host device markup for lambdas cr
         }
     };
 
-Note: If one wants to avoid capturing a copy of the entire class in the lambda, one has to create local
-copies of any accessed data members, and can not use non-static member functions inside the lambda:
+注意事項: ラムダ式内でクラス全体のコピーを取得することを避けたい場合、 アクセスされたデータメンバーのローカルコピーを作成する必要があり、ラムダ関数内では非静的メンバ関数を使用できません:
 
 .. code-block:: cpp
 
@@ -200,7 +199,7 @@ copies of any accessed data members, and can not use non-static member functions
 ``KOKKOS_DEDUCTION_GUIDE``
 --------------------------
 
-This macro is used to annotate user-defined deduction guides.
+このマクロは、ユーザー定義の推論ガイドに注釈を付けるために使用されます。
 
 
 .. code-block:: cpp
