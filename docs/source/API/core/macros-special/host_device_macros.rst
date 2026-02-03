@@ -18,27 +18,27 @@
     auto l = KOKKOS_LAMBDA(int i) { ... };
     auto l = KOKKOS_CLASS_LAMBDA(int i) { ... };
 
-These macros deal with the management of split compilation for device and host code.
-They fulfill the same purpose as the ``__host__ __device__`` markup in CUDA and HIP.
-Generally only functions marked with one of these macros can be used inside of parallel
-Kokkos code - i.e. all code executed in parallel algorithms must be marked up by one
-of these macros.
+これらのマクロは、デバイスコードとホストコードの分割コンパイルの管理を行います。
+それらは、CUDAおよびHIPにおける　``__host__ __device__``　マークアップと同じ目的を果たします。
+一般的に、これらのマクロのいずれかでマークされた関数のみが、並列　Kokkos　コード内で使用可能です。
+つまり、並列アルゴリズムで実行されるすべてのコードは、これらのマクロのいずれかで
+マークされなければなりません。
 
 ``KOKKOS_FUNCTION``
 -------------------
 
-This macro is the equivalent of ``__host__ __device__`` markup in CUDA and HIP.
-Use it primarily on inline-defined member functions of classes and templated
-free functions
+このマクロは、CUDAおよびHIPにおける　``__host__ __device__``　マークアップに相当します。
+クラスおよびテンプレートのフリー関数におけるインライン定義のメンバ関数に、
+主に使用します
 
 .. code-block:: cpp
 
     class Foo {
       public:
-        // inline defined constructor
+        // インライン定義されたコンストラクタ
         KOKKOS_FUNCTION Foo() { ... };
 
-        // inline defined member function
+        // インライン定義されたメンバー関数
         template<class T>
         KOKKOS_FUNCTION void bar() const { ... }
     };
@@ -50,8 +50,8 @@ free functions
 ``KOKKOS_INLINE_FUNCTION``
 --------------------------
 
-This macro is the equivalent of ``__host__ __device__ inline`` markup in CUDA and HIP.
-Use it primarily for non-templated free functions:
+このマクロは、CUDAおよびHIPにおける　``__host__ __device__ inline``　マークアップに相当します。
+主にテンプレート化されていないフリー関数に使用します:
 
 .. code-block:: cpp
 
