@@ -1,13 +1,13 @@
 .. _kokkos_if_on_host_device_macros:
 
 =================================================
-``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE``
+``KOKKOS_IF_ON_HOST`` および ``KOKKOS_IF_ON_DEVICE``
 =================================================
 
 .. role:: cpp(code)
    :language: cpp
 
-Overview
+概要
 ========
 The ``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE`` macros are a pair of
 function-like macros introduced in Kokkos 3.6 that enable **portable
