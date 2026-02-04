@@ -17,17 +17,17 @@
 
 .. |text| replace:: *ExecutionPolicy*
 
-Dispatches parallel work defined by ``functor`` according to the |text|_ ``policy``. The optional label ``name`` is
-used by profiling and debugging tools. This call may be asynchronous and return to the callee immediately. 
+``functor``で定義された並列作業を、|text|_ ``policy``　に従ってディスパッチします。 オプションのラベル　``name``　は、
+プロファイリングおよびデバッグツールで使用されます。この呼び出しは非同期であり、呼び出し元へ直ちに返る可能性があります。 
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:function:: template <class ExecPolicy, class FunctorType> Kokkos::parallel_for(const std::string& name, const ExecPolicy& policy, const FunctorType& functor);
 
 .. cpp:function:: template <class ExecPolicy, class FunctorType> Kokkos::parallel_for(const ExecPolicy& policy, const FunctorType& functor);
 
-Parameters:
+パラメータ:
 ~~~~~~~~~~~
 
 * ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks. 
