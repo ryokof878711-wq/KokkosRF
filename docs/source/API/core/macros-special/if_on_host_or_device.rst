@@ -9,39 +9,39 @@
 
 概要
 ========
-The ``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE`` macros are a pair of
-function-like macros introduced in Kokkos 3.6 that enable **portable
-conditional compilation** within a **single ``KOKKOS_FUNCTION`` body**. They
-allow you to select which code is compiled and executed based on whether the
-function is running on the host (CPU) or a device (GPU, etc.). These macros
-provide an alternative to non-portable preprocessor idioms like #ifdef
-``__CUDA_ARCH__``.
+``KOKKOS_IF_ON_HOST`` 及び``KOKKOS_IF_ON_DEVICE`` マクロは、 
+3.6 で導入された関数のようなマクロのペアであり、
+**single ``KOKKOS_FUNCTION`` body** 内で、**portable　conditional compilation**を可能にします。
+それらにより関数がホスト（CPU）上で実行されるか、
+デバイス（GPUなど）上で実行されるかに基づいて、コンパイルおよび実行されるコードの選択が可能になります。 
+これらのマクロは、#ifdef ``__CUDA_ARCH__`` のような
+移植性のないプリプロセッサ構文に代わる手段を提供します。
 
-Motivation
+モチベーション
 ==========
-Traditional preprocessor directives like ``#ifdef __CUDA_ARCH__`` rely on a
-split compilation model, where host and device code are compiled in separate
-passes.  While this model is supported by some compilers (like ``nvcc``), it is
-not universally portable.  Other modern compilers for GPU-accelerated code,
-such as those that support OpenACC or OpenMPTarget, use a unified compilation
-approach where both host and device code are compiled in a single pass. As a
-result, code written with backend-specific macros is not portable across
-different compilers and programming models
+従来のプリプロセッサ指令（例：``#ifdef __CUDA_ARCH__``）は、ホストコードとデバイスコードが
+別々のパスでコンパイルされる分割コンパイルモデルに依存しています。
+このモデルは一部のコンパイラ（　``nvcc``　など）でサポートされていますが、
+OpenACC　や　OpenMPTarget　をサポートするコンパイラ等、GPUアクセラレーションコード向けのその他の現代的なコンパイラでは、
+ホストコードとデバイスコードの両方を、
+単一のパスでコンパイルする統一されたコンパイル手法を採用しています。
+その結果、バックエンド固有のマクロで記述されたコードは、
+異なるコンパイラやプログラミングモデル間において、移植性がありません。
 
-The ``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE`` macros solve this
-portability problem by allowing the compiler to conditionally compile code
-within a single pass, enabling a single code base to be used with a wider range
-of compilers and backends.
+``KOKKOS_IF_ON_HOST`` および　``KOKKOS_IF_ON_DEVICE`` マクロは、
+コンパイラが単一のパス内でコードを条件付きでコンパイルできるように
+この移植性の問題を解決し、単一のコードベースをより幅広いコンパイラやバックエンドで
+使用できるようにします。
 
-Usage
+使用例
 =====
-These macros are designed to be used within a function decorated with
-``KOKKOS_FUNCTION``. They accept a single argument, which is a block of code
-enclosed in double parentheses. The code inside the macro's parentheses will
-only be compiled and executed on the specified architecture
+これらのマクロは、``KOKKOS_FUNCTION`` で装飾された関数内で使用されるように
+設計されています。それらは単一の引数を受け付けますが、
+それは二重括弧で囲まれたコードブロックです。 マクロの括弧内のコードは、
+指定されたアーキテクチャでのみ、コンパイルおよび実行されます。
 
 
-Signature
+シグネチャ
 ---------
 
 .. code-block:: cpp
@@ -50,11 +50,11 @@ Signature
     KOKKOS_IF_ON_DEVICE(( /* code to be compiled on the device */ ))
 
 
-Example: Host/Device Overloading
+例: ホスト/デバイス オーバーロード
 --------------------------------
 
-A common use case is to provide different implementations of a function for
-host and device execution.
+一般的なユースケースとして、ホスト側とデバイス側での実行用に、関数の異なる実装を提供する
+ことが挙げられます。
 
 .. code-block:: cpp
 
@@ -72,15 +72,15 @@ host and device execution.
       ))
     }
 
-Important Considerations
+重要考慮事項
 ========================
 
-Scope
+範囲
 -----
 
-Each ``KOKKOS_IF_ON_*`` macro introduces a new scope. Any variables declared
-within the macro's parentheses are local to that scope and will not be
-accessible outside of it.
+各 ``KOKKOS_IF_ON_*`` マクロは、新たな範囲を導入します。マクロの括弧内で宣言された変数は、
+そのスコープ内でローカルとなり、
+その範囲外からはアクセスできません。
 
 .. code-block:: cpp
 
@@ -89,25 +89,25 @@ accessible outside of it.
       std::cout << x << '\n';
     )) // The scope of 'x' ends here.
 
-``constexpr`` Context
+``constexpr`` コンテクスト
 ---------------------
 
-These macros cannot be used in a context that requires a ``constexpr``
-(constant expression).
+これらのマクロは、``constexpr``　を必要とするコンテキストでは使用できません。
+(定数式).
 
-Best Practices
+ベストプラクティス
 --------------
 
-**Avoid using these macros whenever possible.**
+**可能な限りこれらのマクロの使用は避けてください。**
 
-``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE`` should be considered a **last
-resort** for code differentiation. The primary goal of Kokkos is to achieve
-high-performance portability through a unified code base. Relying on these
-macros can hinder this goal by introducing host/device-specific logic.
+``KOKKOS_IF_ON_HOST`` and ``KOKKOS_IF_ON_DEVICE`` のコードの差別化の手段としては、
+あくまで　**最終手段**　と考えるべきです。 Kokkos の主な目標は、
+統一されたコードベースを通じて高い移植性を実現することである。 これらのマクロに依存すると、
+ホスト/デバイス固有のロジックを導入することで、この目標の達成を妨げる可能性があります。
 
-Before using these macros, consider alternative approaches like **partial
-template specialization** on execution spaces or using Kokkos's built-in
-functionalities, which are designed to be portable across all backends. Using
-these macros should be limited to situations where a fundamental difference
-between host and device APIs necessitates separate code paths, such as for I/O
-operations or specific backend intrinsics.
+これらのマクロ使用前に、実行空間に対する　**部分テンプレート特化**　または
+Kokkos　の組み込み機能の使用といった代替アプローチを検討しますが、
+それは、すべてのバックエンド間で移植可能になるように設計されています。
+これらのマクロの使用は、ホストとデバイスのAPI間に根本的な差異が存在し、
+I/O操作や特定のバックエンド固有命令など、別々のコードパスが必要となる状況に
+限定するべきです。
