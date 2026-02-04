@@ -4,47 +4,47 @@
 .. role::cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_ExecPolicy.hpp>``
+ヘッダーファイル: ``<Kokkos_ExecPolicy.hpp>``
 
 .. _parallelFor: ../parallel-dispatch/parallel_for.html
 
 .. |parallelFor| replace:: :cpp:func:`parallel_for`
 
-A tag used in team size calculation functions to indicate that the functor for which a team size is being requested is being used in a |parallelFor|_
+チーム規模の要求対象となるファンクターを示すための、チーム規模計算機能で使用されるタグは、|parallelFor|_に使用されています。  
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
-    using PolicyType = Kokkos::TeamPolicy<>; 
+    PolicyType = Kokkos::TeamPolicy<>　を使用; 
     PolicyType policy;
     int recommended_team_size = policy.team_size_recommended(
         Functor, Kokkos::ParallelForTag());
 
-Synopsis 
+シノプシス 
 --------
 
 .. code-block:: cpp
 
-    struct ParallelForTag{};
+    構造体　ParallelForTag{};
 
-Public Class Members
+パブリッククラスメンバー
 --------------------
 
-None
+無し
 
 Typedefs
 ~~~~~~~~
    
-None
+無し
 
-Constructors
+コンストラクタ
 ~~~~~~~~~~~~
  
-Default
+デフォルト
 
-Functions
+関数
 ~~~~~~~~~
 
-None
+無し
