@@ -43,34 +43,34 @@ and `parallel_scan() <parallel_scan.html#kokkosparallel_scan>`_) を
 セマンティクス
 ---------
 
-- Blocks on completion of all outstanding asynchronous works. Side effects of outstanding work will be observable upon completion of the ``fence`` call - that means ``Kokkos::fence()`` implies a memory fence.
+- すべての未処理の非同期作業が完了した時点でブロックします。 未処理作業の副作用は、 ``fence`` 呼び出しの完了時に観測可能となります。つまり ``Kokkos::fence()`` は、メモリフェンスを意味します。
 
-Examples
+例
 --------
 
-Timing kernels
+タイミングカーネル
 ~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
     Kokkos::Timer timer;
-    // This operation is asynchronous, without a fence 
-    // one would time only the launch overhead
+    // This operation is asynchronous, without a fence この演算は非同期であり、フェンスなしで行われます。
+    // ローンチオーバーヘッドのみを計測します。
     Kokkos::parallel_for("Test", N, functor);
     Kokkos::fence();
     double time = timer.seconds();
 
-Use with asynchronous deep copy
+非同期の深部コピーと併用
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
     Kokkos::deep_copy(exec1, a,b);
     Kokkos::deep_copy(exec2, a,b);
-    // do some stuff which doesn't touch a or b
+    // aやbに干渉しない何かを行います。
     Kokkos::parallel_for("Test", N, functor);
 
-    // wait for all three operations to finish
-    Kokkos::fence();
+    // Kokkos::fence();　を完了するために
+    3つの演算すべてを待ちます。
 
-    // do something with a and b
+    // a および bを使って何かを行います。
