@@ -10,41 +10,41 @@
 
 .. |parallelReduce| replace:: :cpp:func:`parallel_reduce`
 
-A tag used in team size calculation functions to indicate that the functor for which a team size is being requested is being used in a |parallelReduce|_
+チーム規模の要求対象となるファンクターを示すための、チーム規模計算機能で使用されるタグは、 |parallelReduce|_　に使用されています。
 
 Usage
 -----
 
 .. code-block:: cpp
 
-    using PolicyType = Kokkos::TeamPolicy<>; 
+    PolicyType = Kokkos::TeamPolicy<> を使用; 
     PolicyType policy;
     int recommended_team_size = policy.team_size_recommended(
         Functor, Kokkos::ParallelReduceTag());
 
-Synopsis
+シノプシス
 --------
 
 .. code-block:: cpp
 
-    struct ParallelReduceTag{};
+    構造体 ParallelReduceTag{};
 
-Public Class Members
+パブリッククラスメンバー
 --------------------
 
-None
+無し
 
 Typedefs
 ~~~~~~~~
 
-None
+無し
 
-Constructors
+コンストラクタ
 ~~~~~~~~~~~~
 
-Default
+デフォルト
 
-Functions
+関数
 ~~~~~~~~~
 
-None
+無し
