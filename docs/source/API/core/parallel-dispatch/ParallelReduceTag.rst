@@ -4,7 +4,7 @@
 .. role::cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_ExecPolicy.hpp>``
+ヘッダーファイル: ``<Kokkos_ExecPolicy.hpp>``
 
 .. _parallelReduce: ../parallel-dispatch/parallel_reduce.html
 
