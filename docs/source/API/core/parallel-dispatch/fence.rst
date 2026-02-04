@@ -4,21 +4,22 @@
 .. role::cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage:
+使用例:
 
 .. code-block:: cpp
 
     Kokkos::fence();
 
-Blocks on completion of all outstanding asynchronous Kokkos operations.
-That includes parallel dispatch (e.g. `parallel_for() <parallel_for.html#kokkosparallel_for>`_, `parallel_reduce() <parallel_reduce.html#kokkosparallel_reduce>`_ 
-and `parallel_scan() <parallel_scan.html#kokkosparallel_scan>`_) as well as asynchronous data operations such as three-argument `deep_copy <../view/deep_copy.html>`_.
+未完了の非同期　Kokkos　演算がすべて完了した時点でブロックします。
+それは、三引数 `deep_copy <../view/deep_copy.html>`_　だけでなく、並列ディスパッチ　(例えば、 `parallel_for() <parallel_for.html#kokkosparallel_for>`_, `parallel_reduce() <parallel_reduce.html#kokkosparallel_reduce>`_ 
+and `parallel_scan() <parallel_scan.html#kokkosparallel_scan>`_) を
+含みます。
 
-Note: there is a execution space instance specific ``fence`` too: `ExecutionSpaceConcept <../execution_spaces.html#executionspaceconcept>`_
+注意事項: 実行空間インスタンス固有の　``fence`` も存在します。
 
-Interface
+インターフェイス
 ---------
 
 .. code-block:: cpp
@@ -29,17 +30,17 @@ Interface
 
     void Kokkos::fence(const std::string& label);
 
-Parameters
+パラメータ
 ~~~~~~~~~~
 
 - ``label``: A label to identify a specific fence in fence profiling operations. ``label`` does not have to be unique.
 
-Requirements
+必要要件
 ~~~~~~~~~~~~
 
-- ``Kokkos::fence()`` cannot be called inside an existing parallel region (i.e. inside the ``operator()`` of a functor or lambda).
+- ``Kokkos::fence()`` は、既存の並列領域内では呼び出すことはできません (つまり、  ``operator()`` of a functor or lambda内)。
 
-Semantics
+セマンティクス
 ---------
 
 - Blocks on completion of all outstanding asynchronous works. Side effects of outstanding work will be observable upon completion of the ``fence`` call - that means ``Kokkos::fence()`` implies a memory fence.
