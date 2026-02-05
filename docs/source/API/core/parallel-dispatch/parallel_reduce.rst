@@ -73,26 +73,26 @@ Parametersパラメータ:
 * ExecPolicy: 反復空間およびその他の実行プロパティを定義する *ExecutionPolicy*　。 有効なポリシーは以下の通り:
 
   - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
-  - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
+  - `RangePolicy <../policies/RangePolicy.html>`_: 1次元反復範囲を定義します。
   - `MDRangePolicy <../policies/MDRangePolicy.html>`_: 多次元反復空間を定義します。
-  - `TeamPolicy <../policies/TeamPolicy.html>`_: 1次元の反復範囲を定義し、それぞれがスレッドチームに割り当てらます。
+  - `TeamPolicy <../policies/TeamPolicy.html>`_: 1次元反復範囲を定義し、それぞれがスレッドチームに割り当てらます。
   - `TeamVectorRange <../policies/TeamVectorRange.html>`_: スレッドチームによって実行される1次元の反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
-  - `TeamVectorMDRange <../policies/TeamVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``
-  - `TeamThreadRange <../policies/TeamThreadRange.html>`_: defines a 1D iteration range to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
-  - `TeamThreadMDRange <../policies/TeamThreadMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
+  - `TeamVectorMDRange <../policies/TeamVectorMDRange.html>`_: チーム内のスレッドにより実行されるべき多次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
+  - `TeamThreadRange <../policies/TeamThreadRange.html>`_: チーム内のスレッドにより実行されるべき1次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
+  - `TeamThreadMDRange <../policies/TeamThreadMDRange.html>`_: チーム内のスレッドにより実行されるべき多次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき1次元反復範囲を定義します。 TeamPolicy または TaskTeam を通じて実行される並列領域内でのみ有効です。
-  - `ThreadVectorMDRange <../policies/ThreadVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
-* FunctorType: A valid functor with (at minimum) an ``operator()`` with a matching signature for the ``ExecPolicy`` combined with the reduced type.
-* ReducerArgument: Either a class fulfilling the "Reducer" concept or a ``Kokkos::View``.
-* ReducerArgumentNonConst: A scalar type or an array type; see below for functor requirements.
+  - `ThreadVectorMDRange <../policies/ThreadVectorMDRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき多次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
+* FunctorType: 有効なファンクタで、少なくとも　``ExecPolicy``　と縮小型との組み合わせに対応するシグネチャを持つ　``operator()`` を備えるもの。
+* ReducerArgument: ``Reducer``　の概念を満たすクラス、または ``Kokkos::View`` のいずれか。
+* ReducerArgumentNonConst: スカラー型または配列型; ファンクタの要件については以下を参照してください。
 
-Requirements:
+必要要件:
 ~~~~~~~~~~~~~
 
-* If ``ExecPolicy`` is not ``MDRangePolicy``, the ``functor`` has a member function of the form ``operator() (const HandleType& handle, ReducerValueType& value) const`` or ``operator() (const WorkTag, const HandleType& handle, ReducerValueType& value) const``.
+*  ``ExecPolicy`` が ``MDRangePolicy``　ではない場合、 the ``functor`` は、 ``operator() (const HandleType& handle, ReducerValueType& value) const`` または ``operator() (const WorkTag, const HandleType& handle, ReducerValueType& value) const``　の形式のメンバー関数を持ちます。
 
-  - If ``ExecPolicy::work_tag`` is ``void`` or if ``ExecPolicy`` is an ``IntegerType``, the overload without a ``WorkTag`` argument is used.
-  - ``HandleType`` is an ``IntegerType`` if ``ExecPolicy`` is an ``IntegerType`` else it is ``ExecPolicy::member_type``.
+  -  ``ExecPolicy::work_tag`` が ``void`` または ``ExecPolicy`` が ``IntegerType``　である場合、 ``WorkTag``　引数を使わないオーバーロードが使用されます。
+  - ``HandleType`` is an ``IntegerType`` if ``ExecPolicy`` is an ``IntegerType`` else it is ``ExecPolicy::member_type``.``HandleType`` は、``ExecPolicy`` が ``IntegerType`` の場合、``IntegerType`` であり、そうでない場合は ``ExecPolicy::member_type`` です。
 * If ``ExecPolicy`` is ``MDRangePolicy`` the ``functor`` has a member function of the form ``operator() (const IntegerType& i0, ... , const IntegerType& iN, ReducerValueType& value) const`` or ``operator() (const WorkTag, const IntegerType& i0, ... , const IntegerType& iN, ReducerValueType& value) const``.
 
   - If ``ExecPolicy::work_tag`` is ``void``, the overload without a ``WorkTag`` argument is used.
