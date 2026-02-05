@@ -74,7 +74,7 @@ Parametersパラメータ:
 
   - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
   - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
-  - `MDRangePolicy <../policies/MDRangePolicy.html>`_: defines a multi-dimensional iteration space.
+  - `MDRangePolicy <../policies/MDRangePolicy.html>`_: 多次元反復空間を定義します。
   - `TeamPolicy <../policies/TeamPolicy.html>`_: defines a 1D iteration range, each of which is assigned to a thread team.
   - `TeamVectorRange <../policies/TeamVectorRange.html>`_: defines a 1D iteration range to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
   - `TeamVectorMDRange <../policies/TeamVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
