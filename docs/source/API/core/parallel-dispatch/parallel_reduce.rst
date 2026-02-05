@@ -77,10 +77,10 @@ Parametersパラメータ:
   - `MDRangePolicy <../policies/MDRangePolicy.html>`_: 多次元反復空間を定義します。
   - `TeamPolicy <../policies/TeamPolicy.html>`_: 1次元の反復範囲を定義し、それぞれがスレッドチームに割り当てらます。
   - `TeamVectorRange <../policies/TeamVectorRange.html>`_: スレッドチームによって実行される1次元の反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
-  - `TeamVectorMDRange <../policies/TeamVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
+  - `TeamVectorMDRange <../policies/TeamVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``
   - `TeamThreadRange <../policies/TeamThreadRange.html>`_: defines a 1D iteration range to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
   - `TeamThreadMDRange <../policies/TeamThreadMDRange.html>`_: defines a multi-dimensional iteration space to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
-  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: defines a 1D iteration range to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
+  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき次元反復範囲を定義します。 TeamPolicy または TaskTeam を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorMDRange <../policies/ThreadVectorMDRange.html>`_: defines a multi-dimensional iteration space to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
 * FunctorType: A valid functor with (at minimum) an ``operator()`` with a matching signature for the ``ExecPolicy`` combined with the reduced type.
 * ReducerArgument: Either a class fulfilling the "Reducer" concept or a ``Kokkos::View``.
