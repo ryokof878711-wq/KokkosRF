@@ -61,9 +61,9 @@
 例
 --------
 
-More Detailed Examples are provided in the ExecutionPolicy documentation. 
+より詳細な例は、実行ポリシーのドキュメントに記載されています。
 
-* ``IntegerType`` policy with lambda as the functor.  Note that KOKKOS_LAMBDA is the same as [=] KOKKOS_FUNCTION, which means that all of the variables used within the lambda are captured by value.  Also, the KOKKOS_LAMBDA and KOKKOS_FUNCTION macros add all of the function specifiers necessary for the target execution space.
+* ラムダ式をファンクタとする　``IntegerType``　ポリシー。 KOKKOS_LAMBDA は [=] KOKKOS_FUNCTION と同じであることに注意してください。これは、ラムダ式内で使用されるすべての変数が値でキャプチャされることを意味します。 また、 KOKKOS_LAMBDA および KOKKOS_FUNCTION マクロは、ターゲット実行空間に必要なすべての関数指定子を追加します。
 
 .. code-block:: cpp
 
@@ -82,7 +82,7 @@ More Detailed Examples are provided in the ExecutionPolicy documentation.
         Kokkos::finalize();
     }
 
-* ``TeamPolicy`` policy with C++ struct as  functor.  Note that the KOKKOS_INLINE_FUNCTION macro adds all of the function specifiers necessary for the target execution space.  The TagA/B structs also provide the ability to 'overload' the operators within the same functor.  Much like the lambda example, the functor and any member variables contained within are captured by value, which means they must have either implicit or explicit copy constructors.
+* C++ struct をファンクタとして使用としてする　``TeamPolicy`` ポリシー。  KOKKOS_INLINE_FUNCTION マクロは、ターゲット実行空間に必要なすべての関数指定子を追加することに注意してください。 TagA/B構造体は、同じファンクタ内で演算子を　'overload'　する機能も提供します。 ラムダ式の例と同様に、ファンクタとその内部に含まれるメンバー変数は値でキャプチャされるため、暗示的または明示的なコピーコンストラクタを持つ必要があります。
 
 .. code-block:: cpp
 
@@ -95,12 +95,12 @@ More Detailed Examples are provided in the ExecutionPolicy documentation.
     struct Foo {
         KOKKOS_INLINE_FUNCTION
         void operator() (const TagA, const Kokkos::TeamPolicy<>::member_type& team) const {
-            printf("Greetings from thread %i of team %i with TagA\n",
+            printf("TagA\n"を使った、チーム%i　のスレッド%iからの挨拶
                     team.thread_rank(),team.league_rank());
         }
         KOKKOS_INLINE_FUNCTION
         void operator() (const TagB, const Kokkos::TeamPolicy<>::member_type& team) const {
-            printf("Greetings from thread %i of team %i with TagB\n",
+            printf("TagB\n"を使った、チーム%i　のスレッド%iからの挨拶
                     team.thread_rank(),team.league_rank());
         }
     };
