@@ -72,7 +72,7 @@ Parametersパラメータ:
 * ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
 * ExecPolicy: 反復空間およびその他の実行プロパティを定義する *ExecutionPolicy*　。 有効なポリシーは以下の通り:
 
-  - ``IntegerType``: defines a 1D iteration range, starting from 0 and going to a count.
+  - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
   - `RangePolicy <../policies/RangePolicy.html>`_: defines a 1D iteration range.
   - `MDRangePolicy <../policies/MDRangePolicy.html>`_: defines a multi-dimensional iteration space.
   - `TeamPolicy <../policies/TeamPolicy.html>`_: defines a 1D iteration range, each of which is assigned to a thread team.
