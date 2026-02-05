@@ -73,7 +73,7 @@ Parametersパラメータ:
 * ExecPolicy: 反復空間およびその他の実行プロパティを定義する *ExecutionPolicy*　。 有効なポリシーは以下の通り:
 
   - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
-  - `RangePolicy <../policies/RangePolicy.html>`_: defines a 1D iteration range.
+  - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
   - `MDRangePolicy <../policies/MDRangePolicy.html>`_: defines a multi-dimensional iteration space.
   - `TeamPolicy <../policies/TeamPolicy.html>`_: defines a 1D iteration range, each of which is assigned to a thread team.
   - `TeamVectorRange <../policies/TeamVectorRange.html>`_: defines a 1D iteration range to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
