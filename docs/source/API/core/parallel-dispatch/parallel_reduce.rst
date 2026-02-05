@@ -18,9 +18,9 @@ Usage
     Kokkos::parallel_reduce(policy, functor, result...);
     Kokkos::parallel_reduce(policy, functor);
 
-Dispatches parallel work defined by ``functor`` according to the *ExecutionPolicy* and performs a reduction of the contributions provided by workers as defined by the execution policy. The optional label name is used by profiling and debugging tools. The reduction type is either a ``sum``, is defined by the ``reducer`` or is deduced from an optional ``join`` operator on the functor. The reduction result is stored in ``result``, or through the ``reducer`` handle. It is also provided to the ``functor.final()`` function if such a function exists. Multiple ``reducers`` can be used in a single ``parallel_reduce`` and thus, it is possible to compute the ``min`` and the ``max`` values in a single ``parallel_reduce``.
+``functor``で定義された並列作業を、*ExecutionPolicy*　に従ってディスパッチし、実行ポリシーで定義されたワーカーからの貢献を削減します。オプションのラベル名は、プロファイリングおよびデバッグツールで使用されます。 還元型は、``sum``　であるか、``reducer``　によって定義されるか、あるいはファンクタ上のオプションの　``join``　演算子から演繹されます。削減結果は、``result``　に格納されるか、``reducer``　ハンドルを通じて格納されます。 また、そのような関数が存在する場合、``functor.final()``　関数にも提供されます。 単一の　``parallel_reduce``　内で複数の　``reducers``　を使用できるため、単一の　``parallel_reduce``　内で　``min``　値と　``max``　値を計算することが可能です。
 
-Interface
+インターフェイス
 ---------
 
 .. code-block:: cpp
@@ -66,7 +66,7 @@ Interface
                             const FunctorType& functor,
                             ReducerArgumentNonConst&... reducer);
 
-Parameters:
+Parametersパラメータ:
 ~~~~~~~~~~~
 
 * ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks.
