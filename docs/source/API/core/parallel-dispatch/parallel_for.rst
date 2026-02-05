@@ -30,35 +30,35 @@
 パラメータ:
 ~~~~~~~~~~~
 
-* ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks. 
-* ExecPolicy: An *ExecutionPolicy* which defines iteration space and other execution properties. Valid policies are:
+* ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
+* ExecPolicy: 反復空間およびその他の実行プロパティを定義する　*ExecutionPolicy* :
 
-  - ``IntegerType``: defines a 1D iteration range, starting from 0 and going to a count.
-  - `RangePolicy <../policies/RangePolicy.html>`_: defines a 1D iteration range.
-  - `MDRangePolicy <../policies/MDRangePolicy.html>`_: defines a multi-dimensional iteration space.
-  - `TeamPolicy <../policies/TeamPolicy.html>`_: defines a 1D iteration range, each of which is assigned to a thread team.
-  - `TeamThreadRange <../policies/TeamVectorRange.html>`_: defines a 1D iteration range to be executed by a thread-team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
-  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: defines a 1D iteration range to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
+  - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
+  - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
+  - `MDRangePolicy <../policies/MDRangePolicy.html>`_: 多次元反復空間を定義します。
+  - `TeamPolicy <../policies/TeamPolicy.html>`_: 1次元の反復範囲を定義し、それぞれがスレッドチームに割り当てらます。
+  - `TeamThreadRange <../policies/TeamVectorRange.html>`_: スレッドチームによって実行される1次元の反復範囲を定義します。  ``TaskTeam``.``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
+  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: 1次元反復範囲を定義し、チーム内のスレッドを分割するベクトル並列化を通じて実行します。  ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
 
-* FunctorType: A valid functor having an ``operator()`` with a matching signature for the ``ExecPolicy``.  The functor can be defined using a C++ class/struct or lambda.  See Examples below for more detail.
+* FunctorType:  ``ExecPolicy`` のシグネチャに一致する operator() を持つ有効なファンクタ。 詳細については以下の例を参照してください。
 
-Requirements
+必要要件
 ~~~~~~~~~~~~
 
-* If ``ExecPolicy`` is an ``IntegerType``, ``functor`` has a member function ``operator() (const IntegerType& i) const``.  
-* If ``ExecPolicy`` is an ``MDRangePolicy`` and ``ExecPolicy::work_tag`` is ``void``, ``functor`` has a member function ``operator() (const IntegerType& i0, ... , const IntegerType& iN) const`` where ``N`` is ``ExecPolicy::rank-1``.
-* If ``ExecPolicy`` is an ``MDRangePolicy`` and ``ExecPolicy::work_tag`` is not ``void``, ``functor`` has a member function ``operator() (const ExecPolicy::work_tag, const IntegerType& i0, ... , const IntegerType& iN) const`` where ``N`` is ``ExecPolicy::rank-1``.
-* If ``ExecPolicy::work_tag`` is ``void``, ``functor`` has a member function ``operator() (const ExecPolicy::member_type& handle) const``.
-* If ``ExecPolicy::work_tag`` is not ``void``, ``functor`` has a member function ``operator() (const ExecPolicy::work_tag, const ExecPolicy::member_type& handle) const``. 
+* ``ExecPolicy`` が ``IntegerType``　であれば、 ``functor`` は、メンバー関数 ``operator() (const IntegerType& i) const``　を持ちます。  
+* ``ExecPolicy`` が ``MDRangePolicy`` であり、 ``ExecPolicy::work_tag`` が ``void``　であれば、 ``functor`` は、``N`` が ``ExecPolicy::rank-1``　であるメンバー関数 ``operator() (const IntegerType& i0, ... , const IntegerType& iN) const`` を持ちます。 
+* ``ExecPolicy`` が ``MDRangePolicy`` であり、 ``ExecPolicy::work_tag`` が ``void``　でなければ、 ``functor`` は、``N`` が ``ExecPolicy::rank-1``　であるメンバー関数 ``operator() (const ExecPolicy::work_tag, const IntegerType& i0, ... , const IntegerType& iN) constを持ちます。
+* ``ExecPolicy::work_tag`` が　``void``　であれば、 ``functor``　は、 メンバー関数 ``operator() (const ExecPolicy::member_type& handle) const``　を持ちます。
+* ``ExecPolicy::work_tag`` が ``void``　でなければ、 ``functor`` は、 メンバー関数　``operator() (const ExecPolicy::work_tag, const ExecPolicy::member_type& handle) const``　を持ちます。 
 
-Semantics
+セマンティクス
 ---------
 
-* For every element of the iteration space defined in ``policy`` the functors call operator is invoked exactly once, except for ``TeamPolicy`` and ``TeamThreadRange`` where the call operator is invoked by each vector lane of the team and thread respectively.
-* Neither concurrency nor order of execution of iterations are guaranteed.
-* The call is potentially asynchronous. To guarantee a kernel has finished, a developer should call fence on the execution space on which the kernel is run.
+* ``policy``で定義された反復空間の各要素に対して、ファンクターの呼び出し演算子は正確に1回呼び出されます。ただし、``TeamPolicy`` および ``TeamThreadRange`` については、それぞれチームの各ベクトルレーンおよびスレッドによって呼び出し演算子が呼び出されます。
+* 並行性も、反復処理の実行順序も、保証されません
+* この呼び出しは非同期になる可能性があります。 カーネルの終了を保証するには、開発者はカーネルが実行されている実行領域に対してフェンスを呼び出すべきです。
 
-Examples
+例
 --------
 
 More Detailed Examples are provided in the ExecutionPolicy documentation. 
