@@ -69,8 +69,8 @@ Usage
 Parametersパラメータ:
 ~~~~~~~~~~~
 
-* ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks.
-* ExecPolicy: An *ExecutionPolicy* which defines iteration space and other execution properties. Valid policies are:
+* ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
+* ExecPolicy: 反復空間およびその他の実行プロパティを定義する *ExecutionPolicy*　。 有効なポリシーは以下の通り:
 
   - ``IntegerType``: defines a 1D iteration range, starting from 0 and going to a count.
   - `RangePolicy <../policies/RangePolicy.html>`_: defines a 1D iteration range.
