@@ -48,7 +48,7 @@
 * ``functor`` は、 ``operator() (const HandleType& handle, ReturnType& value, const bool final) const`` または ``operator() (const WorkTag, const HandleType& handle, ReturnType& value, const bool final) const``　の形式のメンバー関数を持ちます。
 
   - ExecPolicy が IntegerType　または　ExecPolicy::work_tag が void　である場合、 WorkTag　を持たない　``operator()``　オーバーロードが使用されます。
-  - ``HandleType`` is an ``IntegerType`` if ``ExecPolicy`` is an ``IntegerType`` else it is ``ExecPolicy::member_type``.
+  - HandleType は、ExecPolicy が IntegerType の場合、IntegerType であり、そうでない場合は ExecPolicy::member_type です
 * The type ``ReturnType`` of the ``functor`` operator must be compatible with the ``ReturnType`` of the parallel_scan and must match the arguments of the ``init`` and ``join`` functions of the functor if provided. If the functor doesn't have an ``init`` member function, it is assumed that the identity for the scan operation is given by the default constructor of the value type (and not by `reduction_identity <../builtinreducers/reduction_identity.html>`_).
 * The functor must define ``FunctorType::value_type`` the same as ``ReturnType``.
 
