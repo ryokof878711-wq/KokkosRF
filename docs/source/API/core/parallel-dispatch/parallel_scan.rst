@@ -35,8 +35,8 @@
 * ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
 * ExecPolicy: 反復空間およびその他の実行プロパティを定義する  *ExecutionPolicy* 　。 有効なポリシーは以下の通り:
 
-  - ``IntegerType``: defines a 1D iteration range, starting from 0 and going to a count.
-  - `RangePolicy <../policies/RangePolicy.html>`_: defines a 1D iteration range.
+  - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
+  - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
   - `TeamThreadRange <../policies/TeamThreadRange.html>`_: defined a 1D iteration range to be executed through thread parallelization dividing the range over the threads of the team. Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
   - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: defines a 1D iteration range to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a ``TeamPolicy`` or a ``TaskTeam``.
 * FunctorType: A valid functor with (at minimum) an ``operator()`` with a signature compatible with the ``ExecPolicy`` and the ``ReturnType``.
