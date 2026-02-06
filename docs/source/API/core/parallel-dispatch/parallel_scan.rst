@@ -32,7 +32,7 @@
 パラメータ:
 ~~~~~~~~~~~
 
-* ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks.
+* ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
 * ExecPolicy: An *ExecutionPolicy* which defines iteration space and other execution properties. Valid policies are:
 
   - ``IntegerType``: defines a 1D iteration range, starting from 0 and going to a count.
