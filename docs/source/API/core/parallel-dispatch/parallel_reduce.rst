@@ -82,7 +82,7 @@ Parametersパラメータ:
   - `TeamThreadMDRange <../policies/TeamThreadMDRange.html>`_: チーム内のスレッドにより実行されるべき多次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき1次元反復範囲を定義します。 TeamPolicy または TaskTeam を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorMDRange <../policies/ThreadVectorMDRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき多次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
-* FunctorType: 有効なファンクタで、少なくとも　``ExecPolicy``　と縮小型との組み合わせに対応するシグネチャを持つ　``operator()`` を備えるもの。
+* FunctorType: 有効なファンクタで、（少なくとも）　``ExecPolicy``　と縮小型との組み合わせに対応するシグネチャを持つ　``operator()`` を備えるもの。
 * ReducerArgument: ``Reducer``　の概念を満たすクラス、または ``Kokkos::View`` のいずれか。
 * ReducerArgumentNonConst: スカラー型または配列型; ファンクタの要件については以下を参照してください。
 
