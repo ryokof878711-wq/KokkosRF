@@ -49,8 +49,8 @@
 
   - ExecPolicy が IntegerType　または　ExecPolicy::work_tag が void　である場合、 WorkTag　を持たない　``operator()``　オーバーロードが使用されます。
   - HandleType は、ExecPolicy が IntegerType の場合、IntegerType であり、そうでない場合は ExecPolicy::member_type です
-*   ``functor``　の　``ReturnType`` 型は、parallel_scanの ``ReturnType``　と互換性があり、提供されていれば、 ``init`` および ``join`` 関数の引数に一致しなければなりません。 ファクタが、 ``init`` メンバー関数を持たない場合には、 スキャン演算の同一性は、値型のデフォルトコンストラクタによって与えられるものと仮定されます。（`reduction_identity <../builtinreducers/reduction_identity.html>`_ によってではありません）。
-* ファクタは、``ReturnType``　と同様に、 ``FunctorType::value_type`` を定義する必要があります。
+*   ``functor``　の　``ReturnType`` 型は、parallel_scanの ``ReturnType``　と互換性があり、提供されていれば、 ``init`` および ``join`` 関数の引数に一致しなければなりません。 ファンクタが、 ``init`` メンバー関数を持たない場合には、 スキャン演算の同一性は、値型のデフォルトコンストラクタによって与えられるものと仮定されます。（`reduction_identity <../builtinreducers/reduction_identity.html>`_ によってではありません）。
+* ファンクタは、``ReturnType``　と同様に、 ``FunctorType::value_type`` を定義する必要があります。
 
 セマンティクス
 ---------
@@ -58,9 +58,9 @@
 * 並行性または実行順序は、保証されません。
 * ``ReturnType``　の内容は上書きされます。つまり、値を還元中立要素に初期化する必要はありません。
 * 演算子への入力値には部分的な結果が含まれる可能性があり、Kokkos　はスレッドローカルな寄与を最終段階で結合するのみである場合があります。 演算子は、要求されたスキャン演算に応じて入力値を変更する必要があります。
-* For every element of the iteration space defined in ``policy`` the functors call operator is invoked exactly once with ``final = true``.
-* It is not guaranteed that the functor will ever be called with ``final = false``.
-* The functor might be called multiple times with ``final = false`` and the user has to make sure that the behavior in this case stays the same for repeated calls.
+* ポリシーで定義された反復空間の各要素について、ファンクタの呼び出し演算子は、 final = true で正確に一度呼び出されます。
+* ファンクタが　``final = false``　で呼び出される保証はありません。
+* ファンクタは、``final = false``　で複数回呼び出される可能性があり、ユーザーはこの場合の動作が繰り返しの呼び出しでも、それが一貫していることを保証する必要があります。
 
 例
 --------
