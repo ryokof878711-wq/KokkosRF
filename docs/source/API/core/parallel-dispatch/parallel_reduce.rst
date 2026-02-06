@@ -95,7 +95,7 @@ Usage
   - ``HandleType`` は、``ExecPolicy`` が ``IntegerType`` の場合、``IntegerType`` であり、そうでない場合は ``ExecPolicy::member_type`` です。
 *  ``ExecPolicy`` が ``MDRangePolicy``である場合、 ``functor`` は、 ``operator() (const IntegerType& i0, ... , const IntegerType& iN, ReducerValueType& value) const`` または　``operator() (const WorkTag, const IntegerType& i0, ... , const IntegerType& iN, ReducerValueType& value) const``　の形式のメンバー関数を持ちます。
 
-  - If ``ExecPolicy::work_tag`` が ``void``　の場合,  ``WorkTag`` 引数を持たないオーバーロードが使用されます。 
+  - ``ExecPolicy::work_tag`` が ``void``　の場合,  ``WorkTag`` 引数を持たないオーバーロードが使用されます。 
   - ``N`` は ``ExecPolicy::rank`` と一致する必要があります。
 * ``functor``　がラムダ式である場合、``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。  後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。 提供されている場合、``init``/ ``join``/ ``final`` メンバ関数は、タグ付き削減であっても ``WorkTag`` 引数を取ってはいけません
 * ``ExecPolicy`` が ``TeamThreadRange`` である場合、 "reducing" ``functor`` は認められず、   ``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。
