@@ -4,9 +4,9 @@
 .. role::cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -16,9 +16,9 @@ Usage
     Kokkos::parallel_scan( policy, functor, result);
     Kokkos::parallel_scan( policy, functor );
 
-Dispatches parallel work defined by ``functor`` according to the *ExecutionPolicy* ``policy`` and performs an exclusive or inclusive scan of the contributions provided by the work items. The optional label ``name`` is used by profiling and debugging tools. If provided, the final result is placed in ``result``.
+``functor``で定義された並列作業を、*ExecutionPolicy* ``policy``　に従ってディスパッチし、作業項目が提供する成果物に対して排他的または包括的なスキャンを実行します。 オプションのラベル　``name`` はプロファイリングおよびデバッグツールで使用されます。提供された場合、最終結果は、 ``result``に格納されます。
 
-Interface
+インターフェイス
 ---------
 
 .. cpp:function:: template <class ExecPolicy, class FunctorType> Kokkos::parallel_scan(const std::string& name, const ExecPolicy& policy, const FunctorType& functor);
@@ -29,7 +29,7 @@ Interface
 
 .. cpp:function:: template <class ExecPolicy, class FunctorType, class ReturnType> Kokkos::parallel_scan(const ExecPolicy&  policy, const FunctorType& functor, ReturnType& return_value);
 
-Parameters:
+パラメータ:
 ~~~~~~~~~~~
 
 * ``name``: A user provided string which is used in profiling and debugging tools via the Kokkos Profiling Hooks.
