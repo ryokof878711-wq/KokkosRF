@@ -15,18 +15,18 @@
 ディスクリプション
 -----------
 
-``Array`` is a contiguous aggregate owning container storing a fixed size sequence of objects (models holding exactly N elements).
+``Array`` は、連続した集合を所有するコンテナで、固定サイズのオブジェクト列（正確にN個の要素を持つモデル）を格納します。
 
-* This is intended as a replacement for ``std::array<T, N>``.
-* This container is an owning container (the data is embedded in the container itself).
-* This container is an aggregate type with the same semantics as a struct holding a C-style array ``T[N]`` as its only non-static data member when ``N > 0``; otherwise, it is an empty container.
-* Unlike a C-style array, it doesn't decay to ``T*`` automatically.
-* As an aggregate type, it can be initialized with aggregate-initialization given at most ``N`` initializers that are convertible to ``T``: ``Kokkos::Array<int, 3> a = { 1, 2, 3 };``.
+* これは、``std::array<T, N>``　の代替として設計されています。
+* このコンテナは所有コンテナです（データはコンテナ自体に埋め込まれています）。
+* このコンテナは、この場合 ``N > 0`` であるため、Cスタイル配列 ``T[N]`` を唯一の非静的データメンバーとして保持する構造体と同一の意味論を持つ集合型です；そうでない場合には、それは空のコンテナです。
+* Cスタイルの配列とは異なり、自動的に　``T*``　に型変換されることはありません。
+* 集合型として、それは、 ``T``: ``Kokkos::Array<int, 3> a = { 1, 2, 3 };``　に変換可能な、最大で　``N``　個の初期化子による集合初期化で初期化できます。
 
 ..
-  The API of the entity.
+  エンティティのAPI。
 
-Interface
+インターフェイス
 ---------
 
 .. versionchanged:: 4.4.0
@@ -34,15 +34,15 @@ Interface
 .. cpp:struct:: template <class T, size_t N> Array
 
   ..
-    Template parameters (if applicable)
-    Omit template parameters that are just used for specialization/are deduced/ and/or should not be exposed to the user.
+    テンプレートパラメータ (該当する場合)
+    特殊化専用に使用される／演鐸される／および／またはユーザーに公開すべきでないテンプレートパラメータは省略します。
 
-  .. rubric:: Template Parameters
+  .. rubric:: テンプレートパラメータ
 
-  :tparam T: The type of the element being stored.
-  :tparam N: The number of elements being stored.
+  :tparam T: 格納されているエレメント型。
+  :tparam N: 格納されているエレメント数。
 
-  .. rubric:: Public Types
+  .. rubric:: パブリックタイプ
 
   .. cpp:type:: value_type = T
   .. cpp:type:: pointer = T*
@@ -52,24 +52,24 @@ Interface
   .. cpp:type:: size_type = size_t
   .. cpp:type:: difference_type = ptrdiff_t
 
-  .. rubric:: Public Member Functions
+  .. rubric:: パブリックメンバー関数
 
-  .. cpp:function:: static constexpr bool empty() noexcept
+  .. cpp:function:: 静的定数コンストラクタ付きブール値　empty()　noexcept　
 
     :return: ``N == 0``
-    :since: ``noexcept`` since 5.0
+    :since: 5.0　より　``noexcept`` 
 
-  .. cpp:function:: static constexpr size_type size() noexcept
-  .. cpp:function:: constexpr size_type max_size() const noexcept
+  .. cpp:function:: 静的定数コンストラクタ size_type size() noexcept
+  .. cpp:function:: コンストラクタ size_type max_size() const noexcept
 
     :return: ``N``
-    :since: ``noexcept`` since 5.0
+    :since: 5.0より ``noexcept``
 
-  .. cpp:function:: constexpr reference operator[](size_t i)
-  .. cpp:function:: constexpr const_reference operator[](size_t i) const
+  .. cpp:function:: 定数コンストラクタ参照 operator[](size_t i)
+  .. cpp:function:: 定数コンストラクタ const_reference operator[](size_t i) const
 
-    :return: A reference to the ``i``-th element of the array.
-    :since: No longer requires the argument to be of an integral type or an unscoped enum type. (since 5.1)
+    :return: 配列の　``i``　番目のエレメントへの参照。
+    :since: 引数が整数型またはスコープ外列挙型である必要がなくなりました (5.1より)。
 
   .. cpp:function:: constexpr pointer data() noexcept
   .. cpp:function:: constexpr const_pointer data() const noexcept
