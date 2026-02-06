@@ -40,9 +40,9 @@
   - `TeamThreadRange <../policies/TeamThreadRange.html>`_: チーム内のスレッドにより実行されるべき1次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam``を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき1次元反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
 * FunctorType: 有効なファンクタで、（少なくとも）　 ``ExecPolicy`` と縮小型との組み合わせに対応するシグネチャを持つ　`operator()`` を備えるもの。
-* ReturnType: a POD type with ``operator +=`` and ``operator =``, or a ``Kokkos::View``.
+* ReturnType: ``operator +=`` および ``operator =``　を持つPOD型　または ``Kokkos::View``.
 
-Requirements:
+必要要件:
 ~~~~~~~~~~~~~
 
 * The ``functor`` has a member function of the form ``operator() (const HandleType& handle, ReturnType& value, const bool final) const`` or ``operator() (const WorkTag, const HandleType& handle, ReturnType& value, const bool final) const``
