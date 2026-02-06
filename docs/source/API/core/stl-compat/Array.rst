@@ -5,14 +5,14 @@
     :language: cpp
 
 ..
-  The (public header) file the user will include in their code
+ ユーザーがそのコードを含む (パブリックヘッダー) ファイル 
 
-Defined in header ``<Kokkos_Array.hpp>`` which is included from ``<Kokkos_Core.hpp>``
+``<Kokkos_Core.hpp>``　から含まれる、ヘッダー ``<Kokkos_Array.hpp>`` に定義。
 
 ..
-  High-level, human-language summary of what the thing does, and if possible, brief statement about why it exists (2 - 3 sentences, max);
+  物事が行うこと、そして可能であれば、それがなぜ存在するかについての短い説明についての、高レベルの、人間の言語の概要 (2 - 3 文、最大);
 
-Description
+ディスクリプション
 -----------
 
 ``Array`` is a contiguous aggregate owning container storing a fixed size sequence of objects (models holding exactly N elements).
