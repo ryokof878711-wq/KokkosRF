@@ -18,7 +18,7 @@ Usage
     Kokkos::parallel_reduce(policy, functor, result...);
     Kokkos::parallel_reduce(policy, functor);
 
-``functor``で定義された並列作業を、*ExecutionPolicy*　に従ってディスパッチし、実行ポリシーで定義されたワーカーからの貢献を削減します。オプションのラベル名は、プロファイリングおよびデバッグツールで使用されます。 還元型は、``sum``　であるか、``reducer``　によって定義されるか、あるいはファンクタ上のオプションの　``join``　演算子から演繹されます。削減結果は、``result``　に格納されるか、``reducer``　ハンドルを通じて格納されます。 また、そのような関数が存在する場合、``functor.final()``　関数にも提供されます。 単一の　``parallel_reduce``　内で複数の　``reducers``　を使用できるため、単一の　``parallel_reduce``　内で　``min``　値と　``max``　値を計算することが可能です。
+``functor``　で定義された並列作業を、*ExecutionPolicy*　に従ってディスパッチし、実行ポリシーで定義されたワーカーからの貢献を削減します。オプションのラベル名は、プロファイリングおよびデバッグツールで使用されます。 還元型は、``sum``　であるか、``reducer``　によって定義されるか、あるいはファンクタ上のオプションの　``join``　演算子から演繹されます。削減結果は、``result``　に格納されるか、``reducer``　ハンドルを通じて格納されます。 また、そのような関数が存在する場合、``functor.final()``　関数にも提供されます。 単一の　``parallel_reduce``　内で複数の　``reducers``　を使用できるため、単一の　``parallel_reduce``　内で　``min``　値と　``max``　値を計算することが可能です。
 
 インターフェイス
 ---------
@@ -97,10 +97,10 @@ Usage
 
   - If ``ExecPolicy::work_tag`` が ``void``　の場合,  ``WorkTag`` 引数を持たないオーバーロードが使用されます。 
   - ``N`` は ``ExecPolicy::rank`` と一致する必要があります。
-* ``functor``がラムダ式である場合、``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。  後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。 提供されている場合、``init``/ ``join``/ ``final`` メンバ関数は、タグ付き削減であっても ``WorkTag`` 引数を取ってはいけません
+* ``functor``　がラムダ式である場合、``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。  後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。 提供されている場合、``init``/ ``join``/ ``final`` メンバ関数は、タグ付き削減であっても ``WorkTag`` 引数を取ってはいけません
 * ``ExecPolicy`` が ``TeamThreadRange`` である場合、 "reducing" ``functor`` は認められず、   ``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。
 * ``ExecPolicty`` が　``TeamVectorMDRange``、　``TeamThreadMDRange`` または ``ThreadVectorMDRange`` である場合、 ``ReducerArgumentNonConst``　のみが認められ、   ``operator +=`` and ``operator =``　を持つPOD型でなければなりません。
-* The reduction argument typeof the ``functor`` 演算子の削減引数 ``ReducerValueType`` は、　``ReducerArgument`` (または　``ReducerArgumentNonConst``) と互換性がなければならず、``init``、``join``、および``final``関数の引数が存在し、リデューサーが特定されない場合には、ファクターのそれらの引数は一致する必要があります（``ReducerArgument``は``Reducer``概念を満たさないが、スカラー、配列、または``Kokkos::View``です）。In case of tagged reductions, タグ削減の場合、つまりポリシー内でタグを特定する場合には、ファンクタの潜在的な　``init``/``join``/``final``　メンバ関数もタグ付けされる必要があります。
+* ``functor`` 演算子の削減引数 ``ReducerValueType`` は、　``ReducerArgument`` (または　``ReducerArgumentNonConst``) と互換性がなければならず、``init``、``join``、および``final``関数の引数が存在し、リデューサーが特定されない場合には、ファクターのそれらの引数は一致する必要があります（``ReducerArgument``は``Reducer``概念を満たさないが、スカラー、配列、または``Kokkos::View``です）。タグ削減の場合、つまりポリシー内でタグを特定する場合には、ファンクタの潜在的な　``init``/``join``/``final``　メンバ関数もタグ付けされる必要があります。
 * ``ReducerArgument`` (または ``ReducerArgumentNonConst``)　が
 
   - スカラー型の場合には、 ``ReducerValueType``は、同型である必要があります。
