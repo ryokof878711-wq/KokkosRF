@@ -56,7 +56,7 @@
 ---------
 
 * 並行性または実行順序は、保証されません。
-* The ``ReturnType`` content will be overwritten, i.e. the value does not need to be initialized to the reduction-neutral element.
+* ``ReturnType``　の内容は上書きされます。つまり、値を還元中立要素に初期化する必要はありません。
 * The input value to the operator may contain a partial result, Kokkos may only combine the thread local contributions in the end. The operator should modify the input value according to the desired scan operation.
 * For every element of the iteration space defined in ``policy`` the functors call operator is invoked exactly once with ``final = true``.
 * It is not guaranteed that the functor will ever be called with ``final = false``.
