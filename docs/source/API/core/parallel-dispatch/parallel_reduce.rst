@@ -89,7 +89,7 @@ Usage
 必要要件:
 ~~~~~~~~~~~~~
 
-*  ``ExecPolicy`` が ``MDRangePolicy``　ではない場合、 the ``functor`` は、 ``operator() (const HandleType& handle, ReducerValueType& value) const`` または ``operator() (const WorkTag, const HandleType& handle, ReducerValueType& value) const``　の形式のメンバー関数を持ちます。
+*  ``ExecPolicy`` が ``MDRangePolicy``　ではない場合、 ``functor`` は、 ``operator() (const HandleType& handle, ReducerValueType& value) const`` または ``operator() (const WorkTag, const HandleType& handle, ReducerValueType& value) const``　の形式のメンバー関数を持ちます。
 
   -  ``ExecPolicy::work_tag`` が ``void`` または ``ExecPolicy`` が ``IntegerType``　である場合、 ``WorkTag``　引数を使わないオーバーロードが使用されます。
   - ``HandleType`` is an ``IntegerType`` if ``ExecPolicy`` is an ``IntegerType`` else it is ``ExecPolicy::member_type``.``HandleType`` は、``ExecPolicy`` が ``IntegerType`` の場合、``IntegerType`` であり、そうでない場合は ``ExecPolicy::member_type`` です。
