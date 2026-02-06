@@ -45,7 +45,7 @@
 必要要件:
 ~~~~~~~~~~~~~
 
-* The ``functor`` has a member function of the form ``operator() (const HandleType& handle, ReturnType& value, const bool final) const`` or ``operator() (const WorkTag, const HandleType& handle, ReturnType& value, const bool final) const``
+* ``functor`` は、 ``operator() (const HandleType& handle, ReturnType& value, const bool final) const`` または ``operator() (const WorkTag, const HandleType& handle, ReturnType& value, const bool final) const``　の形式のメンバー関数を持ちます。
 
   - The ``operator()`` overload without the ``WorkTag`` is used if ``ExecPolicy`` is an ``IntegerType`` or ``ExecPolicy::work_tag`` is ``void``.
   - ``HandleType`` is an ``IntegerType`` if ``ExecPolicy`` is an ``IntegerType`` else it is ``ExecPolicy::member_type``.
