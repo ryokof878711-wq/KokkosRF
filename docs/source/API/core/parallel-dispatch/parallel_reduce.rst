@@ -100,7 +100,7 @@ Usage
 * ``functor``　がラムダ式である場合、``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。  後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。 提供されている場合、``init``/ ``join``/ ``final`` メンバ関数は、タグ付き削減であっても ``WorkTag`` 引数を取ってはいけません
 * ``ExecPolicy`` が ``TeamThreadRange`` である場合、 "reducing" ``functor`` は認められず、   ``ReducerArgument``　が　``Reducer``　概念を満たす、または ``ReducerArgumentNonConst`` が、 ``operator +=`` および ``operator =`` の POD型または ``Kokkos::View``　である必要があります。後者の場合、値型のデフォルトコンストラクタ（　``reduction_identity``` ではなく）によって同一性が与えられると仮定する場合、和の削減が適用されます。
 * ``ExecPolicty`` が　``TeamVectorMDRange``、　``TeamThreadMDRange`` または ``ThreadVectorMDRange`` である場合、 ``ReducerArgumentNonConst``　のみが認められ、   ``operator +=`` and ``operator =``　を持つPOD型でなければなりません。
-* ``functor`` 演算子の削減引数 ``ReducerValueType`` は、　``ReducerArgument`` (または　``ReducerArgumentNonConst``) と互換性がなければならず、``init``、``join``、および``final``関数の引数が存在し、リデューサーが特定されない場合には、ファクターのそれらの引数は一致する必要があります（``ReducerArgument``は``Reducer``概念を満たさないが、スカラー、配列、または``Kokkos::View``です）。タグ削減の場合、つまりポリシー内でタグを特定する場合には、ファンクタの潜在的な　``init``/``join``/``final``　メンバ関数もタグ付けされる必要があります。
+* ``functor``　演算子の削減引数 ``ReducerValueType`` は、　``ReducerArgument`` (または　``ReducerArgumentNonConst``) と互換性がなければならず、``init``、``join``、および``final``関数の引数が存在し、リデューサーが特定されない場合には、ファクターのそれらの引数は一致する必要があります（``ReducerArgument``　は　``Reducer``　概念を満たさないが、スカラー、配列、または　``Kokkos::View``　です）。タグ削減の場合、つまりポリシー内でタグを特定する場合には、ファンクタの潜在的な　``init``/``join``/``final``　メンバ関数もタグ付けされる必要があります。
 * ``ReducerArgument`` (または ``ReducerArgumentNonConst``)　が
 
   - スカラー型の場合には、 ``ReducerValueType``　は、同型である必要があります。
