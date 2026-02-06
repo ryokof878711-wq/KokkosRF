@@ -49,7 +49,7 @@
 
   - ExecPolicy が IntegerType　または　ExecPolicy::work_tag が void　である場合、 WorkTag　を持たない　``operator()``　オーバーロードが使用されます。
   - HandleType は、ExecPolicy が IntegerType の場合、IntegerType であり、そうでない場合は ExecPolicy::member_type です
-*   ``functor``　の　``ReturnType`` 型は、parallel_scanの ``ReturnType``　と互換性があり、提供されていれば、 ``init`` および ``join`` 関数の引数に一致しなければなりません。 If the functor doesn't have an ``init`` member function, it is assumed that the identity for the scan operation is given by the default constructor of the value type (and not by `reduction_identity <../builtinreducers/reduction_identity.html>`_).
+*   ``functor``　の　``ReturnType`` 型は、parallel_scanの ``ReturnType``　と互換性があり、提供されていれば、 ``init`` および ``join`` 関数の引数に一致しなければなりません。 ファクタが、 ``init`` メンバー関数を持たない場合には、 スキャン演算の同一性は、値型のデフォルトコンストラクタによって与えられるものと仮定されます。（`reduction_identity <../builtinreducers/reduction_identity.html>`_ によってではありません）。
 * The functor must define ``FunctorType::value_type`` the same as ``ReturnType``.
 
 Semantics
