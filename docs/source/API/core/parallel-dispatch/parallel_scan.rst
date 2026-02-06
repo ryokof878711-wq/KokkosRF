@@ -39,7 +39,7 @@
   - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
   - `TeamThreadRange <../policies/TeamThreadRange.html>`_: チーム内のスレッドにより実行されるべき1次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam``を通じて実行される並列領域内でのみ有効です。
   - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき1次元反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
-* FunctorType: A valid functor with (at minimum) an ``operator()`` with a signature compatible with the ``ExecPolicy`` and the ``ReturnType``.
+* FunctorType: 有効なファンクタで、（少なくとも）　 ``ExecPolicy`` と縮小型との組み合わせに対応するシグネチャを持つ　`operator()`` を備えるもの。
 * ReturnType: a POD type with ``operator +=`` and ``operator =``, or a ``Kokkos::View``.
 
 Requirements:
