@@ -16,7 +16,7 @@
     Kokkos::parallel_scan( policy, functor, result);
     Kokkos::parallel_scan( policy, functor );
 
-``functor``で定義された並列作業を、*ExecutionPolicy* ``policy``　に従ってディスパッチし、作業項目が提供する成果物に対して排他的または包括的なスキャンを実行します。 オプションのラベル　``name`` はプロファイリングおよびデバッグツールで使用されます。提供された場合、最終結果は、 ``result``に格納されます。
+``functor``　で定義された並列作業を、*ExecutionPolicy* ``policy``　に従ってディスパッチし、作業項目が提供する成果物に対して排他的または包括的なスキャンを実行します。 オプションのラベル　``name`` はプロファイリングおよびデバッグツールで使用されます。提供された場合、最終結果は、 ``result``に格納されます。
 
 インターフェイス
 ---------
