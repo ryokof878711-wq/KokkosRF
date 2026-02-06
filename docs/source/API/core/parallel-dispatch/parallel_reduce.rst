@@ -103,7 +103,7 @@ Usage
 * ``functor`` 演算子の削減引数 ``ReducerValueType`` は、　``ReducerArgument`` (または　``ReducerArgumentNonConst``) と互換性がなければならず、``init``、``join``、および``final``関数の引数が存在し、リデューサーが特定されない場合には、ファクターのそれらの引数は一致する必要があります（``ReducerArgument``は``Reducer``概念を満たさないが、スカラー、配列、または``Kokkos::View``です）。タグ削減の場合、つまりポリシー内でタグを特定する場合には、ファンクタの潜在的な　``init``/``join``/``final``　メンバ関数もタグ付けされる必要があります。
 * ``ReducerArgument`` (または ``ReducerArgumentNonConst``)　が
 
-  - スカラー型の場合には、 ``ReducerValueType``は、同型である必要があります。
+  - スカラー型の場合には、 ``ReducerValueType``　は、同型である必要があります。
   - rank-0 ``Kokkos::View``である場合、  ``ReducerArgument::non_const_value_type`` は、 ``ReducerValueType``　に一致する必要があります。
   - satisfies the ``Reducer`` 概念を満たす場合、 ``ReducerArgument::value_type``　は、must ``ReducerValueType``　に一致する必要があります。
   -  ``Kokkos::View``　の配列またはランク1である場合には、以下の通り :
