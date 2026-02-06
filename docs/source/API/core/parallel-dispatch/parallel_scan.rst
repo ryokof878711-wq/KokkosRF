@@ -38,7 +38,7 @@
   - ``IntegerType``: 1D反復範囲を定義し、0からカウント値までを範囲とします。
   - `RangePolicy <../policies/RangePolicy.html>`_: 1D反復範囲を定義します。
   - `TeamThreadRange <../policies/TeamThreadRange.html>`_: チーム内のスレッドにより実行されるべき1次元反復範囲を定義します。``TeamPolicy`` または ``TaskTeam``を通じて実行される並列領域内でのみ有効です。
-  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: defines a 1D iteration range to be executed through vector parallelization dividing the threads within a team.  Only valid inside a parallel region executed through a .スレッドチームによって実行される1次元の反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
+  - `ThreadVectorRange <../policies/ThreadVectorRange.html>`_: チーム内のスレッドを分割するベクトル並列化を通じて実行されるべき1次元反復範囲を定義します。 ``TeamPolicy`` または ``TaskTeam`` を通じて実行される並列領域内でのみ有効です。
 * FunctorType: A valid functor with (at minimum) an ``operator()`` with a signature compatible with the ``ExecPolicy`` and the ``ReturnType``.
 * ReturnType: a POD type with ``operator +=`` and ``operator =``, or a ``Kokkos::View``.
 
