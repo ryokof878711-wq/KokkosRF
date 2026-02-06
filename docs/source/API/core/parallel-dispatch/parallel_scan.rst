@@ -57,7 +57,7 @@
 
 * 並行性または実行順序は、保証されません。
 * ``ReturnType``　の内容は上書きされます。つまり、値を還元中立要素に初期化する必要はありません。
-* The input value to the operator may contain a partial result, Kokkos may only combine the thread local contributions in the end. The operator should modify the input value according to the desired scan operation.
+* 演算子への入力値には部分的な結果が含まれる可能性があり、Kokkos　はスレッドローカルな寄与を最終段階で結合するのみである場合があります。 演算子は、要求されたスキャン演算に応じて入力値を変更する必要があります。
 * For every element of the iteration space defined in ``policy`` the functors call operator is invoked exactly once with ``final = true``.
 * It is not guaranteed that the functor will ever be called with ``final = false``.
 * The functor might be called multiple times with ``final = false`` and the user has to make sure that the behavior in this case stays the same for repeated calls.
