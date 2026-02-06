@@ -66,7 +66,7 @@ Usage
                             const FunctorType& functor,
                             ReducerArgumentNonConst&... reducer);
 
-Parametersパラメータ:
+パラメータ:
 ~~~~~~~~~~~
 
 * ``name``: ユーザーが提供した文字列で、Kokkos Profiling Hooksを介してプロファイリングおよびデバッグツールで使用されます。
