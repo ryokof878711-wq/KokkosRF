@@ -1,7 +1,7 @@
 (ExperimentalNamespace)=
 # `Kokkos::Experimental`
 
-Defined in header `<Kokkos_Core.hpp>`
+ヘッダー `<Kokkos_Core.hpp>`　に定義。
 
 ```c++
 namespace Kokkos {
@@ -11,4 +11,4 @@ namespace Kokkos {
 }
 ```
 
-Namespace inside main `Kokkos` namespace that contains features that are not yet part of the public API. Anything contained might be subject to any change, removal, or extension without announcement. No guarantees are given.
+メインの `Kokkos` 名前空間内の名前空間で、まだ公開　API　の一部ではない機能を含みます。 記載されている内容は、予告なく変更、削除、または追加される場合があります。一切の保証はありません。
