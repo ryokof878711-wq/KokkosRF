@@ -21,8 +21,7 @@
 　1) 　値　``a`` および　``b``　を入れ替えます。 ``std::is_move_constructible_v<T> && std::is_move_assignable_v<T>``　が　
 ``true``　でなければ、このオーバーロードは、
 オーバーロード解決に関与しません。
-
-　2) 　配列　``a`` および　``b``　を入れ替えます。 ``T2`` 　が入れ替え可能でなければ、Swaps the arrays a and b. This overload does not participate in overload resolution unless T2 is swappable.
+　2) 　配列　``a`` および　``b``　を入れ替えます。 ``T2`` 　が入れ替え可能でなければ、
    このオーバーロードは、オーバーロード解決に関与しません。
 
 注意事項
