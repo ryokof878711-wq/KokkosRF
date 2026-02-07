@@ -1,4 +1,4 @@
-Minimum/maximum operations
+最小/最大 演算子
 ==========================
 
 .. role:: cpp(code)
@@ -8,7 +8,7 @@ Minimum/maximum operations
 
 .. |StandardLibraryHeaderAlgorithm| replace:: ``<algorithm>``
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
 Provides minimum/maximum and related operations from the standard library header |StandardLibraryHeaderAlgorithm|_.
 
