@@ -51,90 +51,90 @@ API
     // is_detected は、Op<Args...> が有効な型である場合に std::true_type の別名となります。
     // そうでない場合、std::false_type の別名です。
 
-    template <template <class...> class Op, class... Args>
+    テンプレート <template <class...> class Op, class... Args>
     is_detected =
         typename DETECTOR<nonesuch, void, Op, Args...>::value_t;　を使用
 
     // detected_t は、Op<Args...> が有効な型である場合に Op<Args...> の別名となります。
     //  そうでない場合、 Kokkos::nonesuch　の別名です。
 
-    template <template <class...> class Op, class... Args>
+    テンプレート <template <class...> class Op, class... Args>
     detected_t = typename DETECTOR<nonesuch, void, Op, Args...>::type;　を使用
 
     // detected_or_t は、Op<Args...> が有効な型である場合に  Op<Args...> の別名となります。
     //  そうでない場合、 Default の別名です。
 
-    template <class Default, template <class...> class Op, class... Args>
+    テンプレート <class Default, template <class...> class Op, class... Args>
     using detected_or_t = typename DETECTOR<Default, void, Op, Args...>::type;　を使用
 
     // is_detected_exact は、Op<Args...> が、 Expected と同じ型である場合に std::true_type の別名となります。
     //  そうでない場合、std::false_type　の別名です。
 
-    template <class Expected, template <class...> class Op, class... Args>
-    using is_detected_exact = std::is_same<Expected, detected_t<Op, Args...>>;
+    テンプレート <class Expected, template <class...> class Op, class... Args>
+    is_detected_exact = std::is_same<Expected, detected_t<Op, Args...>>;　を使用
 
-    // is_detected_convertible is an alias for std::true_type if Op<Args...> is convertible to To
-    //  otherwise, an alias for std::false_type
+    // is_detected_convertible は、Op<Args...> が To へ変換可能な場合に std::true_type の別名となります。
+    //  そうでない場合、std::false_type　の別名です。
 
-    template <class To, template <class...> class Op, class... Args>
-    using is_detected_convertible =
-        std::is_convertible<detected_t<Op, Args...>, To>;
+    テンプレート <class To, template <class...> class Op, class... Args>
+    is_detected_convertible =
+        std::is_convertible<detected_t<Op, Args...>, To>;　を使用
 
-    // C++17 or later convenience variables
+    // C++17　またはそれ以降の便利変数
 
-    template <template <class...> class Op, class... Args>
+    テンプレート <template <class...> class Op, class... Args>
     inline constexpr bool is_detected_v = is_detected<Op, Args...>::value;
 
-    template <class Expected, template <class...> class Op, class... Args>
+    テンプレート <class Expected, template <class...> class Op, class... Args>
     inline constexpr bool is_detected_exact_v =
         is_detected_exact<Expected, Op, Args...>::value;
 
-    template <class Expected, template <class...> class Op, class... Args>
+    テンプレート <class Expected, template <class...> class Op, class... Args>
     inline constexpr bool is_detected_convertible_v =
 
     } // Kokkos namespace
 
-Examples
+例
 --------
 
-Detecting an expression
+式を検出
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Suppose we needed to write a type trait to detect if a given type ``T`` is copy assignable. First we write an archetype helper alias:
+ある型 ``T`` がコピー代入可能かどうかを検出する型特性を記述する必要があると仮定します。 まず、アーキタイプヘルパーエイリアスを記述します:
 
 .. code-block:: cpp
 
     template<class T>
-    using copy_assign_t = decltype(std::declval<T&>() = std::declval<T const&>());
+    copy_assign_t = decltype(std::declval<T&>() = std::declval<T const&>());　を使用
 
-Then the trait can be easily expressed as:
-
-.. code-block:: cpp
-
-    template<class T>
-    using is_copy_assignable = Kokkos::is_detected<copy_assign_t, T>;
-
-If we also wanted to check that the return type of the copy assignment is ``T&``, we would use:
+その後、その特性は簡単に次のように表現できます:
 
 .. code-block:: cpp
 
     template<class T>
-    using is_canonical_copy_assignable = Kokkos::is_detected_exact<T&, copy_assign_t, T>;
+    is_copy_assignable = Kokkos::is_detected<copy_assign_t, T>;　を使用
 
-Detecting a nested typedef
+コピー代入の戻り値の型が ``T&`` であることを確認したい場合、以下を使用します:
+
+.. code-block:: cpp
+
+    template<class T>
+    is_canonical_copy_assignable = Kokkos::is_detected_exact<T&, copy_assign_t, T>;　を使用
+
+ネストされたtypedefを検出
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Suppose we want to use a nested ``MyType::difference_type`` if it exists, otherwise, we want to use ``std::ptrdiff_t``:
+ネストされた``MyType::difference_type``　が存在する場合には、それを使用したいと仮定し、そうでない場合には、``std::ptrdiff_t``　の使用を望みます:
 
-First we write an archetype helper alias:
+まず、アーキタイプヘルパーエイリアスを記述します:
 
 .. code-block:: cpp
 
     template<class T>
-    using diff_t = typename T::difference_type;
+    diff_t = typename T::difference_type;　を使用
 
-Then we can declare our type:
+その後、型を宣言することができます:
 
 .. code-block:: cpp
 
-    using our_difference_type = Kokkos::detected_or_t<std::ptrdiff_t, diff_t, MyType>;
+    our_difference_type = Kokkos::detected_or_t<std::ptrdiff_t, diff_t, MyType>;　を使用
