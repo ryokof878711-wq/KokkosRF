@@ -18,7 +18,7 @@
 ``NDEBUG`` および　``KOKKOS_ENABLE_DEBUG``。
 
 ``NDEBUG`` が定義されず、 ``<Kokkos_Assert.hpp>`` または　``<Kokkos_Core.hpp>`` が含まれないソースコード内のポイントで
- ``KOKKOS_ENABLE_DEBUG`` が定義されない場合には、
+``KOKKOS_ENABLE_DEBUG`` が定義されない場合には、
 アサートは何もできません。
 
 ``NDEBUG`` が定義されない、または　``KOKKOS_ENABLE_DEBUG`` が定義される場合には、
