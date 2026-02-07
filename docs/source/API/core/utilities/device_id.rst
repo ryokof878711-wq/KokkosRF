@@ -4,18 +4,18 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
 .. code-block:: cpp
 
-    [[nodiscard]] int device_id() noexcept;  // (since 4.1)
+    [[nodiscard]] int device_id() noexcept;  // (4.1より)
 
-Returns the id of the device that is used by ``DefaultExecutionSpace`` or
-``-1`` if only host backends are enabled.
+ホストバックエンドのみが有効な場合、 ``DefaultExecutionSpace`` または　``-1`` により使用されるデバイスの
+id　を返します。
 
 ----
 
-**See also**
+**以下も参照**
 
 .. _num_devices : num_devices.html
 
@@ -33,10 +33,10 @@ Returns the id of the device that is used by ``DefaultExecutionSpace`` or
 
 .. |InitializationSettings| replace:: ``InitializationSettings``
 
-|num_devices|_: returns the number of devices available to Kokkos
+|num_devices|_:  Kokkos　に利用可能なデバイスの数を返します。
 
-|num_threads|_: returns the number of threads used by Kokkos
+|num_threads|_:  Kokkos　が使用するスレッド数を返します。
 
-|initialize|_: initializes the Kokkos execution environment
+|initialize|_:  Kokkos 実行環境を初期化します。
 
-|InitializationSettings|_: settings for initializing Kokkos
+|InitializationSettings|_: Kokkos　を初期化するための設定
