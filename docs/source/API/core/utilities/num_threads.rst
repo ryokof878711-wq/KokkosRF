@@ -8,7 +8,7 @@
 
 .. code-block:: cpp
 
-    [[nodiscard]] int num_threads() noexcept;  // (since 4.1)
+    [[nodiscard]] int num_threads() noexcept;  // (4.1より)
 
  ``DefaultHostExecutionSpace``　により使用された同時実行スレッド数を返します。
 
