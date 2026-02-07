@@ -35,27 +35,27 @@
 
    .. cpp:function:: Timer()
 
-      Constructs a new Timer instance and immediately starts the clock.
+      新しいTimerインスタンスを構築し、直ちにタイマーを開始します。
 
-      The timer is initialized with the current time, marking the beginning of
-      the measurement period.
+      タイマーは、現在時刻で初期化され、
+      測定期間の開始が記録されます。
 
    .. cpp:function:: double seconds() const
 
-      :returns: The number of seconds that have elapsed since the timer was
-        started or last reset.
+      :returns: タイマーが開始または最後にリセットされてから
+        経過した秒数。
 
    .. cpp:function:: void reset()
 
-      Resets the timer, setting the start time to the current time.
+      タイマーをリセットし、開始時刻を現在の時刻に設定します。
 
-      This function effectively restarts the measurement period without
-      creating a new Timer object.
+      この関数は、新しいタイマーオブジェクトを作成せずに、
+　　　測定期間を効果的に再起動します
 
-   .. cpp:function:: Timer(Timer const&&) = delete
-   .. cpp:function:: Timer(Timer&&) = delete
+   .. cpp:function:: Timer(Timer const&&) = 削除
+   .. cpp:function:: Timer(Timer&&) = 削除
 
-      The Timer class is neither copy-constructible nor copy-assignable.
+      タイマークラスは、コピーコンストラクタもコピー代入もできません。
 
 
 例
@@ -63,9 +63,9 @@
 
 .. code-block:: cpp
 
-    Timer timer;
+    タイマー　タイマー;
     // ...
-    double time1 = timer.seconds();
+    ダブルタイム1 = timer.seconds();
     timer.reset();
     // ...
     ダブルタイム2 = timer.seconds();
