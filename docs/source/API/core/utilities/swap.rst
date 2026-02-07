@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
- ``<Kokkos_Core.hpp>``　から含まれるヘッダー ``<Kokkos_Swap.hpp>``:sup:`(4.3より)`　に定義。
+``<Kokkos_Core.hpp>``　から含まれるヘッダー ``<Kokkos_Swap.hpp>``:sup:`(4.3より)`　に定義。
 
 .. code-block:: cpp
 
