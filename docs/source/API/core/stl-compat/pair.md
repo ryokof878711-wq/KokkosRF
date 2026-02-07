@@ -1,10 +1,10 @@
 # `Kokkos::pair`
 
-Header File: `Kokkos_Pair.hpp`
+ヘッダーファイル: `Kokkos_Pair.hpp`
 
-An implementation of `std::pair` that is intended to be fully compatible, with the exception that `Kokkos::pair` will work on the device. Also provides utility functions to convert from and to `std::pair`
+ `Kokkos::pair` がデバイス上で機能する場合を除き、完全に互換性を持つことを目的とした `std::pair` の実装。また、`std::pair` からの変換、および `std::pair` への変換のための、ユーティリティ関数も提供します。
 
-Usage: 
+使用例: 
 ```c++
 std::pair<int, float> std_pair = std::make_pair(1,2.0f); 
 Kokkos::pair<int_float> kokkos_pair = Kokkos::make_pair(1,2.0f);
@@ -12,10 +12,10 @@ Kokkos::pair<int, float> converted_std_pair(std_pair);
 std::pair<int,float> converted_kokkos_pair = kokkos_pair.to_std_pair();
 ```
 
-## Synopsis 
+## シノプシス 
 ```c++
 template <class T1, class T2>
-struct pair {
+構造体ペア {
 
     typedef T1 first_type;
     typedef T2 second_type;
@@ -40,24 +40,24 @@ struct pair {
 };
 ```
 
-### Public Class Members
+### パブリックメンバー関数
 
-  * `first`: the first element in the pair
-  * `second`: the second element in the pair
+  * `first`: ペア内の1番目の要素
+  * `second`: ペア内の2番目の要素
 
 ### Typedefs
    
-  * `first_type`: the type of the first element in the pair
-  * `second_type`: the type of the second element in the pair
+  * `first_type`: ペア内の1番目の型
+  * `second_type`: ペア内の2番目の型
 
-### Constructors
+### コンストラクタ
 
   * 
   ```c++ 
   KOKKOS_DEFAULTED_FUNCTION constexpr pair() = default;
   ```
 
-  Default constructor. Initializes both data members with their defaults
+  デフォルトコンストラクタ。 そのデフォルトを使って、データメンバーを初期化します。
 
   * 
   ```c++
@@ -65,7 +65,7 @@ struct pair {
                                   second_type const& s);
   ```
 
-  Element-wise constructor. Assigns `first` the value of `f`, `second` the value of `s` 
+  要素ごとのコンストラクタ。 `first` に `f`　の値、 `second` にthe value of `s` の値を割り当てます。
 
   * 
   ```c++
@@ -73,9 +73,9 @@ struct pair {
   KOKKOS_FORCEINLINE_FUNCTION constexpr pair(const pair<U, V>& p);
   ``` 
       
-  Conversion from `std::pair`. Assigns each element of the pair to its corresponding element in the `p`
+   `std::pair`　から変換。ペアの各要素を、  `p`　内の対応する要素に、割り当てます。
 
-### Assignment and conversion
+### 割り当ておよび変換
 
   * 
   ```c++
@@ -83,12 +83,12 @@ struct pair {
   KOKKOS_FORCEINLINE_FUNCTION pair<T1, T2>& operator=(const pair<U, V>& p);
   ```
 
-  Sets `first` to `p.first` and `second` to `p.second` 
-  ### Functions
+   `first` を `p.first` に、and `second` を `p.second` に設定します。
+  ### 関数
 
   * 
   ```c++
   std::pair<T1, T2> to_std_pair() const;
   ```
 
-  Returns a `std::pair` whose contents match those of the `Kokkos::pair`. Useful for interacting with libraries that explicitly only accept `std::pair`
+  コンテンツが、  `Kokkos::pair`　のコンテンツに一致する  `std::pair` を返します。明示的に `std::pair` のみを受け入れるライブラリの処理に有用です。
