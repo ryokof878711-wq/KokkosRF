@@ -21,7 +21,7 @@
  ``KOKKOS_ENABLE_DEBUG`` が定義されない場合には、
 アサートは何もできません。
 
-If ``NDEBUG`` が定義されない、または　``KOKKOS_ENABLE_DEBUG`` が定義される場合には、
+``NDEBUG`` が定義されない、または　``KOKKOS_ENABLE_DEBUG`` が定義される場合には、
 ``KOKKOS_ASSERT`` は、``bool``　に変換されたその引数が、``false``　に決定されているかどうかを
 確認します。 そうである場合には、 ``KOKKOS_ASSERT`` は、
 事前定義されたマクロス  ``__FILE__`` and ``__LINE__``　のみならず、
