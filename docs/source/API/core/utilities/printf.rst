@@ -16,7 +16,7 @@
     KOKKOS_FUNCTION void printf(const char* format, Args... args);  // (since 4.2)
 
  ``format`` および ``args...`` に特定されるデータを ``stdout``　に出力します。
-``void``この動作は、　``std::printf``　に類似していますが、
+この動作は、　``std::printf``　に類似していますが、
 戻り値の型は、バックエンド間で一貫した動作を保証するため、``void``　です。
 
 例
