@@ -22,7 +22,7 @@
 ``true``　でなければ、このオーバーロードは、
 オーバーロード解決に関与しません。
 
-　2) 　配列 　``a`` および　``b``　を入れ替えます。 ``T2`` 　が入れ替え可能でなければ、
+　2) 　配列　``a`` および　``b``　を入れ替えます。 ``T2`` 　が入れ替え可能でなければ、Swaps the arrays a and b. This overload does not participate in overload resolution unless T2 is swappable.
    このオーバーロードは、オーバーロード解決に関与しません。
 
 注意事項
