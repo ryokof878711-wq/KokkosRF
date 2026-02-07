@@ -21,7 +21,7 @@
 .. code-block:: cpp
 
    テンプレート　<class ViewType, class... Args>
-   using Subview = IMPL_DETAIL; を使用　// ソースビューの特性からサブビューのタイプを演鐸します。
+    Subview = IMPL_DETAIL; を使用　// ソースビューの特性からサブビューのタイプを演鐸します。
 
  ``Kokkos::subview(ViewType view_arg, Args .... args)``　の結果の型。
 
