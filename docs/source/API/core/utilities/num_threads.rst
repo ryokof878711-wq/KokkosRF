@@ -4,17 +4,17 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
 .. code-block:: cpp
 
     [[nodiscard]] int num_threads() noexcept;  // (since 4.1)
 
-Returns the number of concurrent threads that are used by ``DefaultHostExecutionSpace``.
+ ``DefaultHostExecutionSpace``　により使用された同時実行スレッド数を返します。
 
 ----
 
-**See also**
+**以下も参照**
 
 .. _device_id : device_id.html
 
@@ -32,10 +32,10 @@ Returns the number of concurrent threads that are used by ``DefaultHostExecution
 
 .. |InitializationSettings| replace:: ``InitializationSettings``
 
-|num_devices|_: returns the number of devices available to Kokkos
+|num_devices|_:  Kokkos　が利用可能なデバイス数を返します。
 
-|device_id|_: returns the id of the device used by Kokkos
+|device_id|_:  Kokkos　により使用されるデバイスの　id を返します。
 
-|initialize|_: initializes the Kokkos execution environment
+|initialize|_:  Kokkos　実行環境を初期化します。
 
 |InitializationSettings|_: settings for initializing Kokkos
