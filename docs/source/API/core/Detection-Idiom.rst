@@ -9,41 +9,41 @@
 ヘッダーファイル: ``<Kokkos_DetectionIdiom.hpp>``
 
 Kokkos 検出イディオムは、ISO/IEC TS 19568:2017、ライブラリ基礎のためのC++拡張のバージョン2の検出イディオムに基づいており、
-Library Fundamentals, ISO/IEC TS 19568:2017, そのドラフトは、`here <https://cplusplus.github.io/fundamentals-ts/v2.html#meta.detect>`　に
+そのドラフトは、`here <https://cplusplus.github.io/fundamentals-ts/v2.html#meta.detect>`　に見られます。
 
-The original C++ proposal can be found at `here <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4436.pdf>`.
+元の C++ プロポーザルは、 `here <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4436.pdf>`　に見られます。
 
 API
 ---
 
 .. code-block:: cpp
 
-    // VOID_T and DETECTOR are exposition-only and not intended to be used directly.
+    // VOID_T および DETECTOR は説明用であり、直接使用を目的としていません。
 
-    // Convenient metafunction to leverage SFINAE
+    // SFINAE　を効果的に活用する便利なメタ関数
     template<class...>
-    using VOID_T = void;
+    VOID_T = void;　を使用
 
-    // Primary template for types not supporting the archetypal Op<Args...>
+    // 典型的な Op<Args...> をサポートしない型のためのプライマリテンプレート
     template<class Default, class /* AlwaysVoid */, template<class...> class /* Op */, class... /* Args */>
-    struct DETECTOR {
-        using value_t = std::false_type;
-        using type    = Default;
+    構造体 DETECTOR {
+        value_t = std::false_type;　を使用
+        type    = Default;　を使用
     };
 
     // Specialization for types supporting the archetypal Op<Args...>
     template<class Default, template<class...> class Op, class... Args>
-    struct DETECTOR<Default, VOID_T<Op<Args...>>, Op, Args...> {
-        using value_t = std::true_type;
-        using type    = Op<Args...>;
+    構造体 DETECTOR<Default, VOID_T<Op<Args...>>, Op, Args...> {
+        value_t = std::true_type;　を使用
+        type    = Op<Args...>;　を使用
     };
 
 .. code-block:: cpp
 
-    namespace Kokkos {
+    名前空間 Kokkos {
 
-    // Simplification of the type returned by detected_t for types not supporting the archetype provided
-    struct nonesuch {
+    // 提供されたアーキタイプをサポートしない型について、detected_t が返す型の簡略化
+    構造体 nonesuch {
         nonesuch(nonesuch&&) = delete;
         ~nonesuch() = delete;
     };
@@ -52,8 +52,8 @@ API
     // otherwise, an alias for std::false_type
 
     template <template <class...> class Op, class... Args>
-    using is_detected =
-        typename DETECTOR<nonesuch, void, Op, Args...>::value_t;
+    is_detected =
+        typename DETECTOR<nonesuch, void, Op, Args...>::value_t;　を使用
 
     // detected_t is an alias for Op<Args...> if Op<Args...> is a valid type
     //  otherwise, an alias for Kokkos::nonesuch
