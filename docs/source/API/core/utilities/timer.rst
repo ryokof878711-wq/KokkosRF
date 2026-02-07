@@ -12,24 +12,26 @@
 .. code-block:: cpp
 
     Kokkos::Timer timer;
-    double time = timer.seconds();
+    ダブルタイム = タイマー.seconds();
     timer.reset();
 
-Interface
+インターフェイス
 ---------
 
-.. cpp:class:: Timer
+.. cpp:class:: タイマー
 
-   A high-resolution timer class for measuring elapsed time.
+   経過時間を計測するための高精度タイマークラスです。
 
    .. note::
 
-        This class is intended for "quick and dirty" timing as well as situations where
-        timing is meant to be "always on". For serious performance profiling, it is
-        recommended to use the **Kokkos Tools** API. Kokkos Tools provides the
-        flexibility to enable or disable profiling at runtime without modifying
-        your application, avoiding the need to clutter your code with explicit
-        timer objects.
+       　このクラスは「手っ取り早く大まかな」タイミング測定だけでなく、
+        タイミング測定を「常時有効」とする状況も想定しています。
+    　　 本格的なパフォーマンスプロファイリングには、
+        **Kokkos Tools** APIの使用が推奨されます。
+        Kokkos Toolsは、アプリケーションを変更することなく、
+        実行時にプロファイリングを有効化または無効化する柔軟性を提供し
+        明示的なタイマーオブジェクトでコードを煩雑にする
+        必要性を回避します。
 
    .. cpp:function:: Timer()
 
@@ -56,7 +58,7 @@ Interface
       The Timer class is neither copy-constructible nor copy-assignable.
 
 
-Example
+例
 -------
 
 .. code-block:: cpp
@@ -66,4 +68,4 @@ Example
     double time1 = timer.seconds();
     timer.reset();
     // ...
-    double time2 = timer.seconds();
+    ダブルタイム2 = timer.seconds();
