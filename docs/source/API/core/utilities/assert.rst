@@ -4,30 +4,30 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Core.hpp>``
+ヘッダー ``<Kokkos_Core.hpp>``　に定義。
 
 .. code-block:: cpp
 
-    #if defined(NDEBUG) and not defined(KOKKOS_ENABLE_DEBUG)
-    #  define KOKKOS_ASSERT(condition) ((void)0)
+    #定義された場合(NDEBUG) および定義されない場合(KOKKOS_ENABLE_DEBUG)
+    #  KOKKOS_ASSERT(condition) ((void)0)　を定義
     #else
-    #  define KOKKOS_ASSERT(condition) if (!bool(condition)) /*call Kokkos::abort()*/
+    #  (!bool(condition)) /*call Kokkos::abort()*/　である場合、 KOKKOS_ASSERT(条件) を定義。
     #endif
 
-The definition of the macro ``KOKKOS_ASSERT`` depends on other macros,
-``NDEBUG`` and ``KOKKOS_ENABLE_DEBUG``.
+マクロ ``KOKKOS_ASSERT`` の定義は、他のマクロ、
+``NDEBUG`` および　``KOKKOS_ENABLE_DEBUG``。
 
-If ``NDEBUG`` is defined and ``KOKKOS_ENABLE_DEBUG`` is not
-defined at the point in the source code where ``<Kokkos_Assert.hpp>`` or ``<Kokkos_Core.hpp>`` is
-included, then assert does nothing.
+``NDEBUG`` が定義されず、 ``<Kokkos_Assert.hpp>`` または　``<Kokkos_Core.hpp>`` が含まれないソースコード内のポイントで
+ ``KOKKOS_ENABLE_DEBUG`` が定義されない場合には、
+アサートは何もできません。
 
-If ``NDEBUG`` is not defined or ``KOKKOS_ENABLE_DEBUG`` is defined,  then
-``KOKKOS_ASSERT`` checks if its argument converted to ``bool`` evaluates to
-``false``. If it does, ``KOKKOS_ASSERT`` calls ``Kokkos::abort`` with
-diagnostic information that includes the text of expression, as well as the
-values of the predefined macros ``__FILE__`` and ``__LINE__``.
+If ``NDEBUG`` が定義されない、または　``KOKKOS_ENABLE_DEBUG`` が定義される場合には、
+``KOKKOS_ASSERT`` は、``bool``　に変換されたその引数が、``false``　に決定されているかどうかを
+確認します。 そうである場合には、 ``KOKKOS_ASSERT`` は、
+事前定義されたマクロス  ``__FILE__`` and ``__LINE__``　のみならず、
+式のテキストを含む、診断情報を使って、 ``Kokkos::abort``　を呼び出します。
 
-Example
+例
 -------
 
 .. code-block:: cpp
@@ -44,17 +44,13 @@ Example
         assert(Kokkos::is_finalized());  // exclusively callable on the host
 
 
-Notes
+注意事項
 -----
 
-.. _KokkosAssert: https://github.com/kokkos/kokkos/blob/4.2.00/core/src/Kokkos_Assert.hpp
+.. バージョン　4.2より、  <Kokkos_Assert.hpp>　から　``KOKKOS_ASSERT`` もまた入手可能です。
+* C++ 標準ライブラリからの `assert`　とは対照的に、
+  ``KOKKOS_FUNCTION``から ``KOKKOS_ASSERT`` を呼び出すことは、合法的です。
 
-.. |KokkosAssert| replace:: ``<Kokkos_Assert.hpp>``
-
-* Since version 4.2, ``KOKKOS_ASSERT`` is also available from |KokkosAssert|_.
-* In contrast to `assert` from the C++ standard library, it is legal to call
-  ``KOKKOS_ASSERT`` from a ``KOKKOS_FUNCTION``.
-
-See also
+以下も参照
 --------
-* `Kokkos::abort() <abort.html>`_ causes abnormal program termination
+* `Kokkos::abort() <abort.html>`_ は、プログラムの異常終了を引き起こします。
