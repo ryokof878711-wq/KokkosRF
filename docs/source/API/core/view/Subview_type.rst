@@ -8,44 +8,44 @@
 
 .. |subviewfunc| replace:: ``Kokkos::subview()``
 
-Header File: ``Kokkos_Core.hpp``
+ヘッダーファイル: ``Kokkos_Core.hpp``
 
-Description
+ディスクリプション
 -----------
 
-Alias template to deduce the type that is returned by a call to the |subviewfunc|_ function with given arguments.
+|subviewfunc|_　関数を指定された引数で呼び出した際に返される型の演鐸を行うエイリアステンプレート。
 
-Interface
+インターフェイス
 ---------
 
 .. code-block:: cpp
 
-   template <class ViewType, class... Args>
-   using Subview = IMPL_DETAIL; // deduce subview type from source view traits
+   テンプレート　<class ViewType, class... Args>
+   using Subview = IMPL_DETAIL; を使用　// ソースビューの特性からサブビューのタイプを演鐸します。
 
-Type of the result of ``Kokkos::subview(ViewType view_arg, Args .... args)``
+ ``Kokkos::subview(ViewType view_arg, Args .... args)``　の結果の型。
 
-Requirements
+必要要件
 ------------
 
-Requires:
+以下を必要とします:
 
-- ``ViewType`` is a specialization of ``Kokkos::View``
+- ``ViewType`` は、 ``Kokkos::View``　の仕様です。
 
-- ``Args...`` are slice specifiers as defined in |subviewfunc|_.
+- ``Args...``  は、 |subviewfunc|_ で定義されているスライス指定子です。
 
 - ``sizeof... (Args) == ViewType::rank()``.
 
 
-Examples
+例
 --------
 
 .. code-block:: cpp
 
-   using view_type = Kokkos::View<double ***[5]>;
+   view_type = Kokkos::View<double ***[5]>;　を使用
    view_type a("A",N0,N1,N2);
 
-   struct subViewHolder {
+   構造体 subViewHolder {
    Kokkos::Subview<view_type,
                    std::pair<int,int>,
                    int,
