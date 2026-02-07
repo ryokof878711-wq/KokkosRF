@@ -8,7 +8,7 @@
 
 .. |KokkosPrintf| replace:: ``<Kokkos_Printf.hpp>``
 
- ``<Kokkos_Core.hpp>``　から含まれる ヘッダー |KokkosPrintf|_ に定義。
+``<Kokkos_Core.hpp>``　から含まれる ヘッダー |KokkosPrintf|_ に定義。
 
 .. code-block:: cpp
 
