@@ -4,9 +4,9 @@
 .. role:: cpp(code)
     :language: cpp
 
-Defined in header ``<Kokkos_Timer.hpp>`` which is included from ``<Kokkos_Core.hpp>``
-
-Usage
+ ``<Kokkos_Core.hpp>``　から含まれる、ヘッダー ``<Kokkos_Timer.hpp>``　に定義。
+ 
+使用例
 -----
 
 .. code-block:: cpp
