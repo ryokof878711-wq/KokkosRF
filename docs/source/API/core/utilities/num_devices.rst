@@ -8,9 +8,9 @@
 
 .. code-block:: cpp
 
-    [[nodiscard]] int num_devices() noexcept;  // (since 4.3)
+    [[nodiscard]] int num_devices() noexcept;  // (4.3より)
 
-Returns the number of available devices on the system or ``-1`` if only host backends are enabled.ホストバックエンドのみが有効な場合は、システム上で利用可能なデバイスの数、または　``-1``を返します。
+ホストバックエンドのみが有効な場合は、システム上で利用可能なデバイスの数、または　``-1``を返します。
 
 注意事項
 -----
