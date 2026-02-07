@@ -38,4 +38,4 @@
 
 |initialize|_:  Kokkos　実行環境を初期化します。
 
-|InitializationSettings|_: settings for initializing Kokkos
+|InitializationSettings|_: Kokkos　初期化の設定
