@@ -10,7 +10,7 @@
 
     [[nodiscard]] int num_threads() noexcept;  // (4.1より)
 
- ``DefaultHostExecutionSpace``　により使用された同時実行スレッド数を返します。
+``DefaultHostExecutionSpace``　により使用された同時実行スレッド数を返します。
 
 ----
 
