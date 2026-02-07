@@ -48,27 +48,27 @@ API
         ~nonesuch() = delete;
     };
 
-    // is_detected is an alias for std::true_type if Op<Args...> is a valid type
-    // otherwise, an alias for std::false_type
+    // is_detected は、Op<Args...> が有効な型である場合に std::true_type の別名となります。
+    // そうでない場合、std::false_type の別名です。
 
     template <template <class...> class Op, class... Args>
     is_detected =
         typename DETECTOR<nonesuch, void, Op, Args...>::value_t;　を使用
 
-    // detected_t is an alias for Op<Args...> if Op<Args...> is a valid type
-    //  otherwise, an alias for Kokkos::nonesuch
+    // detected_t は、Op<Args...> が有効な型である場合に Op<Args...> の別名となります。
+    //  そうでない場合、 Kokkos::nonesuch　の別名です。
 
     template <template <class...> class Op, class... Args>
-    using detected_t = typename DETECTOR<nonesuch, void, Op, Args...>::type;
+    detected_t = typename DETECTOR<nonesuch, void, Op, Args...>::type;　を使用
 
-    // detected_or_t is an alias for Op<Args...> if Op<Args...> is a valid type
-    //  otherwise, an alias for Default
+    // detected_or_t は、Op<Args...> が有効な型である場合に  Op<Args...> の別名となります。
+    //  そうでない場合、 Default の別名です。
 
     template <class Default, template <class...> class Op, class... Args>
-    using detected_or_t = typename DETECTOR<Default, void, Op, Args...>::type;
+    using detected_or_t = typename DETECTOR<Default, void, Op, Args...>::type;　を使用
 
-    // is_detected_exact is an alias for std::true_type if Op<Args...> is the same type as Expected
-    //  otherwise, an alias for std::false_type
+    // is_detected_exact は、Op<Args...> が、 Expected と同じ型である場合に std::true_type の別名となります。
+    //  そうでない場合、std::false_type　の別名です。
 
     template <class Expected, template <class...> class Op, class... Args>
     using is_detected_exact = std::is_same<Expected, detected_t<Op, Args...>>;
