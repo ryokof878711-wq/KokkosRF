@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
- ``<Kokkos_Core.hpp>``　から含まれる、ヘッダー ``<Kokkos_Timer.hpp>``　に定義。
+``<Kokkos_Core.hpp>``　から含まれる、ヘッダー ``<Kokkos_Timer.hpp>``　に定義。
  
 使用例
 -----
