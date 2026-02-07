@@ -18,11 +18,11 @@
     kokkos_swap(T2 (&a)[N], T2 (&b)[N]) noexcept(noexcept(*a, *b));  // (2) (4.3より)
 
 
-　1) 値　``a`` および　``b``　を入れ替えます。 ``std::is_move_constructible_v<T> && std::is_move_assignable_v<T>``　が　
+　1) 　値　``a`` および　``b``　を入れ替えます。 ``std::is_move_constructible_v<T> && std::is_move_assignable_v<T>``　が　
 ``true``　でなければ、このオーバーロードは、
 オーバーロード解決に関与しません。
 
-　2) 配列 ``a`` および ``b``　を入れ替えます。 ``T2`` が入れ替え可能でなければ、
+　2) 　配列 ``a`` および　``b``　を入れ替えます。 ``T2`` が入れ替え可能でなければ、
    このオーバーロードは、オーバーロード解決に関与しません。
 
 注意事項
