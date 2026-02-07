@@ -1,15 +1,15 @@
-Detection Idiom
+検出イディオム
 ===============
 
 .. role:: cpp(code)
     :language: cpp
 
-The Detection Idiom is used to recognize, in an SFINAE-friendly way, the validity of any C++ expression.
+検出イディオムは、SFINAE　に配慮した方法で、あらゆる　C++　式が有効かどうかを認識するために使用されます。
 
-Header File: ``<Kokkos_DetectionIdiom.hpp>``
+ヘッダーファイル: ``<Kokkos_DetectionIdiom.hpp>``
 
-The Kokkos Detection Idiom is based upon the detection idiom from Version 2 of the C++ Extensions for
-Library Fundamentals, ISO/IEC TS 19568:2017, a draft of which can be found `here <https://cplusplus.github.io/fundamentals-ts/v2.html#meta.detect>`.
+Kokkos 検出イディオムは、ISO/IEC TS 19568:2017、ライブラリ基礎のためのC++拡張のバージョン2の検出イディオムに基づいており、
+Library Fundamentals, ISO/IEC TS 19568:2017, そのドラフトは、`here <https://cplusplus.github.io/fundamentals-ts/v2.html#meta.detect>`　に
 
 The original C++ proposal can be found at `here <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4436.pdf>`.
 
