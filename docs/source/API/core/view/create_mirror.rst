@@ -121,7 +121,7 @@
 .. cpp:function:: テンプレート <class Space, class ViewType> ImplMirrorType create_mirror_view(decltype(Kokkos::WithoutInitializing), Space const& space, ViewType const& src);
 
    ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value``  が ``false``　であれば、
-    ``src`` と同じレイアウトおよびパディングを使いますが、but with a device type of ``Space::device_type``　のデバイスタイプを使って新たな |View|_　を作成します。
+    ``src`` と同じレイアウトおよびパディングを使いますが、``Space::device_type``　のデバイスタイプを使って新たな |View|_　を作成します。
    新たなビューは、 初期化されていないデータを持ちます。 そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
@@ -132,10 +132,10 @@
 
 .. cpp:function:: テンプレート <class ViewType, class ALLOC_PROP> auto create_mirror_view(ALLOC_PROP const& arg_prop, ViewType const& src);
 
-   If the |View|_ constructor 引数 ``arg_prop`` ( `Kokkos::view_alloc`　への呼び出しにより、作成) がメモリ空間を含み、 そのメモリ空間が
+    |View|_ constructor 引数 ``arg_prop`` ( `Kokkos::view_alloc`　への呼び出しにより、作成) がメモリ空間を含み、 そのメモリ空間が
     ``src``　のメモリ空間と一致しない場合には、 特定　memory_space　内の新たな |View|_  を作成します。　``arg_prop`` が、メモリ空間を含まず、 ``src`` のメモリ空間が、ホストアクセス可能でない場合には、新たなホストアクセス可能な |View|_　を作成します。
    そうでない場合には、 ``src`` を、返します。 新たな |View|_ が作成される場合には、 暗示的に呼び出されるコンストラクタは、``arg_prop``　を尊重し、
-   and uses the same layout and padding as ``src``　と同じレイアウトおよびパディングを使います。　
+    ``src``　と同じレイアウトおよびパディングを使います。　
 
    - ``src``: a ``Kokkos::View``.
 
@@ -148,26 +148,24 @@
 .. cpp:function:: テンプレート <class Space, class ViewType> ImplMirrorType create_mirror_view_and_copy(Space const& space, ViewType const& src);
 
    ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value`` が ``false``　であれば、
-   creates a new ``Kokkos::View`` with the same layout and padding as ``src`` but with a device type of ``Space::device_type``
-   and conducts a ``deep_copy`` from ``src`` to the new view if one was created. Otherwise returns ``src``.
+   ``src``　と同じレイアウトおよびパディングを使いますが、 ``Space::device_type``　のデバイス型を使って、作成し、作成されれば、  ``deep_copy`` を``src`` から新たなビューに実行します。そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
 
-   - ``Space``: a class meeting the requirements of |ExecutionSpaceConcept|_ or |MemorySpaceConcept|_
+   - ``Space``:  |ExecutionSpaceConcept|_ または |MemorySpaceConcept|_　　の必要要件を満たすクラス。
 
-   - ``ImplMirrorType``: an implementation defined specialization of ``Kokkos::View``.
+   - ``ImplMirrorType``:  ``Kokkos::View``　　の実装定義の仕様。
 
-.. cpp:function:: template <class ViewType, class ALLOC_PROP> ImplMirrorType create_mirror_view_and_copy(ALLOC_PROP const& arg_prop, ViewType const& src);
+.. cpp:function:: テンプレート <class ViewType, class ALLOC_PROP> ImplMirrorType create_mirror_view_and_copy(ALLOC_PROP const& arg_prop, ViewType const& src);
 
-   If the  memory space included in the |View|_ constructor arguments ``arg_prop`` (created by a call to `Kokkos::view_alloc`) does not match the memory
-   space of ``src``, creates a new |View|_ in the specified memory space using ``arg_prop`` and the same layout
-   and padding as ``src``. Additionally, a ``deep_copy`` from ``src`` to the new view is executed
-   (using the execution space contained in ``arg_prop`` if provided). Otherwise returns ``src``.
+   If the  memory space included in the |View|_ コンストラクタ引数 ``arg_prop`` に含まれるメモリ空間　(　`Kokkos::view_alloc`　への呼び出しにより作成) が、 ``src``　のメモリ空間と一致しない場合には、 creates a new |View|_ in the specified memory space using ``arg_prop`` およびand the same layout
+   and padding as ``src``　と同じレイアウトおよびパディングを使って、特定メモリ空間内の新たな  |View|_ 　を作成します。　さらに、Additionally, a from ``src`` から新たなビューへの ``deep_copy``　が実行されます (提供されれば、 ``arg_prop`` 内に含まれた実行空間を使用)。
+   そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
 
-   - ``arg_prop``: |View|_ constructor properties, e.g., ``Kokkos::view_alloc(Kokkos::HostSpace{}, Kokkos::WithoutInitializing)``.
+   - ``arg_prop``: |View|_ コンストラクタ特性、例えば、 ``Kokkos::view_alloc(Kokkos::HostSpace{}, Kokkos::WithoutInitializing)``.
 
-     .. important::
+     .. 重要事項::
 
-	``arg_prop`` must not include a pointer to memory, or a label, or allow padding and ``arg_prop`` must include a memory space.
+	``arg_prop`` は、メモリまたはラベルへのポインタを含んではならず、 またはパディングを認めてはなりません。そして、``arg_prop`` は、メモリ空間を含まなければなりません。
