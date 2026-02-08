@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
 Usage
 -----
@@ -14,25 +14,25 @@ Usage
    Kokkos::deep_copy(exec_space, dest, src);
    Kokkos::deep_copy(dest, src);
 
-Copies data from ``src`` to ``dest``, where ``src`` and ``dest``
-can be `Kokkos::Views <view.html>`_ or scalars under certain circumstances.
+データをCopies data from ``src`` から ``dest``　にコピーしますが、その中で ``src`` および ``dest``　が
+特定状況下で、`Kokkos::Views <view.html>`_ またはスカラーである可能性があります。
 
-Interface
+インターフェイス
 ---------
 
-.. cpp:function:: template <class ExecSpace, class ViewDest, class ViewSrc> void Kokkos::deep_copy(const ExecSpace& exec_space, const ViewDest& dest, const ViewSrc& src);
+.. cpp:function:: テンプレート <class ExecSpace, class ViewDest, class ViewSrc> void Kokkos::deep_copy(const ExecSpace& exec_space, const ViewDest& dest, const ViewSrc& src);
 
-.. cpp:function:: template <class ExecSpace, class ViewDest> void Kokkos::deep_copy(const ExecSpace& exec_space, const ViewDest& dest, const typename ViewDest::value_type& src);
+.. cpp:function:: テンプレート <class ExecSpace, class ViewDest> void Kokkos::deep_copy(const ExecSpace& exec_space, const ViewDest& dest, const typename ViewDest::value_type& src);
 
-.. cpp:function:: template <class ExecSpace, class ViewSrc> void Kokkos::deep_copy(const ExecSpace& exec_space, ViewSrc::value_type& dest, const ViewSrc& src);
+.. cpp:function:: テンプレート <class ExecSpace, class ViewSrc> void Kokkos::deep_copy(const ExecSpace& exec_space, ViewSrc::value_type& dest, const ViewSrc& src);
 
-.. cpp:function:: template <class ViewDest, class ViewSrc> void Kokkos::deep_copy(const ViewDest& dest, const ViewSrc& src);
+.. cpp:function:: テンプレート <class ViewDest, class ViewSrc> void Kokkos::deep_copy(const ViewDest& dest, const ViewSrc& src);
 
-.. cpp:function:: template <class ViewDest> void Kokkos::deep_copy(const ViewDest& dest, const typename ViewDest::value_type& src);
+.. cpp:function:: テンプレート <class ViewDest> void Kokkos::deep_copy(const ViewDest& dest, const typename ViewDest::value_type& src);
 
-.. cpp:function:: template <class ViewSrc> void Kokkos::deep_copy(ViewSrc::value_type& dest, const ViewSrc& src);
+.. cpp:function:: テンプレート <class ViewSrc> void Kokkos::deep_copy(ViewSrc::value_type& dest, const ViewSrc& src);
 
-Parameters
+パラメータ
 ~~~~~~~~~~
 
 * ExecSpace: An `ExecutionSpace <../execution_spaces.html>`_
