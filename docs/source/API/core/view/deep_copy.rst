@@ -6,7 +6,7 @@
 
 ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
@@ -37,33 +37,33 @@ Usage
 
 * ExecSpace: An `ExecutionSpace <../execution_spaces.html>`_
 
-* ViewDest: A `view-like type <view_like.html>`_ with a non-const ``value_type``
+* ViewDest: 非定数 ``value_type``　を伴う `view-like type <view_like.html>`_ 
 
-* ViewSrc: A `view-like type <view_like.html>`_.
+* ViewSrc: `view-like type <view_like.html>`_.
 
-Requirements
+必要要件
 ~~~~~~~~~~~~
 
-* If ``src`` and ``dest`` are `Kokkos::View <view.html>`_ s, then all the following are true:
+* ``src`` および ``dest`` が `Kokkos::View <view.html>`_ である場合には、 以下のすべてが真です:
 
   - ``std::is_same<ViewDest::non_const_value_type, ViewSrc::non_const_value_type>::value == true``
 
-  - ``src.rank == dest.rank`` (or, for ``Kokkos::DynRankView`` , ``src.rank() == dest.rank()`` )
+  - ``src.rank == dest.rank`` (または  ``Kokkos::DynRankView`` については、 ``src.rank() == dest.rank()`` )
 
-  - For all ``k`` in ``[0, dest.rank)`` ``dest.extent(k) == src.extent(k)`` (or the same as ``dest.rank()``)
+  - ``[0, dest.rank)``　内のすべての  ``k`` については、``dest.extent(k) == src.extent(k)`` (または、 ``dest.rank()``と同じ)
 
-  - ``src.span_is_contiguous() && dest.span_is_contiguous() && std::is_same<ViewDest::array_layout,ViewSrc::array_layout>::value``, *or* there exists an `ExecutionSpace <../execution_spaces.html>`_ ``copy_space`` (either given or defaulted) such that both ``SpaceAccessibility<copy_space, ViewDest::memory_space>::accessible == true`` and ``SpaceAccessibility<copy_space,ViewSrc::memory_space>::accessible == true``.
+  -  ``SpaceAccessibility<copy_space, ViewDest::memory_space>::accessible == true`` および ``SpaceAccessibility<copy_space,ViewSrc::memory_space>::accessible == true``　両方であるための、``src.span_is_contiguous() && dest.span_is_contiguous() && std::is_same<ViewDest::array_layout,ViewSrc::array_layout>::value``、 *or* there exists an `ExecutionSpace <../execution_spaces.html>`_ ``copy_space`` (規定またはデフォルト)
 
-* If ``src`` is a `Kokkos::View <view.html>`_ and ``dest`` is a scalar, then ``src.rank == 0`` is true.
+* ``src`` is a `Kokkos::View <view.html>`_ and ``dest`` is a scalar, then ``src.rank == 0`` が真である場合には、
 
-Semantics
+セマンティクス
 ---------
 
-* If no `ExecutionSpace <../execution_spaces.html>`_ argument is provided, all outstanding operations (kernels, copy operation) in any execution spaces will be finished before the copy is executed, and the copy operation is finished before the call returns.
+* `ExecutionSpace <../execution_spaces.html>`_ argument が提供されなければ、  いかなる実行空間のすべての優れた演算子　（カーネル、コピー演算子）は、コピーが実行される前に終了し、コピー演算子は、呼び出しが返される前に終了します。
 
-* If an `ExecutionSpace <../execution_spaces.html>`_ argument ``exec_space`` is provided the call is potentially asynchronous—i.e., the call returns before the copy operation is executed. In that case the copy operation will occur only after any already submitted work to ``exec_space`` is finished, and the copy operation will be finished before any work submitted to ``exec_space`` after the ``deep_copy`` call returns is executed. Note: the copy operation is only synchronous with respect to work in the specific execution space instance, but not necessarily with work in other instances of the same type. This behaves analogous to issuing a ``cudaMemcpyAsync`` into a specific CUDA stream, without any additional synchronization.
+* `ExecutionSpace <../execution_spaces.html>`_ argument ``exec_space`` が提供されば、 呼び出しは、同期可能ーつまり、コピー演算子が実行される前に、呼び出しは、返されます。 その場合には、In that case the copy operation will occur only after any already submitted work to ``exec_space`` is finished, and the copy operation will be finished before any work submitted to ``exec_space`` after the ``deep_copy`` call returns is executed. Note: the copy operation is only synchronous with respect to work in the specific execution space instance, but not necessarily with work in other instances of the same type. This behaves analogous to issuing a ``cudaMemcpyAsync`` into a specific CUDA stream, without any additional synchronization.
 
-Examples
+例
 --------
 
 Some Things you can and cannot do
