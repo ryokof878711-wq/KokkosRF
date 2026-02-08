@@ -81,75 +81,73 @@
 
 .. cpp:function:: テンプレート <class ViewType, class ALLOC_PROP> auto create_mirror(ALLOC_PROP const& arg_prop, ViewType const& src);
 
-   Creates a new |View|_ with the same layout and padding as ``src``
-   using the |View|_ constructor properties ``arg_prop``, e.g., ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
-   If ``arg_prop`` contains a memory space, a |View|_ in that space is created. Otherwise, a |View|_ in host-accessible memory is returned.
+    |View|_ constructor properties ``arg_prop``, 例えば、 ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``　を使って、
+   レイアウトとパディングは``src``と同じものを使って、新たな |View|_ を作成します。
+   　``arg_prop`` がメモリスペースを含んでいれば、 そのスペース内の |View|_ が作成されます。そうでない場合、 ホストアクセス可能なメモリ内の |View|_  を返します。
 
    - ``src``: a ``Kokkos::View``.
 
-   - ``arg_prop``: |View|_ constructor properties, e.g., ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
+   - ``arg_prop``: |View|_ コンストラクタ特性、例えば、  ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
 
-     .. important::
+     .. 重要事項::
 
-	``arg_prop`` must not include a pointer to memory, or a label, or allow padding.
+	``arg_prop`` は、メモリまたはラベルへのポインタを含んではならず、 またはパディングを認めてはなりません。
 
 
-.. cpp:function:: template <class ViewType> typename ViewType::HostMirror create_mirror_view(ViewType const& src);
+.. cpp:function:: テンプレート <class ViewType> typename ViewType::HostMirror create_mirror_view(ViewType const& src);
 
-   If ``src`` is not host accessible (i.e. if ``SpaceAccessibility<HostSpace,ViewType::memory_space>::accessible`` is ``false``)
-   it creates a new host accessible |View|_ with the same layout and padding as ``src``. Otherwise returns ``src``.
-
-   - ``src``: a ``Kokkos::View``.
-
-.. cpp:function:: template <class ViewType> typename ViewType::HostMirror create_mirror_view(decltype(Kokkos::WithoutInitializing), ViewType const& src);
-
-   If ``src`` is not host accessible (i.e. if ``SpaceAccessibility<HostSpace,ViewType::memory_space>::accessible`` is ``false``)
-   it creates a new host accessible |View|_ with the same layout and padding as ``src``. The new view will have uninitialized data. Otherwise returns ``src``.
+  ``src`` が、ホストアクセス可能でない場合には (つまり　``SpaceAccessibility<HostSpace,ViewType::memory_space>::accessible`` が ``false``　である場合)、
+　``src``　と同じレイアウトおよびパディングを使って、 |View|_　とアクセス可能な新たなホストを作成します。そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
 
-.. cpp:function:: template <class Space, class ViewType> ImplMirrorType create_mirror_view(Space const& space, ViewType const& src);
+.. cpp:function:: テンプレート <class ViewType> typename ViewType::HostMirror create_mirror_view(decltype(Kokkos::WithoutInitializing), ViewType const& src);
 
-   If ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value`` is ``false``, creates a new |View|_ with
-   the same layout and padding as ``src`` but with a device type of ``Space::device_type``. Otherwise returns ``src``.
+   ``src`` が、ホストアクセス可能でない場合には (つまり　``SpaceAccessibility<HostSpace,ViewType::memory_space>::accessible`` が ``false``　である場合)、
+   ``src``　と同じレイアウトおよびパディングを使って、 |View|_　とアクセス可能な新たなホストを作成します。 新たなビューは、 初期化されていないデータを持ちます。 そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
 
-   - ``Space`` : a class meeting the requirements of |ExecutionSpaceConcept|_ or |MemorySpaceConcept|_
+.. cpp:function:: テンプレート <class Space, class ViewType> ImplMirrorType create_mirror_view(Space const& space, ViewType const& src);
 
-   - ``ImplMirrorType``: an implementation defined specialization of ``Kokkos::View``.
+   ``std::is_same<typename Space::memory_space　である場合には、 typename ViewType::memory_space>::value`` は、 ``false``　です。  ``src`` と同じレイアウトおよびパディングを使いますが、　``Space::device_type``　のデバイスタイプを使って新たな |View|_　を作成します。　そうでない場合には、 ``src``　を返します。
 
-.. cpp:function:: template <class Space, class ViewType> ImplMirrorType create_mirror_view(decltype(Kokkos::WithoutInitializing), Space const& space, ViewType const& src);
+   - ``src``: a ``Kokkos::View``.
 
-   If ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value`` is ``false``,
-   creates a new |View|_ with the same layout and padding as ``src`` but with a device type of ``Space::device_type``.
-   The new view will have uninitialized data. Otherwise returns ``src``.
+   - ``Space`` :  |ExecutionSpaceConcept|_ または |MemorySpaceConcept|_　の必要要件を満たすクラス。
+
+   - ``ImplMirrorType``: ``Kokkos::View``　の実装定義の仕様。
+
+.. cpp:function:: テンプレート <class Space, class ViewType> ImplMirrorType create_mirror_view(decltype(Kokkos::WithoutInitializing), Space const& space, ViewType const& src);
+
+   ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value``  が ``false``　であれば、
+    ``src`` と同じレイアウトおよびパディングを使いますが、but with a device type of ``Space::device_type``　のデバイスタイプを使って新たな |View|_　を作成します。
+   新たなビューは、 初期化されていないデータを持ちます。 そうでない場合には、 ``src``　を返します。
 
    - ``src``: a ``Kokkos::View``.
 
    - ``Space``: a class meeting the requirements of |ExecutionSpaceConcept|_ or |MemorySpaceConcept|_
 
-   - ``ImplMirrorType``: an implementation defined specialization of ``Kokkos::View``.
+   - ``ImplMirrorType``:　 |ExecutionSpaceConcept|_ または |MemorySpaceConcept|_　の必要要件を満たすクラス。
 
-.. cpp:function:: template <class ViewType, class ALLOC_PROP> auto create_mirror_view(ALLOC_PROP const& arg_prop, ViewType const& src);
+.. cpp:function:: テンプレート <class ViewType, class ALLOC_PROP> auto create_mirror_view(ALLOC_PROP const& arg_prop, ViewType const& src);
 
-   If the |View|_ constructor arguments ``arg_prop`` (created by a call to `Kokkos::view_alloc`) include a memory space and the memory space
-   doesn't match the memory space of ``src``, creates a new |View|_ in the specified memory_space. If the ``arg_prop`` don't include a memory
-   space and the memory space of ``src`` is not host-accessible, creates a new host-accessible |View|_.
-   Otherwise, ``src`` is returned. If a new |View|_ is created, the implicitly called constructor respects ``arg_prop``
-   and uses the same layout and padding as ``src``.
+   If the |View|_ constructor 引数 ``arg_prop`` ( `Kokkos::view_alloc`　への呼び出しにより、作成) がメモリ空間を含み、 そのメモリ空間が
+    ``src``　のメモリ空間と一致しない場合には、 特定　memory_space　内の新たな |View|_  を作成します。　``arg_prop`` が、メモリ空間を含まず、 ``src`` のメモリ空間が、ホストアクセス可能でない場合には、新たなホストアクセス可能な |View|_　を作成します。
+   そうでない場合には、 ``src`` を、返します。 新たな |View|_ が作成される場合には、 暗示的に呼び出されるコンストラクタは、``arg_prop``　を尊重し、
+   and uses the same layout and padding as ``src``　と同じレイアウトおよびパディングを使います。　
 
    - ``src``: a ``Kokkos::View``.
 
-   - ``arg_prop``: |View|_ constructor properties, e.g., ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
+   - ``arg_prop``: |View|_ コンストラクタ特性、例えば、 ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
 
-     .. important::
+     .. 重要事項::
 
-	``arg_prop`` must not include a pointer to memory, or a label, or allow padding.
+	``arg_prop`` は、メモリまたはラベルへのポインタを含んではならず、 またはパディングを認めてはなりません。
 
-.. cpp:function:: template <class Space, class ViewType> ImplMirrorType create_mirror_view_and_copy(Space const& space, ViewType const& src);
+.. cpp:function:: テンプレート <class Space, class ViewType> ImplMirrorType create_mirror_view_and_copy(Space const& space, ViewType const& src);
 
-   If ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value`` is ``false``,
+   ``std::is_same<typename Space::memory_space, typename ViewType::memory_space>::value`` が ``false``　であれば、
    creates a new ``Kokkos::View`` with the same layout and padding as ``src`` but with a device type of ``Space::device_type``
    and conducts a ``deep_copy`` from ``src`` to the new view if one was created. Otherwise returns ``src``.
 
