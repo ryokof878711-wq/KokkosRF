@@ -51,9 +51,9 @@
 
    .. cpp:function:: LayoutRight(LayoutRight&&) = default
 
-       Default move constructor, element-wise moves the other Layout.
+       デフォルトの移動コンストラクタは、要素単位で他のレイアウトをコピーします。
 
-   .. rubric:: Assignment operators
+   .. rubric:: 代入演算子
 
    .. cpp:function:: LayoutRight& operator=(LayoutRight const&) = default
 
