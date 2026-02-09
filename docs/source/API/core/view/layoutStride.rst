@@ -4,18 +4,18 @@
 .. role:: cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: c++
 
-    Kokkos::View<float***> full_mesh; // an entire mesh
+    Kokkos::View<float***> full_mesh; // 網状の構造
     Kokkos::View<float**, Kokkos::LayoutStride> mesh_subcomponent;
-    mesh_subcomponent = Kokkos::subview(full_mesh,Kokkos::ALL(), 0, Kokkos::ALL()); // take x and z components
+    mesh_subcomponent = Kokkos::subview(full_mesh,Kokkos::ALL(), 0, Kokkos::ALL()); // x および z コンポーネントを選択
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:class:: LayoutStride
