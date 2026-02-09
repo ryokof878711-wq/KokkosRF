@@ -61,4 +61,4 @@
 
    .. cpp:function:: LayoutRight& operator=(LayoutRight&&) = default
 
-       Default move assignment, element-wise moves the other Layout.
+       デフォルトの移動演算子は、要素単位で他のレイアウトをコピーします。
