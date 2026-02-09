@@ -18,8 +18,8 @@
 
 .. cpp:struct:: LayoutRight
 
-   多次元ビューに提供された場合、 lays out memory such that the **最後の指数が隣接したものである**　ために、
-   This matches the C conventions for allocations.
+   多次元ビューに提供された場合、  **最後の指数が隣接したものである**　ために、
+   メモリを配置します。 これは、割り当てに関する　C　の慣習に合致します。
 
    .. rubric:: Nested Typedefs
 
