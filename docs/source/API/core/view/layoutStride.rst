@@ -20,14 +20,14 @@
 
 .. cpp:class:: LayoutStride
 
-   When provided to a multidimensional View, lays out memory with an arbitrary stride.
-   Most frequently encountered when taking a noncontiguous subview of some larger view.
+   多次元ビューに提供された場合、 任意のストライドでメモリを配置します。
+   より大きなビューの一部として非連続なサブビューを取得する際に最も頻繁に遭遇します。
 
-   .. rubric:: Public Class Members
+   .. rubric:: パブリッククラスメンバー
 
    .. cpp:member:: size_t dimension[ARRAY_LAYOUT_MAX_RANK];
 
-      An array containing the size of each dimension of the Layout
+      レイアウトの各次元のサイズを含む配列
 
    .. cpp:member:: size_t stride[ARRAY_LAYOUT_MAX_RANK];
 
