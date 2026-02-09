@@ -18,8 +18,8 @@
 
 .. cpp:struct:: LayoutRight
 
-   When provided to a multidimensional View, lays out memory such that the
-   **last index is the contiguous one最後の指数が隣接したものである**. This matches the C conventions for allocations.
+   多次元ビューに提供された場合、 lays out memory such that the **最後の指数が隣接したものである**　ために、
+   This matches the C conventions for allocations.
 
    .. rubric:: Nested Typedefs
 
