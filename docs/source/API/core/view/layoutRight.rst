@@ -61,4 +61,4 @@
 
    .. cpp:function:: LayoutRight& operator=(LayoutRight&&) = default
 
-       デフォルトの移動演算子は、要素単位で他のレイアウトをコピーします。
+       デフォルトの移動演算子は、要素単位で他のレイアウトを移動します。
