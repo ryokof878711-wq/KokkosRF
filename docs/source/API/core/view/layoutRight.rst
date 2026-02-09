@@ -4,22 +4,22 @@
 .. role:: cpp(code)
    :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
    Kokkos::View<float*, Kokkos::LayoutRight> my_view;
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:struct:: LayoutRight
 
    When provided to a multidimensional View, lays out memory such that the
-   **last index is the contiguous one**. This matches the C conventions for allocations.
+   **last index is the contiguous one最後の指数が隣接したものである**. This matches the C conventions for allocations.
 
    .. rubric:: Nested Typedefs
 
