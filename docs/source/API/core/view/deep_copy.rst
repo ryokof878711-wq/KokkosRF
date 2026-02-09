@@ -61,12 +61,12 @@
 
 * `ExecutionSpace <../execution_spaces.html>`_ argument が提供されなければ、  いかなる実行空間のすべての優れた演算子　（カーネル、コピー演算子）は、コピーが実行される前に終了し、コピー演算子は、呼び出しが返される前に終了します。
 
-* `ExecutionSpace <../execution_spaces.html>`_ argument ``exec_space`` が提供されば、 呼び出しは、同期可能ーつまり、コピー演算子が実行される前に、呼び出しは、返されます。 その場合には、In that case the copy operation will occur only after any already submitted work to ``exec_space`` is finished, and the copy operation will be finished before any work submitted to ``exec_space`` after the ``deep_copy`` call returns is executed. Note: the copy operation is only synchronous with respect to work in the specific execution space instance, but not necessarily with work in other instances of the same type. This behaves analogous to issuing a ``cudaMemcpyAsync`` into a specific CUDA stream, without any additional synchronization.
+* `ExecutionSpace <../execution_spaces.html>`_ argument ``exec_space`` が提供されば、 呼び出しは、同期可能ーつまり、コピー演算子が実行される前に、呼び出しは、返されます。 その場合には、コピー演算子は、``exec_space``　に既に送信された作業がすべて完了した後にのみ発生し、コピー演算子は、 ``deep_copy`` 呼び出し返しの実行後に、``exec_space``　に送信されたいずれかの作業の前に完了します。注意事項: コピー演算子は、特定実行空間インスタンスにおける作業に関してのみ、同期的ですが、必ずしも同じ型の他のインスタンスにおける作業を伴っていません。 これは、追加の同期処理なしに、特定の　CUDA　ストリームに対して、``cudaMemcpyAsync``　を発行するのと同様の動作をします
 
 例
 --------
 
-Some Things you can and cannot do
+出来る事と出来ない事
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
@@ -80,41 +80,41 @@ Some Things you can and cannot do
             int N = argc > 1 ? atoi(argv[1]) : 12;
             if (N < 6) N = 12;
 
-            // Contiguous Device View
+            // 連続デバイスビュー
             Kokkos::View<int**, Kokkos::LayoutLeft> d_a("A", N, 10);
             // Deep Copy Scalar into every element of a view
             Kokkos::deep_copy(d_a, 3);
 
-            // Non Contiguous Device View
+            // 非連続デバイスビュー
             auto d_a_2 = Kokkos::subview(d_a, 2, Kokkos::ALL);
-            // Deep Copy Scalar into every element of a non-contiguous view
+            // 非連続ビューの各要素への、深部コピースカラー
             Kokkos::deep_copy(d_a_2, 5);
-            // Non Contiguous Device View
+            // 非連続デバイスビュー
             auto d_a_5 = Kokkos::subview(d_a, 5, Kokkos::ALL);
-            // Deep Copy between two non-contiguous views with a common execution space
+            // 共通の実行領域を持つ2つの非連続ビュー間の深部コピー
             Kokkos::deep_copy(d_a_2, d_a_5);
 
-            // Contiguous Host View
+            // 連続ホストビュー
             auto h_a = Kokkos::create_mirror_view(d_a);
-            // Deep Copy contiguous views
+            // 深部コピー連続ビュー
             Kokkos::deep_copy(h_a, d_a);
 
-            // Non Contiguous Host Views
+            // 非連続ホストビュー
             auto h_a_2 = Kokkos::subview(h_a, 2, Kokkos::ALL);
-            // Deep Copy between two non-contiguous views with potentially no common
-            // execution space This fails for example if you compile the code with Cuda
+            // 共通要素が潜在的に存在しない、非連続な2つのビュー間の深部コピー
+            // 実行空間 例えば、これは、Cudaでコードをコンパイルすると失敗します。
             // Kokkos::deep_copy(h_a_2, d_a_2);
 
-            // A Scalar View
+            // スカラービュー
             auto d_a_2_5 = Kokkos::subview(d_a, 2, 5);
             int scalar;
-            // Deep Copy Scalar View into a scalar
+            // スカラーへの深部コピースカラービュー
             Kokkos::deep_copy(scalar, d_a_2_5);
         }
         Kokkos::finalize();
     }
 
-How to get layout incompatible views copied
+レイアウト互換性のないビューをコピーする方法
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
@@ -127,27 +127,27 @@ How to get layout incompatible views copied
             int N = argc>1?atoi(argv[1]):1000000;
             int R = argc>2?atoi(argv[2]):10;
 
-            // Create two views with different Layouts
-            Kokkos::View<int**[5], Kokkos::LayoutLeft> d_view("DeviceView",N,R);
+            // 異なるレイアウトを使って、2つのビューを作成。           
+　　　　　　Kokkos::View<int**[5], Kokkos::LayoutLeft> d_view("DeviceView",N,R);
             Kokkos::View<int**[5], Kokkos::LayoutRight, Kokkos::HostSpace> h_view("HostView",N,R);
 
-            // This would fail for example in a CUDA or HIP build:
+            // 例えば、CUDA　ビルドや　HIP　ビルドでは失敗するでしょう:
             // Kokkos::deep_copy(d_view,h_view);
 
-            // To copy two views with incompatible layouts between devices we need a temporary
-            auto h_view_tmp = Kokkos::create_mirror_view(d_view);
+            // 互換性のないレイアウトを持つ2つのビューをデバイス間でコピーするには、一時的に
+            auto h_view_tmp = Kokkos::create_mirror_view(d_view)を必要とします;
 
-            // This inherits the Layout from d_view
+            // これは、d_view　
             static_assert(std::is_same<decltype(h_view_tmp)::array_layout,
-                                       Kokkos::LayoutLeft>::value);
+                                       Kokkos::LayoutLeft>::value)からのからレイアウトを継承します;
 
-            // This now works since h_view_tmp and h_view are both accessible
-            // from HostSpace::execution_space
-            Kokkos::deep_copy(h_view_tmp,h_view);
+            // これは現在機能しています。なぜなら h_view_tmp および h_view の両方が
+            //  HostSpace::execution_space
+            Kokkos::deep_copy(h_view_tmp,h_view)からアクセス可能であるためです;
 
-            // Now we can copy from h_view_tmp to d_view since they are Layout compatible
-            // If we just compiled for OpenMP this is a no-op since h_view_tmp and d_view
-            // would reference the same data.
+            // 現在　h_view_tmp および d_view が互換性のあるレイアウトであるため、h_view_tmp から d_view へのコピーが可能です。
+            // If we just compiled for OpenMP用にコンパイルするのであれば、　について  。
+            // h_view_tmp および d_view　が同じデータを参照するであろうから、これは　no-op です。
             Kokkos::deep_copy(d_view,h_view_tmp);
         }
         Kokkos::finalize();
