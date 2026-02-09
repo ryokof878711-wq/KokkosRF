@@ -27,21 +27,21 @@
 
    .. cpp:member:: size_t dimension[ARRAY_LAYOUT_MAX_RANK];
 
-      レイアウトの各次元のサイズを含む配列
+      レイアウトの各次元のサイズを含む配列。
 
    .. cpp:member:: size_t stride[ARRAY_LAYOUT_MAX_RANK];
 
-      レイアウトの各次元のサイズを含む配列
+      レイアウトの各次元のサイズを含む配列。
 
    .. cpp:member:: static constexpr bool is_extent_constructible = false;
 
-      このクラスが拡張可能なコンストラクタを持つかどうかを検出するためのブール値
+      このクラスが拡張可能なコンストラクタを持つかどうかを検出するためのブール値。
 
    .. rubric:: パブリック型定義
 
    .. cpp:type:: array_layout
 
-      このモデルがレイアウト概念を表現していることを示すタグ
+      このモデルがレイアウト概念を表現していることを示すタグ。
 
    .. rubric:: コンストラクタ
 
@@ -52,7 +52,7 @@
                            size_t S4 = 0, size_t N5 = 0, size_t S5 = 0, \
                            size_t N6 = 0, size_t S6 = 0, size_t N7 = 0, size_t S7 = 0);
 
-      Constructor that takes in up to 8 sizes, to set the sizes of the corresponding dimensions of the Layout
+      レイアウトの対応する次元のサイズを設定するための、最大8つのサイズを受け取るコンストラクタ。
 
    .. cpp:function:: LayoutStride(LayoutStride const&) = default;
 
