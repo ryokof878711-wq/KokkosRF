@@ -31,7 +31,7 @@
 
    .. cpp:member:: static constexpr bool is_extent_constructible = true
 
-       A boolean to allow detection that this class is extent constructible.
+       このクラスが拡張可能なコンストラクタを持つかどうかを検出するためのブール値。
 
    .. cpp:member:: size_t dimension[8]
 
