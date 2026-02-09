@@ -60,9 +60,9 @@
 
    .. cpp:function:: LayoutStride(LayoutStride&&) = default;
 
-      Default move constructor, element-wise moves the other Layout
+      デフォルトの移動コンストラクタは、要素単位で他のレイアウトを移動します。
 
-   .. rubric:: Assignment operators
+   .. rubric:: 代入演算子
 
    .. cpp:function:: LayoutStride& operator=(LayoutStride const&) = default;
 
