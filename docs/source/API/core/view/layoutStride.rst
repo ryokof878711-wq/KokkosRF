@@ -66,7 +66,7 @@
 
    .. cpp:function:: LayoutStride& operator=(LayoutStride const&) = default;
 
-      Default copy assignment, element-wise copies the other Layout
+      デフォルトのコピー代入は、要素単位で他のレイアウトをコピーします。
 
    .. cpp:function:: LayoutStride& operator=(LayoutStride&&) = default;
 
