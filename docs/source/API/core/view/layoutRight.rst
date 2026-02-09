@@ -47,7 +47,7 @@
 
    .. cpp:function:: LayoutRight(LayoutRight const&) = default
 
-       Default copy constructor, element-wise copies the other Layout.
+       デフォルトのコピーコンストラクタは、要素単位で他のレイアウトをコピーします。
 
    .. cpp:function:: LayoutRight(LayoutRight&&) = default
 
