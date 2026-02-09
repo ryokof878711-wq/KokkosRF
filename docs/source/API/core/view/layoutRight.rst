@@ -35,9 +35,9 @@
 
    .. cpp:member:: size_t dimension[8]
 
-       An array containing the size of each dimension of the Layout.
+       レイアウトの各次元のサイズを含む配列。
 
-   .. rubric:: Constructors
+   .. rubric:: コンストラクタ
 
    .. cpp:function:: KOKKOS_INLINE_FUNCTION explicit constexpr LayoutRight(size_t N0 = 0, size_t N1 = 0, \
 				       size_t N2 = 0, size_t N3 = 0, size_t N4 = 0, \
