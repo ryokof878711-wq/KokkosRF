@@ -56,7 +56,7 @@
 
    .. cpp:function:: LayoutStride(LayoutStride const&) = default;
 
-      Default copy constructor, element-wise copies the other Layout
+      デフォルトのコピーコンストラクタは、要素単位で他のレイアウトをコピーします。
 
    .. cpp:function:: LayoutStride(LayoutStride&&) = default;
 
