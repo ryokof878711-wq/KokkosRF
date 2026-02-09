@@ -31,21 +31,21 @@
 
    .. cpp:member:: size_t stride[ARRAY_LAYOUT_MAX_RANK];
 
-      An array containing the stride for each dimension of the Layout
+      レイアウトの各次元のサイズを含む配列
 
    .. cpp:member:: static constexpr bool is_extent_constructible = false;
 
-      A boolean to allow detection that this class is extent constructible
+      このクラスが拡張可能なコンストラクタを持つかどうかを検出するためのブール値
 
-   .. rubric:: Public Typedefs
+   .. rubric:: パブリック型定義
 
    .. cpp:type:: array_layout
 
-      A tag signifying that this models the Layout concept
+      このモデルがレイアウト概念を表現していることを示すタグ
 
-   .. rubric:: Constructors
+   .. rubric:: コンストラクタ
 
-   .. cpp:function:: KOKKOS_INLINE_FUNCTION explicit constexpr LayoutStride(size_t N0 = 0, size_t S0 = 0, \
+   .. cpp:function:: KOKKOS_INLINE_FUNCTION 明示的 constexpr LayoutStride(size_t N0 = 0, size_t S0 = 0, \
 			   size_t N1 = 0, \
                            size_t S1 = 0, size_t N2 = 0, size_t S2 = 0, \
                            size_t N3 = 0, size_t S3 = 0, size_t N4 = 0, \
