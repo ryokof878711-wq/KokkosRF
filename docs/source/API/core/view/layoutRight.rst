@@ -25,9 +25,9 @@
 
    .. cpp:type:: array_layout
 
-       A tag signifying that this models the Layout concept.
+       このモデルがレイアウト概念を表現していることを示すタグ。
 
-   .. rubric:: Member Variables
+   .. rubric:: メンバー変数
 
    .. cpp:member:: static constexpr bool is_extent_constructible = true
 
