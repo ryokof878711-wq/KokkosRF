@@ -14,7 +14,7 @@
     resize(view,n0,n1,n2,n3);
     resize(view,layout);
 
-Reallocates a view to have the new dimensions. Can grow or shrink, and will preserve content of the common subextents.
+新たな次元を持つために、ビューを再割り当てします｡ 拡大または縮小でき、共通サブテクストの内容は保持されません。
 
 
 Description
