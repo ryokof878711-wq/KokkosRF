@@ -8,19 +8,19 @@
 
 .. cpp:struct:: テンプレート <unsigned N> MemoryTraits
 
-  When provided to a multidimensional View, ``MemoryTraits`` allow passing extra information about the treatment of the allocation. The template argument is expected to be a bitwise OR of enumeration values described below.
+  多次元ビューに提供された場合、 ``MemoryTraits`` は、割り当て処理に関する追加情報を渡すことを許可します。 テンプレート引数は、下記の列挙型値のビット単位の論理和であることが想定されます。
 
-.. rubric:: Nested type
+.. rubric:: ネストされた型
 
 .. cpp:type::  memory_traits
 
-  A tag type signifying the memory access trait(s) denoted by ``N``.
+  ``N``で示されるメモリアクセス特性（複数可）を表すタグタイプ。
 
-.. rubric:: Member Variables
+.. rubric:: メンバー変数
 
-.. cpp:member::  static constexpr bool is_unmanaged
+.. cpp:member:: static constexpr bool is_unmanaged
 
-  A boolean that indicates whether the Unmanaged trait is enabled.
+  アンマネージドトレイトが有効かどうかを示すブール値
 
 .. cpp:member::  static constexpr bool is_random_access
 
