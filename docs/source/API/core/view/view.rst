@@ -1,20 +1,20 @@
 ``View``
 ========
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
 .. _CppReferenceSharedPtr: https://en.cppreference.com/w/cpp/memory/shared_ptr
 
-.. |CppReferenceSharedPtr| replace:: ``std::shared_ptr``
+.. |CppReferenceSharedPtr| 置換:: ``std::shared_ptr``
 
 .. _ProgrammingGuide: ../../../ProgrammingGuide/View.html#memory-access-traits
 
-.. |ProgrammingGuide| replace:: Programming Guide
+.. |ProgrammingGuide| 置換:: プログラミングガイド
 
-Class Interface
+クラスインターフェイス
 ---------------
 
-.. cpp:class:: template <class DataType, class... Properties> View
+.. cpp:class:: テンプレート <class DataType, class... Properties> View
 
    Kokkos View is a potentially reference counted multi dimensional array with compile time layouts and memory space.
    Its semantics are similar to that of |CppReferenceSharedPtr|_.
