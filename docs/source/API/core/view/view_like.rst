@@ -1,11 +1,11 @@
-View-like Types
+ View-like 型
 ===============
 
-View-like types are loosely defined as the set of class templates that behave like `Kokkos::View <view.html>`__ from an interface perspective. There is not a full formal definition of what this means yet, which means there is no way for users to add to this list in a way that the new class is recognized by Kokkos facilities operating on View-like things. In Kokkos these class templates are considered View-like:
+View-like 型は、 インターフェースの観点から、`Kokkos::View <view.html>`__　のように振る舞うクラステンプレートの集合として大まかに定義されます。 この意味について、まだ完全な正式な定義は存在しませんが、それは、ユーザーがこのリストに追加する方法は存在せず、新たに追加されたクラスが　View　のようなものに対して動作するKokkosの機能によって認識されることを意味します。 Kokkos では、これらのクラステンプレートは、　View　のようなものと考えられます:
 
 * `Kokkos::View <view.html>`_
 * `Kokkos::DynRankView <../../containers/DynRankView.html>`_
 * `Kokkos::OffsetView <../../containers/Offset-View.html>`_
 * `Kokkos::DynamicView <../../containers/DynamicView.html>`_
 
-Notably, `Kokkos::DualView <../../containers/DualView.html>`_ and `Kokkos::ScatterView <../../containers/ScatterView.html>`_ are **not** included in this category.
+特に、 `Kokkos::DualView <../../containers/DualView.html>`_ and `Kokkos::ScatterView <../../containers/ScatterView.html>`_ は、  このカテゴリーには、含まれ　**ません**。
