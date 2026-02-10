@@ -4,56 +4,55 @@
 .. role:: cpp(code)
     :language: cpp
 
-Header File: ``<Kokkos_Core.hpp>``
+ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
-Usage
+使用例
 -----
 
 .. code-block:: cpp
 
     auto s = subview(view,std::pair<int,int>(5,191),Kokkos::ALL,1);
 
-Creates a ``Kokkos::View`` representing a subset of another ``Kokkos::View``.
+別の ``Kokkos::View``　のサブセットを表す ``Kokkos::View`` を作成します。
 
 
 .. _KokkosAll: ../utilities/all.html#kokkosall
 
 .. |KokkosAll| replace:: :cpp:func:`Kokkos::ALL`
 
-Description
+ディスクリプション
 -----------
 
 .. cpp:function:: template<class ViewType, class ... Args> IMPL_DETAIL subview(const ViewType& v, Args ... args)
 
-   Returns a new ``Kokkos::View`` ``s`` representing a subset of ``v`` specified by ``args...``. The return type of subview is an implementation detail and is determined by the types in ``Args...``.
+　``args...``　が特定する　``v``　のサブセットを表す、新たな  ``Kokkos::View`` ``s`` を返します。The return type of subview　の返す型は、 実装の詳細であり、  ``Args...``　における型により決定されます。
 
-   .. rubric:: Subset selection:
+   .. rubric:: サブセット選択:
 
-   * For every integer argument in ``args...`` the rank of the returned view is one smaller
-     than the rank of ``v`` and the values referenced by ``s`` correspond to the values associated
-     with using the integer argument in the corresponding position during indexing into ``v``.
+   *  ``args...`` におけるすべての整数引数に対して、返されたビューのランクは、``v``のランクより一つ小さく、 
+``s`` により参照された値は、``v`` へのインデックス付けの間に、
+対応する位置で整数引数を使用することに関連する値に対応します。  
 
-   * Passing |KokkosAll|_ as the ``r``\ th argument is equivalent to passing ``pair<ptrdiff_t,ptrdiff_t>(0,v.extent(r))`` as the ``r``\ th argument.
+   *  ``r``\ th 引数として KokkosAll_ を渡すことは、　``r``\ th  引数として pair<ptrdiff_t,ptrdiff_t>(0,v.extent(r)) を渡すことに等しいです。
 
-   * If the ``r``\ th argument ``arg_r`` is the ``d``\ th range (\ ``std::pair``\ , ``Kokkos::pair`` or |KokkosAll|_ )
-     in the argument list than ``s.extent(d) = arg_r.second-arg_r.first``\ , and dimension ``d`` of ``s``
-     references the range ``[arg_r.first,arg_r.second)`` of dimension ``r`` of ``v``.
+   *  ``r``\ th 引数 ``arg_r`` が``s.extent(d) = arg_r.second-arg_r.first``\ よりも、 引数リストにある　``d``\ th 範囲 (\ ``std::pair``\ ``Kokkos::pair`` または、|KokkosAll|_ )　である場合には、 
+      ``s``　の次元　``d``　は、　``v``の次元　``r``　の範囲 ``[arg_r.first,arg_r.second)``　を参照します。
 
-   .. rubric:: Restrictions:
+   .. rubric:: 制約:
 
-   * ``sizeof...(args)`` is equal to ``ViewType::rank``.
+   * ``sizeof...(args)`` は、　``ViewType::rank``　に等しいです。
 
-   * Valid arguments are of type:
+   * 有効な引数は、以下の型です:
 
-     - ``std::pair<iType,iType>`` with ``std::is_integral<iType>::value`` being true.
+     - 真である　``std::pair<iType,iType>`` with ``std::is_integral<iType>::value`` 。
 
-     - ``Kokkos::pair<iType,iType>`` with ``std::is_integral<iType>::value`` being true.
+     - 真である　``Kokkos::pair<iType,iType>`` with ``std::is_integral<iType>::value`` 。
 
-     - ``iType`` with ``std::is_integral<iType>::value`` being true.
+     - 真である　``iType`` with ``std::is_integral<iType>::value`` 。
 
      - ``std::remove_const_t< decltype(``\ |KokkosAll|_ ``)>``
 
-   * If the ``r``\ th argument ``arg_r`` is of type ``std::pair<iType,iType>`` or ``Kokkos::pair<iType,iType>`` it must meet:
+   *  ``r``\ th 引数 ``arg_r`` がis of type ``std::pair<iType,iType>`` または ``Kokkos::pair<iType,iType>`` の型である場合には、以下を満たす必要があります:
 
      - ``arg_r.first >= 0``
 
@@ -61,13 +60,13 @@ Description
 
      - ``arg_r.first <= arg_r.second``
 
-   * If the ``r``\ th argument ``arg_r`` is an integral it must meet:
+   *  ``r``\ th 引数 ``arg_r`` が整数である場合には、以下を満たす必要があります:
 
      - ``arg_r >= 0``
 
      - ``arg_r < v.extent(r)``
 
-Examples
+例
 --------
 
 .. code-block:: cpp
