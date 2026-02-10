@@ -91,54 +91,55 @@
 
 * 制約:
 
-  - ``View<T, P...>::array_layout`` is either ``LayoutLeft`` or ``LayoutRight``.
+  - ``View<T, P...>::array_layout`` は、  ``LayoutLeft`` または ``LayoutRight``です。
 
-  - ``arg_prop`` must not include a pointer to memory, a label, or a memory space.
+  - ``arg_prop`` は、メモリへのポインタ、ラベル、またはメモリ空間を含んではならない。
 
 .. code-block:: cpp
 
-   template <class T, class... P>
+   テンプレート <class T, class... P>
    void realloc(Kokkos::View<T, P...>& v,
 		const typename Kokkos::View<T, P...>::array_layout& layout);
 
-* Resizes ``v`` to have the new dimensions without preserving its contents.
+* ``v`` を、その内容を保持せずに、新しい次元にサイズ変更します。
 
-  - ``v``: existing view, can be a default constructed one.
+  - ``v``: 既存のビューであり、デフォルトコンストラクタで生成されたものになる可能性があります。
 
-  - ``layout``: a layout instance containing the new dimensions.
+  - ``layout``: 新たな次元を含むレイアウトインスタンス。
 
 .. code-block:: cpp
 
-   template <class I, class T, class... P>
+   テンプレート <class I, class T, class... P>
    void realloc(const I& arg_prop, Kokkos::View<T, P...>& v,
                 const typename Kokkos::View<T, P...>::array_layout& layout);
 
-* Resizes ``v`` to have the new dimensions without preserving its contents.
-  The new ``Kokkos::View`` is constructed using the View constructor property ``arg_prop``, e.g., Kokkos::WithoutInitializing.
+* ``v`` を、その内容を保持せずに、新しい次元にサイズ変更します。
+  新たな　``Kokkos::View`` は、View コンストラクタのプロパティである ``arg_prop``、 例えば、　Kokkos::WithoutInitializing　を使用して構築されます。
 
-  - ``v``: existing view, can be a default constructed one.
+  - ``v``: 既存のビューであり、デフォルトコンストラクタで生成されたものになる可能性があります。
 
-  - ``layout``: a layout instance containing the new dimensions.
+  - ``layout``: 新たな次元を含むレイアウトインスタンス。
 
-  - ``arg_prop``: View constructor property, e.g., ``Kokkos::WithoutInitializing``.
+  - ``arg_prop``: ビューコンストラクタのプロパティ。　例えば、 ``Kokkos::WithoutInitializing``.
+
 
 .. code-block:: cpp
 
-   template <class ALLOC_PROP, class T, class... P>
+   テンプレート <class ALLOC_PROP, class T, class... P>
    void realloc(const ALLOC_PROP& arg_prop,
                 Kokkos::View<T, P...>& v,
 		const typename Kokkos::View<T, P...>::array_layout& layout);
 
-* Resizes ``v`` to have the new dimensions without preserving its contents.
-  The new ``Kokkos::View`` is constructed using the View constructor properties ``arg_prop``, e.g., ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
+* ``v`` を、その内容を保持せずに、新しい次元にサイズ変更します。
+  新たな　``Kokkos::View`` は、View コンストラクタのプロパティである ``arg_prop``、 例えば、　``Kokkos::view_alloc(Kokkos::WithoutInitializing)``　を使用して構築されます。
 
-  - ``v``: existing view, can be a default constructed one.
+  - ``v``: 既存のビューであり、デフォルトコンストラクタで生成されたものになる可能性があります。
 
-  - ``layout``: a layout instance containing the new dimensions.
+  - ``layout``: 新たな次元を含むレイアウトインスタンス。
 
-  - ``arg_prop``: View constructor properties, e.g., ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
+  - ``arg_prop``: ビューコンストラクタのプロパティ。　例えば、 ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
 
-* Restrictions: ``arg_prop`` must not include a pointer to memory, a label, or a memory space.
+* 制約: ``arg_prop`` は、メモリ、ラベルまたはメモリ空間へのポインタを含んではいけません。
 
 Example
 -------
