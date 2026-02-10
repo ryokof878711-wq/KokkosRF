@@ -150,7 +150,7 @@
 
     Kokkos::resize(v, 2, 3);
 
-Resize a ``Kokkos::View`` with dynamic rank 2 to have dynamic extent 2 and 3 respectively preserving previous content.
+動的ランク2の　Kokkos::View　を再割り当てし、動的拡張をそれぞれ2と3とします。
 
 * .. code-block:: cpp
 
