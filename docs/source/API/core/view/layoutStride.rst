@@ -70,19 +70,19 @@
 
    .. cpp:function:: LayoutStride& operator=(LayoutStride&&) = default;
 
-      Default move assignment, element-wise moves the other Layout
+      デフォルトの移動演算子は、要素単位で他のレイアウトを移動します。
 
-   .. rubric:: Functions
+   .. rubric:: 関数
 
-   .. cpp:function:: KOKKOS_INLINE_FUNCTION static LayoutStride order_dimensions(int const rank, \
-		   iTypeOrder const* const order, iTypeDimen const* const dimen);
+   .. cpp:function:: KOKKOS_INLINE_FUNCTION 静的 LayoutStride order_dimensions(int 定数ランク, \
+		   iTypeOrder const* , iTypeDimen const* 定数次元);
 
-      Calculates the strides given ordered dimensions
+      指定された順序の次元に基づいてストライドを計算します。
 
-Example
+例
 -------
 
-Creating a 3D unmanaged strided view around a ptr. (You can also just have a view allocate itself by providing a label)
+ptr 周辺に 3D 非管理型ストライド付きビューを作成します。 (ラベルを指定することで、ビュー自体に配置させることもできます。)
 
 .. code-block:: cpp
 
@@ -90,30 +90,30 @@ Creating a 3D unmanaged strided view around a ptr. (You can also just have a vie
     int main(int argc, char* argv[]) {
         Kokkos::initialize(argc,argv);
         {
-            // Some storage
+            // 一部のストレージ
             int* ptr = new int[80];
-            // Creating a layout object
-            Kokkos::LayoutStride layout(3,1,3,5,4,20);
-            // Create a unmanaged view from a pointer and a layout
+            // レイアウトオブジェクトを作成
+            Kokkos::LayoutStride レイアウト(3,1,3,5,4,20);
+            // ポインタおよびレイアウトより、管理対象外のビューを作成
             Kokkos::View<int***, Kokkos::LayoutStride, Kokkos::HostSpace> a(ptr,layout);
 
-            // Get strides
-            int strides[8];
+            // ストライドを取得
+            int ストライド[8];
             a.stride(strides);
 
             // Print extents and strides
             printf("Extents: %d %d %d\n",a.extent(0),a.extent(1),a.extent(2));
             printf("Strides: %i %i %i\n",strides[0],strides[1],strides[2]);
 
-            // delete storage
-            delete [] ptr;
+            // ストレージを削除
+             [] ptr　を削除;
         }
         Kokkos::finalize();
     }
 
-Output:
+出力:
 
 .. code-block::
 
-    Extents: 3 3 4
-    Strides: 1 5 20
+    範囲: 3 3 4
+    ストライド: 1 5 20
