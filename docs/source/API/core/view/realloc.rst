@@ -93,7 +93,7 @@
 
   - ``View<T, P...>::array_layout`` は、  ``LayoutLeft`` または ``LayoutRight``です。
 
-  - ``arg_prop`` は、メモリへのポインタ、ラベル、またはメモリ空間を含んではならない。
+  - ``arg_prop`` は、メモリへのポインタ、ラベル、またはメモリ空間を含んではなりません。
 
 .. code-block:: cpp
 
@@ -139,19 +139,19 @@
 
   - ``arg_prop``: ビューコンストラクタのプロパティ。　例えば、 ``Kokkos::view_alloc(Kokkos::WithoutInitializing)``.
 
-* 制約: ``arg_prop`` は、メモリ、ラベルまたはメモリ空間へのポインタを含んではいけません。
+* 制約: ``arg_prop`` は、メモリ、ラベルまたはメモリ空間へのポインタを含んではなりません。
 
-Example
+例
 -------
 
 .. code-block:: cpp
 
     Kokkos::realloc(v, 2, 3);
 
-* Reallocate a ``Kokkos::View`` with dynamic rank 2 to have dynamic extent 2 and 3 respectively.
+* 動的ランク2の　``Kokkos::View``　を再割り当てし、動的拡張をそれぞれ2と3とします。
 
 .. code-block:: cpp
 
     Kokkos::realloc(Kokkos::WithoutInitializing, v, 2, 3);
 
-* Reallocate a ``Kokkos::View`` with dynamic rank 2 to have dynamic extent 2 and 3 respectively. After this call, the View is uninitialized.
+* 動的ランク2の　``Kokkos::View``　を再割り当てし、動的拡張をそれぞれ2と3とします。 この呼出し後には、ビューは初期化されていません。
