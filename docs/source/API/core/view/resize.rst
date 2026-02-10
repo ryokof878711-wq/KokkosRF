@@ -35,10 +35,10 @@
 
   古いビューおよび新たなビューの共通サブビューの内容を保持しながら、 ``v`` を、新しい次元にサイズ変更します。
 
-  * ``v``: existing view, can be a default constructed one.
+  * ``v``: 既存のビューであり、デフォルトコンストラクタで生成されたものになる可能性があります。
   * ``n[X]``: new length for extent X.
 
-  Restrictions:
+  制約:
 
   * ``View<T, P...>::array_layout`` is either ``LayoutLeft`` or ``LayoutRight``.
 
