@@ -1,12 +1,12 @@
 ``MemoryTraits``
 ================
 
-:cpp:struct:`MemoryTraits` is the last template parameter of :cpp:class:`View`.
+:cpp:struct:`MemoryTraits` は、is the last template parameter of :cpp:class:`View`　の最後のテンプレートパラメータです。
 
-Struct Interface
+構造体インターフェイス
 ----------------
 
-.. cpp:struct:: template <unsigned N> MemoryTraits
+.. cpp:struct:: テンプレート <unsigned N> MemoryTraits
 
   When provided to a multidimensional View, ``MemoryTraits`` allow passing extra information about the treatment of the allocation. The template argument is expected to be a bitwise OR of enumeration values described below.
 
