@@ -156,4 +156,4 @@
 
     Kokkos::resize(Kokkos::WithoutInitializing, v, 2, 3);
 
-Resize a ``Kokkos::View`` with dynamic rank 2 to have dynamic extent 2 and 3 respectively preserving previous content. After this call, the new content is uninitialized.
+動的ランク2の ``Kokkos::View`` が、以前の内容を保持しながら、動的範囲2および3をそれぞれ持つように、サイズ変更します。　この呼出し後には、ビューは初期化されていません。
