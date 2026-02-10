@@ -16,15 +16,16 @@
 
 .. cpp:class:: テンプレート <class DataType, class... Properties> View
 
-   Kokkos View is a potentially reference counted multi dimensional array with compile time layouts and memory space.
-   Its semantics are similar to that of |CppReferenceSharedPtr|_.
+   Kokkos Viewは、コンパイル時のレイアウトとメモリ空間を持つ、参照カウント可能な多次元配列です。
+   そのセマンティクスは、|CppReferenceSharedPtr|_　のものと同様です。
    
-   :tparam DataType: Defines the fundamental scalar type of the :cpp:class:`View` and its dimensionality.
+   :tparam DataType: :cpp:class:`View` の基本スカラー型とその次元性を定義します。
 
-      The basic structure is ``ScalarType STARS BRACKETS`` where the number of ``STARS`` denotes
-      the number of runtime length dimensions and the number of ``BRACKETS`` defines the compile time dimensions.
-      Due to C++ type restrictions runtime dimensions must come first.
-      Examples:
+      基本構造は、　``ScalarType STARS BRACKETS`` であり、ここで　``STARS``　の数は実行時長さの次元数を示し、
+　　　``BRACKETS`` の数はコンパイル時次元数を定義します。
+      Due to C++ type restrictions runtime dimensions must come first.C++の型制限により、実行時の次元は最初に指定されなければなりません。
+
+      例:
 
       - :cpp:`double**`: 2D View of :cpp:`double` with 2 runtime dimensions
       - :cpp:`const int***[5][3]`: 5D View of :cpp:`int` with 3 runtime and 2 compile dimensions. 
