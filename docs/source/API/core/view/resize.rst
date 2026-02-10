@@ -33,7 +33,7 @@
 		 const size_t n6 = KOKKOS_IMPL_CTOR_DEFAULT_ARG,
 		 const size_t n7 = KOKKOS_IMPL_CTOR_DEFAULT_ARG);
 
-  Resizes ``v`` to have the new dimensions while preserving the contents for the common subview of the old and new view.
+  古いビューおよび新たなビューの共通サブビューの内容を保持しながら、 ``v`` を、新しい次元にサイズ変更します。
 
   * ``v``: existing view, can be a default constructed one.
   * ``n[X]``: new length for extent X.
