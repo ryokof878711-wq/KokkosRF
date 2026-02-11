@@ -241,116 +241,116 @@
    :param name: ユーザーにより提供されたラベルで、 プロファイリングおよびデバッグの目的で使用されます。
       名前は、独自のものである必要はありません。
 
-   :param layout: an instance of a layout class.
-      The number of valid extents must either match the :cpp:func:`rank_dynamic` or :cpp:func:`rank`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+   :param layout: レイアウトクラスのインスタンス。
+      有効な範囲の数は、:cpp:func:`rank_dynamic` または :cpp:func:`rank` と一致する必要があります。
+      後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
 
 .. cpp:function:: template<class IntType> View( const ALLOC_PROP &prop, const IntType& ... extents)
 
-   Allocating constructor with allocation properties (created by a call to :cpp:func:`view_alloc`). If an execution space is
-   specified in :cpp:any:`prop`, the initialization uses it and does not fence.
-   Otherwise, the :cpp:class:`View` is initialized using the default execution space instance corresponding to :cpp:type:`memory_space` and fences it.
+   割り当てプロパティを持つ割り当てコンストラクタ（　:cpp:func:`view_alloc` の呼び出しによって作成される）。実行空間が、 
+   :cpp:any:`prop`　において特定される場合には、 初期化ではそれは使われず、フェンスは設定されません。
+   そうでない場合には、:cpp:class:`View` は、:cpp:type:`memory_space` に対応するデフォルトの実行空間インスタンスを使用して初期化され、フェンスが設定されます。
 
-   :tparam IntType: an integral type
+   :tparam IntType: 整数型
 
-   :param prop: An allocation properties object that is returned by :cpp:func:`view_alloc`.
+   :param prop: :cpp:func:`view_alloc`　によって返される割り当てプロパティオブジェクト。
 
-   :param extents: Extents of the View.
+   :param extents: ビューの範囲
 
-   .. rubric:: Requirements:
+   .. rubric:: 必要要件:
 
    - :cpp:expr:`sizeof(IntType...) == rank_dynamic()` or :cpp:expr:`sizeof(IntType...) == rank()`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+      後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
    - :cpp:expr:`array_layout::is_regular == true`.
 
 .. cpp:function:: View( const ALLOC_PROP &prop, const array_layout& layout)
 
-   Allocating constructor with allocation properties (created by a call to :cpp:func:`view_alloc`) and a layout object. If an execution space is
-   specified in :cpp:any:`prop`, the initialization uses it and does not fence.
-   Otherwise, the :cpp:class:`View` is initialized using the default execution space instance corresponding to :cpp:type:`memory_space` and fences it.
+   割り当てプロパティ　( :cpp:func:`view_alloc`　への呼び出しにより作成) および　レイアウトオブジェクトを使って、コンストラクタを割り当てます。実行空間が、
+  :cpp:any:`prop`　において、特定される場合には、  初期化ではそれは使われず、フェンスは設定されません。
+   そうでない場合には、:cpp:class:`View` は、:cpp:type:`memory_space` に対応するデフォルトの実行空間インスタンスを使用して初期化され、フェンスが設定されます。
 
-   :param prop: An allocation properties object that is returned by :cpp:func:`view_alloc`.
+   :param prop: `view_alloc`　によって返される割り当てプロパティオブジェクト。
 
-   :param layout: an instance of a layout class.
-      The number of valid extents must either match the :cpp:func:`rank_dynamic` or :cpp:func:`rank`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+   :param layout: レイアウトクラスのインスタンス。
+      有効な範囲の数は、:cpp:func:`rank_dynamic` または :cpp:func:`rank` と一致する必要があります。
+      後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
 
 .. cpp:function:: template<class IntType> View( pointer_type ptr, const IntType& ... extents)
 
-   Unmanaged data wrapping constructor.
+   管理対象外データラッピングコンストラクタ。
 
-   :tparam IntType: an integral type
+   :tparam IntType: 整数型。
 
-   :param ptr: pointer to a user provided memory allocation.
-      Must provide storage of size :cpp:expr:`required_allocation_size(extents...)`
+   :param ptr: ユーザーにより提供されたメモリ割り当てへのポインタ。
+      サイズ :cpp:expr:`required_allocation_size(extents...)`　のストレージを提供する必要があります。
 
-   :param extents: Extents of the :cpp:class:`View`.
+   :param extents: :cpp:class:`View`　の範囲。
 
-   .. rubric:: Requirements:
+   .. rubric:: 必要要件:
 
    - :cpp:expr:`sizeof(IntType...) == rank_dynamic()` or :cpp:expr:`sizeof(IntType...) == rank()`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+       後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
    - :cpp:expr:`array_layout::is_regular == true`.
 
 .. cpp:function:: View( pointer_type ptr, const array_layout& layout)
 
-   Unmanaged data wrapper constructor.
+   管理対象外データラッピングコンストラクタ。
 
-   :param ptr: pointer to a user provided memory allocation.
-      Must provide storage of size :cpp:expr:`View::required_allocation_size(layout)`
+   :param ptr: ユーザーにより提供されたメモリ割り当てへのポインタ
+      :cpp:expr:`View::required_allocation_size(layout)`　のストレージを提供する必要があります。
 
-   :param layout: an instance of a layout class.
-      The number of valid extents must either match the dynamic rank or the total rank. In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+   :param layout: レイアウトクラスのインスタンス。
+      有効な範囲の数は、ダイナミックまたはトータルランクと一致する必要があります。 
+      後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
 
 .. cpp:function:: template<class IntType> View( const ScratchSpace& space, const IntType& ... extents)
 
-   Constructor which acquires memory from a Scratch Memory handle.
+   スクラッチメモリハンドルからメモリを取得するコンストラクタ。
 
-   :tparam IntType: an integral type
+   :tparam IntType: 整数型
 
-   :param space: scratch memory handle.
-      Typically returned from :cpp:func:`team_shmem`, :cpp:func:`team_scratch`, or :cpp:func:`thread_scratch` in ``TeamPolicy`` kernels.
+   :param space: 
+     一般的には、``TeamPolicy`` カーネル内の、:cpp:func:`team_shmem`, :cpp:func:`team_scratch`, または、 :cpp:func:`thread_scratch` から返されます。
 
    :param extents: Extents of the :cpp:class:`View`.
 
-   .. rubric:: Requirements:
+   .. rubric:: Requirements:スクラッチメモリハンドル
 
    - :cpp:expr:`sizeof(IntType...) == rank_dynamic()` or :cpp:expr:`sizeof(IntType...) == rank()`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+       後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
    - :cpp:expr:`array_layout::is_regular == true`.
 
 .. cpp:function:: View( const ScratchSpace& space, const array_layout& layout)
 
-   Constructor which acquires memory from a Scratch Memory handle.
+   スクラッチメモリハンドルからメモリを取得するコンストラクタ。
 
    :param space: scratch memory handle.
-      Typically returned from :cpp:func:`team_shmem`, :cpp:func:`team_scratch`, or :cpp:func:`thread_scratch` in ``TeamPolicy`` kernels.
+       一般的には、``TeamPolicy`` カーネル内の、 :cpp:func:`team_shmem`, :cpp:func:`team_scratch`、または :cpp:func:`thread_scratch` から返されます。
 
    :param layout: an instance of a layout class.
-      The number of valid extents must either match the dynamic rank or the total rank. In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+       有効な範囲の数は、ダイナミックまたはトータルランクと一致する必要があります。 後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
 
 .. cpp:function:: template<class DT, class... Prop> View( const View<DT, Prop...>& rhs, Args ... args)
 
-   :param rhs: the :cpp:class:`View` to take a subview of
-   :param args...: the subview slices as specified in :cpp:func:`subview`
+   :param rhs: サブビューを取得する　:cpp:class:`View`。
+   :param args...:　:cpp:func:`subview` で指定されたサブビューのスライス。
 
-   Subview constructor.
+   サブビューコンストラクタ。
 
    .. seealso:: :cpp:func:`subview`
 
 .. cpp:function:: explicit(traits::is_managed) View( const NATURAL_MDSPAN_TYPE& mds )
 
-   :param mds: the mdspan to convert from.
+   :param mds: 変換元のmdspan。
 
-   .. warning::
+   .. 警告::
 
-      :cpp:`explicit(bool)` is only available on C++20 and later. When building Kokkos with C++17, this constructor will be fully implicit.
-      Be aware that later upgrading to C++20 will in some cases cause compilation issues in cases where :cpp:`traits::is_managed` is :cpp:`false`.
+      :cpp:`explicit(bool)` は、C++20　以降でのみ利用可能です。 C++17を使って、Kokkos　を構築する場合、このコンストラクタは、完全に暗黙的に定義されます。
+      C++20への、その後のアップグレードでは、:cpp:`traits::is_managed` が、 :cpp:`false` である場合、コンパイルエラーが発生する可能性があることに、注意してください。
 
-   :cpp:`NATURAL_MDSPAN_TYPE` is the :ref:`natural mdspan <api-view-natural-mdspans>` of the View. The *natural mdspan* is only available if :cpp:type:`array_layout` is one of :cpp:struct:`LayoutLeft`, :cpp:struct:`LayoutRight`,
-   or :cpp:class:`LayoutStride`. This constructor is only available if *natural mdspan* is available.
+   :cpp:`NATURAL_MDSPAN_TYPE` は、ビューの　:ref:`natural mdspan <api-view-natural-mdspans>` です。 :cpp:type:`array_layout` が、 :cpp:struct:`LayoutLeft`、 :cpp:struct:`LayoutRight`、または :cpp:class:`LayoutStride`のうちの1つである場合にのみ、 *natural mdspan* が利用可能です。 *natural mdspan* が利用可能である場合にのみ、このコンストラクタは、利用可能です。
 
-   Constructs a :cpp:class:`View` by converting from :cpp:any:`mds`. The :cpp:class:`View` will be unmanaged and constructed as if by :cpp:`View(mds.data(), array_layout_from_mapping(mds.mapping()))`
+   :cpp:any:`mds` から変換して :cpp:class:`View` を構築します。 :cpp:class:`View` は、管理対象外となり、 :cpp:`View(mds.data(), array_layout_from_mapping(mds.mapping()))`　によるかの様に構築されます。
 
    .. seealso:: :ref:`Natural mdspans <api-view-natural-mdspans>`
 
@@ -358,41 +358,40 @@
 
 .. cpp:function:: template <class ElementType, class ExtentsType, class LayoutType, class AccessorType> explicit(SEE_BELOW) View(const mdspan<ElementType, ExtentsType, LayoutType, AccessorType>& mds)
 
-   :tparam ElementType: the mdspan element type
-   :tparam ExtentsType: the mdspan extents
-   :tparam LayoutType: the mdspan layout
-   :tparam AccessorType: the mdspan extents
+   :tparam ElementType:  mdspan 要素型
+   :tparam ExtentsType:  mdspan 範囲
+   :tparam LayoutType:  mdspan レイアウト
+   :tparam AccessorType: mdspan 範囲
 
-   :param mds: the mdspan to convert from
+   :param mds: 変換元のmdspan。
 
-   .. warning::
+   .. 警告::
 
-      :cpp:`explicit(bool)` is only available on C++20 and later. When building Kokkos with C++17, this constructor will be fully implicit.
-      Be aware that later upgrading to C++20 will in some cases cause compilation issues in cases where the condition is false.
-
-   Constructs a :cpp:class:`View` by converting from :cpp:any:`mds`.
-   The :cpp:class:`View`'s :ref:`natural mdspan <api-view-natural-mdspans>` must be constructible from :cpp:any:`mds`. The :cpp:class:`View` will be constructed as if by :cpp:`View(NATURAL_MDSPAN_TYPE(mds))`
+      :cpp:`explicit(bool)` は、C++20　以降でのみ利用可能です。 C++17を使って、Kokkos　を構築する場合、このコンストラクタは、完全に暗黙的に定義されます。
+      C++20への、その後のアップグレードでは、:cpp:`traits::is_managed` が、 :cpp:`false` である場合、コンパイルエラーが発生する可能性があることに、注意してください。
+   :cpp:any:`mds`　～変換することにより、:cpp:class:`View` を構築します。
+   The :cpp:class:`View`'s :ref:`natural mdspan <api-view-natural-mdspans>` は、 :cpp:any:`mds`　から構築可能でなければなりません。 :cpp:class:`View` は、 :cpp:`View(NATURAL_MDSPAN_TYPE(mds))`　によるかの様に、構築されます。
 
    In C++20:
-      This constructor is implicit if :cpp:any:`mds` is implicitly convertible to the *natural mdspan* of the :cpp:class:`View`.
+      このコンストラクタは、This constructor is implicit if :cpp:any:`mds` が、 :cpp:class:`View`　の　*natural mdspan* に暗示的に変換可能です。
 
    .. versionadded:: 4.4.0
 
 
-Data Access Functions
+データアクセス関数
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: template<class IntType> reference_type operator() (const IntType& ... indices) const
 
    :tparam IntType: an integral type
 
-   :param indices: the indices of the element to get a reference to
-   :return: a reference to the element at the given indices
+   :param indices: 要素のインデックスを取得して参照を取得します。
+   :return: 指定されたインデックスの要素への参照。
 
-   Returns a value of :cpp:type:`reference_type` which may or not be referenceable itself.
-   The number of index arguments must match the :cpp:func:`rank` of the view.
+   :cpp:type:`reference_type` の値を返しますが、この型自体は参照可能である場合もあれば、そうでない場合もあります。
+   インデックス引数の数は、ビューの　:cpp:func:`rank`　に一致する必要があります。
 
-   .. rubric:: Requirements:
+   .. rubric:: 必要要件:
    
    - :cpp:expr:`sizeof(IntType...) == rank_dynamic()`
 
@@ -400,32 +399,32 @@ Data Access Functions
          const IntType& i2=0, const IntType& i3=0, const IntType& i4=0, \
          const IntType& i5=0, const IntType& i6=0, const IntType& i7=0) const
 
-   :tparam IntType: an integral type
+   :tparam IntType: 整数型
    
-   :param i0, i1, i2, i3, i4, i5, i6, i7: the indices of the element to get a reference to
-   :return: a reference to the element at the given indices
+   :param i0, i1, i2, i3, i4, i5, i6, i7: 参照を取得する要素のインデックス。
+   :return: 指定されたインデックスの要素への参照。
 
-   Returns a value of :cpp:type:`reference_type` which may or not be referenceable itself.
-   The number of index arguments must be equal or larger than the :cpp:func:`rank` of the view.
-   Index arguments beyond :cpp:func:`rank` must be :cpp:`0`, which will be enforced if :cpp:any:`KOKKOS_DEBUG` is defined.
+   :cpp:type:`reference_type` の値を返しますが、この型自体は参照可能である場合もあれば、そうでない場合もあります。
+   インデックス引数の数は、ビューの :cpp:func:`rank` 以上である必要があります。
+   Index arguments beyond :cpp:func:`rank` must be :cpp:`0`, which will be enforced if :cpp:any:`KOKKOS_DEBUG` is defined.:cpp:func:`rank`を超えるインデックス引数は、　:cpp:`0`　でなければなりませんが、これは、　:cpp:any:`KOKKOS_DEBUG`　が定義されている場合に、必ず行われます。
 
 
-Data Layout, Dimensions, Strides
+データレイアウト、次元、ストライド
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: static constexpr size_t rank()
 
-   :return: the rank of the view.
+   :return: ビューのランク
 
    .. versionadded:: 4.1
 
 .. cpp:function:: static constexpr size_t rank_dynamic()
 
-   :return: the number of runtime determined dimensions.
+   :return: 実行時に決定される次元の数。
 
    .. versionadded:: 4.1
 
-.. note::
+.. 注意事項::
 
    In practice, :cpp:func:`rank()` and :cpp:func:`rank_dynamic()` are not actually implemented as static member functions but ``rank`` and ``rank_dynamic`` underlying types have a nullary member function (i.e. callable with no argument).
 
