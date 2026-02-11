@@ -27,37 +27,37 @@
 
       例:
 
-      - :cpp:`double**`: 2D View of :cpp:`double` with 2 runtime dimensions
-      - :cpp:`const int***[5][3]`: 5D View of :cpp:`int` with 3 runtime and 2 compile dimensions. 
-         The data is :cpp:`const`.
-      - :cpp:`Foo[6][2]`: 2D View of a class :cpp:`Foo` with 2 compile time dimensions.
+      - :cpp:`double**`: 2つのランタイム次元に持つ :cpp:`double` の2Dビュー
+      - :cpp:`const int***[5][3]`: 3つの実行時次元と2つのコンパイル時次元を持つ　cpp:`int`（）の5D ビュー：
+         データは、:cpp:`const`.
+      - :cpp:`Foo[6][2]`: コンパイル時2次元を持つ :cpp:`Foo` クラスの　2D　ビュー
 
-   :tparam Properties...: Defines various properties of the :cpp:class:`View`, including layout, memory space, and memory traits.
+   :tparam Properties...: レイアウト、メモリ空間、メモリ特性等、:cpp:class:`View` の様々なプロパティを定義します。
    
-      :cpp:class:`View`'s template parameters after ``DataType`` are variadic and optional, but must be specified in order. That means for example that :cpp:any:`LayoutType` can be omitted but if both :cpp:any:`MemorySpace` and :cpp:`MemoryTraits` are specified, :cpp:any:`MemorySpace` must come before :cpp:any:`MemoryTraits`.
+      :cpp:class:`View`　クラスのテンプレートパラメータにおいて、　`DataType`　以降のパラメータは可変長かつオプションですが、必ず指定順序で指定する必要があります。 例えば、:cpp:any:`LayoutType` は省略可能であることを意味しますが、:cpp:any:`MemorySpace` と :cpp:`MemoryTraits` の両方が指定される場合、:cpp:any:`MemorySpace` は :cpp:any:`MemoryTraits` の前に記述されなければならない。 
 
       .. code-block:: cpp
-         :caption: The ordering of View template parameters.
+         :caption: ビューテンプレートパラメータの順序付け。
 
-         template <class DataType [, class LayoutType] [, class MemorySpace] [, class MemoryTraits]>
-         class View;
+         テンプレート <class DataType [, class LayoutType] [, class MemorySpace] [, class MemoryTraits]>
+         クラスビュー;
 
-   :tparam LayoutType: Determines the mapping of indices into the underlying 1D memory storage.
+   :tparam LayoutType: インデックスの基盤となる1次元メモリストレージへのマッピングを決定します。
    
-      Kokkos comes with some built-in layouts:
+      Kokkos　には、いくつかの組み込みレイアウトが付属しています:
 
-      - :cpp:struct:`LayoutRight`: strides increase from the right most to the left most dimension.
-         The last dimension has a stride of one.
-         This corresponds to how C multi dimensional arrays (e.g :cpp:`foo[][][]`) are laid out in memory.
-      - :cpp:struct:`LayoutLeft`: strides increase from the left most to the right most dimension.
-         The first dimension has a stride of one. This is the layout Fortran uses for its arrays.
-      - :cpp:struct:`LayoutStride`: strides can be arbitrary for each dimension.
+      - :cpp:struct:`LayoutRight`: ストライドは、右端から左端の次元に向かって増加します。
+         最後の次元は、ストライドが1です。
+         これはC言語の多次元配列（例：　`foo[][][]`　）がメモリ上に配置される方法に対応しています。
+      - :cpp:struct:`LayoutLeft`: ストライドは、左端から右端の次元に向かって増加します。
+         最初の次元は、ストライドが1です。これは、Fortran　が配列に使用するレイアウトです。
+      - :cpp:struct:`LayoutStride`: 各次元ごとのストライドは、任意に設定できます。
    
-   :tparam MemorySpace: Controls the storage location of the View.
+   :tparam MemorySpace: ビューの保存場所を、管理します。
 
-      If omitted the default memory space of the default execution space is used (i.e. :cpp:expr:`DefaultExecutionSpace::memory_space`)
+      省略された場合、デフォルトの実行スペースのデフォルトのメモリ領域が使用されます (つまり、:cpp:expr:`DefaultExecutionSpace::memory_space`)。
 
-   :tparam MemoryTraits: Sets access properties via enum parameters for the struct template :cpp:struct:`MemoryTraits`. Possible template parameters are bitwise OR of the following flags: 
+   :tparam MemoryTraits: 構造体テンプレート :cpp:struct:`MemoryTraits` の列挙型パラメータを介して、アクセプロパティを設定します。可能なテンプレート引数は、以下のフラグの　bitwise OR　です: 
 
       - ``Unmanaged``
       - ``RandomAccess``
@@ -65,111 +65,110 @@
       - ``Restrict``
       - ``Aligned``
 
-      See the sub-section on memory access traits in the |ProgrammingGuide|_ also for further information.
+      詳細については、ProgrammingGuide|_ のメモリアクセス特性に関するサブセクションも、参照してださい。
 
 ..
-   Pushing a "namespace" here; this doesn't create a namespace entity but tells Sphinx that everything between here and the pop is part of the View class.
-   All entities are still referenced via the scope (i.e. View::data_type).
+   ここで、"namespace"　を押します; これは名前空間エンティティを作成するものではなく、ここからポップまでのすべて　ビュークラスの一部であることを、Sphinx　に伝えます。
+   すべてのエンティティは、依然としてスコープを介して参照されます (つまり、 View::data_type)。
 
-.. cpp:namespace-push:: template <class DataType, class... Properties> View
+.. cpp:namespace-push:: テンプレート <class DataType, class... Properties> ビュー
 
-Public Constants
+パブリック定数
 ^^^^^^^^^^^^^^^^
 
 .. cpp:member:: static constexpr bool reference_type_is_lvalue_reference
 
-   whether the reference type is a C++ lvalue reference.
+   参照型が、C++左辺値参照であるかどうかの確認
 
-Data Types
+データ型
 ^^^^^^^^^^
 
 .. cpp:type:: data_type
 
-   The :cpp:any:`DataType` of the :cpp:class:`View`, note :cpp:type:`data_type` contains the array specifiers (e.g. :cpp:`int**[3]`)
+   :cpp:any: :cpp:class:`View`　の `DataType`　であり、　:cpp:type:`data_type` には配列指定子（例: :cpp:`int**[3]`）が含まれることに、注意してください。
 
 .. cpp:type:: const_data_type
 
-   :cpp:`const` version of :cpp:any:`DataType`, same as :cpp:type:`data_type` if that is already  :cpp:`const`.
+   `DataType`の　:cpp:`const` バージョンであり,  それがすでに  :cpp:`const`　であれば、:cpp:type:`data_type`　と同じです。
 
 .. cpp:type:: non_const_data_type
 
-   Non-:cpp:`const` version of :cpp:any:`DataType`, same as :cpp:type:`data_type` if that is already non-:cpp:`const`.
+   :cpp:any:`DataType`　の非　:cpp:`const` バージョンであり、 それがすでに  non-:cpp:`const`　であれば、:cpp:type:`data_type`　と同じです。
 
 .. cpp:type:: scalar_array_type
 
-   If :cpp:any:`DataType` represents some properly specialised array data type such as Sacado FAD types, :cpp:type:`scalar_array_type` is the underlying fundamental scalar type.
+   If :cpp:any:`DataType` が Sacado FAD 型のような適切に特化された配列データ型を表す場合、 :cpp:type:`scalar_array_type` は、基礎となる基本スカラー型です。
 
 .. cpp:type:: const_scalar_array_type
 
-   :cpp:`const` version of :cpp:type:`scalar_array_type`, same as :cpp:type:`scalar_array_type` if that is already :cpp:`const`
+   :cpp:type:`scalar_array_type`　の  :cpp:`const`　バージョンであり、それがすでに  :cpp:`const`　であれば、:cpp:type:`scalar_array_type` と同じです。
 
 .. cpp:type:: non_const_scalar_array_type
 
-   Non-:cpp:`const` version of :cpp:type:`scalar_array_type`, same as :cpp:type:`scalar_array_type` if that is already non-:cpp:`const`.
+    :cpp:type:`scalar_array_type`　の非 　:cpp:`const` バージョンであり、それがすでに  non-:cpp:`const`　 :cpp:type:`scalar_array_type` と同じです。
 
 
-Scalar Types
+スカラー型
 ^^^^^^^^^^^^
 
 .. cpp:type:: value_type
 
-   The :cpp:type:`data_type` stripped of its array specifiers, i.e. the scalar type of the data the view is referencing (e.g. if :cpp:type:`data_type` is :cpp:`const int**[3]`, :cpp:type:`value_type` is :cpp:`const int`).
+   配列指定子を削除した :cpp:type:`data_type`、つまり、 ビューが参照しているデータのスカラー型　(例えば、:cpp:type:`data_type` が :cpp:`const int**[3]`　であれば、 :cpp:type:`value_type` は、 :cpp:`const int`　です)。
 
 .. cpp:type:: const_value_type
 
-   :cpp:`const` version of :cpp:type:`value_type`.
+   :cpp:type:`value_type`　の :cpp:`const`　バージョン。
 
 .. cpp:type:: non_const_value_type
 
-   non-:cpp:`const` version of :cpp:type:`value_type`.
+   :cpp:type:`value_type`　の　non-:cpp:`const` バージョン。
 
 
-Spaces
+空間
 ^^^^^^
 
 .. cpp:type:: execution_space
 
-   The :ref:`execution space <api-execution-spaces>` associated with the view, will be used for
-   performing view initialization, and certain deep_copy operations.
+   ビューに関連付けられた :ref:`execution space <api-execution-spaces>` は、ビュー初期化実行、および特定の and certain deep_copy 演算子に使用されます。
 
 .. cpp:type:: memory_space
 
-   The :ref:`memory space <api-memory-spaces>` where the :cpp:class:`View` data is stored.
+    :cpp:class:`View` データが格納されている、:ref:`memory space <api-memory-spaces>` 。
 
 .. cpp:type:: device_type
 
-   the compound type defined by :cpp:expr:`Device<execution_space, memory_space>`
+   :cpp:expr:`Device<execution_space, memory_space>`　で定義される複合型。
 
 .. cpp:type:: memory_traits
 
-   The memory traits of the view.
+   ビューのメモリトレイト。
 
 .. cpp:type:: host_mirror_space
 
-   Host accessible memory space used in :cpp:type:`HostMirror`.
+   :cpp:type:`HostMirror`　で使用されるホストアクセス可能メモリ領域。
 
-View Types
+ビュー型
 ^^^^^^^^^^
 
 .. cpp:type:: non_const_type
 
-   this :cpp:class:`View` type with :cpp:type:`non_const_data_type` passed as the :cpp:any:`DataType` template parameter
+   :cpp:any:`DataType` テンプレートパラメータとして渡された、　:cpp:class:type with :cpp:type:`non_const_data_type` を持つ、この　:cpp:class:`View` 。
 
 .. cpp:type:: const_type
 
-   this :cpp:class:`View` type with :cpp:type:`const_data_type` passed as the :cpp:any:`DataType` template parameter
+   :cpp:any:`DataType` テンプレートパラメータとして渡された、:cpp:type:`const_data_type`　を持つ、この　:cpp:class:`View`。
 
 .. cpp:type:: HostMirror
 
-   compatible view type with the same :cpp:type:`data_type` and :cpp:type:`array_layout` stored in host accessible memory space.
+   同じ :cpp:type:`data_type` を持つ、互換性のあるビュー型、およびホストアクセスっ可能なメモリ空間内に格納された :cpp:type:`array_layout` 。
 
 
-Data Handles
+データハンドル
 ^^^^^^^^^^^^
 
 .. cpp:type:: reference_type
 
-   return type of the view access operators.
+   ビューアクセス演算子の戻り値の型。
 
    .. seealso::
       :cpp:func:`operator()`
@@ -179,70 +178,68 @@ Data Handles
 
 .. cpp:type:: pointer_type
 
-   pointer to :cpp:type:`value_type`.
+   :cpp:type:`value_type`　へのポインタ。
 
 
-Other Types
+他の型
 ^^^^^^^^^^^
 
 .. cpp:type:: array_layout
 
-   The :cpp:any:`LayoutType` of the :cpp:class:`View`.
+    :cpp:class:`View`　の　:cpp:any:`LayoutType`。
 
 .. cpp:type:: size_type
 
-   index type associated with the memory space of this :cpp:class:`View`.
+   この :cpp:class:`View`　の　メモリ空間に関するインデックス型。
 
-.. cpp:type:: dimension
+.. cpp:type:: 次元
 
-   An integer array like type, able to represent the extents of the :cpp:class:`View`.
+   :cpp:class:`View`　の範囲を表すことができる整数配列のような型。
 
-.. cpp:type:: specialize
+.. cpp:type:: 特殊化
 
-   A specialization tag used for partial specialization of the mapping construct underlying a :cpp:class:`View`.
+   :cpp:class:`View` の基盤となるマッピング構造の部分的な特殊化に使用される特殊化タグ。
 
 
-Constructors
+コンストラクタ
 ^^^^^^^^^^^^
 
 .. cpp:function:: View()
 
-   Default Constructor. No allocations are made, no reference counting happens. All extents are zero and its data pointer is :cpp:`nullptr`.
+   デフォルトコンストラクタ。 割り当ては行われず、参照カウントも発生しません。すべての領域はゼロであり、データ指針は :cpp:`nullptr` です。
 
 .. cpp:function:: template<class DT, class... Prop> View( const View<DT, Prop...>& rhs)
 
-   Copy constructor with a compatible view. Follows :cpp:class:`View` assignment rules.
+   互換性のあるビューを持つコピーコンストラクタ。以下の　`View`　クラスの代入ルールに従います。
 
    .. seealso:: :ref:`api-view-assignment`
 
 .. cpp:function:: View(View&& rhs)
 
-   Move constructor
+   移動コンストラクタ
 
 .. cpp:function:: template<class IntType> View( const std::string& name, const IntType& ... extents)
 
-   Standard allocating constructor. The initialization is executed on the default
-   instance of the execution space corresponding to :cpp:type:`memory_space` and fences it.
+   標準割り当てコンストラクタ。初期化は、:cpp:type:`memory_space`　に対応する実行空間のデフォルトインスタンス上で実行され、それをフェンスします。
 
-   :tparam IntType: an integral type
+   :tparam IntType: 整数型
 
-   :param name: a user provided label, which is used for profiling and debugging purposes. Names are not required to be unique.
+   :param name: ユーザーにより提供されたラベルで、 プロファイリングおよびデバッグの目的で使用されます。 名前は、独自のものである必要はありません。
 
-   :param extents: Extents of the :cpp:class:`View`.
+   :param extents: :cpp:class:`View`　の範囲。
 
-   .. rubric:: Requirements:
+   .. rubric:: 必要要件:
 
    - :cpp:expr:`sizeof(IntType...) == rank_dynamic()` or :cpp:expr:`sizeof(IntType...) == rank()`.
-      In the latter case, the extents corresponding to compile-time dimensions must match the :cpp:class:`View` type's compile-time extents.
+      後者の場合、コンパイル時の次元に対応する範囲は、:cpp:class:`View` 型のコンパイル時の範囲と一致する必要があります。
    - :cpp:expr:`array_layout::is_regular == true`.
 
 .. cpp:function:: View( const std::string& name, const array_layout& layout)
 
-   Standard allocating constructor. The initialization is executed on the default
-   instance of the execution space corresponding to :cpp:type:`memory_space` and fences it.
+    標準割り当てコンストラクタ。初期化は、:cpp:type:`memory_space`　に対応する実行空間のデフォルトインスタンス上で実行され、それをフェンスします。
 
-   :param name: a user provided label, which is used for profiling and debugging purposes.
-      Names are not required to be unique.
+   :param name: ユーザーにより提供されたラベルで、 プロファイリングおよびデバッグの目的で使用されます。
+      名前は、独自のものである必要はありません。
 
    :param layout: an instance of a layout class.
       The number of valid extents must either match the :cpp:func:`rank_dynamic` or :cpp:func:`rank`.
@@ -720,7 +717,7 @@ For an mdspan :cpp:`m` of type :cpp:`M` that is the *natural mdspan* of a :cpp:c
 
 Additionally, the *natural mdspan* is constructed so that :cpp:`m.data() == v.data()` and for each extent :cpp:`r`, :cpp:`m.extents().extent(r) == v.extent(r)`.
 
-Examples
+例
 --------
 
 .. code-block:: cpp
