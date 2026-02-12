@@ -1,29 +1,29 @@
-Execution Policies
+実行ポリシー
 ##################
 
-Top Level Execution Policies
+トップレベル実行ポリシー
 ============================
 
-`ExecutionPolicyConcept <policies/ExecutionPolicyConcept.html>`__ is the fundamental abstraction to represent “how” the execution of a Kokkos parallel pattern takes place.
+`ExecutionPolicyConcept <policies/ExecutionPolicyConcept.html>`__ は、並列パターンの実行が、 “どのように” 行われるかを表すための基本的な抽象化です。
 
-.. list-table::
-    :widths: 35 65
-    :header-rows: 1
-    :align: left
+.. リスト表::
+    :幅: 35 65
+    :ヘッダー列: 1
+    :配列: 左
 
-    * - Policy
-      - Description
+    * - ポリシー
+      - ディスクリプション
 
     * * `RangePolicy <policies/RangePolicy.html>`__
-      * Each iterate is an integer in a contiguous range
+      * 各イテレートは、連続範囲内での整数です。
 
     * * `MDRangePolicy <policies/MDRangePolicy.html>`_
-      * Each iterate for each rank is an integer in a contiguous range
+      * 各ランクについての各イテレートは、連続範囲内での整数です。
 
     * * `TeamPolicy <policies/TeamPolicy.html>`__
-      * Assigns to each iterate in a contiguous range a team of threads
+      * 連続した範囲の各イテレート処理にスレッドのチームを割り当てます。
 
-Nested Execution Policies
+ネストされた実行ポリシー
 ============================
 
 Nested Execution Policies are used to dispatch parallel work inside of an already executing parallel region either dispatched with a `TeamPolicy <policies/TeamPolicy.html>`__ or a task policy. `NestedPolicies <policies/NestedPolicies.html>`__ summary.
