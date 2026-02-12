@@ -426,21 +426,21 @@
 
 .. 注意事項::
 
-   In practice, :cpp:func:`rank()` and :cpp:func:`rank_dynamic()` are not actually implemented as static member functions but ``rank`` and ``rank_dynamic`` underlying types have a nullary member function (i.e. callable with no argument).
+   実際には、:cpp:func:`rank()` および :cpp:func:`rank_dynamic()` は、静的メンバ関数として実装されていませんが、しかし、``rank``および``rank_dynamic``の基底型には、引数なしのメンバ関数があります。 (つまり、 引数なしで、呼び出し可能)。
 
 .. versionchanged:: 4.1
 
-   :cpp:func:`rank` and :cpp:func:`rank_dynamic` are static member constants that are convertible to :cpp:`size_t`.
-   Their underlying types are unspecified, but equivalent to :cpp:`std::integral_constant` with a nullary member function callable from host and device side.
-   Users are encouraged to use :cpp:`rank()` and :cpp:`rank_dynamic()` (akin to a static member function call) instead of relying on implicit conversion to an integral type.
+   :cpp:func:`rank` および　:cpp:func:`rank_dynamic` は、 :cpp:`size_t`　に変換可能な静的メンバ変数です。
+   それらの基本型は未指定ですが、ホスト側とデバイス側の双方から呼び出せるゼロ引数メンバー関数を持つ :cpp:`std::integral_constant` と同等です。
+   ユーザーには、整数型への暗示的変換に依存する代わりに、:cpp:`rank()` および :cpp:`rank_dynamic()`（静的メンバ関数呼び出しに類似）の使用を推奨します。
 
-   The actual type of :cpp:func:`rank` and :cpp:func:`rank_dynamic` as they were defined until Kokkos 4.1 was left up to the implementation (that is, up to the compiler not to Kokkos) but in practice it was often :cpp:`int` which means this change may yield warnings about comparing signed and unsigned integral types.
-   It may also break code that was using the type of :cpp:func:`rank`.
-   Furthermore, it appears that MSVC has issues with the implicit conversion to :cpp:`size_t` in certain constexpr contexts. Calling :cpp:func:`rank()` or :cpp:func:`rank_dynamic()` will work in those cases.
+   Kokkos 4.1 まで定義されていた :cpp:func:`rank` および :cpp:func:`rank_dynamic` の実際の型は、実装（つまり Kokkos ではなくコンパイラ）に委ねられていましたが、実際には、 :cpp:`int` であることが多く、この変更により符号付きおよび符号なしの整数型の比較に関する警告が発生する可能性があります。
+   また、:cpp:func:`rank` 型を使用していたコードが動作しなくなる可能性があります
+   さらに、MSVCには、特定の　constexpr　コンテキストにおいて、:cpp:`size_t`　への暗示的な変換には、問題があるように見えます。 その場合には、Calling :cpp:func:`rank()` または :cpp:func:`rank_dynamic()` を呼び出すと、上手く機能します。
 
 .. cpp:function:: constexpr array_layout layout() const
 
-   :return: the layout object that can be used to to construct other views with the same dimensions.
+   :return: 同じ寸法で他のビューを構築するために使用可能なレイアウトオブジェクト。
 
 .. cpp:function:: template<class iType> constexpr size_t extent( const iType& dim) const
 
@@ -469,177 +469,177 @@
 
 .. cpp:function:: template<class iType> constexpr size_t stride(const iType& dim) const
 
-   :tparam iType: an integral type
-   :param dim: the dimension to get the stride of
-   :return: the stride of dimension :cpp:any:`dim`
+   :tparam iType: 整数型
+   :param dim: ストライドを獲得するための次元。
+   :return: 次元 :cpp:any:`dim`　のストライド。
 
-   Example: :cpp:expr:`a.stride(3) == (&a(i0,i1,i2,i3+1,i4)-&a(i0,i1,i2,i3,i4))`
+   例: :cpp:expr:`a.stride(3) == (&a(i0,i1,i2,i3+1,i4)-&a(i0,i1,i2,i3,i4))`
 
-   .. rubric:: Preconditions:
+   .. rubric::前提条件:
 
-   - :cpp:any:`dim` must be smaller than :cpp:func:`rank`.
+   - :cpp:any:`dim` は、 :cpp:func:`rank`よりも小さくなければなりません。
 
 .. cpp:function:: constexpr size_t stride_0() const
 
-   :return: the stride of dimension 0.
+   :return: 次元 0　のストライド。
 
 .. cpp:function:: constexpr size_t stride_1() const
 
-   :return: the stride of dimension 1.
+   :return: 次元 1　のストライド。
 
 .. cpp:function:: constexpr size_t stride_2() const
 
-   :return: the stride of dimension 2.
+   :return: 次元 2　のストライド。
 
 .. cpp:function:: constexpr size_t stride_3() const
 
-   :return: the stride of dimension 3.
+   :return: 次元 3　のストライド。
 
 .. cpp:function:: constexpr size_t stride_4() const
 
-   :return: the stride of dimension 4.
+   :return: 次元 4　のストライド。
 
 .. cpp:function:: constexpr size_t stride_5() const
 
-   :return: the stride of dimension 5.
+   :return: 次元 5　のストライド。
 
 .. cpp:function:: constexpr size_t stride_6() const
 
-   :return: the stride of dimension 6.
+   :return: 次元 6　のストライド。
 
 .. cpp:function:: constexpr size_t stride_7() const
 
-   :return: the stride of dimension 7.
+   :return: 次元 7　のストライド。
 
 .. cpp:function:: template<class iType> void stride(iType* strides) const
 
-   :tparam iType: an integral type
-   :param strides: the output array of length :cpp:expr:`rank() + 1`
+   :tparam iType: 整数型
+   :param strides: 長さの出力配列 :cpp:expr:`rank() + 1`
 
    Sets :cpp:expr:`strides[r]` to :cpp:expr:`stride(r)` for all :math:`r` with :math:`0 \le r \lt \texttt{rank()}`.
    Sets :cpp:expr:`strides[rank()]` to :cpp:func:`span()`.
 
-   .. rubric:: Preconditions:
+   .. rubric:: 前提条件:
 
-   - :cpp:any:`strides` must be an array of length :cpp:expr:`rank() + 1`
+   - :cpp:any:`strides` は、長さ :cpp:expr:`rank() + 1`　の配列である必要があります。
 
 .. cpp:function:: constexpr size_t span() const
 
-   :return: the size of the span of memory between the element with the lowest and highest address
+   :return: 最低アドレスおよび最高アドレスを持つ要素間の記憶範囲のサイズ。
 
-   Obtains the memory span in elements between the element with the
-   lowest and the highest address. This can be larger than the product
-   of extents due to padding, and or non-contiguous data layout as for example :cpp:struct:`LayoutStride` allows.
+   最低アドレスおよび最高アドレスを持つ要素間の要素における記憶範囲を取得します。
+   これは、パディングによる範囲の積よりも大きくなる可能性があり、
+   または、例えば、 :cpp:struct:`LayoutStride` が認める通りに、非連続データレイアウトとなる可能性があります。
 
 .. cpp:function:: constexpr size_t size() const
 
-   :return: the product of extents, i.e. the logical number of elements in the :cpp:class:`View`.
+   :return: 範囲の積、つまり、 :cpp:class:`View`　における論理的要素の数。
 
 .. cpp:function:: constexpr pointer_type data() const
 
-   :return: the pointer to the underlying data allocation.
+   :return: 基盤データは位置へのポインタ
 
-   .. warning::
+   .. 警告::
    
-      Calling any function that manipulates the behavior of the memory (e.g. ``memAdvise``) on memory managed by Kokkos results in undefined behavior.
+      Kokkos　によって管理されているメモリに対して、メモリの動作を操作する関数（例：``memAdvise``）を呼び出すと、未定義の動作を引き起こします。
 
 .. cpp:function:: bool span_is_contiguous() const
 
-   :return: whether the span is contiguous (i.e. whether every memory location between in span belongs to the index space covered by the :cpp:class:`View`).
+   :return: 範囲が連続しているかどうか (つまり、 範囲内のすべてのメモリ位置が、:cpp:class:`View`　に含まれるインデックス空間に属しているかどうか )。
 
 .. cpp:function:: static constexpr size_t required_allocation_size(size_t N0=0, size_t N1=0, \
          size_t N2=0, size_t N3=0, \
          size_t N4=0, size_t N5=0, \
          size_t N6=0, size_t N7=0);
    
-   :param N0, N1, N2, N3, N4, N5, N6, N7: the dimensions to query
-   :return: the number of bytes necessary for an unmanaged :cpp:class:`View` of the provided dimensions.
+   :param N0, N1, N2, N3, N4, N5, N6, N7: 照会対象となる次元
+   :return: 指定された次元を持つ管理対象外の :cpp:class:`View` に必要なバイト数
 
-   .. rubric:: Requirements:
+   .. rubric:: 必要要件:
    
    - :cpp:expr:`array_layout::is_regular == true`.
 
 .. cpp:function:: static constexpr size_t required_allocation_size(const array_layout& layout);
 
-   :param layout: the layout to query
-   :return: the number of bytes necessary for an unmanaged :cpp:class:`View` of the provided layout.
+   :param layout: 照会対象となるレイアウト
+   :return: 提供されたレイアウトの管理対象外である :cpp:class:`View` に必要なバイト数。
 
-Other Utility Methods
+その他のユーティリティメソッド
 ^^^^^^^^^^^^^^^^^^^^^
 
 .. cpp:function:: int use_count() const;
 
-   :return: the current reference count of the underlying allocation.
+   :return: 基盤となる割り当ての現在の参照カウント。
 
 .. cpp:function:: const std::string label() const;
 
-   :return: the label of the View.
+   :return: ビューのレベル。
 
 .. cpp:function:: void assign_data(pointer_type arg_data);
 
-   :param arg_data: the pointer to set the underlying :cpp:class:`View` data pointer to
+   :param arg_data: 基盤の :cpp:class:`View` データポインタを設定するポインタ。
 
-   Decrement reference count of previously assigned data and set the underlying pointer to arg_data.
-   Note that the effective result of this operation is that the view is now an unmanaged view; thus, the deallocation of memory associated with arg_data is not linked in anyway to the deallocation of the view.
+   以前に割り当てられたデータの参照カウントを減算し、基底ポインタを arg_data に設定します。
+   この演算の有効な結果は、ビューが管理対象外となったことに注意してください; このように、　arg_data　に関連付けられたメモリの解放は、ビューの解放とはまったく関連していません。
 
 .. cpp:function:: constexpr bool is_allocated() const;
 
-   :return: true if the view points to a valid memory location.
+   :return: ビューが、有効なメモリ位置付けを指す場合には、真。
 
-   This function works for both managed and unmanaged views.
-   With the unmanaged view, there is no guarantee that referenced address is valid, only that it is a non-null pointer.
+   この関数は、管理ビューと管理対象外ビューの両方で機能します。
+   管理対象外ビューでは、参照されるアドレスが有効であることが保証されるのではなく、単にヌルポインタでないことのみが保証されます。
 
-Conversion to mdspan
+mdspanへの変換
 ^^^^^^^^^^^^^^^^^^^^
 
-.. cpp:function:: template <class OtherElementType, class OtherExtents, class OtherLayoutPolicy, class OtherAccessor> constexpr operator mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>()
+.. cpp:function:: テンプレート <class OtherElementType, class OtherExtents, class OtherLayoutPolicy, class OtherAccessor> constexpr　演算子 mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>()
 
-   :tparam OtherElementType: the target mdspan element type
-   :tparam OtherExtents: the target mdspan extents
-   :tparam OtherLayoutPolicy: the target mdspan layout
-   :tparam OtherAccessor: the target mdspan accessor
+   :tparam OtherElementType: 対象 mdspan 要素型。
+   :tparam OtherExtents: 対象 mdspan 範囲。
+   :tparam OtherLayoutPolicy: 対象 mdspan　レイアウト。
+   :tparam OtherAccessor: 対象 mdspan　アクセサ。
 
-   :constraints: :cpp:class:`View`\ 's :ref:`natural mdspan <api-view-natural-mdspans>` must be assignable to :cpp:`mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>`
+   :constraints: :cpp:class:`View`\ 's :ref:`natural mdspan <api-view-natural-mdspans>` は、must be assignable to :cpp:`mdspan<OtherElementType, OtherExtents, OtherLayoutPolicy, OtherAccessor>`　に割り当て可能でなければなりません。
 
-   :returns: an mdspan with extents and a layout converted from the :cpp:class:`View`'s *natural mdspan*.
+   :returns: :cpp:class:`View`　の *natural mdspan*　から変換された範囲およびレイアウトを持つ mdspan。
 
-.. cpp:function:: template <class OtherAccessorType = default_accessor<typename traits::value_type>> constexpr auto to_mdspan(const OtherAccessorType& other_accessor = OtherAccessorType{})
+.. cpp:function:: テンプレート <class OtherAccessorType = default_accessor<typename traits::value_type>> constexpr auto to_mdspan(const OtherAccessorType& other_accessor = OtherAccessorType{})
 
-   :tparam OtherAccessor: the target mdspan accessor
+   :tparam OtherAccessor: 対象 mdspan アクセサ
 
-   :constraints: :cpp:`typename OtherAccessorType::data_handle_type` must be assignable to :cpp:`value_type*`
+   :constraints: :cpp:`typename OtherAccessorType::data_handle_type` は、 :cpp:`value_type*`　に割り当て可能でなければなりません。
 
-   :returns: :cpp:class:`View`\ 's :ref:`natural mdspan <api-view-natural-mdspans>`, but with an accessor policy constructed from :cpp:any:`other_accessor`
+   :returns: :cpp:class:`View`\ 's :ref:`natural mdspan <api-view-natural-mdspans>`　ですが、 :cpp:any:`other_accessor`　～構築されたアクセサポリシーを伴います。
 
 .. cpp:namespace-pop::
 
 
-Non-Member Functions
+非メンバー関数
 --------------------
 
 .. cpp:function:: template <class... ViewTDst, class... ViewTSrc> bool is_assignable(const View<ViewTDst...>& dst, const View<ViewTSrc...>& src)
 
-   :return: true if src can be assigned to dst.
+   :return:  src が dst　に代入可能である場合には、真。
 
    .. seealso:: :ref:`api-view-assignment`
 
-.. cpp:function:: template <class LT, class... LP, class RT, class... RP> bool operator==(const View<LT, LP...>& lhs, const View<RT, RP...>& rhs)
+.. cpp:function:: テンプレート <class LT, class... LP, class RT, class... RP> bool operator==(const View<LT, LP...>& lhs, const View<RT, RP...>& rhs)
 
-   :return: :cpp:`true` if :cpp:type:`~View::value_type`, :cpp:type:`~View::array_layout`, :cpp:type:`~View::memory_space`, :cpp:func:`~View::rank()`, :cpp:func:`~View::data()` and :cpp:expr:`extent(r)`, for :math:`0 \le r \lt \texttt{rank()}`, match.
+   :return: :cpp:type:`~View::value_type`, :cpp:type:`~View::array_layout`, :cpp:type:`~View::memory_space`, :cpp:func:`~View::rank()`, :cpp:func:`~View::data()` および :cpp:expr:`extent(r)`, for :math:`0 \le r \lt \texttt{rank()}`が一致すれば、 :cpp:`true` 。
 
-.. cpp:function:: template <class LT, class... LP, class RT, class... RP> bool operator!=(const View<LT, LP...>& lhs, const View<RT, RP...>& rhs)
+.. cpp:function:: テンプレート <class LT, class... LP, class RT, class... RP> bool operator!=(const View<LT, LP...>& lhs, const View<RT, RP...>& rhs)
 
    :return: :cpp:expr:`!(lhs == rhs)`
 
 .. _api-view-assignment:
 
-Assignment Rules
+代入ルール
 ----------------
 
-Assignment rules cover the assignment operator as well as copy constructors.
-We aim at making all logically legal assignments possible, while intercepting illegal assignments if possible at compile time, otherwise at runtime.
-In the following we use ``DstType`` and ``SrcType`` as the type of the destination view and source view respectively. 
-``dst_view`` and ``src_view`` refer to the runtime instances of the destination and source views, i.e.:
+代入規則は、代入演算子とコピーコンストラクタの両方に適用されます。
+論理的に合法な代入をすべて可能にすることを目指しつつ、一方では、違法な代入はコンパイル時に可能な限り介入し、それが不可能な場合には実行時に介入します。
+以下では、宛先ビューと送信元ビューのタイプをそれぞれ　``DstType`` および　``SrcType``　として使用します。
+``dst_view`` および ``src_view`` は、宛先ビューと送信元ビューのランタイムインスタンスを指します。 つまり:
 
 .. code-block:: cpp
 
@@ -647,44 +647,44 @@ In the following we use ``DstType`` and ``SrcType`` as the type of the destinati
     DstType dst_view(src_view);
     dst_view = src_view;
 
-The following conditions must be met at and are evaluated at compile time:
+以下の条件は、コンパイル時に満たされ、かつ評価されなければなりません:
 
 * :cpp:`DstType::rank() == SrcType::rank()`
-* :cpp:`DstType::non_const_value_type` is the same as :cpp:`SrcType::non_const_value_type`
-* If :cpp:`std::is_const_v<SrcType::value_type> == true` then :cpp:`std::is_const_v<DstType::value_type>` must also be :cpp:`true`.
+* :cpp:`DstType::non_const_value_type` が :cpp:`SrcType::non_const_value_type`　と同じ。
+* :cpp:`std::is_const_v<SrcType::value_type> == true`　であれば、 :cpp:`std::is_const_v<DstType::value_type>` もまた、 :cpp:`true`　である必要があります。
 * :cpp:`MemorySpaceAccess<DstType::memory_space,SrcType::memory_space>::assignable == true`
-* If :cpp:`DstType::rank_dynamic() != DstType::rank()` and :cpp:`SrcType::rank_dynamic() != SrcType::rank()` then for each dimension :cpp:`k` that is compile time for both it must be true that :cpp:`dst_view.extent(k) == src_view.extent(k)`
+* :cpp:`DstType::rank_dynamic() != DstType::rank()` および :cpp:`SrcType::rank_dynamic() != SrcType::rank()`　であれば、 各次元 :cpp:`k` について、両方のコンパイル時に、:cpp:`dst_view.extent(k) == src_view.extent(k)`　が真である必要があります。
 
-Additionally the following conditions must be met at runtime:
+さらに、実行時には、以下の条件を満たす必要があります:
 
-* If :cpp:`DstType::rank_dynamic() != DstType::rank()` then for each compile time dimension :cpp:`k` it must be true that :cpp:`dst_view.extent(k) == src_view.extent(k)`.
+* :cpp:`DstType::rank_dynamic() != DstType::rank()`　であれば、  各コンパイル時次元 :cpp:`k`　について、 :cpp:`dst_view.extent(k) == src_view.extent(k)`　が真である必要があります。
 
-Furthermore there are rules which must be met if :cpp:`DstType::array_layout` is not the same as :cpp:`SrcType::array_layout`.
-These rules only cover cases where both layouts are one of :cpp:class:`LayoutLeft`, :cpp:class:`LayoutRight` or :cpp:class:`LayoutStride`
+さらに、:cpp:`DstType::array_layout` が :cpp:`SrcType::array_layout` と同一でない場合、満たさなければならない規則があります。
+これらのルールは、両方のレイアウトが :cpp:class:`LayoutLeft`、:cpp:class:`LayoutRight`、または :cpp:class:`LayoutStride` のいずれかである場合にのみ適用されます。
 
-* If neither :cpp:`DstType::array_layout` nor :cpp:`SrcType::array_layout` is :cpp:class:`LayoutStride`:
+* :cpp:`DstType::array_layout`　または :cpp:`SrcType::array_layout`　が :cpp:class:`LayoutStride`　である場合:
 
-  - If :cpp:`DstType::rank > 1` then :cpp:`DstType::array_layout` must be the same as :cpp:`SrcType::array_layout`.
+  - If :cpp:`DstType::rank > 1`　であれば、 :cpp:`DstType::array_layout` は、:cpp:`SrcType::array_layout`　と同じである必要があります。
 
-* If either :cpp:`DstType::array_layout` or :cpp:`SrcType::array_layout` is :cpp:class:`LayoutStride`
+* :cpp:`DstType::array_layout` または :cpp:`SrcType::array_layout` が :cpp:class:`LayoutStride`　である場合
 
-  - For each dimension :cpp:`k` it must hold that :cpp:`dst_view.extent(k) == src_view.extent(k)`
+  - 各次元 :cpp:`k` について、:cpp:`dst_view.extent(k) == src_view.extent(k)`でなければなりません。
 
 .. code-block:: cpp
-   :caption: Assignment Examples
+   :caption: 代入例
 
     View<int*>       a1 = View<int*>("A1",N);     // OK
     View<int**>      a2 = View<int*[10]>("A2",N); // OK
-    View<int*[10]>   a3 = View<int**>("A3",N,M);  // OK if M == 10 otherwise runtime failure
+    View<int*[10]>   a3 = View<int**>("A3",N,M);  // OK M == 10　の場合に、OK。そうでなければ実行不能。 
     View<const int*> a4 = a1;                     // OK
-    View<int*>       a5 = a4;                     // Error: const to non-const assignment
-    View<int**>      a6 = a1;                     // Error: Ranks do not match
-    View<int*[8]>    a7 = a3;                     // Error: compile time dimensions do not match
-    View<int[4][10]> a8 = a3;                     // OK if N == 4 otherwise runtime failure
-    View<int*, LayoutLeft>    a9  = a1;           // OK since a1 is either LayoutLeft or LayoutRight
+    View<int*>       a5 = a4;                     // エラー: const から 非const への代入。
+    View<int**>      a6 = a1;                     // エラー: ランクが不一致。
+    View<int*[8]>    a7 = a3;                     // エラー: コンパイル時次元が不一致。
+    View<int[4][10]> a8 = a3;                     // OK if N == 4 の場合に、OK。そうでなければ実行不能。
+    View<int*, LayoutLeft>    a9  = a1;           // a1 が、LayoutLeft または LayoutRight　のいずれかであれば、OK。
     View<int**, LayoutStride> a10 = a8;           // OK
     View<int**>               a11 = a10;          // OK
-    View<int*, HostSpace> a12 = View<int*, CudaSpace>("A12",N); // Error: non-assignable memory spaces
+    View<int*, HostSpace> a12 = View<int*, CudaSpace>("A12",N); // エラー: non-assignable memory spaces代入不可能メモリ空間。
     View<int*, HostSpace> a13 = View<int*, CudaHostPinnedSpace>("A13",N); // OK
 
 .. _api-view-natural-mdspans:
@@ -694,27 +694,27 @@ Natural mdspans
 
 .. versionadded:: 4.4.0
 
-C++23 introduces `mdspan <https://en.cppreference.com/w/cpp/container/mdspan>`_, a non-owning multidimensional array view.
-:cpp:class:`View` is compatible with :cpp:`std::mdspan` and can be implicitly converted from and to valid mdspans.
-These conversion rules are dictated by the *natural mdspan* of a view.
-For an mdspan :cpp:`m` of type :cpp:`M` that is the *natural mdspan* of a :cpp:class:`View` :cpp:`v` of type :cpp:`V`, the following properties hold:
+C++23 は、非所有の多次元配列ビュー`　である、mdspan <https://en.cppreference.com/w/cpp/container/mdspan>`_　を導入します。
+:cpp:class:`View` は :cpp:`std::mdspan` と互換性があり、有効な mdspan との間で、暗示的に変換可能です。
+これらの変換ルールは、ビューの　*natural mdspan*　によって規定されます。
+For an mdspan :cpp:`m` of type :cpp:`M` that is the *natural mdspan* of a :cpp:class:`View` :cpp:`v` of type :cpp:`V`, 型 :cpp:`M` の mdspan :cpp:`m` が、型 :cpp:`V` の :cpp:class:`View` :cpp:`v` の *natural mdspan* である場合、以下のプロパティが成立します:
 
-#. :cpp:`M::value_type` is :cpp:`V::value_type`
-#. :cpp:`M::index_type` is :cpp:`std::size_t`.
-#. :cpp:`M::extents_type` is :cpp:`std::extents<M::index_type, Extents...>` where
+#. :cpp:`M::value_type` は、 :cpp:`V::value_type`
+#. :cpp:`M::index_type` は、 :cpp:`std::size_t`.
+#. :cpp:`M::extents_type` は、 :cpp:`std::extents<M::index_type, Extents...>` 、ただし
 
-   * :cpp:`sizeof(Extents...)` is :cpp:`V::rank()`
-   * and each element at index :cpp:`r` of :cpp:`Extents...` is :cpp:`V::static_extents(r)` if :cpp:`V::static_extents(r) != 0`, otherwise :cpp:`std::dynamic_extent`
+   * :cpp:`sizeof(Extents...)` は、 :cpp:`V::rank()`
+   * およびand each element at インデックス :cpp:`r` of :cpp:`Extents...` における各要素は、　:cpp:`V::static_extents(r) != 0`　であれば、:cpp:`V::static_extents(r)`　であり、そうでない場合には、 :cpp:`std::dynamic_extent`　です。
 
-#. :cpp:`M::layout_type` is
+#. :cpp:`M::layout_type` は、
 
-   * :cpp:`std::layout_left_padded<std::dynamic_extent>` if :cpp:`V::array_layout` is :cpp:`LayoutLeft`
-   * :cpp:`std::layout_right_padded<std::dynamic_extent>` if :cpp:`V::array_layout` is :cpp:`LayoutRight`
-   * :cpp:`std::layout_stride` if :cpp:`V::array_layout` is :cpp:any:`LayoutStride`
+   * :cpp:`V::array_layout` が :cpp:`LayoutLeft`　であれば、:cpp:`std::layout_left_padded<std::dynamic_extent>`
+   * :cpp:`V::array_layout` が :cpp:`LayoutRight`　であれば、:cpp:`std::layout_right_padded<std::dynamic_extent>`
+   * :cpp:`V::array_layout` が :cpp:any:`LayoutStride`　であれば、:cpp:`std::layout_stride` 。
 
-#. :cpp:`M::accessor_type` is :cpp:`std::default_accessor<V::value_type>`
+#. :cpp:`M::accessor_type` が :cpp:`std::default_accessor<V::value_type>`　です。
 
-Additionally, the *natural mdspan* is constructed so that :cpp:`m.data() == v.data()` and for each extent :cpp:`r`, :cpp:`m.extents().extent(r) == v.extent(r)`.
+さらに、*natural mdspan* は、:cpp:`m.data() == v.data()` および、各範囲  :cpp:`r`　について、 :cpp:`m.extents().extent(r) == v.extent(r)`　となるように、構築されています。
 
 例
 --------
