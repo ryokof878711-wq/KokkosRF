@@ -24,7 +24,7 @@
    :ヘッダー列: 1
    :配列: 左
 
-   * - Version integer macrosバージョン整数マクロ
+   * - バージョン整数マクロ
      -  Kokkos バージョン 4.2.1を想定した値の例
    * - ``KOKKOS_VERSION``
      - ``40201``
@@ -37,9 +37,9 @@
 
 Kokkos バージョンマクロは、整数として定義されます。
 ``KOKKOS_VERSION`` は、 ``<MAJOR>*10000 + <MINOR>*100 + <PATCH>``　に等しいです。
-``40201`` corresponds to the Kokkos 4.2.1 release version.
-A ``99`` patch number denotes a development version.  That is, ``40199``
-corresponds to the Kokkos development version post release 4.1
+``40201`` は、 Kokkos 4.2.1 リリースバージョンに対応します。
+ ``99`` パッチ番号は、開発版を示します。　つまり、 ``40199``　は、
+ Kokkos 開発バージョン　ポストリリース 4.1　に対応します。
 
 .. code-block:: c++
    
@@ -49,7 +49,7 @@ corresponds to the Kokkos development version post release 4.1
    static_assert(KOKKOS_VERSION_MINOR == KOKKOS_VERSION / 100 % 100);
    static_assert(KOKKOS_VERSION_PATCH == KOKKOS_VERSION % 100);
    #if KOKKOS_VERSION >= 30700
-   // Kokkos version is at least 3.7
+   // Kokkos バージョンは、少なくとも 3.7
    #endif
    int main() {
      if (KOKKOS_VERSION_PATCH == 99)
@@ -57,70 +57,66 @@ corresponds to the Kokkos development version post release 4.1
      // ...
    }
 
-.. warning:: Until Kokkos 4.1, ``KOKKOS_VERSION_MINOR`` and ``KOKKOS_VERSION_PATCH`` were not defined when they were meant to be ``0``
+.. 警告:: Kokkos 4.1まで、 ``KOKKOS_VERSION_MINOR`` および ``KOKKOS_VERSION_PATCH`` は、それらが本来　``0``　であるべき時に、定義されませんでした。 
 
-.. list-table::
-   :header-rows: 1
-   :align: left
+.. list表::
+   :ヘッダー列: 1
+   :配列: 左
 
-   * - Function-like version helper macros (since Kokkos 4.1)
-   * - ``KOKKOS_VERSION_LESS(major, minor, patch)``
-   * - ``KOKKOS_VERSION_LESS_EQUAL(major, minor, patch)``
-   * - ``KOKKOS_VERSION_GREATER(major, minor, patch)``
-   * - ``KOKKOS_VERSION_GREATER_EQUAL(major, minor, patch)``
-   * - ``KOKKOS_VERSION_EQUAL(major, minor, patch)``
+   * - 関数のようなバージョンのヘルパーマクロ ( Kokkos 4.1より)
+   * - ``KOKKOS_VERSION_LESS(メジャー・マイナー・パッチ)``
+   * - ``KOKKOS_VERSION_LESS_EQUAL(メジャー・マイナー・パッチ)``
+   * - ``KOKKOS_VERSION_GREATER(メジャー・マイナー・パッチ)``
+   * - ``KOKKOS_VERSION_GREATER_EQUAL(メジャー・マイナー・パッチ)``
+   * - ``KOKKOS_VERSION_EQUAL(メジャー・マイナー・パッチ)``
 
-``KOKKOS_VERSION_<COMPARE>`` function-like macros return the result of
-comparing the version of Kokkos currently used against the version specified by
-the three arguments ``major.minor.patch``.  These are available since Kokkos
-4.1
+``KOKKOS_VERSION_<COMPARE>`` 関数のようなマクロは、現在使用中の　Kokkos　のバージョンと、3つの引数　``major.minor.patch``　で指定されたバージョンを比較した結果を返します。 これらは、Kokkos
+4.1から利用可能です。
 
 .. code-block:: c++
    
    #include <Kokkos_Core.hpp>
-   // sanity check for illustration
+   // イラストレーションの整合性チェック
    static_assert(KOKKOS_VERSION_EQUAL(KOKKOS_VERSION_MAJOR,
                                       KOKKOS_VERSION_MINOR,
                                       KOKKOS_VERSION_PATCH));
-   // set the minimum required version of Kokkos for a project or a file
-   static_assert(KOKKOS_VERSION_GREATER_EQUAL(4, 5, 0));
+   // static_assert(KOKKOS_VERSION_GREATER_EQUAL(4, 5, 0))　プロジェクトまたはファイルに対して、Kokkos　の最小必要バージョンを設定します;
 
    void do_work() {
      #if KOKKOS_VERSION_GREATER_EQUAL(4, 3, 0)
-     // using the new rad functionality
+     // 新しいrad機能の使用
      #else
-     // falling back to the old boring stuff
+     // 昔ながらの退屈なものへの後退
      #endif
    }
 
-General Settings
+一般設定
 ----------------
 
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| Macro                                           | Description                                                                                                 |
+| マクロ                                           | ディスクリプション                                                                                                |
 +=================================================+=============================================================================================================+
-| ``KOKKOS_ENABLE_DEBUG``                         | Defined if extra debug features are activated.                                                              |
+| ``KOKKOS_ENABLE_DEBUG``                         | 追加のデバッグ機能が有効化されている場合に定義                                                             |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_DEBUG_BOUNDS_CHECK``            | Defined if extra bounds checks are enabled.                                                                 |
+| ``KOKKOS_ENABLE_DEBUG_BOUNDS_CHECK``            | 追加の境界チェックが有効化されている場合に定義                                                                |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_DEBUG_DUALVIEW_MODIFY_CHECK``   | Defined if debug checks for ``Kokkos::DualView`` objects are enabled.                                       |
+| ``KOKKOS_ENABLE_DEBUG_DUALVIEW_MODIFY_CHECK``   | デバッグチェックで　``Kokkos::DualView``　オブジェクトの有効化が有効な場合に定義                                      |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_DEPRECATED_CODE_3``             | Defined if features deprecated in major release 3 are still available.                                      |
+| ``KOKKOS_ENABLE_DEPRECATED_CODE_3``             | メジャーリリース3で非推奨となった機能がまだ利用可能かどうかを定義                                     |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_DEPRECATION_WARNING``           | Defined if deprecated features generate deprecation warnings.                                               |
+| ``KOKKOS_ENABLE_DEPRECATION_WARNING``           | 非推奨機能が非推奨警告を生成するかどうかを定義                                              |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_TUNING``                        | Whether bindings for tunings are available (see `#2422 <https://github.com/kokkos/kokkos/pull/2422>`_).     |
+| ``KOKKOS_ENABLE_TUNING``                        | ューニング用のバインディングが利用可能かどうか ( `#2422 <https://github.com/kokkos/kokkos/pull/2422>`_　を参照)。     |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_COMPLEX_ALIGN``                 | Whether complex types are aligned.                                                                          |
+| ``KOKKOS_ENABLE_COMPLEX_ALIGN``                 | 複合型が配置されるかどうか。                                                                         |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_AGGRESSIVE_VECTORIZATION``      | Whether certain dependency assumptions are ignored for aggressive vectorization of internal Kokkos loops.   |
+| ``KOKKOS_ENABLE_AGGRESSIVE_VECTORIZATION``      | 内部　Kokkos　ループの積極的なベクトル化において、特定の依存性仮定が無視されるかどうか。  |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 
-Execution Spaces
+実行空間
 ----------------
 
-The following macros can be used to test whether or not a specified execution space
-is enabled. They can be tested for existence (e.g. ``#ifdef KOKKOS_ENABLE_SERIAL``).
+以下のマクロを使用すると、指定された実行スペースが有効かどうかをテストできます。 それらの存在を確認可能です (例えば、 ``#ifdef KOKKOS_ENABLE_SERIAL``)。
 
 .. _Serial: execution_spaces.html
 
@@ -143,26 +139,26 @@ is enabled. They can be tested for existence (e.g. ``#ifdef KOKKOS_ENABLE_SERIAL
 .. |HPX| replace:: :cpp:func:`HPX`
 
 +--------------------------------+--------------------------------------------------------------------------+
-| Macro                          | Description                                                              |
+| マクロ                          | ディスクリプション                                                            |
 +================================+==========================================================================+
-| ``KOKKOS_ENABLE_SERIAL``       | Defined if the |Serial|_ execution space is enabled.                     |
+| ``KOKKOS_ENABLE_SERIAL``       |  |Serial|_ 実行空間が有効かどうかを定義。                     |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_OPENMP``       | Defined if the |OpenMP|_ execution space is enabled.                     |
+| ``KOKKOS_ENABLE_OPENMP``       |  |OpenMP|_ 実行空間が有効かどうかを定義。                     |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_OPENMPTARGET`` | Defined if the experimental ``OpenMPTarget`` execution space is enabled. |
+| ``KOKKOS_ENABLE_OPENMPTARGET`` | 実験 ``OpenMPTarget`` 実行空間が有効かどうかを定義。 |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_THREADS``      | Defined if the |Threads|_ execution space is enabled.                    |
+| ``KOKKOS_ENABLE_THREADS``      |  |Threads|_ 実行空間が有効かどうかを定義。                    |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_CUDA``         | Defined if the |Cuda|_ execution space is enabled.                       |
+| ``KOKKOS_ENABLE_CUDA``         |  |Cuda|_ 実行空間が有効かどうかを定義。                       |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_HIP``          | Defined if the experimental ``HIP`` execution space is enabled.          |
+| ``KOKKOS_ENABLE_HIP``          | 実験 ``HIP`` 実行空間が有効かどうかを定義。          |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_HPX``          | Defined if the |HPX|_ execution space is enabled.                        |
+| ``KOKKOS_ENABLE_HPX``          |  |HPX|_ 実行空間が有効かどうかを定義。                        |
 +--------------------------------+--------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_SYCL``         | Defined if the experimental ``SYCL`` execution space is enabled.         |
+| ``KOKKOS_ENABLE_SYCL``         | 実験 ``SYCL`` 実行空間が有効かどうかを定義。         |
 +--------------------------------+--------------------------------------------------------------------------+
 
-Backend options
+バックエンドオプション
 ---------------
 
 +-------------------------------------------------------+---------------------------------------------------------------------------------------+
