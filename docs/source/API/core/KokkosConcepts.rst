@@ -125,21 +125,15 @@ Kokkos　の外部に存在する　``DualView``　および　``OffsetView``　
 
 追加の概念によって制約された追加の型なしでは、さらなる要件を表現することはできません
 （これは、C++　の概念機構におけるよく知られた制限であり、型システムの決定可能性を維持するために必要です）。
-
-
-(whereby an archetype with an implementation-private
-name designed to meet the requirements of the extra concept is used in the definition of constraints),
-the state of practice appears to be converging on a strategy that involves creating an additional named
-concept templated on all relevant types and constraining them together, which can then be used at relevant call site.
-Most argue that this is a necessary artifact of the language feature, but that constraining concepts together
-in this way does not count as an "extra" concept for the purposes of cognitive load assessment.
-Applying this approach and assuming the intention is for things like |Kokkos_parallel_for|_ to remain
-as algorithms rather than customization points, we get some further requirements from the ``Kokkos::Impl`` namespace:
+この問題を回避するためにアーキタイプパターンを使用すべきだと主張する人もいますが　(　これにより、追加の概念の要件を満たすように設計された実装非公開の名前を持つアーキタイプが制約の定義で使用されます）、
+実践の状況は、関連する全ての型をテンプレート化した追加の命名済み概念を作成し、それらをまとめて制約する戦略に収束しつつあるように見え、その後、関連する呼び出し元で使用可能となります。
+多くの人は、これは言語機能の必然的な副産物であると主張しますが、このような方法で概念を一緒に制約することは、認知負荷評価の目的において、"追加の"　概念とは考えられません。
+このアプローチを適用し、|Kokkos_parallel_for|_　のようなものがカスタマイズポイントではなくアルゴリズムとして残ることを意図していると仮定すると、 ``Kokkos::Impl`` 名前空間からいくつかの追加要件を取得します:
 
 .. code-block:: cpp
 
-    template <typename Ex, typename ExPol, typename F, typename ResultType = int>
-    concept ExecutionSpaceOf =
+    テンプレート <typename Ex, typename ExPol, typename F, typename ResultType = int>
+    概念 ExecutionSpaceOf =
         ExecutionSpace<Ex> &&
         ExecutionPolicyOf<ExPol, Ex> && // defined below
         Functor<F> && // defined below
@@ -153,7 +147,7 @@ as algorithms rather than customization points, we get some further requirements
             { Impl::ParallelScanWithTotal<F, ExPol, Ex>(f, policy, total).execute(); }
         }
 
-    template <typename Ex, typename ExPol, typename F, typename Red>
+    テンプレート <typename Ex, typename ExPol, typename F, typename Red>
     concept ExecutionSpaceOfReduction =
         ExecutionSpaceOf<Ex, ExPol, F> &&
         Reducer<Red> &&
@@ -166,10 +160,10 @@ as algorithms rather than customization points, we get some further requirements
             { closure.execute(); }
         }
 
-Perhaps, though, these should be part of some internal concepts (``ImplExecutionSpaceOf``, for instance)
-and the user-visible concept should exclude these requirements.
+ただし、おそらく、これらは内部の概念の一部であるべきかもしれません (例えば、　``ImplExecutionSpaceOf``　)。
+そして、ユーザーに表示されるコンセプトからは、これらの要件を除外すべきです。
 
-Support for ``UniqueToken`` adds the following requirements:
+ ``UniqueToken`` のサポートには、以下の要件が追加されます:
 
 .. code-block:: cpp
 
@@ -194,23 +188,19 @@ Support for ``UniqueToken`` adds the following requirements:
         && CopyConstructible<Experimental::UniqueToken<Ex, Experimental::UniqueTokenScope::Global>>
         && DefaultConstructible<Experimental::UniqueToken<Ex, Experimental::UniqueTokenScope::Global>>;
 
-Some *de facto* Requirements
+一部の　*事実上*　の要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There are other places where we're providing partial specializations using concrete execution spaces,
-such as ``Impl::TeamPolicyInternal``. These also qualify as "requirements" on an ``ExecutionSpace``,
-just like ``Impl::ParallelFor<...>``. In many of these cases, it would be nice if we could refactor
-some things to use a less "all-or-nothing" approach to customization than partial class template specialization.
+``Impl::TeamPolicyInternal``　等、具体的な実行空間を使用して部分的な特殊化を提供している他の箇所も存在します。 これらも``ExecutionSpace``上の「要件」として扱われ、これは``Impl::ParallelFor<...>``と同様です。 こうしたケースの多くでは、部分クラス型テンプレートの特化という、　"すべてか無か"　的なカスタマイズ手法よりも、より柔軟なアプローチを採用できるようリファクタリングできれば理想的です。
 
-The ``MemorySpace`` Concept
+ ``MemorySpace`` 概念
 ---------------------------
 
-Looking at the common functionality in the current implementations of ``CudaSpace``, ``CudaUVMSpace``,
-``HostSpace``, and ``OpenMPTargetSpace``, the current concept for ``MemorySpace`` looks something like:
+Looking at the common functionality in the current implementations of現在の実装における ``CudaSpace``、 ``CudaUVMSpace``、``HostSpace`` および ``OpenMPTargetSpace``　の共通機能を見れば、 ``MemorySpace`` の現在の概念は、以下の様に見えます:
 
 .. code-block:: cpp
 
-    template <typename Mem>
+    テンプレート <typename Mem>
     concept MemorySpace =
         CopyConstructible<Mem> &&
         DefaultConstructible<Mem> &&
@@ -221,21 +211,21 @@ Looking at the common functionality in the current implementations of ``CudaSpac
             Kokkos::is_execution_space<typename Mem::execution_space>::value;
             typename Mem::device_type;
         }
-        // Required methods:
+        // 必要なメソッド:
         requires(Mem m, size_t size, void* ptr) {
             { m.name() } -> const char*;
             { m.allocate(size) } -> void*;
             { m.deallocate(ptr, size) };
         };
 
-Implementation Requirements
+実装必要要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Most of the ways that the ``MemorySpace`` concept is used in generic contexts by Kokkos are in the ``Impl`` namespace.
+Kokkos　が汎用的な文脈で、　``MemorySpace``　概念を使用するほとんどの方法が、``Impl``　名前空間内で行われています。
 
 .. code-block:: cpp
 
-    template <typename Mem>
+    テンプレート <typename Mem>
     concept ImplMemorySpace =
         MemorySpace<Mem> &&
         DefaultConstructible<Impl::SharedAllocationRecord<Mem, void>> &&
@@ -260,8 +250,8 @@ Most of the ways that the ``MemorySpace`` concept is used in generic contexts by
             -> Impl::SharedAllocationRecord<Mem, void>*
         };
 
-    template <typename Mem1, typename Mem2, typename Ex>
-    concept ImplRelatableMemorySpaces =
+    テンプレート <typename Mem1, typename Mem2, typename Ex>
+    概念　ImplRelatableMemorySpaces =
         ImplMemorySpace<Mem1> &&
         ImplMemorySpace<Mem2> &&
         ExecutionSpace<Ex> &&
@@ -278,18 +268,17 @@ Most of the ways that the ``MemorySpace`` concept is used in generic contexts by
             { Impl::DeepCopy<Mem1, Mem2, Ex>(exec, dst, src, n) };
         }
 
-The ``ExecutionPolicy`` Concept
+ ``ExecutionPolicy`` 概念
 -------------------------------
 
-This is where I think we have the most work to do.  We could achieve a significant complexity
-reduction by unifying disparate interfaces for, e.g., ``RangePolicy<...>`` and ``ThreadVectorRange<...>``, into one hierarchy.
+これが、私たちが最も力を入れるべき点だと考えます。例えば、``RangePolicy<...>``　および　``ThreadVectorRange<...>``　といった異なるインターフェースを単一の階層構造に統合することで、大幅な複雑性の削減を実現できます。
 
-Looking at the current implementations of ``RangePolicy<...>``, ``MDRangePolicy<...>``, ``TeamPolicy``,
-``Impl::TeamThreadRangeBoundariesStruct``, and ``Impl::TeamVectorRangeBoundariesStruct``, all that I can find in common is:
+``RangePolicy<...>``、 ``MDRangePolicy<...>``、 ``TeamPolicy``、
+``Impl::TeamThreadRangeBoundariesStruct``、 および ``Impl::TeamVectorRangeBoundariesStruct``　の現在の実装について見てみると、 共通点として認められるものは以下の通りです:
 
 .. code-block:: cpp
 
-    template <typename ExPol>
+    テンプレート <typename ExPol>
     concept BasicExecutionPolicy =
         CopyConstructible<ExPol> &&
         Destructible<ExPol> &&
@@ -297,25 +286,23 @@ Looking at the current implementations of ``RangePolicy<...>``, ``MDRangePolicy<
             ExPol::index_type;
         }
 
-That is, of course, not a useful concept.
-If we exclude ``Impl::TeamThreadRangeBoundariesStruct`` and ``Impl::TeamVectorRangeBoundariesStruct``, we get the tag also:
+それは、もちろん、有用な概念ではありません。
+ ``Impl::TeamThreadRangeBoundariesStruct`` および ``Impl::TeamVectorRangeBoundariesStruct``　を除外すれば、 また以下のタグを取得します:
 
 .. code-block:: cpp
 
-    template <typename ExPol>
+    テンプレート <typename ExPol>
     concept ExecutionPolicy =
         BasicExecutionPolicy<ExPol> &&
         requires(ExPol ex) {
             std::is_same_v<ExPol, typename ExPol::execution_policy>;
         }
 
-which indicates that the policies that can be given to parallel algorithms inside
-of other algorithms weren't intended to be part of the same concept as the others
-(though I would argue maybe they should). ``TeamPolicy`` and ``RangePolicy`` both have functions for managing chunk sizes:
+それは、他のアルゴリズム内部で並列アルゴリズムに与えられるポリシーが、他のものと同じ概念の一部となることを目的としていなかったことを示しています　(ただし、私はおそらくそれらが一部となることを目的としているべきであると主張していますが)。 ``TeamPolicy`` および　``RangePolicy`` 双方とも、チャンクサイズ管理関数を持ちます:
 
 .. code-block:: cpp
 
-    template <typename ExPol>
+    テンプレート <typename ExPol>
     concept ChunkedExecutionPolicy =
         ExecutionPolicy<ExPol> &&
         requires(ExPol ex, typename ExPol::index_type size) {
@@ -323,39 +310,32 @@ of other algorithms weren't intended to be part of the same concept as the other
             { ex.set_chunk_size(size) } -> ExPol&
         }
 
-Chunk size is, of course, a bit more complicated with ``MDRangePolicy``, but the generalization
-to chunks in each dimension is pretty straightforward, so we could unify concepts a bit here.
-The ``IterateTile`` abstraction is pretty nice, and seems like it could unify these concepts
-to reduce the amount of duplicate code in places like ``impl/Kokkos_OpenMP_Parallel.hpp``.
+チャンクサイズは、もちろん　``MDRangePolicy``　では少し複雑になりますが、各次元におけるチャンクへの一般化は、かなり単純明快であるため、ここで概念を少し統一できました。 
+``IterateTile`` 抽象化は、かなり優れたもので、 ``impl/Kokkos_OpenMP_Parallel.hpp``のような場所での重複コード量を削減するために、これらの概念を統合できる可能性があるように思われます。
 
-It would be nice if there were some way to reduce the conceptual surface area by allowing
-users to think of a ``RangePolicy`` as a special case of ``MDRangePolicy`` with rank of 1,
-and to allow users to think of ``RangePolicy`` as a special case of ``TeamPolicy`` with ``N``
-teams of size 1 each.  Of course, we'd still provide the current interface as a shortcut,
-and would probably teach it the current way, but when users advance to the point where
-they're using all of these, it would be nice to have them think about one thing with two different
-axes rather than three different things.
+それぞれ、ユーザーが　``RangePolicy`` をランク1の ``MDRangePolicy`` の特殊ケースとして考えることを可能にすることで、およびユーザーが ``RangePolicy`` を、各チームが1つの　``N``　個のチームから成る　``TeamPolicy`` の特殊なケースとして考えることを可能にすることにより、概念的な表面積を縮小する方法があれば理想的です。もちろん、 現在のインターフェースはショートカットとして引き続き提供し、
+おそらく現在の方法で教えることになりますが、ユーザーがこれらのすべてを使いこなす段階に進むと、 三つの異なる事柄ではなく、一つの事柄を二つの異なる軸で考えられるようにすることが、理想的です。
 
-Finally, it's not entirely clear to me why we need separate concepts for ``TeamThreadRange`` and ``ThreadVectorRange``.
-In my mind, multiple levels of nested parallelism is just another axis along which to extend the execution policy concept,
-and it's not clear to me why we need to use up extra conceptual overhead to describe specific points in that hierarchy.
-(Again, I don't have any objections to the names specifically, just the extra cognitive load.)
+最後に、なぜ　``TeamThreadRange`` および ``ThreadVectorRange``という別々の概念が必要なのか、私は完全には理解できていません。
+複数のレベルで入れ子化された並列処理は、実行ポリシーの概念を拡張するための単なる別の軸に過ぎないものであると考えており、
+そして、その階層構造における特定のポイントを記述するために、なぜ余分な概念的なオーバーヘッドを消費する必要があるのか、完全には理解できていません。
+(繰り返しますが、名前そのものには特に異論はあるわけではなく、ただ、余計な認知負荷がかかるだけであると申し上げます。)
 
-It's entirely possible that there isn't significant simplification to be made here.
-Maybe the current separation of concerns is the simplest possible.
-But as long as we're looking at hardening Kokkos concepts, we should at least explore this space.
+ここには、大幅な単純化を行う余地が全くないという可能性があります。
+おそらく現在の関心の分離が、考え得る限り最も単純な形であるのでしょう。
+しかしながら、Kokkos の概念を強化する方向で検討している以上、少なくともこの領域を探求する必要があります。
 
-The ``TeamMember`` Concept
+ ``TeamMember`` 概念
 --------------------------
 
 TODO
 
-The ``Functor`` Concept
+ ``Functor`` 概念
 -----------------------
 
 TODO
 
-A Note on Implementation Delegation
+実装委任に関する注意事項
 -----------------------------------
 
 TODO
