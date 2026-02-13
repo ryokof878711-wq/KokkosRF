@@ -114,7 +114,7 @@ Kokkos　の外部に存在する　``DualView``　および　``OffsetView``　
             { ex.print_configuration(ostr, detail) };
         } &&
 
-ここでは、実行スペースインスタンスに関する最近の進捗から、現在スタティックメソッドとして実装されている多くのメソッドが、一般的なケースでは最終的にインスタンスメソッドのみを必要とすることが推測される。
+ここでは、実行スペースインスタンスに関する最近の進捗から、現在スタティックメソッドとして実装されている多くのメソッドが、一般的なケースでは最終的にインスタンスメソッドのみを必要とすることが推測されます。
 
 実装必要要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,9 +123,11 @@ Kokkos　の外部に存在する　``DualView``　および　``OffsetView``　
 
 .. |Kokkos_parallel_for| replace:: ``Kokkos::parallel_for``
 
-Further requirements cannot be expressed without additional types constrained by additional concepts
-(this is a well-known limitation of the concepts mechanism in C++, and is necessary to preserve decidability of the type system).
-Though some argue for using an archetype pattern to get around this (whereby an archetype with an implementation-private
+追加の概念によって制約された追加の型なしでは、さらなる要件を表現することはできません
+（これは、C++　の概念機構におけるよく知られた制限であり、型システムの決定可能性を維持するために必要です）。
+
+
+(whereby an archetype with an implementation-private
 name designed to meet the requirements of the extra concept is used in the definition of constraints),
 the state of practice appears to be converging on a strategy that involves creating an additional named
 concept templated on all relevant types and constraining them together, which can then be used at relevant call site.
