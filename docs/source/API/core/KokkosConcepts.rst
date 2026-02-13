@@ -1,37 +1,27 @@
-Kokkos Concepts
+Kokkos 概念
 ===============
 
-Introduction
+序章
 ------------
 
-Kokkos has been using concept-driven design essentially since its inception.
-Until recently, there has been no readily-available mechanism for expressing these concepts in code.
-(In fact, there hasn't really even been a generally agreed-upon approach to *documenting* concepts.)
-With the merging of C++ Concepts as a language feature into the working draft, their implementation in multiple compilers,
-and the acceptance of the first concept-driven library feature, ranges, into the standard, it is time to consider
-formally specifying and documenting the concepts Kokkos uses in generic code. Beyond this, the recent rapid expansion
-in (and corresponding demand for) new Kokkos backends makes the lack of a hardened, formal specification for basic
-Kokkos concepts more acute than ever. With several new backend projects on the near horizon—SYCL, resilience,
-and HPX, just to name a few—now is the best time to formalize the core concepts in Kokkos so that we can
-begin to iteratively harden the concept set that Kokkos uses in generic code.
-Additionally, since the promotion to Kokkos 3.0 includes a plan to deprecate many non-general
-features of certain execution spaces, now is a good time to take a more holistic approach
-to the execution space concept and the concepts it interacts with.
+Kokkos は、創業当初から本質的にコンセプト主導のデザインを採用してきた。
+最近まで、これらの概念をコードで表現する手軽な手段は存在しませんでした。
+(実際、概念を　*文書化する*　手法についてさえ、一般的に合意されたアプローチは存在していなかった。)
+C++コンセプトが言語機能として作業草案に統合され、複数のコンパイラで実装され、
+そして最初のコンセプト駆動型ライブラリ機能、範囲が基準に採用されたことに伴い、 Kokkos が汎用コードで使用する概念を正式に定義し文書化する時期が到来しています。 さらに、最近の新たな　Kokkos　バックエンドの急速な拡大（およびそれに対応する需要）により、基本的な　Kokkos　概念に対する堅牢で正式な仕様の欠如がこれまで以上に深刻化しています。
+近い将来に、SYCL、レジリエンス、そして　HPX　など、複数の新しいバックエンドプロジェクトが控えており、いくつか例を挙げると、今こそが、　Kokkos　の中核概念を正式に定義し、汎用コードでKokkosが使用する概念セットを反復的に強化し始める最適な時期です。
+さらに、Kokkos 3.0 へのアップグレードには、特定の実行空間における多くの非汎用機能の廃止計画が含まれているため、今こそ、実行空間の概念と、それが相互作用する概念に対して、より包括的なアプローチを取る良い機会です。
 
-Approach
+アプローチ
 --------
 
-In addition to the experience we have garnered over the past several years of participation in the
-ISO-C++ executor specification effort, we should use the approach in "Design of Concept Libraries for C++" (2011) by Sutton and Stroustrup as a guide.
-In particular, we should design based on the *concepts = constraints + axioms* philosophy, which focuses on balancing
-flexibility of use with ease of learning. This is not far from the design philosophy we already take—for instance,
-we don't really have separate "concepts" for the range policies given to ``parallel_for`` and ``parallel_reduce``,
-even though a pure constraints-based approach may not see a need to make these two the same
-(the algorithms do very slightly different things with them, after all).
-By combining constraints sets that are "similar enough" (as we always have done in the past),
-we can maintain the flexibility we need while minimizing cognitive load on users.
+過去数年にわたるISO-C++実行器仕様策定活動で得た経験に加え、サットンとストラウストルプによる『C++のための概念ライブラリ設計』（2011年）のアプローチを指針とすべきです。
+特に、*概念 = 制約 + 公理* という哲学に基づいて設計すべきでありますが、これは
+使用の柔軟性と習得の容易さのバランスに焦点を当てたものです。 これは私たちが既に採用している設計思想からは、大きく変わるものではありませんー例えば、 純粋な制約ベースのアプローチでは、これら2つの　``parallel_for`` および ``parallel_reduce``　を同一にする必要性を見出さないかもしれませんが、これら2つに与えられる範囲ポリシーについて、実際には別個の「概念」は存在しません。（アルゴリズムは、結局のところそれらに対してほんのわずかに異なる処理を行います）
+"similar enough" 制約集合を組み合わせることで  (これまで常にしてきたように)、
+ユーザーへの認知的負荷を最小限に抑えつつ、必要な柔軟性を維持することができます。
 
-Overview
+概念
 --------
 
 .. _ExecutionSpace: execution_spaces.html
@@ -54,10 +44,9 @@ Overview
 
 .. |TeamMember| replace:: ``TeamMember``
 
-When it comes to cognitive load, perhaps even more important than limiting the total number of
-concepts is limiting the number of *subsumption hierarchies* of concepts. Experience with C++ ranges has also shown that
-limiting the branching width of these hierarchies increases ease of learning.
-Roughly speaking and from a high-level perspective, the major user-visible concept hierarchies that Kokkos currently uses are:
+認知負荷に関して言えば、概念の総数を制限することよりも、おそらくさらに重要なのは、概念の　*subsumption hierarchies*　の数を制限することです。　C++　の範囲に関する経験からも、
+これらの階層構造における分岐幅を制限することが学習の容易さを高めることが示されています。
+おおまかに言えば、高レベルな視点から見た場合、　Kokkos　が現在使用している主要なユーザー可視の概念階層は次の通りです:
 
 * |ExecutionSpace|_
 * |MemorySpace|_
@@ -65,13 +54,13 @@ Roughly speaking and from a high-level perspective, the major user-visible conce
 * |TeamMember|_
 * ``Functor``
 
-Some minor hierarchies include:
+いくつかの小規模な階層には以下が含まれます:
 
 * ``MemoryLayout``
 * ``Reducer``
 * ``TaskScheduler``
 
-Some things currently being treated as concepts (according to ``Kokkos_Concepts.hpp``) that are really more like enumerations (or something similar) are:
+現在（　``Kokkos_Concepts.hpp`` によると）概念として扱われているものの、実際には列挙型（または類似のもの）に近い性質を持つものは以下の通りです:
 
 * ``MemoryTraits``
 * Several things used only with execution policies:
@@ -84,24 +73,22 @@ Some things currently being treated as concepts (according to ``Kokkos_Concepts.
 
 .. |Kokkos_View| replace:: ``Kokkos::View``
 
-There is also some question as to whether |Kokkos_View|_ (and friends) should be presented
-as a concept rather than just a class template, given the existence of act-alike
-class templates such as ``DualView`` and ``OffsetView`` external to Kokkos.
+Kokkos　の外部に存在する　``DualView``　および　``OffsetView``　のような、動作が類似したクラス型を前提とすれば、
+また、　|Kokkos_View|_（および関連クラス）を単なるクラス・テンプレートではなく、概念として提示すべきかどうかについても、疑問が投げかけられています。
 
-The ``ExecutionSpace`` Concept
+``ExecutionSpace`` 概念
 ------------------------------
 
 .. _ExecutionSpaceTwo: execution_spaces.html#executionspaceconcept
 
 .. |ExecutionSpaceTwo| replace:: ``ExecutionSpace``
 
-Working off the functionality currently common to ``Serial``, ``Cuda``, ``OpenMP``, ``Threads``, ``HIP``,
-and ``OpenMPTarget``, the current state of the Kokkos |ExecutionSpaceTwo|_ concept looks something like:
+現在　``Serial``、 ``Cuda``、 ``OpenMP``、 ``Threads``、``HIP``　および ``OpenMPTarget``　に共通する機能性を基盤として、　Kokkos |ExecutionSpaceTwo|_ 概念の現状は以下のようなものとなります:
 
 .. code-block:: cpp
 
-    template <typename Ex>
-    concept ExecutionSpace =
+    テンプレート <typename Ex>
+    概念 ExecutionSpace =
         std::regular<Ex> &&
         // Member type requirements:
         requires() {
@@ -117,7 +104,7 @@ and ``OpenMPTarget``, the current state of the Kokkos |ExecutionSpaceTwo|_ conce
             is_memory_space<typename Ex::scratch_memory_space>::value;
             typename Ex::device_type;
         } &&
-        // Required methods:
+        // 必要なメソッド:
         requires(Ex ex, std::string str, std::ostream& ostr, bool detail) {
             { ex.fence(str) };
             { ex.fence() };
@@ -127,10 +114,9 @@ and ``OpenMPTarget``, the current state of the Kokkos |ExecutionSpaceTwo|_ conce
             { ex.print_configuration(ostr, detail) };
         } &&
 
-Where we've extrapolated from the recent progress on execution space instances that many methods
-currently implemented as static methods eventually need only be instance methods in the general case.
+ここでは、実行スペースインスタンスに関する最近の進捗から、現在スタティックメソッドとして実装されている多くのメソッドが、一般的なケースでは最終的にインスタンスメソッドのみを必要とすることが推測される。
 
-Implementation Requirements
+実装必要要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _Kokkos_parallel_for: parallel-dispatch/parallel_for.html
