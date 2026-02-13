@@ -1,7 +1,7 @@
-Macros
+マクロ
 ======
 
-Function Markup Macros
+関数マークアップマクロ
 ----------------------
 
 .. toctree::
@@ -17,15 +17,15 @@ Function Markup Macros
 
    macros-special/if_on_host_or_device.rst
 
-Version Macros
+バージョンマクロ
 --------------
 
-.. list-table::
-   :header-rows: 1
-   :align: left
+.. list表::
+   :ヘッダー列: 1
+   :配列: 左
 
-   * - Version integer macros
-     - Example value assuming Kokkos version 4.2.1
+   * - Version integer macrosバージョン整数マクロ
+     -  Kokkos バージョン 4.2.1を想定した値の例
    * - ``KOKKOS_VERSION``
      - ``40201``
    * - ``KOKKOS_VERSION_MAJOR``
@@ -35,8 +35,8 @@ Version Macros
    * - ``KOKKOS_VERSION_PATCH``
      - ``1``
 
-Kokkos version macros are defined as integers.
-``KOKKOS_VERSION`` is equal to ``<MAJOR>*10000 + <MINOR>*100 + <PATCH>``.
+Kokkos バージョンマクロは、整数として定義されます。
+``KOKKOS_VERSION`` は、 ``<MAJOR>*10000 + <MINOR>*100 + <PATCH>``　に等しいです。
 ``40201`` corresponds to the Kokkos 4.2.1 release version.
 A ``99`` patch number denotes a development version.  That is, ``40199``
 corresponds to the Kokkos development version post release 4.1
