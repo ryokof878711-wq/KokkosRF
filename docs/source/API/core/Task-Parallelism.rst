@@ -1,15 +1,15 @@
-Task-Parallelism
+タスク並列処理
 ================
 
 .. role:: cpp(code)
     :language: cpp
 
-.. warning::
-   Deprecated since Kokkos 4.5.
+.. 警告::
+    Kokkos 4.5より非推奨
 
-Kokkos has support for lightweight task-based programming, which is currently pretty limited but we plan to substantially expand in the future.
+Kokkos　は、軽量なタスクベースのプログラミングをサポートしていますが、現時点ではかなり限定的ですが、将来的には大幅に拡張する予定です。
 
-Will Kokkos Tasking work for my problem?
+私の問題に対して、Kokkos Tasking　は有効ですか？
 ----------------------------------------
 
 Not all task-based problems are a good fit for the current Kokkos approach to tasking. Currently, the tasking interface in Kokkos is targeted at problems with kernels far too small to overcome the inherent overhead of top-level Kokkos data parallel launches—that is, small but plentiful data parallel tasks with a non-trivial dependency structure. For tasks that fit this general scale model but have (very) trivial dependency structures, it may be easier to use `hierarchical parallelism <../../ProgrammingGuide/HierarchicalParallelism.html>`_, potentially with a ``Kokkos::Schedule<Dynamic>`` scheduling policy (see, for instance, `this page <policies/RangePolicy.html>`_) for load balancing if necessary. 
