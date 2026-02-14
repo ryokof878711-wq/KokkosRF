@@ -1,13 +1,13 @@
-Profiling
+プロファイリング
 =========
 
 Kokkos::Profiling::ScopedRegion
 -------------------------------
-See `Profiling::ScopedRegion <profiling/scoped_region.html>`_ for details.`
+詳細については、 `Profiling::ScopedRegion <profiling/scoped_region.html>`_ を参照してください。
 
 Kokkos::Profiling::ProfilingSection
 -----------------------------------
-See `Profiling::ProfilingSection <profiling/profiling_section.html>`_ for details.`
+詳細については、 `Profiling::ProfilingSection <profiling/profiling_section.html>`_ を参照してください。
 
 .. toctree::
    :hidden:
