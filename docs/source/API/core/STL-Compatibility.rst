@@ -1,11 +1,9 @@
-STL Compatibility Issues
+STL 互換性問題
 ========================
 
-Kokkos developers strive to implement the Kokkos macros in a manner compatible with the latest versions of the
-C++ language and with the C++ Standard Library (STL). However deviations from this approach occur when necessary,
-as is the case for the following STL classes ``(std::*)``. The STL class does not work properly on GPUs so parallel Kokkos
-classes have been developed. This section documents the specific deviations and provides usage guidance for developers.
-Select the links below to see the details.
+Kokkosの開発者は、Kokkos　マクロを最新の　C++　言語および　C++　標準ライブラリ（STL）と互換性のある方法で実装するよう努めています。 ただし、必要に応じてこのアプローチからの逸脱が生じる場合があり、
+以下のSTLクラス　``(std::*)``　がその例です。 STL　クラスは　GPU　上で正常に動作しないため、並列　Kokkos　クラスが開発されました。本セクションでは、具体的な例外を文書化し、開発者向けの使用ガイダンスを提供します。
+下記リンクを選択して、詳細について参照してください。
 
 .. toctree::
    :maxdepth: 1
