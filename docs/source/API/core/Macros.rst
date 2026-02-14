@@ -100,13 +100,13 @@ Kokkos バージョンマクロは、整数として定義されます。
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 | ``KOKKOS_ENABLE_DEBUG_BOUNDS_CHECK``            | 追加の境界チェックが有効化されているかどうかを定義。                                                                |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_DEBUG_DUALVIEW_MODIFY_CHECK``   | デバッグチェックで　``Kokkos::DualView``　オブジェクトの有効化が有効な場合に定義                                      |
+| ``KOKKOS_ENABLE_DEBUG_DUALVIEW_MODIFY_CHECK``   | デバッグチェックで　``Kokkos::DualView``　オブジェクトの有効化が有効かどうかを定義                                      |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 | ``KOKKOS_ENABLE_DEPRECATED_CODE_3``             | メジャーリリース3で非推奨となった機能がまだ利用可能かどうかを定義                                     |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 | ``KOKKOS_ENABLE_DEPRECATION_WARNING``           | 非推奨機能が非推奨警告を生成するかどうかを定義                                              |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_TUNING``                        | ューニング用のバインディングが利用可能かどうか ( `#2422 <https://github.com/kokkos/kokkos/pull/2422>`_　を参照)。     |
+| ``KOKKOS_ENABLE_TUNING``                        | チューニング用のバインディングが利用可能かどうか ( `#2422 <https://github.com/kokkos/kokkos/pull/2422>`_　を参照)。     |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
 | ``KOKKOS_ENABLE_COMPLEX_ALIGN``                 | 複合型が配置されるかどうか。                                                                         |
 +-------------------------------------------------+-------------------------------------------------------------------------------------------------------------+
@@ -202,165 +202,166 @@ Kokkos は最新のC++言語標準をサポートしています。 特定の機
 +-------------------------------+-----------------------------------------------------------------------------------------------------------------------+
 | マクロ                        | ディスクリプション                                                                                                          |
 +===============================+=======================================================================================================================+
-| ``KOKKOS_ENABLE_HWLOC``       | Defined if `libhwloc <https://www.open-mpi.org/projects/hwloc/>`_ is enabled for NUMA and architecture information.   |
+| ``KOKKOS_ENABLE_HWLOC``       | NUMA およびアーキテクチャ情報用に `libhwloc <https://www.open-mpi.org/projects/hwloc/>`_ が有効化されているかどうかを定義。   |
 +-------------------------------+-----------------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_LIBDL``       | Defined if Kokkos links to the dynamic linker (libdl).                                                                |
+| ``KOKKOS_ENABLE_LIBDL``       | Kokkos　が動的リンカー（libdl）にリンクしているかどうかを定義。                                                                |
 +-------------------------------+-----------------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_LIBQUADMATH`` | Defined if Kokkos links to the `GCC Quad-Precision Math Library API <https://gcc.gnu.org/onlinedocs/libquadmath/>`_.  |
+| ``KOKKOS_ENABLE_LIBQUADMATH`` |  Kokkosが`GCC Quad-Precision Math Library API <https://gcc.gnu.org/onlinedocs/libquadmath/>`_にリンクするかどうかを定義。  |
 +-------------------------------+-----------------------------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ENABLE_ONEDPL``      | Defined if Kokkos links to the `oneDPL library <https://github.com/oneapi-src/oneDPL>`_ when using the SYCL backend.  |
-|                               | Enabling this TPL might affect performance for Kokkos algorithms that use it, e.g., `sort`.                           |
+| ``KOKKOS_ENABLE_ONEDPL``      | SYCL　バックエンド使用時に　Kokkos　が　`oneDPLライブラリ <https://github.com/oneapi-src/oneDPL>`_　にリンクするかどうかを定義。  |
+|                               | この　TPL　を有効にすると、それを使用する　Kokkos　アルゴリズム（例：　`sort`　）のパフォーマンスに影響を与える可能性があり。                          |
 +-------------------------------+-----------------------------------------------------------------------------------------------------------------------+
 
-Architectures
+アーキテクチャ
 -------------
 
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| Macro                             | Description                                                                                     | 
+| マクロ                             | ディスクリプション                                                                                   | 
 +===================================+=================================================================================================+
-| ``KOKKOS_ARCH_ARMV80``            | Optimize for ARMv8.0 Compatible CPU (HOST)                                                      |
+| ``KOKKOS_ARCH_ARMV80``            | ARMv8.0　互換性　CPU　(HOST)　向けに最適化。　                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_ARMV8_THUNDERX``    | Optimize for ARMv8 Cavium ThunderX CPU (HOST)                                                   |
+| ``KOKKOS_ARCH_ARMV8_THUNDERX``    | ARMv8 Cavium ThunderX CPU (HOST) 向けに最適化。
+|
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_ARMV81``            | Optimize for ARMv8.1 Compatible CPU (HOST)                                                      |
+| ``KOKKOS_ARCH_ARMV81``            | ARMv8.1 互換性　CPU　(HOST)　向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_ARMV8_THUNDERX2``   | Optimize for ARMv8 Cavium ThunderX2 CPU (HOST)                                                  |
+| ``KOKKOS_ARCH_ARMV8_THUNDERX2``   | ARMv8 Cavium ThunderX2 CPU (HOST) 向けに最適化。                                                 |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_AVX2``          | Optimize for AVX2 (enabled for Zen)                                                             |
+| ``KOKKOS_ARCH_AMD_AVX2``          | AVX2の最適化（Zenで有効化）。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX906``        | Optimize for AMD GPU MI50, MI60 (GPU)                                                           |
+| ``KOKKOS_ARCH_AMD_GFX906``        | AMD GPU MI50、MI60（GPU）向けに最適化。                                                          |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX908``        | Optimize for AMD GPU MI100 (GPU)                                                                |
+| ``KOKKOS_ARCH_AMD_GFX908``        | Optimize for AMD GPU MI100 (GPU)  AMD GPU MI100 (GPU)　向けに最適化。                                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX90A``        | Optimize for AMD GPU MI200 series (GPU)                                                         |
+| ``KOKKOS_ARCH_AMD_GFX90A``        | AMD GPU MI200シリーズ（GPU）向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX940``        | Optimize for AMD GPU MI300A pre-production (GPU)                                                |
+| ``KOKKOS_ARCH_AMD_GFX940``        | AMD GPU MI300A 試作版向け最適化 (GPU) 。                                               |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX942``        | Optimize for AMD GPU MI300X (GPU)                                                               |
+| ``KOKKOS_ARCH_AMD_GFX942``        | AMD GPU MI300X (GPU) 向けに最適化。                                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX942_APU``    | Optimize for AMD GPU MI300A (GPU)                                                               |
+| ``KOKKOS_ARCH_AMD_GFX942_APU``    | AMD GPU MI300A (GPU) 向けに最適化。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX1030``       | Optimize for AMD GPU V620, W6800 (GPU)                                                          |
+| ``KOKKOS_ARCH_AMD_GFX1030``       | Optimize for AMD GPU  (GPU) AMD GPU V620、 W6800 (GPU) 向けに最適化。                                                       |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX1100``       | Optimize for AMD GPU 7900 XT (GPU)                                                              |
+| ``KOKKOS_ARCH_AMD_GFX1100``       | Optimize for AMD GPU (GPU)  AMD GPU  7900 XTMI (GPU) 向けに最適化。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX1103``       | Optimize for AMD Phoenix APU (GPU)                                                              |
+| ``KOKKOS_ARCH_AMD_GFX1103``       | AMD Phoenix APU（GPU）向けに最適化。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GFX1201``       | Optimize for AMD GPU 9070 XT (GPU)                                                              |
+| ``KOKKOS_ARCH_AMD_GFX1201``       | AMD GPU 9070 XT (GPU) 向けに最適化。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_GPU``           | String of the architecture flag for AMD GPU (e.g. "gfx90A" when targeting a MI250X accelerator) |
+| ``KOKKOS_ARCH_AMD_GPU``           | AMD GPU　のアーキテクチャフラグの文字列（例：MI250Xアクセラレータをターゲットとする場合　"gfx90A"　）|
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AVX``               | Optimize for AVX                                                                                |
+| ``KOKKOS_ARCH_AVX``               | AVX の最適化。                                                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AVX2``              | Optimize for AVX2                                                                               |
+| ``KOKKOS_ARCH_AVX2``              | AVX2 の最適化。                                                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AVX512XEON``        | Optimize for Skylake(AVX512)                                                                    |
+| ``KOKKOS_ARCH_AVX512XEON``        | Skylake(AVX512) の最適化。                                                                   |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KNC``               | Optimize for Intel Knights Corner Xeon Phi (HOST)                                               |
+| ``KOKKOS_ARCH_KNC``               | インテル Knights Corner Xeon Phi (HOST) 向けに最適化。                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AVX512MIC``         | Optimize for Many Integrated Core (MIC; AVX512)                                                 |
+| ``KOKKOS_ARCH_AVX512MIC``         | Many Integrated Core (MIC; AVX512) 向けに最適化。                                                 |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_POWER8``            | Optimize for IBM POWER8 CPUs (HOST)                                                             |
+| ``KOKKOS_ARCH_POWER8``            | IBM POWER8 CPU向けに最適化 (HOST)。                                                           |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_POWER9``            | Optimize for IBM POWER9 CPUs (HOST)                                                             |
+| ``KOKKOS_ARCH_POWER9``            | IBM POWER9 CPU向けに最適化 (HOST)。                                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_RISCV_SG2042``      | Optimize for RISC-V SG2042 CPUs (HOST)                                                          |
+| ``KOKKOS_ARCH_RISCV_SG2042``      | RISC-V SG2042 CPU　向け最適化 (HOST)。                                                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_RISCV_RVA22V``      | Optimize for RISC-V RVA22V CPUs (HOST)                                                          |
+| ``KOKKOS_ARCH_RISCV_RVA22V``      | RISC-V RVA22V CPU　向け最適化 (HOST)。                                                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_RISCV_U74MC``       | Optimize for RISC-V U74MC CPUs (HOST)                                                           |
+| ``KOKKOS_ARCH_RISCV_U74MC``       | RISC-V U74MC CPUs 向け最適化 (HOST)。。                                                        |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_GEN``         | Optimize for Intel GPUs, Just-In-Time compilation (GPU)                                         |
+| ``KOKKOS_ARCH_INTEL_GEN``         | インテル　GPU、ジャストインタイムコンパイル向けに最適化　（GPU)。                                        |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_DG1``         | Optimize for Intel Iris XeMAX GPU (GPU)                                                         |
+| ``KOKKOS_ARCH_INTEL_DG1``         | Intel Iris XeMAX GPU (GPU) 向けに最適化。                                                       |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_DG2``         | Optimize for Intel DG2 GPUs (GPU)                                                               |
+| ``KOKKOS_ARCH_INTEL_DG2``         |　Intel DG2 GPU　(GPU) 向けに最適化。                                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_GEN9``        | Optimize for Intel GPU Gen9 (GPU)                                                               |
+| ``KOKKOS_ARCH_INTEL_GEN9``        | Intel GPU Gen9 (GPU) 向けに最適化。                                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_GEN11``       | Optimize for Intel GPU Gen11 (GPU)                                                              |
+| ``KOKKOS_ARCH_INTEL_GEN11``       | Intel GPU Gen11 (GPU) 向けに最適化。                                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_GEN12LP``     | Optimize for Intel GPU Gen12LP (GPU)                                                            |
+| ``KOKKOS_ARCH_INTEL_GEN12LP``     | Intel GPU Gen12LP (GPU) 向けに最適化。                                                           |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_XEHP``        | Optimize for Intel GPU Xe-HP (GPU)                                                              |
+| ``KOKKOS_ARCH_INTEL_XEHP``        | Intel GPU Xe-HP (GPU) 向けに最適化。                                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_PVC``         | Optimize for Intel GPU Ponte Vecchio/GPU Max (GPU)                                              |
+| ``KOKKOS_ARCH_INTEL_PVC``         | Intel GPU Ponte Vecchio/GPU Max (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_INTEL_GPU``         | Set if any Intel GPU architecture has been enabled                                              |
+| ``KOKKOS_ARCH_INTEL_GPU``         | Intel GPU　アーキテクチャが有効化されているかどうかを設定。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KEPLER``            | Set if any NVIDIA Kepler architecture has been enabled                                          |
+| ``KOKKOS_ARCH_KEPLER``            | いずれかの　NVIDIA Kepler　アーキテクチャが有効化されているかどうかを設定。                                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KEPLER30``          | Optimize for NVIDIA Kepler generation CC 3.0 (GPU)                                              |
+| ``KOKKOS_ARCH_KEPLER30``          | NVIDIA Kepler generation CC 3.0 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KEPLER32``          | Optimize for NVIDIA Kepler generation CC 3.2 (GPU)                                              |
+| ``KOKKOS_ARCH_KEPLER32``          | NVIDIA Kepler generation CC 3.2 (GPU) 向けに最適化。                                             |                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KEPLER35``          | Optimize for NVIDIA Kepler generation CC 3.5 (GPU)                                              |
+| ``KOKKOS_ARCH_KEPLER35``          | NVIDIA Kepler generation CC 3.5 (GPU) 向けに最適化。                                             |                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_KEPLER37``          | Optimize for NVIDIA Kepler generation CC 3.7 (GPU)                                              |
+| ``KOKKOS_ARCH_KEPLER37``          | NVIDIA Kepler generation CC 3.7 (GPU) 向けに最適化。                                             |                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_MAXWELL``           | Set if any NVIDIA Maxwell architecture has been enabled                                         |
+| ``KOKKOS_ARCH_MAXWELL``           | いずれかの　NVIDIA Maxwell アーキテクチャが有効化されているかどうかを設定。                                        |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_MAXWELL50``         | Optimize for NVIDIA Maxwell generation CC 5.0 (GPU)                                             |
+| ``KOKKOS_ARCH_MAXWELL50``         | NVIDIA Maxwell generation CC 5.0 (GPU) 向けに最適化。                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_MAXWELL52``         | Optimize for NVIDIA Maxwell generation CC 5.2 (GPU)                                             |
+| ``KOKKOS_ARCH_MAXWELL52``         | NVIDIA Maxwell generation CC 5.2 (GPU) 向けに最適化。                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_MAXWELL53``         | Optimize for NVIDIA Maxwell generation CC 5.3 (GPU)                                             |
+| ``KOKKOS_ARCH_MAXWELL53``         | NVIDIA Maxwell generation CC 5.3 (GPU) 向けに最適化。                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_NAVI``              | Set if any AMD Navi GPU architecture as been enabled :sup:`Since Kokkos 4.0`                    |
+| ``KOKKOS_ARCH_NAVI``              | いずれかの　AMD Navi GPU アーキテクチャが有効化されているかどうかを設定。:sup:` Kokkos 4.0`より                    |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_NAVI1030``          | Optimize for AMD GPU V620/W6800 GFX1030 (GPU) :sup:`Since Kokkos 4.0`                           |
+| ``KOKKOS_ARCH_NAVI1030``          | AMD GPU V620/W6800 GFX1030 (GPU) :sup:`Since Kokkos 4.0`向けに最適化。                           |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_PASCAL``            | Set if any NVIDIA Pascal architecture has been enabled                                          |
+| ``KOKKOS_ARCH_PASCAL``            | いずれかの NVIDIA Pascal アーキテクチャが有効化されているかどうかを設定。                                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_PASCAL60``          | Optimize for NVIDIA Pascal generation CC 6.0 (GPU)                                              |
+| ``KOKKOS_ARCH_PASCAL60``          | NVIDIA Pascal generation CC 6.0 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_PASCAL61``          | Optimize for NVIDIA Pascal generation CC 6.1 (GPU)                                              |
+| ``KOKKOS_ARCH_PASCAL61``          | NVIDIA Pascal generation CC 6.1 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VOLTA``             | Set if any NVIDIA Volta architecture has been enabled                                           |
+| ``KOKKOS_ARCH_VOLTA``             | いずれかの NVIDIA Volta アーキテクチャが有効化されているかどうかを設定。                                    |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VOLTA70``           | Optimize for NVIDIA Volta generation CC 7.0 (GPU)                                               |
+| ``KOKKOS_ARCH_VOLTA70``           | NVIDIA Volta generation CC 7.0 (GPU) 向けに最適化。                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VOLTA72``           | Optimize for NVIDIA Volta generation CC 7.2 (GPU)                                               |
+| ``KOKKOS_ARCH_VOLTA72``           | NVIDIA Volta generation CC 7.2 (GPU)　向けに最適化。                                              |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_TURING75``          | Optimize for NVIDIA Turing generation CC 7.5 (GPU)                                              |
+| ``KOKKOS_ARCH_TURING75``          | NVIDIA Turing generation CC 7.5 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMPERE``            | Set if any NVIDIA Ampere architecture has been enabled                                          |
+| ``KOKKOS_ARCH_AMPERE``            | いずれかの NVIDIA Ampere アーキテクチャが有効化されているかどうかを設定。                                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMPERE80``          | Optimize for NVIDIA Ampere generation CC 8.0 (GPU)                                              |
+| ``KOKKOS_ARCH_AMPERE80``          | NVIDIA Ampere generation CC 8.0 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMPERE86``          | Optimize for NVIDIA Ampere generation CC 8.6 (GPU)                                              |
+| ``KOKKOS_ARCH_AMPERE86``          | NVIDIA Ampere generation CC 8.6 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMPERE87``          | Optimize for NVIDIA Ampere generation CC 8.7 (GPU)                                              |
+| ``KOKKOS_ARCH_AMPERE87``          | NVIDIA Ampere generation CC 8.7 (GPU) 向けに最適化。                                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_ADA89``             | Optimize for NVIDIA Ada generation CC 8.9 (GPU) :sup:`since Kokkos 4.1`                         |
+| ``KOKKOS_ARCH_ADA89``             | Optimize for NVIDIA Ada generation CC 8.9 (GPU) 向けに最適化。:sup:`Kokkos 4.1より`                         |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_HOPPER``            | Set if any NVIDIA Hopper architecture has been enabled :sup:`since Kokkos 4.0`                  |
+| ``KOKKOS_ARCH_HOPPER``            | Set if いずれかの NVIDIA Hopper アーキテクチャが有効化されているかどうかを設定。 :sup:`Kokkos 4.0より`                  |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_HOPPER90``          | Optimize for NVIDIA Hopper generation CC 9.0 (GPU) :sup:`since Kokkos 4.0`                      |
+| ``KOKKOS_ARCH_HOPPER90``          | NVIDIA Hopper generation CC 9.0 (GPU)　向けに最適化。:sup:`Kokkos 4.0より`                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_BLACKWELL``         | Set if any NVIDIA Blackwell architecture has been enabled :sup:`since Kokkos 4.7`               |
+| ``KOKKOS_ARCH_BLACKWELL``         | いずれかの NVIDIA Blackwell アーキテクチャが有効化されているかどうかを設定。 :sup:`Kokkos 4.7より`               |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_BLACKWELL100``      | Optimize for NVIDIA Blackwell generation CC 10.0 (GPU) :sup:`since Kokkos 4.7`                  |
+| ``KOKKOS_ARCH_BLACKWELL100``      | NVIDIA Blackwell generation CC 10.0 (GPU) 向けに最適化。:sup:`Kokkos 4.7より`                  |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_BLACKWELL120``      | Optimize for NVIDIA Blackwell generation CC 12.0 (GPU) :sup:`since Kokkos 4.7`                  |
+| ``KOKKOS_ARCH_BLACKWELL120``      | NVIDIA Blackwell generation CC 12.0 (GPU) 向けに最適化。:sup:`Kokkos 4.7より`                  |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_ZEN``           | Optimize for AMD Zen architecture (HOST)                                                        |
+| ``KOKKOS_ARCH_AMD_ZEN``           | AMD Zen アーキテクチャ (HOST) 向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_ZEN2``          | Optimize for AMD Zen2 architecture (HOST)                                                       |
+| ``KOKKOS_ARCH_AMD_ZEN2``          | AMD Zen2 アーキテクチャ (HOST) 向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_ZEN3``          | Optimize for AMD Zen3 architecture (HOST)                                                       |
+| ``KOKKOS_ARCH_AMD_ZEN3``          | AMD Zen3 アーキテクチャ (HOST) 向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_ZEN4``          | Optimize for AMD Zen4 architecture (HOST)                                                       |
+| ``KOKKOS_ARCH_AMD_ZEN4``          | AMD Zen4 アーキテクチャ (HOST) 向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_AMD_ZEN5``          | Optimize for AMD Zen5 architecture (HOST)                                                       |
+| ``KOKKOS_ARCH_AMD_ZEN5``          | AMD Zen5 アーキテクチャ (HOST) 向けに最適化。                                                      |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VEGA``              | Set if any AMD Vega GPU architecture as been enabled                                            |
+| ``KOKKOS_ARCH_VEGA``              | いずれかの　AMD Vega GPU アーキテクチャが有効化されているかどうかを設定。                                            |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VEGA900``           | Optimize for AMD GPU MI25 GFX900 (GPU) :sup:`Removed in Kokkos 4.0`                             |
+| ``KOKKOS_ARCH_VEGA900``           | AMD GPU MI25 GFX900 (GPU)　向けに最適化。:sup:`Kokkos 4.0において削除`                             |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VEGA906``           | Optimize for AMD GPU MI50/MI60 GFX906 (GPU)                                                     |
+| ``KOKKOS_ARCH_VEGA906``           | AMD GPU MI50/MI60 GFX906 (GPU) 向けに最適化。                                                    |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VEGA908``           | Optimize for AMD GPU MI100 GFX908 (GPU)                                                         |
+| ``KOKKOS_ARCH_VEGA908``           | AMD GPU MI100 GFX908 (GPU) 向けに最適化。                                                        |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
-| ``KOKKOS_ARCH_VEGA90A``           | Optimize for AMD GPU MI200 series GFX90A (GPU)                                                  |
+| ``KOKKOS_ARCH_VEGA90A``           | AMD GPU MI200 シリーズ GFX90A (GPU) 向けに最適化。                                                 |
 +-----------------------------------+-------------------------------------------------------------------------------------------------+
