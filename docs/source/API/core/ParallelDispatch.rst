@@ -1,37 +1,37 @@
 Parallel Execution/Dispatch
 ===========================
 
-Parallel patterns
+並列パターン
 -----------------
 
-Parallel execution patterns for composing algorithms.
+ルゴリズムを構成するための並列実行パターン。
 
-.. list-table::
-   :widths: 25 75
-   :header-rows: 1
+.. リスト表::
+   :幅: 25 75
+   :ヘッダー列: 1
 
-   * - Function
-     - Description
+   * - 関数
+     - ディスクリプション
    * - `parallel_for <parallel-dispatch/parallel_for.html>`__
-     - Executes user code in parallel
+     - ユーザーコードを並列に実行
    * - `parallel_reduce <parallel-dispatch/parallel_reduce.html>`__
-     - Executes user code to perform a reduction in parallel
+     - 並列で削減を実行するためにユーザーコードを実行
    * - `parallel_scan <parallel-dispatch/parallel_scan.html>`__
-     - Executes user code to generate a prefix sum in parallel
+     - 並列で接頭和を生成するユーザーコードを実行
    * - `fence <parallel-dispatch/fence.html>`__
-     - Fences execution spaces
+     - 実行領域をフェンス
 
-Tags for Team Policy Calculations
+チームポリシー計算用タグ
 ---------------------------------
 
-The following parallel pattern tags are used to call the correct overload for team size calculations (team_size_max,team_size_recommended):
+以下の並列パターンタグは、チーム規模計算の適切なオーバーロードを呼び出すために使用されます (team_size_max,team_size_recommended):
 
-.. list-table::
-   :widths: 25 75
-   :header-rows: 1
+.. リスト表::
+   :幅: 25 75
+   :ヘッダー列: 1
 
-   * - Tag
-     - Pattern
+   * - タグ
+     - パターン
    * - `ParallelForTag <parallel-dispatch/ParallelForTag.html>`__
      - parallel_for
    * - `ParallelReduceTag <parallel-dispatch/ParallelReduceTag.html>`__
