@@ -91,9 +91,9 @@ Kokkosの　``TaskScheduler``　概念は、タスクベースシステムにお
         Kokkos::BasicFuture<my_task_result, Scheduler> ff = fut;
     }
 
-(注意事項: Kokkos　はタスク並列パターンの具体的な戻り値型を保証せず、適切な``Kokkos::BasicFuture``型に変換可能であることのみを保証します。  何らかの理由で型に名前を付ける必要がある場合（例えばコンテナに格納する場合など）までは、``auto`` を使用してください。 Otherwise, Kokkos may be able to provide better performance if the future type is never required to be converted to a specific ``Kokkos::BasicFuture`` type.)
+(注意事項: Kokkos　はタスク並列パターンの具体的な戻り値型を保証せず、適切な``Kokkos::BasicFuture``型に変換可能であることのみを保証します。  何らかの理由で型に名前を付ける必要がある場合（例えばコンテナに格納する場合など）までは、``auto`` を使用してください。 そうでない場合、将来の型が特定の ``Kokkos::BasicFuture`` 型に変換される必要が全くないならば、Kokkos　の方がより優れたパフォーマンスを提供できる可能性があります。)
 
-``TaskScheduler`` types in Kokkos have shared reference semantics; a copy of a given scheduler represents the same underlying entity and strategy as the scheduler it was copied from. Inside of a task functor, users should retrieve the scheduler instance from the team member handle passed in as the first argument rather than storing the scheduler themselves.  Use ``auto`` for this as well until you need to store it for some reason.
+Kokkosにおける ``TaskScheduler`` 型は、共有参照セマンティクスを持ちます; 特定のスケジューラのコピーは、それがコピーされた元のスケジューラと同じ基盤となるエンティティと戦略を表します。 タスクファンクタ内部では、ユーザーはスケジューラを自身で保持するのではなく、最初の引数として渡されたチームメンバーハンドルからスケジューラインスタンスを取得すべきです。これについても、何らかの理由で保存する必要が生じるまでは``auto``　を使用してください。
 
 When a future is ready, the result of the task that a future represents as a predecessor can be retrieved using the ``get()`` method.  However, this can **only** be called from a context where the future is guaranteed to be ready—that is, in a task that was spawned with the future as a predecessor, or a task that transitively depends on that future via another task, or after a ``Kokkos::wait`` on the scheduler that spawned the task associated with the future (see below).  **Calling the** ``get()`` **method of a future in any other context results in undefined behavior** (and the worst kind of bug, at that: it may not even result in a segfault or anything until hours of execution!).  Note that this is different from ``std::future``, where the ``get()`` method blocks until it's ready.
 
