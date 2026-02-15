@@ -14,19 +14,19 @@ is_execution_policy
 is_memory_space
 ---------------
 
-Boolean type trait to detect types that model `MemorySpace concept <memory_spaces.html#memoryspaceconcept>`_.
+`MemorySpace concept <memory_spaces.html#memoryspaceconcept>`_ をモデル化する型を検出するためのブール型特性。
 
 is_memory_traits
 ----------------
 
-Boolean type trait to detect specializations of ``Kokkos::MemoryTraits``.
+ ``Kokkos::MemoryTraits``. の特殊化を検出するためのブール型特性。
 
 is_reducer
 ----------
 
-Boolean type trait to detect types that model the `Reducer concept <builtinreducers/ReducerConcept.html>`_.
+`Reducer concept <builtinreducers/ReducerConcept.html>`_ をモデル化する型を検出するためのブール型特性。
 
 is_space
 --------
 
-Boolean type trait to detect types that model the Space concept.
+Space　概念をモデル化する型を検出するためのブール型特性。
