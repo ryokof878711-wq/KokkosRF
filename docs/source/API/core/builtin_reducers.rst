@@ -10,38 +10,36 @@
    :ヘッダー列: 1
 
    * - リデューサー
-     - Description
+     - ディスクリプション
    * - `BAnd <builtinreducers/BAnd.html>`__
-     - Binary 'And' reduction
+     - バイナリ 'And' 還元
    * - `BOr <builtinreducers/BOr.html>`__
-     - Binary 'Or' reduction
+     - バイナリ 'Or' 還元
    * - `LAnd <builtinreducers/LAnd.html>`__
-     - Logical 'And' reduction
+     - 論理的 'And' 還元
    * - `LOr <builtinreducers/LOr.html>`__
-     - Logical 'Or' reduction
+     - 論理的' Or' 還元
    * - `Max <builtinreducers/Max.html>`__
-     - Maximum reduction
+     - 最大還元
    * - `MaxLoc <builtinreducers/MaxLoc.html>`__
-     - Reduction providing maximum and an associated index
+     - 最大値および関連インデックスを提供する還元
    * - `Min <builtinreducers/Min.html>`__
-     - Minimum reduction
+     - 最小還元
    * - `MinLoc <builtinreducers/MinLoc.html>`__
-     - Reduction providing minimum and an associated index
+     - 最小値および関連インデックスを提供する還元
    * - `MinMax <builtinreducers/MinMax.html>`__
-     - Reduction providing both minimum and maximum
+     - 最小値および最大値の両方を提供する還元
    * - `MinMaxLoc <builtinreducers/MinMaxLoc.html>`__
-     - Reduction providing both minimum and maximum and associated indices
+     - 最小値および最大値の両方並びに関連インデックスを提供する還元
    * - `Prod <builtinreducers/Prod.html>`__
-     - Multiplicative reduction
+     - 乗法的還元
    * - `Sum <builtinreducers/Sum.html>`__
-     - Sum reduction
+     - 和の還元
 
 
-:cpp:struct:`reduction_identity` defines the neutral elements (identity values)
-for various reduction operations. Specializing it is crucial for enabling
-built-in reducers to work with user-defined types.
+:cpp:struct:`reduction_identity` は、様々な還元演算における中和元（恒等値）を定義します。 特化処理は、組み込みリデューサーがユーザー定義型と連動するために不可欠です。
 
-`Reduction Scalar Types <builtinreducers/ReductionScalarTypes.html>`__ are template classes for storage for reducers.
+`還元スカラー型 <builtinreducers/ReductionScalarTypes.html>`__ は、リデューサーのストレージ用テンプレートクラスです。
 
 .. toctree::
    :hidden:
