@@ -1,6 +1,6 @@
 .. _api-execution-spaces:
 
-Execution Spaces実行空間
+実行空間
 ================
 
 .. role:: cpp(code)
