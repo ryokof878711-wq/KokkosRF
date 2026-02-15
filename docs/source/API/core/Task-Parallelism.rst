@@ -123,14 +123,14 @@ Kokkosは通常、個々の　Future を待機するために実行スレッド�
 タスクファンクタにおける　"待機"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In Kokkos tasking, all task functors must be able to run to completion without blocking once they are started (the Kokkos scheduler *can* run other tasks at any point that the functor calls back into the Kokkos tasking system, such as any ``task_spawn``, but it is allowed to assume user functors will run to completion if left alone).  This means that there is no way to block a task pending the result of another task.  Other tasking systems that make this kind of design decision require the user to spawn a new task for each new piece of predicated work, which is an option in Kokkos as well, but Kokkos also provides another option.  To help reduce the allocation cost associated with the traditional approach to never-blocking task systems, Kokkos allows users to "reuse" the current task as a successor to some future.  Kokkos provides the ``Kokkos::respawn()`` function.  For example:
+ Kokkos のタスク処理において、すべてのタスクファンクタは、一度開始されたらブロックすることなく完了まで実行可能である必要があります (　Kokkos　スケジューラは、ファンクタがKokkosタスクシステムへ呼び戻す任意の時点、例えば、あらゆる``task_spawn``で、他のタスクを実行*可能*ですが、放置されたユーザーファンクタは完了まで実行されると仮定しても差し支えありません)。 これは、あるタスクの結果を待機している別のタスクをブロックする方法がないことを意味します。 この種の設計選択を行う他のタスクシステムでは、予測される作業の新たな部分ごとにユーザーが新しいタスクを生成する必要がありますが、これはまた　Kokkos　でもオプションの一つです。しかしながら、 but Kokkos はまた、別のオプションも提供します。 従来の非ブロッキングタスクシステムのアプローチに伴う割り当てコストを削減するため、Kokkosではユーザーが現在のタスクを将来の何らかの後継タスクとして、"再利用"　できるようにします。 Kokkos は、 ``Kokkos::respawn()`` 関数を提供します。  例えば:
 
 .. code-block:: cpp
 
-    template <class Scheduler>
-    struct MyTaskFunctor {
-        using value_type = void;
-        using future_type = Kokkos::BasicFuture<double, Scheduler>;
+    テンプレート <class Scheduler>
+    構造体 MyTaskFunctor {
+        value_type = void;　を使用
+        using future_type = Kokkos::BasicFuture<double, Scheduler>;　を使用
         future_type f;
         template <class TeamMember>
         KOKKOS_INLINE_FUNCTION
@@ -143,28 +143,28 @@ In Kokkos tasking, all task functors must be able to run to completion without b
             Kokkos::respawn(this, f);
             }
             else {
-            // This is after the respawn so we're guaranteed that f is ready
+            // これはリスポーン後なので、　f　が確実に準備完了している状態です
             printf("Got result %f\n", f.get());
             }
         }
     };
 
-A task functor can only be respawned up to once *per execution of* ``operator()`` (that is, once per time it is spawned or respawned).  Multiple calls to ``respawn`` in the same execution of ``operator()`` are redundant and lead to undefined behavior.  Calls to ``respawn`` are always lazy—the subsequent call to ``operator()`` by Kokkos will only happen after the currently executing one returns (and after the predecessors, if any, are ready) at the earliest.
+タスクファンクタは、``operator()``の　タスクファンクタは、``operator()``の　*実行ごとに*（つまり、生成または再生成されるたびに）最大1回のみ再生成できます。 同じ　``operator()``　の実行内で ``respawn`` を複数回呼び出すことは冗長であり、未定義挙動を引き起こします。``respawn``　への呼び出しは常に遅延評価されます。つまり、Kokkos　による後続の呼び出しは、現在実行中の呼び出しが返った後（および先行する呼び出しがある場合は、それらが準備完了した後）に初めて発生します。
 
-The first argument to ``Kokkos::respawn`` must always be a pointer to the currently executing task functor (or one of its base classes) from which ``Kokkos::respawn`` is called.  The second argument can be either a future of the same scheduler as the currently executing task functor or an instance of the scheduler itself.  The third (optional) argument is a task priority, discussed below.
+``Kokkos::respawn`` の最初の引数は、常に ``Kokkos::respawn`` が呼び出されている現在実行中のタスクファンクタ（またはその基底クラスのいずれか）へのポインタでなければなりません。 第2引数は、現在実行中のタスクファンクタと同じスケジューラのフューチャー、またはスケジューラ自体のインスタンスのいずれかです。 第三引数（オプション）はタスク優先度であり、以下で説明します。 
 
-Aggregate Predecessors
+集計前段階
 ----------------------
 
-Kokkos tasking provides two forms of the ``when_all()`` method on every ``TaskScheduler`` type. Both serve to aggregate multiple predecessors into one, and both return a value convertible to a ``Kokkos::BasicFuture`` of ``void`` and that scheduler type.  The first takes an array of ``Kokkos::BasicFuture`` of the scheduler type and a count of entries in that array.  The second takes a ``count`` and a unary function or functor that should expect to be called with each integer in the range ``[0, count)``.  In both cases, the return value is a future that will become ready when all of the input futures become ready.
+Kokkos　のタスク処理は、すべての　TaskScheduler　型に対して、2種類の ``when_all()`` メソッドを提供します。 どちらも複数の先行オブジェクトを1つに集約する役割を果たし、どちらも　``void`` 型およびそのスケジューラ型の　``Kokkos::BasicFuture``に変換可能な値を返します。　最初のものは、スケジューラ型の　``Kokkos::BasicFuture``　の配列とその配列内のエントリ数を引数として受け取ります。 二つ目は、``count``　と一項関数またはファンクタを受け取り、その関数は範囲　``[0, count)``　内の各整数で呼び出されることを想定しています。 いずれの場合も、戻り値は入力　Future がすべて準備完了状態になった時点で準備完了状態になる　Future です。
 
-Task Priorities
+タスク優先度
 ---------------
 
-Kokkos allows users to provide a priority hint to task parallel execution policies as an optional third argument, or as an optional third argument to ``Kokkos::respawn``.  This has no observable effect on the programming model—only on the performance.  A scheduler may ignore these priorities.  The allowed task priorities are ``Kokkos::TaskPriority::High``, ``Kokkos::TaskPriority::Regular``, and ``Kokkos::TaskPriority::Low``, which the second being the default if the argument isn't given.
+Kokkos　では、タスク並列実行ポリシーに対して、優先度ヒントをオプションの第三引数として、または　``Kokkos::respawn``　のオプションの第三引数として指定できます。 これはプログラミングモデルには目に見える影響を与えず、パフォーマンスのみに影響します。 スケジューラは、これらの優先度を無視する場合があります。 認められたタスク優先度は、``Kokkos::TaskPriority::High``、 ``Kokkos::TaskPriority::Regular``　および　``Kokkos::TaskPriority::Low``　であり、 それは、引数が指定されていない場合、デフォルトで2番目の値が使用されるということです。
 
 ..
-    Invariants in the Kokkos Tasking Programming Model
+     Kokkos タスクプログラミングモデルにおける不変条件
     ==================================================
 
 ..
