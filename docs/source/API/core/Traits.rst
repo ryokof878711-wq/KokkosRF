@@ -9,7 +9,7 @@ is_array_layout
 is_execution_policy
 -------------------
 
-Boolean type trait to detect types that model `ExecutionPolicy concept <policies/ExecutionPolicyConcept.html>`_.
+`ExecutionPolicy concept <policies/ExecutionPolicyConcept.html>`_ をモデル化する型を検出するためのブール型特性。
 
 is_memory_space
 ---------------
