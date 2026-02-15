@@ -1,27 +1,27 @@
-C-style memory management
+Cスタイルのメモリ管理
 =========================
 
-Functions
+関数
 ---------
-Defined in ``<Kokkos_Core.hpp>``
+ ``<Kokkos_Core.hpp>``　に定義。
 
 .. toctree::
    :maxdepth: 1
 
-   ./c_style_memory_management/malloc
+   ./c_style_memory_management/malloc　は、
 
-allocates memory
-
-.. toctree::
-   :maxdepth: 1
-
-   ./c_style_memory_management/realloc
-
-expands or shrinks previously allocated memory block
+メモリ割り当てます。
 
 .. toctree::
    :maxdepth: 1
 
-   ./c_style_memory_management/free
+   ./c_style_memory_management/realloc　は、
 
-deallocates previously allocated memory 
+以前割り当てられたメモリブロックを拡大し、縮小します。
+
+.. toctree::
+   :maxdepth: 1
+
+   ./c_style_memory_management/free　は、
+
+以前割り当てられたメモリブロックの割り当てを取り消します。
