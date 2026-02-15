@@ -1,10 +1,10 @@
-Traits
+トレイト
 ======
 
 is_array_layout
 ---------------
 
-Boolean type trait to detect types that model the Layout concept.
+レイアウト概念をモデル化する型を検出するためのブール型特性。
 
 is_execution_policy
 -------------------
