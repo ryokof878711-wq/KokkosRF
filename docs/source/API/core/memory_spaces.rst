@@ -1,6 +1,6 @@
 .. _api-memory-spaces:
 
-Memory Spaces
+メモリ空間
 =============
 
 .. role:: cpp(code)
@@ -20,16 +20,16 @@ Memory Spaces
 
 .. _ExecutionSpaceType: ./execution_spaces.html#kokkos-executionspaceconcept
 
-.. |ExecutionSpaceType| replace:: :cpp:func:`ExecutionSpace` type
+.. |ExecutionSpaceType| 置換:: :cpp:func:`ExecutionSpace` 型
 
 .. _ExecutionSpaceTypes: ./execution_spaces.html#kokkos-executionspaceconcept
 
-.. |ExecutionSpaceTypes| replace:: :cpp:func:`ExecutionSpace` types
+.. |ExecutionSpaceTypes| 置換:: :cpp:func:`ExecutionSpace` 型
 
 ``Kokkos::CudaSpace``
 ---------------------
 
-``Kokkos::CudaSpace`` is a |MemorySpaceType|_ representing device memory on a Cuda-capable GPU. Except in rare instances, it should not be used directly, but instead should be used generically as a memory space.  For details, see |TheDocumentationOnTheMemorySpaceConcept|_.
+``Kokkos::CudaSpace`` は、Cuda対応GPU上のデバイスメモリを表すMemorySpaceTypeです。 Except in rare instances, it should not be used directly, but instead should be used generically as a memory space.  For details, see |TheDocumentationOnTheMemorySpaceConcept|_.
 
 ``Kokkos::CudaHostPinnedSpace``
 -------------------------------
