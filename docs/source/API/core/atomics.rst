@@ -1,4 +1,4 @@
-Atomics
+アトミック
 =======
 
 .. toctree::
