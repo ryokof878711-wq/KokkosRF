@@ -1,15 +1,15 @@
-Built-in Reducers
+組み込みリデューサー
 =================
 
-`ReducerConcept <builtinreducers/ReducerConcept.html>`__ provides the concept for Reducers.
+`ReducerConcept <builtinreducers/ReducerConcept.html>`__ は、リデューサーの概念を提供します。
 
-Reducer objects used in conjunction with `parallel_reduce <parallel-dispatch/parallel_reduce.html>`__
+`parallel_reduce <parallel-dispatch/parallel_reduce.html>`__ と組み合わせて使用されるリデューサーオブジェクト。
 
-.. list-table::
-   :widths: 25 75
-   :header-rows: 1
+.. リスト表::
+   :幅: 25 75
+   :ヘッダー列: 1
 
-   * - Reducer
+   * - リデューサー
      - Description
    * - `BAnd <builtinreducers/BAnd.html>`__
      - Binary 'And' reduction
