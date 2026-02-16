@@ -1,4 +1,4 @@
-Algorithms API
+アルゴリズム API
 ##############
 
 .. toctree::
