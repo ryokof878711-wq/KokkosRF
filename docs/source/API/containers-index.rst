@@ -5,28 +5,28 @@ Containers API
    :widths: 25 75
    :header-rows: 1
 
-   * - Container
-     - Description
-   * - `Bitset <containers/Bitset.html>`__
-     - A concurrent Bitset class.
+   * - コンテナ
+     - ディスクリプション
+   * - `ビットセット　<containers/Bitset.html>`__
+     - 並行処理可能なビットセットクラス。
    * - `DualView <containers/DualView.html>`__
-     - Container to manage access to mirrored views in different memory spaces.
+     - 異なるメモリ空間におけるミラーリングされたビューへのアクセスを管理するコンテナ。
    * - `DynamicView <containers/DynamicView.html>`__
-     - DynamicView comment.
+     - DynamicView コメント。
    * - `DynRankView <containers/DynRankView.html>`__
-     - Kokkos Runtime-determined-dimension DynRankView class.
+     - Kokkos Runtime-determined-dimension DynRankView クラス。
    * - `ErrorReporter <containers/ErrorReporter.html>`__
-     - A class to facilitate thread-safe error output.
+     - スレッドセーフなエラー出力を実現するためのクラス。
    * - `OffsetView <containers/Offset-View.html>`__
-     - OffsetView comment.
+     - OffsetView コメント。
    * - `ScatterView <containers/ScatterView.html>`__
-     - ScatterView comment.
+     - ScatterView コメント。
    * - `StaticCrsGraph <containers/StaticCrsGraph.html>`__
-     - [DEPRECATED] StaticCrsGraph compressed raw storage graph
+     - [非推奨] StaticCrsGraph 圧縮生ストレージグラフ。
    * - `UnorderedMap <containers/Unordered-Map.html>`__
-     - UnorderedMap comment.
+     - UnorderedMap コメント。
    * - `vector <containers/vector.html>`__
-     - [DEPRECATED] std::vector compatible implementation that works with non-host memory spaces.
+     - [非推奨] 非ホストメモリ空間で動作する、std::vector　互換の実装。
 
 .. toctree::
    :hidden:
