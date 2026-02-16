@@ -24,27 +24,27 @@
 | fill_random              | アルゴリズム | ランダムナンバー | (0から)範囲または開始-終了空間に適合するサンプル空間を作成  |
 +--------------------------+-----------+---------------+----------------------------------------------------------------+
 
-コンテイナ
+コンテナ
 ----------
 
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
 |　名前                                               | ライブラリ                               | カテゴリ | ディスクリプション                                                                                                    |
 +====================================================+=======================================+==========+================================================================================================================+
-| `Bitset <containers/Bitset.html>`_                 | `Containers <containers-index.html>`_ | View     | A concurrent Bitset class.                                                                                     |
+| `Bitset <containers/Bitset.html>`_                 | `コンテナ <containers-index.html>`_ | ビュー     | 並行ビットセットクラス.                                                                                     |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `DualView <containers/DualView.html>`_             | `Containers <containers-index.html>`_ | View     | Host-Device Mirror of View with Host-Device Memory                                                             |
+| `DualView <containers/DualView.html>`_             | `コンテナ <containers-index.html>`_ | ビュー     | ホスト-デバイス記憶装置を用いたホスト-デバイス間ミラーリング                                                            |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `DynamicView <containers/DynamicView.html>`_       | `Containers <containers-index.html>`_ | View     | A view which can change its size dynamically.                                                                  |
+| `DynamicView <containers/DynamicView.html>`_       | `コンテナ <containers-index.html>`_ | ビュー     | 動的にサイズを変更できるビュー。                                                                 |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `DynRankView <containers/DynRankView.html>`_       | `Containers <containers-index.html>`_ | View     | A view which can determine its rank at runtime.                                                                |
+| `DynRankView <containers/DynRankView.html>`_       | `コンテナ <containers-index.html>`_ | ビュー     | 実行時に自身のランクを判定できるビュー。                                                               |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `ErrorReporter <containers/ErrorReporter.html>`_   | `Containers <containers-index.html>`_ | View     | A class supporting error recording in parallel code.                                                           |
+| `ErrorReporter <containers/ErrorReporter.html>`_   | `コンテナ <containers-index.html>`_ | ビュー     | 並列コードにおけるエラー記録をサポートするクラス。                                                          |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `OffsetView <containers/Offset-View.html>`_        | `Containers <containers-index.html>`_ | View     | View structure supporting non-zero start indices.                                                              |
+| `OffsetView <containers/Offset-View.html>`_        | `コンテナ <containers-index.html>`_ | ビュー     | ゼロ以外の開始インデックスをサポートする構造体のビュー。                                                              |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `ScatterView <containers/ScatterView.html>`_       | `Containers <containers-index.html>`_ | View     | View structure to transpartently support atomic and data replication strategies for scatter-reduce algorithms. |
+| `ScatterView <containers/ScatterView.html>`_       | `コンテナ <containers-index.html>`_ | ビュー     | ビュー構造は、スキャッター-リデュースアルゴリズムにおけるアトミックおよびデータ複製戦略を透過的にサポートする。 |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
-| `StaticCrsGraph <containers/StaticCrsGraph.html>`_ | `Containers <containers-index.html>`_ | View     | A non-resizable CRS graph structure with view semantics.                                                       |
+| `StaticCrsGraph <containers/StaticCrsGraph.html>`_ | `コンテナ <containers-index.html>`_ | ビュー     | A non-resizable CRS graph structure with view semantics.                                                       |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
 | `UnorderedMap <containers/Unordered-Map.html>`_    | `Containers <containers-index.html>`_ | View     | A map data structure optimized for concurrent inserts.                                                         |
 +----------------------------------------------------+---------------------------------------+----------+----------------------------------------------------------------------------------------------------------------+
