@@ -1,9 +1,8 @@
-# Hierarchical Parallelism
+# 階層的並列処理
 
-This chapter explains how to use Kokkos to exploit multiple levels of shared-memory parallelism. These levels include thread teams, threads within a team, and vector lanes. You may nest these levels of parallelism, and execute [`parallel_for()`](../API/core/parallel-dispatch/parallel_for), [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce), or [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan) at each level. The syntax differs only by the execution policy,
-which is the first argument to the `parallel_*` operation. Kokkos also exposes a "scratch pad" memory which provides thread private and team private allocations.
+本章では、Kokkos　を使用して複数のレベルの共有メモリ並列性を活用する方法について説明します。　これらのレベルには、スレッドチーム、チーム内のスレッド、およびベクトルレーンが含まれます。 これらの並列処理レベルをネストし、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　および　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。各レベルで　[`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce)　または　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。 構文は実行ポリシーのみが異なり、これは`parallel_*`　演算の最初の引数です。Kokkos　は、また "scratch pad" メモリを公開しており、スレッド固有およびチーム固有の割り当てを提供します。
 
-## Motivation
+## モチベーション
 
 Node architectures on modern high-performance computers are characterized by ever more _hierarchical parallelism_.
 A level in the hierarchy is determined by the hardware resources which are shared between compute units at that level.
