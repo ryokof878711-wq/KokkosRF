@@ -1,15 +1,15 @@
-# Atomic Operations
+# アトミック演算
 
-After reading this chapter, you should understand the following:
+本章を読んだ後に、以下を理解する必要があります:
 
-* Atomic operations can be used to resolve write conflicts
-* How to use the free functions.
-* How to use the Atomic memory trait.
-* Using [ScatterView](../API/containers/ScatterView) for scatter add patterns
+* Atomic operations can be used to resolve write conflictsアトミック演算は、書き込み競合を解決するために使用。
+* フリー関数の使用方法。
+* アトミックメモリ特性の使用方法。
+* 散布図の追加パターンに　[ScatterView](../API/containers/ScatterView)　を使用
 
-## Write Conflicts and Their Resolution With Atomic Operations
+## 書き込み競合およびそのアトミック演算による解決
 
-Consider the simple task of creating a histogram of a number set.
+数値集合のヒストグラムを作成するという単純な作業を考案。
 
 ```c++
 void create_histogram(View<int*> histogram, int min, int max, View<int*> values) {
@@ -21,22 +21,16 @@ void create_histogram(View<int*> histogram, int min, int max, View<int*> values)
 }
 ```
 
-When parallelizing this loop with a simple [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) multiple threads may try to
-increment the same `index` at the same time. The increment on the other hand is actually
-three operations:
-  1. load `histogram(index)` into a register,
-  2. increment the registers,
-  3. store the register back to `&histogram(index)`
+このループを単純な　[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　で並列化すると、複数のスレッドが同時に同じ　`index`　をインクリメントしようとする可能性があります。その一方で、増分は実際には、３つの演算です:
+  1. `histogram(index)` をレジスタへ読み込み、
+  2. レジスタを増分し、
+  3. レジスタを　`&histogram(index)`　に格納。
 
-When two threads try to do this to the same index at the same time, it can happen that both
-threads load the value, then increment and then store. Since both loaded the same original
-value only one of the updates makes it through, while the second increment gets lost. This
-is called a *race condition*.
+2つのスレッドが同時に同じインデックスに対してこの操作を試みると、両方のスレッドが値を読み込み、増分し、保存するという状況が発生する可能性があります。 どちらも同じ元の値を読み込んだため、更新のうち1つだけが適用されますが、一方、2番目の増加分は失われます。 これは、*競合状態*　と呼ばれます。
 
-Another typical situation for this situation are so called *scatter-add* algorithms.
-For example in particle codes one often loops over all particles, and then for each particle
-contribute something to each of its neighbours (such as a partial force). If two threads simultaneously
-work on two particles with shared neighbours, they may race on contributing to the same neighbour particle.
+この状況におけるもう一つの典型的な例が、いわゆる*scatter-add* アルゴリズムです。
+例えば粒子コードでは、全ての粒子をループ処理し、各粒子に対して
+その近傍の粒子それぞれに何かを寄与させます（例えば部分的な力など）。 2つのスレッドが同時に共有隣接要素を持つ2つの粒子に対して作業する場合、それらは同じ隣接要素粒子への貢献について、競合する可能性があります。
 
 ```c++
 void compute_force(View<int**> neighbours, View<double*> values) {
@@ -50,17 +44,18 @@ void compute_force(View<int**> neighbours, View<double*> values) {
 }
 ```
 
-There are a number of approaches to resolve such situations: One can (i) apply colouring and run the algorithm multiple times in a way that no conflicts appear with the subset of each colour, (ii) replicate the output array for every thread, or (iii) use atomic operations. All of these come with disadvantages.
 
-Colouring has the disadvantages that one has to create the sets. For the histogram example, the cost of creating the set is likely larger than the operation itself. Furthermore, since one has to run each colour separately, the total amount of memory transfer can be significantly larger, since you tend to loop through all the allocations multiple times while using only parts of each cache line.
+こうした状況に対処するには、いくつかの方法があります: (i) 各色の部分集合間で競合が発生しないように着色を適用しアルゴリズムを複数回実行することができ、(ii) 各スレッドに対して出力配列を複製することができ、または (iii) アトミック演算を使用することができます。 これらすべてに欠点があります。
 
-Replicating the output array is a good strategy for low thread counts (2-8) but often tends to fall apart above that.
+着色には、セットを作成しなければならないという欠点があります。 ヒストグラムの例では、セットの作成コストは演算自体よりも大きい可能性が高いです。さらに、各色別々に処理する必要があるため、メモリ転送の総量はかなり大きくなる可能性があります。各キャッシュラインの一部しか使用しないにもかかわらず、すべての割り当てを複数回ループ処理する傾向があるためです。
 
-Atomic operations execute a whole logical operation uninterrupted. For example the load-modify-store cycle of the above examples will be executed with no other threads being able to access the modified library (via another atomic operation) until the atomic operation is finished. Note that non-atomic operations may still race with atomic operations. The disadvantage of atomic operation is that they hinder certain compiler optimizations, and the throughput of atomics may not be good depending on the architecture and the scalar type.
+出力配列の複製はスレッド数が少ない場合（2～8）には有効な戦略だが、それ以上になるとしばしば破綻する傾向にあります。
 
-## Atomic Free Functions
+アトミック演算は、論理演算全体を中断なく実行します。アトミック演算は、論理演算全体を中断なしで実行します。例えば、上記の例のロード・変更・保存サイクルは、アトミック演算が完了するまで、他のスレッドが変更されたライブラリに（別のアトミック演算を介して）アクセスできない状態で実行されます。非アトミック演算は、アトミック演算と競合する可能性があることに注意してください。アトミック操作の欠点は、特定のコンパイラ最適化を阻害することであり、 アトミック演算のスループットは、アーキテクチャやスカラー型によっては良好でない場合があります。
 
-Atomic free functions are functions which take a pointer to the to-be-updated value, plus the update. Every typical operation has its own atomic free function. The two example above would be like this:
+## アトミックフリー関数
+
+アトミック自由関数は、更新対象値へのポインタと更新内容を引数とする関数です。すべての典型的な操作には独自の原子フリー関数があります。上記の2つの例は次のようになります:
 
 ```c++
 void create_histogram(View<int*> histogram, int min, int max, View<int*> values) {
@@ -82,7 +77,7 @@ void compute_force(View<int**> neighbours, View<double*> values) {
 }
 ```
 
-There are also atomic operations which return the old or the new value. They follow the [`atomic_fetch_[op]`](../API/core/atomics/atomic_fetch_op) and [`atomic_[op]_fetch`](../API/core/atomics/atomic_op_fetch) naming scheme. For example if one would want to find all the indices of negative values in an array and store them in a list this would be the algorithm:
+また、古い値または新しい値を返すアトミック演算も存在します。これらは、[`atomic_fetch_[op]`](../API/core/atomics/atomic_fetch_op)　および　[`atomic_[op]_fetch`](../API/core/atomics/atomic_op_fetch)　の命名規則に従います。例えば、配列内の負の値のすべてのインデックスを見つけ、それらをリストに格納したい場合、以下のアルゴリズムが適用されます:
 ```c++
 void find_indices(View<int*> indices, View<double*> values) {
   View<int> count("Count");
@@ -95,23 +90,22 @@ void find_indices(View<int*> indices, View<double*> values) {
 }
 ```
 
-The full list of atomic operations can be found here:
+アトミック演算の完全なリストはこちらで見られます:
 
-| Name                                                                                  | Library                   | Category | Description                  |
+| 名前                                                                                  | ライブラリ                   | カテゴリ | ディスクリプション                  |
 |:--------------------------------------------------------------------------------------|:--------------------------|:-----------|:----------------------------|
-| [atomic_compare_exchange](../API/core/atomics/atomic_compare_exchange)                | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Atomic operation which exchanges a value only if the old value matches a comparison value and returns the old value. |
-| [atomic_exchange](../API/core/atomics/atomic_exchange)                                | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Atomic operation which exchanges a value and returns the old. |
-| [atomic_fetch_\[op\]](../API/core/atomics/atomic_fetch_op)                            | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Various atomic operations which return the old value. [op] might be `add`, `and`, `div`, `lshift`, `max`, `min`, `mod`, `mul`, `or`, `rshift`, `sub` or `xor` |
-| [atomic_load](../API/core/atomics/atomic_load)                                        | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Atomic operation which loads a value. |
-| [atomic_\[op\]](../API/core/atomics/atomic_op)                                        | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Atomic operation which don't return anything. [op] might be `and`, `add`, `dec`, `max`, `min`, `inc`, `or` or `sub` |
-| [atomic_\[op\]_fetch](../API/core/atomics/atomic_op_fetch)                            | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Various atomic operations which return the updated value. [op] might be `add`, `and`, `div`, `lshift`, `max`, `min`, `mod`, `mul`, `or`, `rshift`, `sub` or `xor` |
-| [atomic_store](../API/core/atomics/atomic_store)                                      | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | Atomic operation which stores a value. |
+| [atomic_compare_exchange](../API/core/atomics/atomic_compare_exchange)                | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 比較対象の値と一致した場合にのみ値を交換し、そうでない場合は元の値を返すアトミック演算。 |
+| [atomic_exchange](../API/core/atomics/atomic_exchange)                                | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 値を交換し、元の値を返すアトミック演算。 |
+| [atomic_fetch_\[op\]](../API/core/atomics/atomic_fetch_op)                            | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 古い値を返す様々なアトミック演算。 [op] は、`add`, `and`, `div`, `lshift`, `max`, `min`, `mod`, `mul`, `or`, `rshift`, `sub` or `xor`　である場合があります。|
+| [atomic_load](../API/core/atomics/atomic_load)                                        | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 値を読み込むアトミック演算。 |
+| [atomic_\[op\]](../API/core/atomics/atomic_op)                                        | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 何も返さないアトミック演算。 [op] は、 `and`, `add`, `dec`, `max`, `min`, `inc`, `or` or `sub`　である場合があります。 |
+| [atomic_\[op\]_fetch](../API/core/atomics/atomic_op_fetch)                            | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 更新後の値を返す様々なアトミック演算。 [op] は、 `add`, `and`, `div`, `lshift`, `max`, `min`, `mod`, `mul`, `or`, `rshift`, `sub` or `xor` である場合があります。|
+| [atomic_store](../API/core/atomics/atomic_store)                                      | [Core](../API/core-index) | [Atomic-Operations](Atomic-Operations) | 値を格納するアトミック演算。 |
 
-## Atomic Memory Trait
+## アトミックメモリ特性
 
-If all operations on a specific `View` during a Kernel are atomic one can also use the atomic memory trait.
-Generally one creates an *atomic* `View` from a *non-atomic* `View` just for the one kernel, and then uses normal
-operations on it.
+カーネル中の特定の`View`に対するすべての演算がアトミックである場合、アトミックメモリ特性も使用できます。
+通常、*非アトミック*　な　`View`　から　*アトミック*　な　`View`　を作成するのは、そのカーネルの処理のためだけであり、その後は通常の操作を適用します：
 
 ```c++
 void create_histogram(View<int*> histogram, int min, int max, View<int*> values) {
@@ -126,9 +120,8 @@ void create_histogram(View<int*> histogram, int min, int max, View<int*> values)
 
 ## ScatterView
 
-On CPUs one often uses low thread counts, in particular if Kokkos is used in conjunction with MPI.
-In such situations data replication often performs better than using atomic operations.
-In order to still have portable code, one can use the [`ScatterView`](../API/containers/ScatterView). It allows the transparent switch at
-compile time from using atomic operations to using data replication depending on the underlying hardware.
+CPU　では、特にKokkos　を　MPI　と併用する場合に、スレッド数を低く設定することが多いです。
+データレプリケーションはアトミック演算を使用する場合よりも高いパフォーマンスを発揮することが多いです。
+ポータブルコードを維持するためには、[`ScatterView`](../API/containers/ScatterView)　を使用できます。 これにより、基盤となるハードウェアに応じて、アトミック演算の使用からデータ複製の使用へ、コンパイル時に透過的に切り替えることが可能になります
 
-A full description can be found here: [ScatterView](../API/containers/ScatterView)
+詳細はこちらで確認できます: [ScatterView](../API/containers/ScatterView)
