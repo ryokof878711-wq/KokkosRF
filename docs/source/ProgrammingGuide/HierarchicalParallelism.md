@@ -344,8 +344,8 @@ parallel_for (policy, KOKKOS_LAMBDA (const team_member& thread) {
           // ...
           lsum += ...;
       }, sum);
-      // Add the result value into a team shared array.
-      // Make sure it is only added once per thread.
+      // 結果値をチームの共有配列に追加。
+      // スレッドごとに一度だけ追加されることを確認。
       Kokkos::single (PerThread (), [=] () {
           shared_array(i) += sum;
       });
@@ -354,32 +354,32 @@ parallel_for (policy, KOKKOS_LAMBDA (const team_member& thread) {
   double sum;
   parallel_reduce (TeamThreadRange (thread, 99),
     KOKKOS_LAMBDA (int i, double& lsum) {
-      // Add the result value into a team shared array.
-      // Make sure it is only added once per thread.
+      // 結果値をチームの共有配列に追加。
+      // スレッドごとに一度だけ追加されることを確認。
       Kokkos::single (PerThread (thread), [=] () {
           lsum += someFunction (shared_array(i),
                                 shared_array(i+1));
       });
   }, sum);
 
-  // Add the per team contribution to global memory.
+  // 各チームのコントリビューションをグローバルメモリに追加。
   Kokkos::single (PerTeam (thread), [=] () {
     global_array(thread.league_rank()) = sum;
   });
 });
 ```
 
-Here is an example of using the broadcast capabilities to determine the start offset for a team in a buffer:
+以下は、ブロードキャスト機能を使用して、バッファ内のチームの開始オフセットを決定する例です:
 
 ```c++
-using Kokkos::parallel_for;
-using Kokkos::parallel_reduce;
-using Kokkos::TeamThreadRange;
-using Kokkos::ThreadVectorRange;
-using Kokkos::PerThread;
+Kokkos::parallel_for　を使用;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamThreadRange　を使用;
+Kokkos::ThreadVectorRange　を使用;
+Kokkos::PerThread　を使用;
 
 TeamPolicy<...> policy (...);
-typedef TeamPolicy<...>::member_type team_member;
+型定義 TeamPolicy<...>::member_type team_member;
 
 Kokkos::View<int> offset("Offset");
 offset() = 0;
@@ -398,12 +398,12 @@ parallel_for (policy, KOKKOS_LAMBDA (const team_member& thread) {
 });
 ```
 
-To further illustrate the "parallel region" semantics of the team execution consider the following code:
+チーム実行の "parallel region" セマンティクスをさらに説明するため、次のコードを考えてください:
 
 ```c++
-using Kokkos::parallel_reduce;
-using Kokkos::TeamThreadRange;
-using Kokkos::TeamPolicy;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamThreadRange　を使用;
+Kokkos::TeamPolicy　を使用;
 
 parallel_reduce(TeamPolicy<>(N,team_size),
   KOKKOS_LAMBDA (const member_type& teamMember, int& lsum) {
@@ -413,14 +413,14 @@ parallel_reduce(TeamPolicy<>(N,team_size),
 },sum);
 ```
 
-In this example `sum` will contain the value `N * team_size * 10`. Every thread in each team will compute `s=10` and then contribute it to the sum.
+この例では、`sum` には値 `N * team_size * 10` が格納されます。各チームのすべてのスレッドが `s=10` を計算し、それを合計値に追加します。
 
-Let's go one step further and add a nested [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce). By choosing the loop bound to be `team_size` every thread still only runs once through the inner loop.
+さらに一歩進んで、ネストされた [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce). を追加してみましょう。ループの境界を `team_size` に選定することで、各スレッドは依然として内側のループを一度だけ実行します。
 
 ```c++
-using Kokkos::parallel_reduce;
-using Kokkos::TeamThreadRange;
-using Kokkos::TeamPolicy;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamThreadRange　を使用;
+Kokkos::TeamPolicy　を使用;
 
 parallel_reduce(TeamPolicy<>(N,team_size),
   KOKKOS_LAMBDA (const member_type& teamMember, int& lsum) {
@@ -436,4 +436,4 @@ parallel_reduce(TeamPolicy<>(N,team_size),
 },sum);
 ```
 
-The answer in this case is nevertheless `N * team_size * team_size * 10`. Each thread computes `inner_s = 10`. But all threads in the team combine their results to compute a `s` value of `team_size * 10`. Since every thread in each team contributes that value to the global sum, we arrive at the final value of `N * team_size * team_size * 10`. If the intended goal was for each team to only contribute `s` once to the global sum, the contribution should have been protected with a `single` clause.
+この場合の答えは、それでもなお `N * チームサイズ * チームサイズ * 10` です。 各スレッドは `inner_s = 10` を計算します。 しかし、チーム内のすべてのスレッドは結果を統合し、`team_size * 10` の `s` 値を計算します。 各チームのすべてのスレッドがその値をグローバル合計に寄与するため、最終的な値は `N * team_size * team_size * 10` となります。各チームがグローバル合計に　`s`　を一度だけ貢献することを意図した目標だったなら、 そのコントリビューションは、`single`　句で保護されていなければなりませんでした。
