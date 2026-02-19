@@ -4,128 +4,128 @@
 
 ## モチベーション
 
-Node architectures on modern high-performance computers are characterized by ever more _hierarchical parallelism_.
-A level in the hierarchy is determined by the hardware resources which are shared between compute units at that level.
-Higher levels in the hierarchy also have access to all resources in its branch at lower levels of the hierarchy.
-This concept is orthogonal to the concept of heterogeneity. For example, a node in a typical CPU-based cluster consists of a number of multicore CPUs.  Each core supports one or more hyper-threads, and each hyper-thread can execute vector instructions. This means there are 4 levels in the hierarchy of parallelism:
+現代の高性能コンピュータにおけるノードアーキテクチャは、ますます高度化する _階層的並列処理_　によって特徴づけられます。
+階層内のレベルは、そのレベルにある演算ユニット間で共有されるハードウェアリソースによって決定されます。
+階層の上位レベルは、その階層の下位レベルにあるブランチ内の全リソースにもアクセス権を持ちます。
+この概念は、異質性の概念とは直交する。例えば、典型的なCPUベースのクラスターにおけるノードは、複数のマルチコア　CPU　で構成されます。 各コアは1つ以上のハイパースレッドをサポートし、各ハイパースレッドはベクトル命令を実行できます。 これは、並列性の階層構造に4つのレベルがあることを意味します:
 
-1. CPU sockets share access to the same memory and network resources,
-1. cores within a socket typically have a shared last level cache (LLC),
-1. hyper-threads on the same core have access to a shared L1 (and L2) cache and they submit instructions to the same execution units, and
-1. vector units execute a shared instruction on multiple data items.
+1. CPU　ソケットは同じメモリおよびネットワークリソースへのアクセスを共有し、
+1. ソケット内のコアは通常、共有の最終レベルキャッシュ（LLC）を備えており、
+1. 同一コア上のハイパースレッドは共有L1（およびL2）キャッシュにアクセス可能であり、同じ実行ユニットに命令を送信し、そして
+1. ベクトル演算ユニットは、複数のデータ項目に対して共有命令を実行します。
 
-GPU-based systems also have a hierarchy of 4 levels:
+GPU　ベースのシステムも、4レベルの階層構造を持ちます:
 
-1. multiple GPUs in the same node share access to the same host memory and network resources,
-1. core clusters (e.g. the SMs on an NVIDIA GPU) have a shared cache and access to the same high bandwidth memory on a single GPU,
-1. threads running on the same core cluster have access to the same L1 cache and scratch memory and
-1. they are grouped in so-called Warps or Wave Fronts within which threads are always synchronous and can collaborate more closely, for example via direct register swapping.
+1. 同一ノード内の複数　GPU　が、同じホストメモリとネットワークリソースへのアクセスを共有し、
+1. GPU　コアクラスタ（例：NVIDIA GPU　上の　SM　）は共有キャッシュを持ち、単一　GPU　上で同じ高帯域メモリにアクセスし、
+1. 同一のコアクラスタ上で実行されるスレッドは、同じ　L1　キャッシュとスクラッチメモリにアクセス可能であり、そして
+1. それらは、いわゆるワープまたは波面内にグループ化され、その内部ではスレッドは常に同期しており、例えば直接的なレジスタ交換を通じて、より緊密に連携できます。
 
-Kokkos provides a number of abstract levels of parallelism, which it maps to the appropriate hardware features. This mapping is not necessarily static or predefined; it may differ for each kernel. Furthermore, some mapping decisions happen at run time. This enables adaptive kernels which map work to different hardware resources depending on the work set size. While Kokkos provides defaults and suggestions, the optimal mapping can be algorithm dependent. Hierarchical parallelism is accessible through execution policies.
+Kokkos　は、複数の抽象化された並列処理レベルを提供しますが、それらを適切なハードウェア機能にマッピングします。 このマッピングは必ずしも静的または事前定義されたものではなく、カーネルごとに異なる場合があります。さらに、一部のマッピング決定は実行時に行われます。これにより、ワークセットのサイズに応じて作業を、異なるハードウェアリソースにマッピングする適応型カーネルが、有効となります。Kokkos　はデフォルト値と提案を提供する一方、最適なマッピングはアルゴリズムに依存する可能性があります。階層的並列性には、実行ポリシーを通じて、アクセス可能である。
 
-You should use Hierarchical Parallelism in particular in a number of cases:
+特に、以下のケースでは階層的並列処理を使用する必要があります:
 
-1. Non-tightly nested loops: Hierarchical Parallelism allows you to expose more parallelism.
-1. Data gather + reuse: If you gather data for a particular iteration of an outer loop, and then repeatably use it in an inner loop, Hierarchical Parallelism with scratch memory may match the use case well.
-1. Force Cache Blocking: Using Hierarchical Parallelism forces a developer into algorithmic choices which are good for cache blocking. This can sometimes lead to better performing algorithms than a simple flat parallelism.
+1. 非密接ネストループ：階層的並列処理により、より多くの並列性を引き出せます。
+1. データ収集と再利用：外側のループの特定の反復でデータを収集し、それを内側のループで繰り返し使用する場合、スクラッチメモリを用いた階層的並列処理がそのユースケースに適している可能性があります。
+1. 階層的並列処理を利用すると、開発者はキャッシュブロッキングに適したアルゴリズム選択を迫られ、これにより、単純なフラット並列処理よりも優れたパフォーマンスを発揮するアルゴリズムが得られる場合があります：
 
-On the other hand you should probably not use Hierarchical Parallelism if you have tightly nested loops. For that use case, a multidimensional Range Policy is the better fit.
+一方、ネストループが密接に存在する場合は、階層的並列処理を使用すべきではないでしょう。そのようなユースケースには、多次元範囲ポリシーの方が適しています
 
 (HP_thread_teams)=
-## Thread teams
+## スレッドチーム
 
-Kokkos' most basic hierarchical parallelism concept is a thread team. A _thread team_ is a collection of threads which can synchronize and which share a "scratch pad" memory (see [Section 7.3](Team_scratch_pad_memory)).
+Kokkos　の最も基本的な階層的並列処理の概念はスレッドチームです。 _thread team_　とは、同期化が可能で、 "scratch pad" メモリを共有するスレッドの集合体です　( [Section 7.3](Team_scratch_pad_memory)　参照)。
 
-Instead of mapping a 1-D range of indices to hardware resources, Kokkos' thread teams map a 2-D index range. The first index is the _league rank_, the index of the team. The second index is the _team rank_, the thread index within a team. In CUDA this is equivalent to launching a 1-D grid of 1-D blocks. The league size is arbitrary -- that is, it is only limited by the integer size type -- while the team size must fit in the hardware constraints. As in CUDA, only a limited number of teams are actually active at the same time, and they must run to completion before new ones are executed. Consequently, it is not valid to use inter thread-team synchronization mechanisms such as waits for events initiated by other thread teams.
+Kokkos　のスレッドチームは、1次元のインデックス範囲をハードウェアリソースにマッピングする代わりに、2次元のインデックス範囲をマッピングします。 最初のインデックスは、_league rank_　、つまり _team rank_　を示すインデックスです。 CUDA　では、これは1次元のブロックの1次元グリッドを起動することに相当します。 リーグの規模は任意です――つまり、整数サイズの型によってのみ制限されますが―一方で、チームの規模はハードウェアの制約に収まる必要があります。 CUDAと同様に、同時に実際にアクティブなチームは限られており、新しいチームが実行される前に、それらは完了まで実行されなければなりません。したがって、他のスレッドチームによって開始されたイベントを待機するといった、スレッドチーム間の同期メカニズムを使用することは有効ではありません。
 
-### Creating a Policy instance
+### ポリシーインスタンスの作成
 
-Kokkos exposes use of thread teams with the [`Kokkos::TeamPolicy`](../API/core/policies/TeamPolicy) execution policy. To use thread teams you need to create a [`Kokkos::TeamPolicy`](../API/core/policies/TeamPolicy) instance. It can be created inline for the parallel dispatch call. The constructors require two arguments: a league size and a team size. In place of the team size, a user can utilize `Kokkos::AUTO` to let Kokkos guess a good team size for a given architecture. Doing that is the recommended way for most developers to utilize the [`TeamPolicy`](../API/core/policies/TeamPolicy). As with the  [`Kokkos::RangePolicy`](../API/core/policies/RangePolicy) a specific execution tag, a specific execution space, a `Kokkos::IndexType`, and a `Kokkos::Schedule` can be given as optional template arguments.
+Kokkosは、　[`Kokkos::TeamPolicy`](../API/core/policies/TeamPolicy)　実行ポリシーを使用してスレッドチームの使用を明示します。  スレッドチームを使用するには、　[`Kokkos::TeamPolicy`](../API/core/policies/TeamPolicy)　のインスタンスを作成する必要があります。並列ディスパッチ呼び出しに対して、インラインで作成できます。 コンストラクタは2つの引数（リーグサイズとチームサイズ）を必要とします：チームサイズの代わりに、　`Kokkos::AUTO`　を使用することで、　既定のアーキテクチャに適したチームサイズを推測させることができます。そうすることが、[`TeamPolicy`](../API/core/policies/TeamPolicy)を利用するための、ほとんどの開発者によって推奨される方法です。 [`Kokkos::RangePolicy`](../API/core/policies/RangePolicy)の場合と同様に、特定の実行タグ、特定の実行空間、`Kokkos::IndexType`、および`Kokkos::Schedule`をオプションのテンプレート引数として指定できます。
 
 ```c++
-// Using default execution space and launching
-// a league with league_size teams with team_size threads each
+// デフォルトの実行スペースを使用し、起動
+// それぞれ team_size スレッドを持つ league_size teams を伴うリーグ
 Kokkos::TeamPolicy<>
         policy( league_size, team_size );
 
-// Using  a specific execution space to
-// run an n_workset parallelism with Kokkos choosing the team size
+// Using  a specific execution space to特定実行を使用
+// チームサイズを選択する　n_workset　並列処理を、Kokkos を使用して実行
 Kokkos::TeamPolicy<ExecutionSpace>
         policy( league_size, Kokkos::AUTO() );
 
-// Using a specific execution space and an execution tag
+// 特定の実行スペースと実行タグを使用
 Kokkos::TeamPolicy<SomeTag, ExecutionSpace>
         policy( league_size, team_size );
 ```
 
-### Basic kernels
+### 基本カーネル
 
-The team policy's `member_type` provides the necessary functionality to use teams within a parallel kernel. It allows access to thread identifiers such as the league rank and size, and the team rank and size. It also provides team-synchronous actions such as team barriers, reductions and scans.
+チームポリシーの　`member_type`　は、並列カーネル内でチームを使用するために必要な機能を提供します。リーグ順位や規模、およびチーム順位および規模等のスレッド識別子へのアクセスを可能にします。 また、チームバリア、削減、スキャンなどのチーム同期アクションも提供します。
 
 ```c++
-using Kokkos::atomic_add;
-using Kokkos::PerTeam;
-using Kokkos::Sum;
-using Kokkos::TeamPolicy;
-using Kokkos::parallel_for;
+Kokkos::atomic_add　を使用;
+Kokkos::PerTeam　を使用;
+Kokkos::Sum　を使用;
+Kokkos::TeamPolicy　を使用;
+Kokkos::parallel_for　を使用;
 
 typedef TeamPolicy<ExecutionSpace>::member_type member_type;
-// Create an instance of the policy
+// ポリシーのインスタンスを作成
 TeamPolicy<ExecutionSpace> policy (league_size, Kokkos::AUTO() );
-// Launch a kernel
+// カーネルを起動
 parallel_for (policy, KOKKOS_LAMBDA (member_type team_member) {
-    // Calculate a global thread id
+    // Calculate a global thread idグローバルスレッドIDを計算
     int k = team_member.league_rank () * team_member.team_size () +
             team_member.team_rank ();
 
-    // Calculate the sum of the global thread ids of this team
+    // このチームのグローバルスレッドIDの合計を計算
     int team_sum = k;
     team_member.team_reduce(Sum<int, typename ExecutionSpace::memory_space>(team_sum));
 
-    // Atomically add the computed sum to a global value
+    // 計算された合計をグローバル値にアトミック演算で加算
     Kokkos::single (PerTeam (team_member), [=] () {
       atomic_add(&global_value(), team_sum);
     });
   });
 ```
 
-The name [`TeamPolicy`](../API/core/policies/TeamPolicy) makes it explicit that a kernel using it constitutes a parallel region with respect to the team.
+ [`TeamPolicy`](../API/core/policies/TeamPolicy) という名称は、これを使用するカーネルがチームに対して並列領域を構成することを明示的に示しています。
 
-In order to allow for coordination of work between members of a team, i.e. some threads compute a value, store it in global memory and then everyone consumes it, teams provide barriers. These barriers are collectives for all team members in the same team, but have no relationship with other teams. Here is an example:
+チームメンバー間の作業調整を可能にするため、つまり一部のスレッドが値を計算し、グローバルメモリに保存した後、誰もがそれを消費する仕組みを実現するために、チームはバリアを提供します。これらの障壁は、同じチーム内の全チームメンバーにとって共通のものですが、他のチームとは関係がありません。こ子にその一例があります:
 
 ```c++
-using Kokkos::TeamPolicy;
-using Kokkos::parallel_for;
+Kokkos::TeamPolicy　を使用;
+Kokkos::parallel_for　を使用;
 
 typedef TeamPolicy<ExecutionSpace>::member_type member_type;
-// Create an instance of the policy
+// ポリシーのインスタンスを作成
 TeamPolicy<ExecutionSpace> policy (league_size, Kokkos::AUTO() );
-// Launch a kernel
+// カーネルを起動
 parallel_for (policy, KOKKOS_LAMBDA (member_type team_member) {
-    // Thread 0 in each team gathers some data via indirection.
+    // 各チームのThread 0　は、間接的にデータを収集。
     if( team_member.team_rank() == 0 ) {
       a(team_member.league_rank()) = b(indices(team_member.league_rank()));
     }
-    // Now do a barrier for every team member to wait for a to be updated
+    //各チームメンバーが更新を待つためのバリアを作成
     team_member.team_barrier();
 
-    // Now a can be used by every team member
+    // すべてのチームメンバーが、a を利用可能
     c(team_member.league_rank(),team_member.team_rank()) = a(team_member.league_rank();
   });
 ```
 
 (Team_scratch_pad_memory)=
-## Team scratch pad memory
+## チームスクラッチパッドメモリ
 
-Each Kokkos team has a "scratch pad." This is an instance of a memory space accessible only by threads in that team. Scratch pads let an algorithm load a workset into a shared space and then collaboratively work on it with all members of a team. The lifetime of data in a scratch pad is the lifetime of the team. In particular, scratch pads are recycled by all logical teams running on the same physical set of cores. During the lifetime of the team all operations allowed on global memory are allowed on the scratch memory. This includes taking addresses and performing atomic operations on elements located in scratch space. Team-level scratch pads correspond to the per-block shared memory in Cuda, or to the "local store" memory on the Cell processor.
+各Kokkos　チームには "scratch pad"　が存在します。　これは、そのチーム内のスレッドのみがアクセス可能なメモリ空間のインスタンスです。 スクラッチパッドは、アルゴリズムがワークセットを共有スペースにロードし、その後チームの全メンバーと共同で作業することを可能にします。 スクラッチパッド内のデータの存続期間は、チームの存続期間です。特に、スクラッチメモリは、同一の物理コア群上で動作する全ての論理チームによって再利用されます。チームの存続期間中、グローバルメモリで許可される全ての操作はスクラッチメモリでも許可されるます。 チームの存続期間中、グローバルメモリで可能になるすべての演算は、スクラッチメモリでも可能になります。 これには、アドレスの取得およびスクラッチ領域にある要素に対するアトミック演算の実行が含まれます。 チームレベルのスクラッチパッドは、Cudaにおけるブロックごとの共有メモリ、あるいはCellプロセッサ上の「ローカルストア」メモリに対応します。
 
-Kokkos exposes scratch pads through a special memory space associated with the execution space: `execution_space::scratch_memory_space`. You may allocate a chunk of scratch memory through the [`TeamPolicy`](../API/core/policies/TeamPolicy) member type. You may request multiple allocations from scratch, up to a user-provided maximum aggregate size. The maximum is provided either through a `team_shmem_size` function in the functor which returns a potentially team-size dependent value, or it can be specified through a setting of the TeamPolicy `set_scratch_size`. It is not valid to provide both values at the same time. The argument to the TeamPolicy can be used to set the shared memory size when using functors. One restriction on shared memory allocations is that they can not be freed during the lifetime of the team. This avoids the complexity of a memory pool, and reduces the time it takes to obtain an allocation (which currently is a few tens of integer operations to calculate the offset).
+Kokkos は、実行スペースに関連付けられた特別なメモリ空間を通じてスクラッチパッドを公開します: `execution_space::scratch_memory_space`。  [`TeamPolicy`](../API/core/policies/TeamPolicy) メンバ型を通じてスクラッチメモリの一部を割り当てることができます。ユーザー指定の最大合計サイズまで、最初から複数回の割り当てを要求できます。 最大値は、ファンクタ内の　`team_shmem_size`　関数によって提供されますが、この関数はチームサイズに依存する可能性のある値を返します。あるいは、TeamPolicy　の　`set_scratch_size`　設定を通じて指定することも可能です。 両方の値を同時に指定することは無効です。TeamPolicy　への引数は、ファンクタを使用する際の共有メモリサイズを設定するために使用できます。 共有メモリ割り当てに関する制約の一つは、チームの存続期間中に解放できない点です。 これが、メモリプールの複雑さの回避および、割り当て取得にかかる時間をの短縮につながります（現在、オフセット計算には、数十回の整数演算が必要です）。
 
-The following is an example of using the functor interface:
+以下は、ファンクターインターフェースの使用例です:
 
 ```c++
 template<class ExecutionSpace>
-struct functor {
+struct functor構造体ファンクタ {
   typedef ExecutionSpace execution_space;
   typedef execution_space::member_type member_type;
 
@@ -133,29 +133,29 @@ struct functor {
   void operator() (member_type team_member) const {
     size_t double_size = 5*team_member.team_size()*sizeof(double);
 
-    // Get a shared team allocation on the scratch pad
+    // スクラッチパッド上で共有チームの割り当てを取得
     double* team_shared_a = (double*)
       team_member.team_shmem().get_shmem(double_size);
 
-    // Get another allocation on the scratch pad
+    // スクラッチパッド上で別の割り当てを取得
     int* team_shared_b = (int*)
       team_member.team_shmem().get_shmem(160*sizeof(int));
 
-    // ... use the scratch allocations ...
+    // ... スクラッチ割り当てを使用 ...
   }
 
-  // Provide the shared memory capacity.
-  // This function takes the team_size as an argument,
-  // which allows team_size dependent allocations.
+  // 共有メモリ容量を提供。
+  // この関数は、引数として team_size を選択し、
+  // それにより、team_size　に応じた割り当てが可能になります
   size_t team_shmem_size (int team_size) const {
     return sizeof(double)*5*team_size +
            sizeof(int)*160;
   }
 };
 ```
-The `set_scratch_size` function of the [`TeamPolicy`](../API/core/policies/TeamPolicy) takes two or three arguments. The first argument specifies the level in the scratch hierarchy for which a specific size is requested. Different levels have different restrictions. Generally, the first level is restricted to a few tens of kilobytes roughly corresponding to L1 cache size. The second level can be used to get an aggregate over all teams of a few gigabyte, corresponding to available space in high-bandwidth memory. The third level mostly falls back to capacity memory in the node. The second and third argument are either per-thread or per-team sizes for scratch memory.
+[`TeamPolicy`](../API/core/policies/TeamPolicy) の `set_scratch_size` 関数は、2つまたは3つの引数を取ります。 最初の引数は、特定のサイズが要求されるスクラッチ階層内のレベルを指定します。 様々なレベルには、様々名制約があります。 一般的に、第1レベルは数十キロバイト程度に制限され、おおむねL1キャッシュサイズに対応します。 第2レベルは、数ギガバイト規模の全チームに対する集計値を取得するために使用でき、これは高帯域メモリの空き領域に対応します。 第3レベルは、主にノード内の容量メモリに依存します。 2番目と3番目の引数は、スクラッチメモリのスレッド単位またはチーム単位のサイズです。
 
-Here are some examples:
+ここにいくつかの例があります:
 
 ```c++
 TeamPolicy<> policy_1 = TeamPolicy<>(league_size, team_size).
@@ -166,7 +166,7 @@ TeamPolicy<> policy_3 = TeamPolicy<>(league_size, team_size).
                           set_scratch_size(0, PerTeam(1024));
 ```
 
-The total amount of scratch space available for each team will be the per-team value plus the per-thread value multiplied by the team-size. The interface allows users to specify those settings inline:
+各チームが利用できるスクラッチスペースの総量は、チームごとの値にスレッドごとの値を乗じた値にチームサイズを乗じた値となります。 このインターフェイスでは、ユーザーがそれらの設定を直接指定することが可能です:
 
 ```c++
 parallel_for(TeamPolicy<>(league_size, team_size).set_scratch_size(1, PerTeam(1024)),
@@ -175,51 +175,51 @@ parallel_for(TeamPolicy<>(league_size, team_size).set_scratch_size(1, PerTeam(10
 });
 ```
 
-Instead of simply getting raw allocations in memory, users can also allocate Views directly in scratch memory. This is achieved by providing the shared memory handle as the first argument of the View constructor. Views also have a static member function which return their shared memory size requirements. The function expects the run-time dimensions as arguments, corresponding to View's constructor. Note that the view must be unmanaged (i.e. it must have the `Unmanaged` memory trait).
+メモリ内で単純に生の割り当てを取得する代わりに、ユーザーはスクラッチメモリ内に直接ビューを割り当てることもできます。 これは、View　コンストラクタの第1引数として共有メモリハンドルを渡すことで実現されます。 ビューには、共有メモリのサイズ要件を返す静的メンバ関数も備わっています。 その関数は実行時次元を引数として想定し、これは　ビューコンストラクタに対応します。 Note that the view must be unmanaged (i.e. it must have the `Unmanaged` memory trait).ビューは、管理対象外（つまり、`Unmanaged`　メモリ特性を持つ必要がある）でなければならないことに注意してください。
 
 ```c++
-typedef Kokkos::DefaultExecutionSpace::scratch_memory_space
+型定義 Kokkos::DefaultExecutionSpace::scratch_memory_space
   ScratchSpace;
 // Define a view type in ScratchSpace
-typedef Kokkos::View<int*[4],ScratchSpace,
+型定義 Kokkos::View<int*[4],ScratchSpace,
           Kokkos::MemoryTraits<Kokkos::Unmanaged>> shared_int_2d;
 
-// Get the size of the shared memory allocation
+// 共有メモリ割り当てのサイズを取得
 size_t shared_size = shared_int_2d::shmem_size(team_size);
 Kokkos::parallel_for(Kokkos::TeamPolicy<>(league_size,team_size).
                        set_scratch_size(0,Kokkos::PerTeam(shared_size)),
                      KOKKOS_LAMBDA ( member_type team_member) {
-  // Get a view allocated in team shared memory.
-  // The constructor takes the shared memory handle and the
-  // runtime dimensions
+  // チーム共有メモリ内でビューを割り当て。
+  // コンストラクタが、共有メモリハンドルおよび
+  // 実行時次元を選択
   shared_int_2d A(team_member.team_scratch(0), team_member.team_size());
   ...
 });
 ```
 
-## Nested parallelism
+## ネスト並列処理
 
-Instead of writing code which explicitly uses league and team rank indices, one can use nested parallelism to implement hierarchical algorithms. Kokkos lets the user have up to three nested layers of parallelism. The team and thread levels are the first two levels. The third level is _vector_ parallelism.
+リーグやチームの順位インデックスを明示的に使用するコードを書く代わりに、ネスト並列処理を用いて階層的アルゴリズムを実装することが可能です。 Kokkos はユーザーが最大3層のネストされた並列処理を可能にします。 チームレベルとスレッドレベルが、最初の2つのレベルです。第3レベルは、  _vector_ 並列処理です。
 
-You may use any of the three parallel patterns -- for, reduce, or scan -- at each level<sup>1</sup>.
-You may nest them and use them in conjunction with code that is aware of the league and team rank. The different layers are accessible via special execution policies: `TeamThreadLoop` and `ThreadVectorLoop`.
+各レベル　<sup>1</sup>　において、3つの並列パターン（for、reduce、scan）のいずれかを使用できます。
+それらをネストしたり、リーグやチームの順位を意識したコードと連携させて使用できます。 異なるレイアは特別な実行ポリシーを介してアクセス可能です: `TeamThreadLoop` および `ThreadVectorLoop`.
 
 ***
-<sup>1</sup> The parallel scan operation is not implemented for all execution spaces on the thread level, and it doesn't support a TeamPolicy on the top level.
+<sup>1</sup> スレッドレベルでは、すべての実行空間に対して並列スキャン演算が実装されているわけではなく、最上位レベルでのTeamPolicy　もサポートしていません。
 ***
 
-### Team loops
+### チームループ
 
-The first nested level of parallel loops splits an index range over the threads of a team. This motivates the policy name [`TeamThreadRange`](../API/core/policies/TeamThreadRange), which indicates that the loop is executed once by the team with the index range split over threads. The loop count is not limited to the number of threads in a team, and how the index range is mapped to threads is architecture dependent. It is not legal to nest multiple parallel loops using the [`TeamThreadRange`](../API/core/policies/TeamThreadRange) policy. However, it is valid to have multiple parallel loops using the [`TeamThreadRange`](../API/core/policies/TeamThreadRange) policy follow each other in sequence, in the same kernel. Note that it is not legal to make a write access to POD data outside the closure of a nested parallel layer. This is a conscious choice to prevent difficult-to-debug issues related to thread private, team shared and globally shared variables. A simple way to enforce this is by using the "capture by value"' clause with lambdas,
-but "capture by reference" is recommended for release builds since it typically results in better performance.
-With the lambda being considered as `const` inside the [`TeamThreadRange`](../API/core/policies/TeamThreadRange) loop, the compiler will catch illegal accesses at compile time as a `const` violation.
+最初のネストレベルの並列ループは、チームの各スレッド間でインデックス範囲を分割します。 これが、This motivates the policy name ポリシー名　[`TeamThreadRange`](../API/core/policies/TeamThreadRange)　を動かし、 それは、ループがチームによって1回実行され、インデックス範囲がスレッド間で分割されることを示しています。 ループ回数はチーム内のスレッド数に制限されず、インデックス範囲がスレッドにマッピングされる方法はアーキテクチャに依存します。 [`TeamThreadRange`](../API/core/policies/TeamThreadRange) ポリシーを使用して複数の並列ループをネストすることは許可されていません。 しかしながら、[`TeamThreadRange`](../API/core/policies/TeamThreadRange) ポリシーを使用した複数の並列ループが、同じカーネル内で、順番に連続して実行されることは有効です。 ネスト並列層のクロージャ外で、POD　データへの書き込みアクセスを行うことは認められないことに注意してください。 これは、スレッドプライベート変数、チーム共有変数、およびグローバル共有変数に関連するデバッグが困難な問題を防止するための意識的な選択です。これを強制する簡単な方法は、ラムダ式で　 "capture by value"　句を使用することですが、
+ただし、通常、パフォーマンスが向上するため、リリースビルドでは、"capture by reference"　が推奨されます。
+ラムダ式が　[`TeamThreadRange`](../API/core/policies/TeamThreadRange)　ループ内で`const`と見なされるため、コンパイラは、コンパイル時に　`const`　違反として不正なアクセスを検出します。
 
-The simplest use case is to have another [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) nested inside a kernel.
+The simplest use case is to have another [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) nested inside a kernel.最も単純な使用例は、カーネル内に別の　[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　をネストさせることです。
 
 ```c++
-using Kokkos::parallel_for;
-using Kokkos::TeamPolicy;
-using Kokkos::TeamThreadRange;
+Kokkos::parallel_for　を使用;
+Kokkos::TeamPolicy　を使用;
+Kokkos::TeamThreadRange　を使用;
 
 parallel_for (TeamPolicy<> (league_size, team_size),
                     KOKKOS_LAMBDA (member_type team_member)
@@ -233,16 +233,16 @@ parallel_for (TeamPolicy<> (league_size, team_size),
 });
 ```
 
-The [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce)  construct can be used to perform optimized team-level reductions:
+ [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce)  構文は、最適化されたチームレベルの削減を実行するために使用できます:
 
 ```c++
-using Kokkos::parallel_reduce;
-using Kokkos::TeamPolicy;
-using Kokkos::TeamThreadRange;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamPolicy　を使用;
+Kokkos::TeamThreadRange　を使用;
 parallel_for (TeamPolicy<> (league_size, team_size),
                  KOKKOS_LAMBDA (member_type team_member) {
-    // The default reduction uses Scalar's += operator
-    // to combine thread contributions.
+    // デフォルトの削減では、スカラーの += 演算子を使用して
+    // スレッドの貢献度を結合します。
     Scalar sum;
     parallel_reduce (TeamThreadRange (team_member, loop_count),
       [=] (int& i, Scalar& lsum) {
@@ -250,12 +250,12 @@ parallel_for (TeamPolicy<> (league_size, team_size),
         lsum += ...;
       }, sum);
 
-    // Introduce a team barrier here to synchronize threads
+    // ここでスレッドを同期させるためのチームバリアを導入
     team_member.team_barrier();
 
-    // You may provide a custom reduction as a functor,
-    // including one of the Kokkos-provided ones, e.g. Prod<Scalar>.
-    Scalar product;
+    // カスタムの縮約をファンクタとして提供できます。。
+    // Kokkos　が提供するものの1つ（例：Prod<Scalar>）を含みます。
+    スカラー積;
     Scalar init_value = 1;
     parallel_reduce (TeamThreadRange (team_member, loop_count),
       [=] (int& i, Scalar& lsum) {
@@ -264,29 +264,29 @@ parallel_for (TeamPolicy<> (league_size, team_size),
       }, Kokkos::Experimental::Prod<Scalar>(product);
   });
 ```
-Note that custom reductions must employ one of the functor join patterns recognized by Kokkos; these include `Sum, Prod, Min, Max, LAnd, LOr, BAnd, BOr, ValLocScalar, MinLoc, MaxLoc, MinMaxScalar, MinMax, MinMaxLocScalar` and `MinMaxLoc`.
+カスタムリダクションでは、Kokkos　が認識するファンクター結合パターンのいずれかを使用する必要があることに、注意してください; これらには、`Sum, Prod, Min, Max, LAnd, LOr, BAnd, BOr, ValLocScalar, MinLoc, MaxLoc, MinMaxScalar, MinMax, MinMaxLocScalar` および `MinMaxLoc`　が含まれます。
 
-The third pattern is [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan) which can be used to perform prefix scans.
+第3のパターンは、プレフィックススキャン実行に使用可能な　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan) です。
 
-#### Team Barriers
+#### チームバリア
 
-In instances where one loop operation might need to be sequenced with a different loop operation, such as filling of arrays as a preparation stage for following computations on that data, it is important to be able to control threads in time; this can be done through the use of barriers. In nested loops, the outside loop ( [`TeamPolicy<> ()`](../API/core/policies/TeamPolicy) ) has a built-in (implicit) team barrier; inner loops ( [`TeamThreadRange ()`](../API/core/policies/TeamThreadRange) ) do not. This latter condition is often referred to as a 'non-blocking' condition. When necessary, an explicit barrier can be introduced to synchronize team threads; an example is shown in the previous example. 
+あるループ演算を別のループ演算と順序付けする必要が生じる場合（例えば、後続の計算のための準備段階として配列を埋める場合など）、スレッドを時間的に制御できることが重要です; これは、バリアの使用によって実現可能です。 ネストループでは、外側のループ（[`TeamPolicy<> ()`](../API/core/policies/TeamPolicy)）に組み込み（暗示的）チームバリアが存在します; 内側のループ ( [`TeamThreadRange ()`](../API/core/policies/TeamThreadRange) ) do not.には、存在しません。 この後者の条件は、多くの場合に、'non-blocking' 条件と呼ばれます。 必要に応じて、チームスレッドを同期化するための明示的なバリアを導入できます；その一例は前の例で示されています。 
 
-### Vector loops
+### ベクターループ
 
-The innermost level of nesting parallel loops in a kernel comprises the _vector_-loop. Vector level parallelism works identically to the team level loops using the execution policy [`ThreadVectorRange`](../API/core/policies/ThreadVectorRange). In contrast to the team-level, there is no legal way to exploit the vector level outside a parallel pattern using the [`ThreadVectorRange`](../API/core/policies/ThreadVectorRange). However, one can use such a parallel construct in- and outside- of a [`TeamThreadRange`](../API/core/policies/TeamThreadRange) parallel operation.
+カーネル内のネストされた並列ループの最内層は、_vector_　ループで構成されます。ベクトルレベルの並列処理は、実行ポリシー[`ThreadVectorRange`](../API/core/policies/ThreadVectorRange)　を使用するチームレベルループと同一の動作をします。 チームレベルとは対照的に、[`ThreadVectorRange`](../API/core/policies/ThreadVectorRange)　を使用した並列パターン以外で、ベクターレベルを合法的に利用する方法はありません。 ただし、このような並列構造は、[`TeamThreadRange`](../API/core/policies/TeamThreadRange) 並列演算の内外を問わず、使用できます。
 
 ```c++
-using Kokkos::parallel_reduce;
-using Kokkos::TeamPolicy;
-using Kokkos::TeamThreadRange;
-using Kokkos::ThreadVectorRange;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamPolicy　を使用;
+Kokkos::TeamThreadRange　を使用;
+Kokkos::ThreadVectorRange　を使用;
 parallel_for (TeamPolicy<> (league_size, team_size),
                  KOKKOS_LAMBDA (member_type team_member) {
 
     int k = team_member.team_rank();
-    // The default reduction uses Scalar's += operator
-    // to combine thread contributions.
+    // デフォルト還元では、スカラーの += 演算子を使用して
+    // レッドの貢献度を結合します。
     Scalar sum;
     parallel_reduce (ThreadVectorRange (team_member, loop_count),
       [=] (int& i, Scalar& lsum) {
@@ -296,9 +296,9 @@ parallel_for (TeamPolicy<> (league_size, team_size),
 
     parallel_for (TeamThreadRange (team_member, workset_size),
       [&] (int& j) {
-      // You may provide a custom reduction as a functor
-      // including one of the Kokkos-provided ones, e.g., Prod<Scalar>.
-      Scalar product;
+      // カスタムの還元をファンクタとして提供できます。
+      // Kokkos　が提供するもののいずれかを含めることも可能です。例：Prod<Scalar>。
+      スカラー積;
       Scalar init_value = 1;
      parallel_reduce (ThreadVectorRange (team_member, loop_count),
         [=] (int& i, Scalar& lsum) {
@@ -309,28 +309,28 @@ parallel_for (TeamPolicy<> (league_size, team_size),
   });
 ```
 
-As the name indicates the vector-level must be vectorizable. The parallel patterns will exploit available mechanisms to encourage vectorization by the compiler. When using the Intel compiler for example, the vector level loop will be internally decorated with `#pragma ivdep`, telling the compiler to ignore assumed vector dependencies.
+名前が示す通り、ベクトルレベルはベクトル化可能でなければなりません。 並列パターンは、コンパイラによるベクトル化を促進するために利用可能なメカニズムを活用します。 例えば、インテルコンパイラを使用する場合、ベクトルレベルループは内部的に　`#pragma ivdep`　で装飾され、コンパイラに想定されるベクトル依存関係を無視するよう指示します。
 
-### Restricting execution to a single executor
+### 実行を単一の実行者に制限
 
-As stated above, a kernel is a parallel region with respect to threads (and vector lanes) within a team. This means that global memory accesses outside of the respective nested levels potentially have to be protected against repetitive execution. A common example is the case where a team performs some calculation but only one result per team has to be written back to global memory.
+前述の通り、カーネルはチーム内のスレッド（およびベクトルレーン）に対して並列領域です。 これは、それぞれのネストレベルの外側にあるグローバルメモリアクセスが、繰り返し実行から保護される必要がある可能性があることを意味します。 よくある例として、チームが計算を実行するが、チームごとに1つの結果のみをグローバルメモリに書き戻す必要がある場合が考えられます。.
 
-Kokkos provides the `Kokkos::single(Policy,Lambda)` function for this case. It currently accepts two policies:
+このケースでは、Kokkos　は`Kokkos::single(Policy,Lambda)`　関数を提供します。それは現在、以下の2つのポリシーを、受け入れています:
 
-* `Kokkos::PerTeam` restricts execution of the lambda's body to once per team
-* `Kokkos::PerThread` restricts execution of the lambda's body to once per thread (that is, to only one vector lane in a thread)
+* 　`Kokkos::PerTeam` はラムダの本体実行をチームごとに1回に制限します
+* 　`Kokkos::PerThread` はラムダ式の実行をスレッドごとに1回（つまり、スレッド内のベクトルレーン1つに限定）に制限します。
 
-The `single` function takes a lambda as its second argument. That lambda takes zero arguments or one argument by reference. If it takes no argument, its body must perform side effects in order to have an effect. If it takes one argument, the final value of that argument is broadcast to every executor on the level: i.e. every vector lane of the thread, or every thread (and vector lane) of the team. It must always be correct for the lambda to capture variables by value (`[=]`, not `[&]`). Thus, if the lambda captures by reference, it must _not_ modify variables that it has captured by reference.
+`single`　関数は、第二引数としてラムダ式を受け取ります。このラムダ式は引数を全く取らないか、参照渡しで1つの引数を取ります。そのラムダ式は、引数を全く取らないか、参照による1つの引数を取ります。引数を全く取らない場合、その本体は効果を発揮するために副作用を実行しなければなりません。 引数を1つ取る場合、その引数の最終的な値はレベル上のすべての実行者にブロードキャストされます: つまり、スレッドのベクトルレーンごと、またはチームの各スレッド（およびベクトルレーン）。 ラムダ式が変数を値渡しでキャプチャする場合（`[=]`、`[&]`ではない）、常に正しくある必要があります。 したがって、ラムダ式が参照によってキャプチャする場合、参照によってキャプチャした変数を変更しては _なりません_ 。
 
 ```c++
-using Kokkos::parallel_for;
-using Kokkos::parallel_reduce;
-using Kokkos::TeamThreadRange;
-using Kokkos::ThreadVectorRange;
-using Kokkos::PerThread;
+Kokkos::parallel_for　を使用;
+Kokkos::parallel_reduce　を使用;
+Kokkos::TeamThreadRange　を使用;
+Kokkos::ThreadVectorRange　を使用;
+Kokkos::PerThread　を使用;
 
 TeamPolicy<...> policy (...);
-typedef TeamPolicy<...>::member_type team_member;
+型定義 TeamPolicy<...>::member_type team_member;
 
 parallel_for (policy, KOKKOS_LAMBDA (const team_member& thread) {
  // ...
@@ -338,7 +338,7 @@ parallel_for (policy, KOKKOS_LAMBDA (const team_member& thread) {
   parallel_for (TeamThreadRange (thread, 100),
     KOKKOS_LAMBDA (const int& i) {
       double sum = 0;
-      // Perform a vector reduction with a thread
+      // スレッドを使って、ベクター還元を実行
       parallel_reduce (ThreadVectorRange (thread, 100),
         [=] (int i, double& lsum) {
           // ...
