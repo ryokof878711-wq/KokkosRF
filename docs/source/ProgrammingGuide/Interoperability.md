@@ -1,21 +1,21 @@
-# Interoperability and Legacy Codes
+# 相互運用性とレガシーコード
 
-One goal of Kokkos is to support incremental adoption in legacy applications. This facilitates a step by step conversion allowing for continuous testing of functionality (and in certain bounds) of performance. One feature of this is full interoperability with the underlying backend programming models. This also allows for target specific optimizations written directly in the backend model in order to achieve maximal performance.
+Kokkos の目標の一つは、レガシーアプリケーションにおける段階的な導入を支援することです。 これにより段階的な変換が可能となり、機能性（および一定の範囲内での）パフォーマンスの継続的なテストを実現します。　この特徴の一つは、基盤となるバックエンドプログラミングモデルとの完全な相互運用性です。 これにより、最大性能を達成するために、バックエンドモデルに直接記述されたターゲット特化型の最適化も可能となります。
 
-After reading this chapter, you should understand the following:
+この章を読んだ後、以下のことを理解する必要があります:
 
-* Restriction on interoperability with raw OpenMP and Cuda.
-* How to handle external data structures.
-* How to incrementally convert legacy data structures.
-* How to call non-Kokkos third party libraries safely.
+* 生の　OpenMP　および　Cuda　との相互運用性に関する制限。
+* 外部データ構造の処理方法。
+* レガシーデータ構造を段階的に変換する方法。
+* 非Kokkosサードパーティライブラリを安全に呼び出す方法。
 
-In all code examples in this chapter, we assume that all classes in the `Kokkos` namespace have been imported into the working namespace.
+本章のすべてのコード例では、`Kokkos`　名前空間のすべてのクラスが、作業名前空間にインポートされているものと仮定します。
 
-## OpenMP, C++ Threads and CUDA interoperability
+## OpenMP、C++スレッド、および　CUDA　の相互運用性
 
-Since the implementation of Kokkos is achieved with a C++ library it provides full interoperability with the underlying backend programming models. In particular, it allows for mixing of OpenMP, CUDA and Kokkos code in the same compilation unit. This is true for both the parallel execution layers of Kokkos as for the data layer.
+Kokkos　の実装は、C++　ライブラリによって実現されているため、基盤となるバックエンドプログラミングモデルとの完全な相互運用性を提供します。特に、同一コンパイル単位内でOpenMP、CUDA、Kokkosコードの混在を可能にします。 これは、Kokkos　の並列実行レイヤーとデータレイヤーの両方に当てはまります
 
-It is important to recognize that this does not lift certain restrictions. For example, it is not valid to allocate a view inside of an OpenMP parallel region, the same way as it is not valid to allocate a View inside a [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) kernel. Indeed, there are things which are slightly more cumbersome when mixing the models. Assigning one view to another inside a Cuda kernel or an OpenMP parallel region is only possible if the destination view is unmanaged. During dispatch of kernels with [`parallel_for()`](../API/core/parallel-dispatch/parallel_for), all Views referenced in the functor or lambda are automatically switched into unmanaged mode. This would not happen when simply entering an OpenMP parallel region.
+このことにより、特定の制限を解除するわけではないことを認識することが重要です。　例えば、OpenMP　並列領域内でビューを割り当てることは無効です。これは、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　カーネル内でビューを割り当てるのが無効であるのと同様です。  Indeed, there are things which are slightly more cumbersome when mixing the models. Assigning one view to another inside a Cuda kernel or an OpenMP parallel region is only possible if the destination view is unmanaged. During dispatch of kernels with [`parallel_for()`](../API/core/parallel-dispatch/parallel_for), all Views referenced in the functor or lambda are automatically switched into unmanaged mode. This would not happen when simply entering an OpenMP parallel region.
 
 ### Cuda interoperability
 
