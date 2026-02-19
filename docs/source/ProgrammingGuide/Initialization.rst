@@ -1,32 +1,32 @@
-Initialization
+初期化
 ==============
 
-In order to use Kokkos, an initialization call is required. That call is responsible for initializing internal objects and acquiring hardware resources such as threads. Typically, this call should be placed right at the start of a program. If you use both MPI and Kokkos, your program should initialize Kokkos right after calling `MPI_Init`. That way, if MPI sets up process binding masks, Kokkos will get that information and use it for best performance. Your program must also _finalize_ Kokkos when done using it in order to free hardware resources.
+ Kokkos　使用のためには、初期化呼び出しが必要です。 その呼び出しは、内部オブジェクトの初期化とスレッドなどのハードウェアリソースの取得を担当します。　通常、この呼び出しはプログラムの開始直後に行う必要があります。 MPI　と　Kokkos　の両方を使用する場合、プログラムは、`MPI_Init`　を呼び出した直後に、Kokkos　を初期化する必要があります。 そうすれば、MPI　がプロセスバインディングマスクを設定した場合、Kokkos　はその情報を取得し、最高のパフォーマンスのために活用します。 プログラムは、Kokkos　の使用が終了したら、ハードウェアリソースを解放するために必ず　_finalize_　する必要があります。
 
-Include Headers
+ヘッダー挿入
 ---------------
 
-All primary capabilities of Kokkos are provided by the `Kokkos_Core.hpp` header file.
-Some capabilities - specifically data structures in the `containers` subpackage and algorithmic capabilities in the `algorithms` subpackage are included via separate header files.
-For specific capabilities check their API reference:
+Kokkos　の主要な機能は、すべて　`Kokkos_Core.hpp`　ヘッダーファイルによって提供されます。
+一部の機能、具体的には　`containers`　サブパッケージのデータ構造体と　`algorithms`　サブパッケージのアルゴリズム機能は、個別のヘッダーファイルを介して組み込まれています。
+具体的な機能については、その　API　リファレンスを確認してください:
 
-- `API: Core <../API/core-index.html>`_
-- `API: Containers <../API/containers-index.html>`_
-- `API: Algorithms <../API/algorithms-index.html>`_
-- `API in Alphabetical Order <../API/alphabetical.html>`_
+- `API: コア <../API/core-index.html>`_
+- `API: コンテナ <../API/containers-index.html>`_
+- `API: アルゴリズム <../API/algorithms-index.html>`_
+- `アルファベット順の　API <../API/alphabetical.html>`_
 
-Initialization by command-line arguments
+コマンドライン引数による初期化
 ----------------------------------------
 
-The simplest way to initialize Kokkos is by calling the following function:
+Kokkos　を初期化する最も簡単な方法は、以下の関数を呼び出すことです:
 
 .. code-block:: cpp
 
     Kokkos::initialize(int& argc, char* argv[]);
 
-Just like `MPI_Init`, this function interprets command-line arguments to determine the requested settings. Also like `MPI_Init`, it reserves the right to remove command-line arguments from the input list. This is why it takes `argc` by reference, rather than by value.
+`MPI_Init`と同様に、この関数は、コマンドライン引数を解釈して要求された設定を決定します。 また、　`MPI_Init`　と同様に、入力リストからコマンドライン引数を削除する権利を留保します。 これが、`argc`を値ではなく参照で受け取る理由です。
 
-During initialization, one or more execution spaces will be initialized and assigned to one of the following aliases.
+初期化の間に、 1つ以上の実行スペースが初期化され、以下の別名のいずれかに割り当てられます。
 
 .. code-block:: cpp
 
@@ -36,8 +36,8 @@ During initialization, one or more execution spaces will be initialized and assi
 
     Kokkos::DefaultHostExecutionSpace;
 
-`DefaultExecutionSpace` is the execution space used with policies and views where one is not explicitly specified.  Primarily, Kokkos will initialize one of the heterogeneous backends (CUDA, HIP, OpenACC, OpenMPTarget, SYCL) as the `DefaultExecutionSpace` if enabled in the build configuration.  In addition, Kokkos requires a `DefaultHostExecutionSpace`.  The `DefaultHostExecutionSpace` is the default execution space used when host operations are required.  If one of the parallel host execution spaces is enabled in the build environment then `Kokkos::Serial` is only initialized if it is explicitly enabled in the build configuration.  If a parallel host execution space is not enabled in the build configuration, then `Kokkos::Serial` is initialized as the `DefaultHostExecutionSpace`.
-Kokkos chooses the two spaces using the following list:
+ `DefaultExecutionSpace` は、ポリシーやビューで明示的に指定されていない場合に使用される実行スペースです。 主に、Kokkosはビルド構成で有効化されている場合、異種バックエンド（CUDA、HIP、OpenACC、OpenMPTarget、SYCL）のいずれかをデフォルト実行空間として初期化します。 さらに、Kokkosでは、　`DefaultHostExecutionSpace`　が必要です。 `DefaultHostExecutionSpace` は、ホスト演算が必要な場合に使用される、デフォルト実行空間です。 ビルド環境で並列ホスト実行スペースのいずれか一つが有効化されている場合、`Kokkos::Serial` はビルド構成で明示的に有効化されている場合にのみ初期化されます。 ビルド構成で並列ホスト実行空間が有効化されていない場合、`Kokkos::Serial` が `DefaultHostExecutionSpace` として初期化されます。
+Kokkos　は、以下のリストを使用して2つのスペースを選択します:
 
 1. `Kokkos::Cuda`
 2. `Kokkos::Experimental::HPX`
@@ -49,95 +49,95 @@ Kokkos chooses the two spaces using the following list:
 8. `Kokkos::Threads`
 9. `Kokkos::Serial`
 
-The highest execution space in the list that is enabled is Kokkos' default execution space, and the highest enabled host execution space is Kokkos' default host execution space. For example, if  `Kokkos::Cuda`, `Kokkos::OpenMP`, and `Kokkos::Serial` are enabled, then `Kokkos::Cuda` is the default execution space and `Kokkos::OpenMP` is the default host execution space\ :sup:`1`.  In cases where the highest enabled backend is a host parallel execution space the `DefaultExecutionSpace` and the `DefaultHostExecutionSpace` will be the same.
+有効化されているリスト内の最高位の実行空間は、Kokkosのデフォルト実行空間であり、有効化されたホスト実行空間の中で最上位のものは、Kokkos　のデフォルトホスト実行空間です。 例えば、 `Kokkos::Cuda`, `Kokkos::OpenMP`, および　`Kokkos::Serial` が有効かされていれば、 `Kokkos::Cuda`　がデフォルトの実行空間であり、`Kokkos::OpenMP`　がデフォルトのホスト実行空間です\ :sup:`1`。  有効なバックエンドの中で最上位のものが、ホスト並列実行空間である場合、 `DefaultExecutionSpace` および `DefaultHostExecutionSpace` は、同じになります。
 
-`Kokkos::initialize <../API/Initialize-and-Finalize.html#kokos-initialize>`_ parses the command line for flags prefixed with `--kokkos-`, and removes all recognized flags. Argument options are given with an equals (`=`) sign. If the same argument occurs more than once, the last one is used. For example, the arguments
+ `Kokkos::initialize <../API/Initialize-and-Finalize.html#kokos-initialize>`_ は、`--kokkos-` で始まるフラグをコマンドラインから解析し、認識されたフラグのすべてを削除します。 引数のオプションは等号（`=`）で指定します。 同じ引数が複数回指定された場合、最後のものが使用されます。例えば、引数
 
     --kokkos-threads=4 --kokkos-threads=3
 
-set the number of threads to 3. :ref:`Table 4.1 <Table_cli-opts>` gives a full list of command-line options.
+は、スレッド数を3に設定します。 :ref:`表 4.1 <Table_cli-opts>` は、コマンドラインオプションの完全なリストを提供します。
 
 .. _Table_cli-opts:
 
-Table 4.1: Command-line options for Kokkos::initialize
+表 4.1:  Kokkos::initialize　のコマンドラインオプション
 
-.. list-table::
+.. リスト表::
 
-  * - Argument
-    - Description
+  * - 引数
+    - ディスクリプション
   * - :code:`--kokkos-help`
-    - print this message
+    - 本メッセージをプリント
   * - :code:`--kokkos-disable-warnings`     
-    - disable kokkos warning messages
+    -  kokkos 警告メッセージを無効化
   * - :code:`--kokkos-print-configuration` 
-    - print configuration
+    - 設定をプリント
   * - :code:`--kokkos-tune-internals`      
-    - allow Kokkos to autotune policies and declare tuning features through the tuning system. If left off, Kokkos uses heuristics.
+    - Kokkosがポリシーを自動調整し、調整システムを通じて調整機能を宣言できるようにします。無効にした場合、Kokkos　はヒューリスティックを使用します。
   * - :code:`--kokkos-num-threads=INT`     
-    - specify total number of threads to use for parallel regions on the host
+    - ホスト上の並列領域で使用するスレッドの総数を指定
   * - :code:`--kokkos-device-id=INT`
-    - specify device id to be used by Kokkos
+    - Kokkos　で使用するデバイスIDを指定
   * - :code:`--kokkos-map-device-id-by=(random\|mpi_rank)`, default: :code:`mpi_rank`
-    - strategy to select device-id automatically from available devices: random or mpi_rank\ :sup:`2`
+    - 利用可能なデバイスからデバイスIDを自動的に選択するストラテジー: ランダムまたは　mpi_rank\ :sup:`2`
   * - :code:`--kokkos-tools-libs=STR`      
-    - specify which of the tools to use. Must either be full path to library or name of library if the path is present in the runtime library search path (e.g. LD_LIBRARY_PATH)
+    - 使用するツールを指定。ライブラリの完全なパス、またはランタイムライブラリ検索パス（例: LD_LIBRARY_PATH）にパスが存在する場合のライブラリ名でなければなりません。
   * - :code:`--kokkos-tools-help`          
-    - query the (loaded) kokkos-tool for its command-line option support (which should then be passed via --kokkos-tools-args="...")
+    - (読み込まれた) kokkos-tool のコマンドラインオプションサポートを参照（その後、--kokkos-tools-args="..."　 経由で渡される必要があります）
   * - :code:`--kokkos-tools-args=STR`      
-    - a single (quoted) string of options which will be whitespace delimited and passed to the loaded kokkos-tool as command-line arguments. E.g. :code:`<EXE> --kokkos-tools-args="-c input.txt"` will pass :code:`<EXE> -c input.txt` as argc/argv to tool
+    - オプションの単一（引用符付き）文字列で、これは空白で区切られ、ロードされた　kokkos-tool　にコマンドライン引数として渡されます。例： :code:`<EXE> --kokkos-tools-args="-c input.txt"` は、 :code:`<EXE> -c input.txt` を argc/argv としてツールに渡します。
 
-When passing a boolean as a string, the acceptable values are:
- - true, yes, 1
- - false, no, 0
+ブール値を文字列として渡す場合、許容される値は次の通りです:
+ - 真, はい, 1
+ - 偽, いいえ, 0
 
-The values are case insensitive.
+値は、大文字小文字を区別しません。
 
 
-:sup:`1` This is the preferred set of defaults when CUDA and OpenMP are enabled. If you use a thread-parallel host execution space, we prefer Kokkos' OpenMP backend, as this ensures compatibility of Kokkos' threads with the application's direct use of OpenMP threads. Kokkos cannot promise that its Threads backend will not conflict with the application's direct use of operating system threads.
+:sup:`1` これは、CUDA　と　OpenMP　が有効な場合の推奨デフォルト設定です。 スレッド並列ホスト実行空間を使用する場合、Kokkos　の　OpenMP　バックエンドを推奨します。これにより、Kokkos　のスレッドとアプリケーションが直接使用する　OpenMP　スレッドとの互換性が保証されます。 Kokkos　は、そのスレッドバックエンドがアプリケーションによるオペレーティングシステムスレッドの直接使用と競合しないことを保証できません。
 
-:sup:`2` The two device-id mapping strategies are:
-- random: select a random device from available.
-- mpi_rank: select device based on a round robin assignment of local MPI ranks. Works with OpenMPI, MVAPICH, SLURM, and derived implementations. Support for MPICH was added in Kokkos 4.0
+:sup:`2` 2つのデバイスIDマッピング戦略は以下の通りです:
+- random: 利用可能なデバイスからランダムに1つ選択。
+- mpi_rank: ローカルMPIランクのラウンドロビン割り当てに基づいてデバイスを選択。 OpenMPI、MVAPICH、SLURM、およびその派生した実装と連携。  MPICH　のサポートを  Kokkos 4.0において追加
 
-Initialization by environment variable
+環境変数による初期化
 --------------------------------------
 
-Instead of using command-line arguments, one may use environment variables. The environment variables are identical to the arguments in :ref:`Table 4.1 <Table_cli-opts>` but they are upper case and the dash is replaced by an underscore. For example, if we want to set the number of threads to 3, we may use
+コマンドライン引数を使用する代わりに、環境変数を使用することもできます。 環境変数は、 :ref:`Table 4.1 <Table_cli-opts>` における引数と同一ですが、それらは、それらは大文字であり、ダッシュはアンダースコアに置換されます。　例えば、例えば、スレッド数を3に設定したい場合、 以下を使用できます
 
 .. code-block:: sh
 
   KOKKOS_NUM_THREADS=3
 
 
-Initialization by struct
+構造体による初期化
 ------------------------
 
-Instead of giving `Kokkos::initialize() <../API/core/initialize_finalize/initialize.html>`_ command-line arguments, one may directly pass in initialization parameters using the `Kokkos::InitializationSettings` struct.  If one wants to set options using the struct, one can use the functions `set_xxx` where `xxx` is identical to the arguments in :ref:`Table 4.1 <Table_cli-opts>` where the dash has been replaced by an underscore. To check if a variable has been set, one can use the `has_xxx` functions. Finally, to get the value that was set, one can use the `get_xxx` functions.
+`Kokkos::initialize() <../API/core/initialize_finalize/initialize.html>`_ command-line 引数を提供する代わりに、  `Kokkos::InitializationSettings` 構造体を使用して、初期化パラメータにおいて直接引き渡すことができます。  構造体を使用してオプションを設定したい場合、ダッシュがアンダースコアに置換されている  :ref:`Table 4.1 <Table_cli-opts>`　における引数に、`xxx`　が同一である関数 `set_xxx` を使用できます。 変数が設定されているかどうかを確認するには、`has_xxx`関数を使用できます。最終的に、設定された値を取得するには、`get_xxx`　関数を使用できます。
 
 
-If you do not set `num_threads`, Kokkos will try to determine a default value if possible or otherwise set it to 1. In particular, Kokkos can use the `hwloc` library to determine default settings using the assumption that the process binding mask is unique, i.e., that this process does not share any cores with another process. Note that the default value of each parameter is -1.
+`num_threads`　を設定しない場合、Kokkos　は可能な限りデフォルト値を決定しようと試み、それが不可能な場合には、1に設定します。 特に、Kokkos　は、　`hwloc`　ライブラリを使用して、プロセスバインディングマスクが一意である、つまりつまり、本プロセスは、別のプロセスとコアを共有しないという仮定のもとで、デフォルト設定を決定できます。各パラメータのデフォルト値が、 -1であることに注意してください。」
 
-Here is an example of how to use the struct.
+以下に、構造体の使用方法の一例を示します。
 
 .. code-block:: cpp
 
-    Kokkos::InitializationSettings settings;
-    // 8 (CPU) threads
+    Kokkos::InitializationSettings 設定;
+    // 8 (CPU) スレッド
     settings.set_num_threads(8);
-    // If Kokkos was built with CUDA enabled, use the GPU with device ID 1.
+    // Kokkos　が、CUDA　有効状態で構築された場合、デバイスID 1の　GPU　を使用してください。
     settings.set_device_id(1);
 
     Kokkos::initialize(settings);
 
-Finalization
+最終処理完了
 ------------
 
-At the end of each program, Kokkos needs to be shut down in order to free resources; do this by calling `Kokkos::finalize() <../API/core/initialize_finalize/finalize.html>`_. You may wish to set this to be called automatically at program exit, either by setting an `atexit` hook or by attaching the function to `MPI_COMM_SELF` so that it is called automatically at `MPI_Finalize`.
+各プログラム終了時に、 Kokkos は、リソースを解放するために、シャットダウンする必要があります; `Kokkos::finalize() <../API/core/initialize_finalize/finalize.html>`_　を呼び出すことにより、これを行ってください。 `MPI_Finalize` で自動的に呼び出されるようにするために、`atexit` フックを設定するか、または　`MPI_COMM_SELF` に関数をアタッチすることにより、 プログラム終了時に自動的に呼び出されるように設定することを推奨します。
 
-Example Code
+コードの例
 ------------
 
-A minimal Kokkos code thus would look like this:
+最小限の　Kokkos　コードは、以下のようになります:
 
 .. code-block:: cpp
 
