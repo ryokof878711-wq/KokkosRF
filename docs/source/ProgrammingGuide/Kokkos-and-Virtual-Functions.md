@@ -1,7 +1,7 @@
-# Kokkos　および and Virtual Functions
+# Kokkos　および 仮想関数
 
-```{warning}
-Using virtual functions in parallel regions is not a good idea in general. It often degrades performance, requires specific code for a correct execution on GPU, and is not portable on every backend. We recommend to use a different approach whenever possible.
+```{警告}
+並列領域で仮想関数を使用することは、一般的に推奨されません。 パフォーマンスを低下させることが多く、GPU上で正しく実行するには特定のコードが必要であり、すべてのバックエンドで移植可能ではありません。可能な限り別の方法を使用することを推奨します。
 ```
 
 Due to oddities of GPU programming, the use of virtual functions in Kokkos parallel regions can be complicated. This document describes the problems you're likely to face, where they come from, and how to work around them.
