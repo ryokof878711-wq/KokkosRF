@@ -1,49 +1,46 @@
 # 導入
 
 高性能コンピューティング（HPC）の分野は、新たな時代を迎えようとしています。
-The need for a fundamental change comes from many angles including the growing
-acceptance that rates of pure computation (often called FLOP/s) are a poor single
-optimization goal for scientific workloads, as well as practical challenges in the form
-of producing energy efficient and cost-efficient processors. Since the convergence on
-the Message-Passing Interface (MPI) standard in the mid 1990s, application developers
-have enjoyed a seemingly static view of the underlying machine - that of a distributed
-collection of homogeneous nodes executing in collaboration. However, after almost two
-decades of dominance, the sole use of MPI to derive parallelism is acting as a potential
-limiter to improved future performance. While we expect MPI to continue to function
-as the basic mechanism for communication between compute nodes for the immediate
-future, additional parallelism is likely to be required on the computing node itself if high
-performance and efficiency goals are to be realized.
+根本的な変革の必要性は、純粋な計算速度（FLOP/sと呼ばれることが多い）が科学的なワークロードにとって
+不十分な単一の最適化目標であるという認識の高まり、および
+エネルギー効率とコスト効率に優れたプロセッサの実現という実践的な課題など、
+多角的な観点から生じています。 1990年代半ばに
+メッセージパッシングインターフェース（MPI）標準が確立されて以来、アプリケーション開発者は
+基盤となるマシンを、分散した同種のノード群が協調して動作する集合体という、
+一見静的な視点で捉えてきました。しかしながら、ほぼ20年にわたる支配の後、 MPI　のみを用いた並列化の導出は、将来の性能改善におけ
+る潜在的な制約要因となり得ます。当面の間、MPIが計算ノード間の通信における基本メカニズムとして機能し続けると予想される一方で、高い性能と効率の目標を達成するためには、計算ノード自体において追加の並列処理が必要となる可能性が高くなります。
 
-In reviewing potential options for the computing nodes of the future the reader
-might fall upon three broad categories of computing devices:
+将来のコンピューティングノードの潜在的な選択肢を検討するにあたり、読者は主に三つのコンピューティングデバイスのカテゴリーに遭遇するかもしれません。:
 
-* the multicore processor with powerful serial performance, optimized to reduce operation latency, 
+* 強力なシリアル性能を備えたマルチコアプロセッサ、動作遅延を低減するよう最適化されており、 
 
-* many-core processors with low to medium powered compute cores that are designed to extend the multicore concept toward throughput based computation,
+* 低中電力の演算コアを備えたマルチコアプロセッサは、マルチコアの概念をスループットベースの計算へと拡張することを目的として設計されており、
 
-* and finally, the general-purpose graphics processor unit (GP-GPU, or often, GPU) which is a much more numerous collection of low powered cores designed to tolerate long latencies but provide performance through a much higher degree of parallelism and computational throughput. 
+* そして最後に、汎用グラフィックスプロセッシングユニット（GP-GPU、または多くの場合、GPU）は、低電力コアを非常に多数集めたもので、長いレイテンシに耐える設計でありながら、はるかに高い並列性と計算スループットによって性能を提供します。
 
-Any combination of these options might also be combined in the future.
+これらのオプションの組み合わせは、将来的に組み合わされる可能性もあります。
 
-The diversity of the options available for processor selection raises an interesting question as to how these should be programmed. In part due to their heritage, but also
-due to their optimized designs, each of these hardware types offers a different programming solution and a different set of guidelines by which to write applications for highest
-performance. Options available today include a number of shared memory approaches
-such as OpenMP, Cilk+, Thread Building Blocks (TBB) as well as Linux p-threads. To
-target both contemporary multi/many-core processors and GPUs technologies options
-such as OpenMP, OpenACC and OpenCL might be used. Finally, for highest performance 
-on GPUs a programming model such as CUDA may be selected. Such a variety
-of options poses a problem to the application developer of today which is reminiscent
-of the challenges before MPI became the default communication library:
+プロセッサ選択の選択肢の多様性は、これらをどのようにプログラムすべきかという興味深い疑問を提起します。
+その背景としては、それぞれのハードウェアの継承された特性も一因ではありますが、
+最適化された設計も大きく寄与しています。これらのハードウェアタイプはそれぞれ、異なるプログラミングソリューションと、
+最高のパフォーマンスを実現するアプリケーションを書くための異なるガイドラインを提供している。 
+現在利用可能なオプションには、OpenMP、Cilk+、スレッドビルディングブロック（TBB）、Linux p-threads　等、
+複数の共有メモリアプローチが含まれます。
+現代のマルチコア／マルチプロセッサ技術とGPU技術の両方を対象とするため、
+OpenMP、OpenACC、OpenCLなどの技術オプションが使用される可能性があります。 最後に、GPU上で最高のパフォーマンスを得るためには、 
+CUDAなどのプログラミングモデルを選択することが考えられます。これほど多様な
+選択肢は、今日のアプリケーション開発者にとって問題となります。これは
+MPIがデフォルトの通信ライブラリとなる前の課題を彷彿とさせます:
 
-* which model should be selected to provide portability across hardware solutions?
+* ハードウェアソリューション間で移植性を提供するために、どのモデルを選択すべきでしょうか？
 
-* and also provide high performance across each class of processor?
+* また、各クラスのプロセッサにおいて高いパフォーマンスを提供しますか？
 
-* and protect algorithm investment into the future?
+* 将来に向けてアルゴリズム投資を保護しますか？
 
-None of the models listed above have been able to provide practical solutions
-to these questions.
+上記のモデルはいずれも、これらの疑問に対して実用的な解決策を
+提供できていません。
 
-The Kokkos programming model described in this programming guide seeks to address these concerns by providing an abstraction of both computation and application data allocation and layout. These abstraction layers are designed specifically to isolate software developers from fluctuation and diversity in hardware details yet provide portability and high levels of performance across many architectures.
+このプログラミングガイドで説明するKokkosプログラミングモデルは、計算とアプリケーションデータの両方の割り当ておよびレイアウトを抽象化することで、これらの懸念に対処することを目的としています。 これらの抽象化レイヤーは、ソフトウェア開発者をハードウェアの詳細における変動や多様性から隔離すると同時に、多くのアーキテクチャにわたって移植性と高いレベルのパフォーマンスを提供するように特別に設計されています。
 
-This guide provides an introduction to the motivations of developing such an abstraction library, a coverage of the programming model and its implementation as an embedded C++ library requiring no additional modifications to the base C++ language. As such it should be seen as an introduction for new users and as a reference for application developers who are already employing Kokkos in their applications. Finally, supplementary tutorial examples are included as part of the Kokkos software release to help users experiment and explore the programming model through a gradual series of steps.
+このガイドでは、このような抽象化ライブラリを開発する動機について紹介するとともに、プログラミングモデルとその実装について解説しており、実装は組み込み　C++　ライブラリとして提供され、ベースとなる　C++　言語に追加の変更を加える必要はありません。 したがって、これは新規ユーザー向けの入門書として、またアプリケーション開発者向けの参考資料として捉えるべきであり、既にアプリケーション内でKokkosを採用している開発者向けの内容となっています。 最後に、Kokkosソフトウェアのリリースには補足チュートリアル例が含まれており、段階的な一連の手順を通じて、ユーザーがプログラミングモデルを実験し、探求するのに役立ちます。
