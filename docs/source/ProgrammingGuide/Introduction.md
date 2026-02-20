@@ -1,7 +1,7 @@
 # 導入
 
-The field of High Performance Computing (HPC) is on the verge of entering a new
-era. The need for a fundamental change comes from many angles including the growing
+高性能コンピューティング（HPC）の分野は、新たな時代を迎えようとしています。
+The need for a fundamental change comes from many angles including the growing
 acceptance that rates of pure computation (often called FLOP/s) are a poor single
 optimization goal for scientific workloads, as well as practical challenges in the form
 of producing energy efficient and cost-efficient processors. Since the convergence on
