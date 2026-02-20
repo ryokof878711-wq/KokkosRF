@@ -15,19 +15,19 @@ Kokkos の目標の一つは、レガシーアプリケーションにおける�
 
 Kokkos　の実装は、C++　ライブラリによって実現されているため、基盤となるバックエンドプログラミングモデルとの完全な相互運用性を提供します。特に、同一コンパイル単位内でOpenMP、CUDA、Kokkosコードの混在を可能にします。 これは、Kokkos　の並列実行レイヤーとデータレイヤーの両方に当てはまります
 
-このことにより、特定の制限を解除するわけではないことを認識することが重要です。　例えば、OpenMP　並列領域内でビューを割り当てることは無効です。これは、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　カーネル内でビューを割り当てるのが無効であるのと同様です。  Indeed, there are things which are slightly more cumbersome when mixing the models. Assigning one view to another inside a Cuda kernel or an OpenMP parallel region is only possible if the destination view is unmanaged. During dispatch of kernels with [`parallel_for()`](../API/core/parallel-dispatch/parallel_for), all Views referenced in the functor or lambda are automatically switched into unmanaged mode. This would not happen when simply entering an OpenMP parallel region.
+このことにより、特定の制限を解除するわけではないことを認識することが重要です。　例えば、OpenMP　並列領域内でビューを割り当てることは無効です。これは、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　カーネル内でビューを割り当てるのが無効であるのと同様です。  実際に、モデルを組み合わせる際には、やや煩雑になることがあります。Cuda　カーネル内および　OpenMP　並列領域内で、あるビューを別のビューに割り当てることは、宛先ビューが管理対象外ビューである場合にのみ、可能です。 [`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　によるカーネルのディスパッチ中に、 ファンクタまたはラムダ式で参照されるすべてのビューは、自動的に管理対象外モードに切り替わります。これは、 単にOpenMP並列領域に入るだけでは、このようなことは起こりません。
 
-### Cuda interoperability
+### Cuda　相互運用性
 
-The most important thing to know for Cuda interoperability is that the provided macro `KOKKOS_INLINE_FUNCTION` evaluates to `__host__ __device__ inline`. This means that calling a pure `__device__` function (for example Cuda intrinsics or device functions of libraries) must be protected with the `__CUDA_ARCH__` pragma.
+Cuda 相互運用性において最も重要な点は、提供されるマクロ `KOKKOS_INLINE_FUNCTION` が `__host__ __device__ inline` として評価されることです。これは、純粋な `__device__` 関数（例えば Cuda イントリンシックやライブラリのデバイス関数）を呼び出す際には、`__CUDA_ARCH__` プラグマで保護する必要があることを意味します。
 
 ```c++
 __device__ SomeFunction(double* x) {
   ...
 }
 
-struct Functor {
-  typedef Cuda execution_space;
+構造体　ファンクタ {
+  型定義　Cuda execution_space;
   View<double*,Cuda> a;
   KOKKOS_INLINE_FUNCTION
  void operator(const int& i) {
@@ -41,75 +41,75 @@ struct Functor {
 }
 ```
 
-The [`RangePolicy`](../API/core/policies/RangePolicy) starts a 1D grid of 1D thread blocks so that the index `i` is calculated as `blockIdx.x * blockDim.x + threadIdx.x`. For the `TeamPolicy` the number of teams is the grid dimension, while the number of threads per team is mapped to the Y-dimension of the Cuda thread-block. The optional vector length is mapped to the X-dimension. For example, `TeamPolicy<Cuda>(100,12,16)` would start a 1D grid of size 100 with block-dimensions (16,12,1) while `TeamPolicy<Cuda>(100,96)` would result in a grid size of 100 with block-dimensions of (1,96,1). The restrictions on the vector length (power of two and smaller than 32 for the Cuda execution space) guarantee that vector loops are performed by threads which are part of a single warp.
+[`RangePolicy`](../API/core/policies/RangePolicy) は、1次元スレッドブロックの1次元グリッドを開始します。これにより、インデックス `i` は `blockIdx.x * blockDim.x + threadIdx.x` として計算されます。 `TeamPolicy` では、チーム数がグリッド次元となり、一方、チームごとのスレッド数は Cuda スレッドブロックの Y 座標軸（Y-dimension）に対応します。 オプションのベクトル長は、X軸にマッピングされます。 例えば、`TeamPolicy<Cuda>(100,12,16)` はブロック次元 (16,12,1) のサイズ 100 の 1D グリッドを開始し、`TeamPolicy<Cuda>(100,96)` はブロック次元 (1,96,1) のグリッドサイズ 100 を生成します。 ベクトル長に対する制限（Cuda　実行空間では2の冪乗かつ32未満）により、ベクトルループは単一のワープに属するスレッドによって実行されることが保証されます。
 
 ### OpenMP
 
-One restriction on OpenMP interoperability is that it is not valid to increase the number of threads via `omp_set_num_threads()` after initializing Kokkos. This restriction is necessary for bookkeeping when Kokkos does allocation for internal per-thread data structures. It is however valid to ask for the thread ID inside a Kokkos parallel kernel compiled for the OpenMP execution space. It is also valid to use OpenMP constructs such as OpenMP atomics inside a parallel kernel or functions called by it. However, what happens when mixing OpenMP and Kokkos atomics is undefined since those will not necessarily map to the same underlying mechanism.
+OpenMP相互運用性における制限事項の一つは、Kokkos　の初期化後に　`omp_set_num_threads()`　を用いてスレッド数を増加させることは無効であるという点です。 この制限は、Kokkosがスレッドごとの内部データ構造の割り当てを行う際の帳簿管理のために必要です。 ただし、OpenMP　実行空間向けにコンパイルされた　Kokkos　並列カーネル内でスレッド　ID　を要求することは有効です。 並列カーネル内または、それによって呼び出される関数内で、OpenMP　アトミックなどの　OpenMP　構文を使用することも有効です。 ただし、それらが必ずしも同じ基盤メカニズムにマッピングされるとは限らないので、OpenMP　と　Kokkos　アトミックを混在させた場合の結果は未定義です。
 
 
-## Legacy data structures
+## レガシィデータ構造
 
-There are two principal mechanisms to facilitate interoperability with legacy data structures: 
+レガシーデータ構造との相互運用性を促進する主なメカニズムは、2つあります: 
 
-1. Kokkos allocates data and raw pointers that are extracted to create legacy data structures and 
-1. unmanaged views can be used to view externally allocated data. 
+1. Kokkos　は、レガシーデータ構造を作成するために抽出されるデータと生のポインタを割り当て、そして 
+1. 管理対象外ビューにより、外部で割り当てられたデータを参照することができます。
 
-In both cases, it is mandatory to fix the Layout of the Kokkos view to the actual layout used in the legacy data structure. Note that the user is responsible for insuring proper access capabilities. For example, a pointer obtained from a view in the `CudaSpace` may only be accessed from Cuda kernels, and a View constructed from memory acquired through a call to `new` will typically only be accessible from Execution spaces which can access the `HostSpace`.
+いずれの場合も、Kokkos　ビューのレイアウトをレガシーデータ構造で使用されている実際のレイアウトに固定することが必須です。 ユーザーは、適切なアクセス権限を保証する責任があることに注意してください。 例えば、`CudaSpace`内のビューから取得したポインタは、Cudaカーネルからのみアクセス可能であり、また、`new`　への呼び出しを通じて取得されたメモリから構築されたビューは、通常、`HostSpace`　にアクセス可能な実行空間からのみアクセス可能です。 
 
-## Raw allocations through Kokkos
+## Kokkos　を介した生の割り当て
 
-A simple way to add support for multiple memory spaces to a legacy app is to use [`kokkos_malloc`](../API/core/c_style_memory_management/malloc), [`kokkos_free`](../API/core/c_style_memory_management/free) and [`kokkos_realloc`](../API/core/c_style_memory_management/realloc). The functions are templated on the memory space and thus allow targeted placement of data structures:
+レガシーアプリに複数のメモリ空間のサポートを追加する簡単な方法は、[`kokkos_malloc`](../API/core/c_style_memory_management/malloc)、 [`kokkos_free`](../API/core/c_style_memory_management/free) および [`kokkos_realloc`](../API/core/c_style_memory_management/realloc) を使用することです。 関数は、メモリ空間に対してテンプレート化されており、これによりデータ構造のターゲットを絞った配置が可能となります:
 
 ```c++
-// Allocate an array of 100 doubles in the default memory space
+// デフォルトのメモリ空間に、100個の　double　型要素からなる配列を割り当て
 double* a = (double*) kokkos_malloc<>(100*sizeof(double));
 
-// Allocate an array of 150 int* in the Cuda UVM memory space
-// This allocation is accessible from the host
+// Cuda UVM　メモリ空間に、150個の　int*　配列を割り当て。
+// この割り当てはホストからアクセス可能
 int** 2d_array = (int**) kokkos_malloc<CudaUVMSpace>
                          (150*sizeof(int*));
 
-// Fill the pointer array with pointers to data in the Cuda Space
-// Since it is not the UVM space you can access 2d_array[i][j] only inside a Cuda Kernel
+// ポインタ配列をCuda空間内のデータへのポインタを充当
+// UVM空間ではないため、2d_array[i][j]　は、Cuda　カーネル内でのみアクセス可能
 for(int i=0;i<150;i++)
   2d_array[i] = (int*) kokkos_malloc<CudaSpace>(200*sizeof(int));
 ```
 
-A common usage scenario of this capability is to allocate all memory in the CudaUVMSpace when compiling for GPUs. This allows all allocations to be accessible from legacy code sections as well as from parallel kernels written with Kokkos.
+この機能の一般的な使用シナリオは、GPU向けにコンパイルする際に、CudaUVMSpace　内の全メモリを割り当てることです。 これにより、すべての割り当てが、レガシーコードセクションからだけでなく、Kokkos　で書き込まれた並列カーネルからもアクセス可能になります。
 
 ### External memory management
 
-When memory is managed externally, for example because Kokkos is used in a library which is given pointers to data allocations as input, it can be necessary or convenient to wrap the data into Kokkos views. If the library anyway receives the data to create a copy, it is straight forward to allocate the internal data structure as a view and copy the data in a parallel kernel element by element. Note that you might need to first copy into a host view before copying to the actual destination memory space:
+メモリが、外部で管理される場合、例えば、Kokkos　がデータ割り当てのポインタを入力として与えられるライブラリで使用されるので、 データを　Kokkos　のビューにラップすることが必要または便利な場合があります。 ライブラリがコピー作成用のデータを受け取った場合、内部データ構造をビューとして割り当て、並列カーネル内でデータを要素ごとにコピーすることは容易です。 実際の宛先メモリ空間にコピーする前に、まずホストビューにコピーする必要がある場合があることに、注意してください:
 
 ```c++
 template<class ExecutionSpace>
 void MyKokkosFunction(double* a, const double** b, int n, int m) {
-  // Define the host execution space and the view types
-  typedef HostSpace::execution_space host_space;
-  typedef View<double*,ExecutionSpace> t_1d_device_view;
-  typedef View<double**,ExecutionSpace> t_2d_device_view;
+  // ホスト実行空間とビュータイプを定義
+  型定義 HostSpace::execution_space host_space;
+  型定義 View<double*,ExecutionSpace> t_1d_device_view;
+  型定義 View<double**,ExecutionSpace> t_2d_device_view;
 
-  // Allocate the view in the memory space of ExecutionSpace
+  // ビューを　ExecutionSpace のメモリ空間に割り当て
   t_1d_device_view d_a("a",n);
-  // Create a host copy of that view
+  // そのビューのホストコピーを作成
   typename t_1d_device_view::HostMirror h_a = create_mirror_view(a);
-  // Copy the data from the external allocation into the host view
+  // 外部割り当てからホストビューへデータをコピー
   parallel_for(RangePolicy<host_space>(0,n),
     KOKKOS_LAMBDA (const int& i) {
     h_a(i) = a[i];
   });
-  // Copy the data from the host view to the device view
+  // ホストビューからデバイスビューへデータをコピー
   deep_copy(d_a,h_a);
 
-  // Allocate a 2D view in the memory space of ExecutionSpace
+  // ExecutionSpace　のメモリ空間内に2Dビューを割り当て
   t_2d_device_view d_b("b",n,m);
-  // Create a host copy of that view
+  // そのビューのホストコピーを作成
   typename t_2d_device_view::HostMirror h_b = create_mirror_view(b);
 
-  // Get the member_type of the team policy
+  // チームポリシーの member_type を取得
   typedef TeamPolicy<host_space>::member_type t_team;
-  // Run a 2D copy kernel using a TeamPolicy
+  // TeamPolicyを使用して2Dコピーカーネルを実行
   parallel_for(TeamPolicy<host_space>(n,m),
     KOKKOS_LAMBDA (const t_team& t) {
     const int i = t.team_rank();
@@ -117,96 +117,96 @@ void MyKokkosFunction(double* a, const double** b, int n, int m) {
       h_b(i,j) = b[i][j];
     });
   });
-  // Copy the data from the host to the device
+  // ホストからデバイスへデータをコピー
   deep_copy(d_b,h_b);
 }
 ```
 
-Alternatively one can create a view which directly references the external allocation. If that data is a multidimensional view, it is important to specify the Layout explicitly. Furthermore, all data must be part of the same allocation.
+あるいは、外部割り当てを直接参照するビューを作成することもできます。 そのデータが多次元ビューである場合、レイアウトを明示的に指定することが重要です。さらに、すべてのデータは同じ割り当ての一部でなければなりません。
 
 ```c++
 void MyKokkosFunction(int* a, const double* b, int n, int m) {
-  // Define the host execution space and the view types
-  typedef View<int*, DefaultHostExecutionSpace, MemoryTraits<Unmanaged>> t_1d_view;
-  typedef View<double**[3],LayoutRight, DefaultHostExecutionSpace,
+  // ホスト実行空間とビュータイプを定義
+  型定義 View<int*, DefaultHostExecutionSpace, MemoryTraits<Unmanaged>> t_1d_view;
+  型定義 View<double**[3],LayoutRight, DefaultHostExecutionSpace,
                MemoryTraits<Unmanaged>> t_3d_view;
-  // Unmanaged views cannot have labels
+  // Unmanaged views cannot have labels管理対象外のビューのラベル保持は不可能
 
-  // Create a 1D view of the external allocation
+  // Create a 1D view of the external allocation外部割り当ての1Dビューを作成
   t_1d_view d_a(a,n);
 
-  // Create a 3D view of the second external allocation
-  // This assumes that the data had a row major layout (i.e. the third index is stride 1)
+  // 2番目の外部割り当ての3Dビューを作成
+  // これにおいては、データが行主記憶配置（すなわち、3番目のインデックスがストライド1）であったことが前提
   t_3d_view d_b(b,n,m);
 }
 ```
 
-### Views as the fundamental data owning structure
+### 基本データ所有構造体としてのビュー
 
-Another option is to let Kokkos handle the basic allocations using Views and then construct the legacy data structures around them. Again, it is important to fix the Layout of the Views to whatever the layout of the legacy data was.
+別の選択肢として、Kokkos　に　Views　を用いた基本的な割り当て処理を任せ、その上に従来のデータ構造を構築する方法があります。 再度、ビューのレイアウトをレガシーデータのレイアウトに固定することが重要です。
 
 ```c++
-// Allocate a 2D view with row major layout
+// 行主記憶方式で、2Dビューを割り当てる
 View<double**,LayoutRight,HostSpace> a("A",n,m);
 
-// Allocate an array of pointers
+// ポインタの配列を割り当てる
 double** a_old = new double*[n];
 
-// Fill the array with pointers to the rows of a
+// 配列に　a　の行へのポインタを格納
 for(int i=0; i<n; i++)
   a_old[i] = &a(i,0);
 ```
 
 ### std::vector
 
-One of the most common data objects in C++ codes is `std::vector`. Its semantics are unfortunately not compatible with Kokkos requirements and it is thus not well supported. A major problem is that functors and lambdas are passed as const objects to the parallel execution. This design choice was made to (i) prevent a common cause of race conditions and (ii) allow the underlying implementation more flexibility in how to share the functor and where to put it. In particular, this leaves the choice open for the implementation to give each thread an individual copy of the functor or place it in read only cache structures.
+C++　コードで最も一般的なデータオブジェクトの一つは、`std::vector`　です。 そのセマンティクスは、残念ながら、Kokko　の要件と互換性がなく、したがって十分にサポートされていません。 ファンクターとラムダ式が、並列実行に対して　const　オブジェクトとして渡されることが、主な問題です。A major problem is that functors and lambdas are passed as const objects to the parallel execution. 本デザインは以下のために選択されました (i) 競合状態の一般的な原因を防止、および (ii) ファンクタを共有する方法や配置場所について、基盤となる実装の対応を柔軟化。 特に、これにより、実装側では各スレッドにファンクタの個別のコピーを割り当てるか、読み取り専用キャッシュ構造体に配置するかの選択肢が残されます。
 
-The semantics of `std::vector` would in this case prevent a kernel from modifying its entries since a const `std::vector` is read only. Furthermore, creating multiple copies of the functor would indeed replicate the vector data, since it has copy semantics.
+この場合、`std::vector`のセマンティクスにより、コンストラクタはエントリを変更できなくなります。なぜなら、const `std::vector`は読み取り専用だからであるからです。 さらに、ファンクターの複数のコピーを作成すると、コピーセマンティクスを持つため、ベクトルデータが実際に複製されることになります。
 
-Other issues with `std::vector` are its unrestricted support for resize as well as push functionality. In a threaded environment support for those capabilities would bring massive performance penalties. In particular access to the `std::vector` would require locks in order to prevent one thread from deallocating the view while another accesses its content. And last but not least `std::vector` is not supported on GPUs and thus would prevent portability.
+`std::vector`　のその他の問題点は、サイズ変更およびプッシュ機能に対する制限のないサポートです。スレッド環境では、それらの機能をサポートすると大幅なパフォーマンスの低下を招くことになります。　特に、 `std::vector`へのアクセスには、あるスレッドがその内容を参照している間に、別のスレッドがビューを解放するのを防ぐために、ロックが必要となります。 そして、最後に重要な点は、`std::vector`　がGPU　ではサポートされておらず、移植性を妨げる要因となることです。
 
-Kokkos provides a drop in replacement for `std::vector` with `Kokkos::vector`. Outside of parallel kernels its semantics are mostly the same as that of `std::vector`; for example assignments perform deep copies and resize and push functionality are provided. One important difference is that it is valid to assign values to the elements of a const vector.
+Kokkosは、　`Kokkos::vector`　により　`std::vector`　のドロップイン置換を提供します。 並列カーネル以外では、そのセマンティクスは、主に　`std::vector`　と同じです; 例えば、割り当ては深部コピーを実行し、サイズ変更とプッシュ機能を提供します。重要な相違点の一つは、const　ベクトルの要素に値を代入することの有効性です。
 
-Inside of parallel sections `Kokkos::vector` switches to view semantics. That means in particular that assignments are shallow copies. Certain functions will also throw runtime errors when called inside a parallel kernel; this includes resize and push.
+並列セクション内で、`Kokkos::vector`はビューセマンティクスへ切り替えます。 具体的には、代入は浅いコピーであることを意味します。 特定の関数は、並列カーネル内で呼び出された場合にも実行時エラーをスローします; これには、サイズ変更およびプッシュが含まれます。
 
 ```c++
-// Create a vector of 1000 double elements
+// 1000個の　double　要素からなるベクトルを作成
 Kokkos::vector<double> v(1000);
-// Create another vector as a copy of v;
-// This allocates another 1000 doubles
+//  v　のコピーとして、別のベクトルを作成;
+// これにより、もう1000個の double を割り当て
 Kokkos::vector<double> x = v;
 
 parallel_for(1000, KOKKOS_LAMBDA (const int& i) {
-   // Create a view of x; m and x will reference the same data.
+   //  x　のビューを作成; m および x は、同じデータを参照。
    Kokkos::vector<double> m = x;
    x[i] = 2*i+1;
    v[i] = m[i] - 1;
 });
 
-// Now x contains the first 1000 uneven numbers
-// v contains the first 1000 even numbers
+// 現在、x　は、最初の1000の奇数を含有
+// v　は、最初の1000の偶数を含有。
 ```
 
-## Calling non-Kokkos libraries
+## 非 Kokkos ライブラリの呼び出し
 
-There are no restrictions on calling non-Kokkos libraries outside of parallel kernels. However, due to the polymorphic layouts of Kokkos views it is often required to test layouts for compatibility with third party libraries. The usual BLAS interface for example, expects matrices to be laid out in column major format (i.e. LayoutLeft in Kokkos). Furthermore, it is necessary to test that the library can access the memory space of the view.
+並列カーネル外では、非Kokkosライブラリを呼び出すことに制限はありません。　しかしながら、 Kokkos　ビューの多態的なレイアウト構造のため、サードパーティ製ライブラリとの互換性を確認するために、レイアウトのテストが必要となる場合が多くなります。 例えば、通常のBLASインターフェースは、行列が列主形式（　Kokkos　では　LayoutLeft　）で配置されていることを想定しています。さらに、ライブラリがビューのメモリ空間にアクセスできることをテストする必要があります。
 
 ```c++
 template<class Scalar, class Device>
-Scalar dot(View<const Scalar* , Device> a,
+スカラー　dot(View<const Scalar* , Device> a,
            View<const Scalar*, Device> b) {
-// Check for Cuda memory and call cublas if true
+// メモリを確認し、真の場合は　cublas　を呼び出す
 #ifdef KOKKOS_HAVE_CUDA
   if(std::is_same<typename Device::memory_space,
                            CudaSpace>::value ||
      std::is_same<typename Device::memory_space,
                            CudaUVMSpace>::value) {
-    return call_cublas_dot(a.ptr_on_device(), b.ptr_on_device(),
+    返し call_cublas_dot(a.ptr_on_device(), b.ptr_on_device(),
                            a.extent(0) );
   }
 #endif
 
-// Call CBlas on the host otherwise
+// それ以外の場合、ホスト上でCBlasを呼び出す
   if(std::is_same<typename Device::memory_space,HostSpace>::value) {
     return call_cblas_dot(a.ptr_on_device(), b.ptr_on_device(),
                           a.extent(0) );
