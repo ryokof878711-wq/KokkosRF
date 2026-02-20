@@ -1,4 +1,4 @@
-# Introduction
+# 導入
 
 The field of High Performance Computing (HPC) is on the verge of entering a new
 era. The need for a fundamental change comes from many angles including the growing
