@@ -1,33 +1,34 @@
-# Programming Model
+# プログラミングモデル
 
-The programming model Kokkos is characterized by 6 core abstractions: Execution Spaces, Execution Patterns, Execution Policies, Memory Spaces, Memory Layout and Memory Traits. These abstraction concepts allow the formulation of generic algorithms and data structures which can then be mapped to different types of architectures. Effectively, they allow for compile time transformation of algorithms to allow for adaptions of varying degrees of hardware parallelism as well as of the memory hierarchy.
+プログラミングモデル「Kokkos」は、以下の6つのコア抽象化によって特徴づけられます: 実行空間,
+実行パターン、実行ポリシー、メモリ空間、メモリレイアウト、およびメモリ特性。 これらの抽象化概念により、汎用的なアルゴリズムやデータ構造を構築することが可能となり、それらを様々な種類のアーキテクチャに適用することが可能となります。 実質的に、これらはアルゴリズムのコンパイル時変換を可能にし、ハードウェアの並列性の程度やメモリ階層構造に応じて適応させることを可能にします。
 
 ![abstractions](figures/kokkos-abstractions-doc.png)
 
-<h4>Figure 3.1 The Core Abstractions of the Kokkos Programming Model</h4>
+<h4>図 3.1  プログラミングモデルのコア抽象化　</h4>
 
-## Execution Spaces
+## 実行空間
 
-An Execution Space is the place _Where_ code can actually be executed. For example, on current Hybrid GPU/CPU systems there are two types of execution spaces: the GPU cores and the CPU cores. In the future this could include Processing in Memory (PIM) modules or different core types on a heterogeneous CPU. In principle, this can also be used to introduce remote memory spaces, e.g., the capability of sending work to a different node. Execution Spaces thus give an application developer the means to target different parts of a heterogeneous hardware architecture. This corresponds directly to the previously described machine model.
+実行空間とは、コードが実際に実行される場所 _Where_ を指します。 例えば、現在のハイブリッド　GPU/CPU　システムでは、実行スペースとして2種類が存在します：　GPU　コアおよび　CPU　コアです。 将来的には、メモリ内処理（PIM）モジュールや、ヘテロジニアス　CPU　上の異なるコアタイプなどが含まれる可能性があります。 原則として、これはリモートメモリ空間の導入にも利用可能です。例えば、異なるノードへ作業を送信する機能などが挙げられます。 実行空間は、アプリケーション開発者が異種混在ハードウェアアーキテクチャの異なる部分をターゲットとする手段を提供します。 これは、以前に説明した機械モデルに直接対応しております。
 
-## Execution Patterns
+## 実行パターン
 
-Execution Patterns are the _fundamental parallel algorithms_ in which an application has to be expressed. Examples are
+実行パターンは、その中でアプリケーションが表現されなければならない、 _基本的パラレルアルゴリズム_ です。　例は、以下の通りです。 
 
-* [`parallel_for()`](../API/core/parallel-dispatch/parallel_for): execute a function in undetermined order a specified amount of times,
-* [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce): which combines `parallel_for()` execution with a reduction operation,
-* [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan): which combines a `parallel_for()` operation with a prefix or postfix scan on output values of each operation, and
-* `task`: which executes a single function with dependencies on other functions.
+* [`parallel_for()`](../API/core/parallel-dispatch/parallel_for): 関数を指定された回数だけ、順序を定めずに実行、
+* [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce): `parallel_for()`の実行および還元演算の組合せ、
+* [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan): 各演算の出力値について、parallel_for()　演算と接頭辞または接尾辞スキャンを組み合わせ、および
+* `task`: 他の関数への依存関係を持つ、単関数を実行。
 
-Expressing an application in these patterns allows the underlying implementation or the used compiler to reason about valid transformations. For example all `parallel_***` patterns allow unspecified execution order and only promise deterministic results of the reductions themselves. This enables different mapping patterns on different hardware such as assignment of iterations to threads or vector lanes.
+アプリケーションをこれらのパターンで表現することで、基盤となる実装および使用されるコンパイラが有効な変換について、推論することが可能となります。例えば、すべての `parallel_***` パターンは、実行順序を設定せず、還元処理自体の結果のみが確定的であることを、保証します。これにより、異なるハードウェア上で、例えば、反復処理のスレッドおよびベクトルレーンの割り当てといった、異なるマッピングパターンが可能となります。 
 
-## Execution Policies
+## 実行ポリシー
 
-An Execution Policy determines, together with an Execution Pattern, _How_ a function is executed. Some policies can be nested in others.
+実行ポリシーは、実行パターンと組み合わせて、関数が _どのように_　実行されるかを決定します。一部のポリシーは、他のポリシー内にネストすることが可能です。 
 
-### Range Policies
+### 範囲ポリシー
 
-The most simple form of execution policies are _Range Policies_. They are used to execute an operation once for each element in a range. There are no prescriptions of order of execution or concurrency, which means that it is not legal to synchronize different iterations.
+実行ポリシーの中で、もっとも単純な形態は、 _範囲ポリシー_　です。それらは、範囲内の各要素に対して一度ずつ演算を実行するために使用されます。 There are no prescriptions of order of execution or concurrency, which means that it is not legal to synchronize different iterations.
 
 ### Team Policies
 
