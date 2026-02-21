@@ -59,46 +59,47 @@ Then, we would call 次に、　`Bar()` inside the `parallel_for`　を呼び出
 
 それでは、仮想関数テーブル（Vtable）について説明します。クラスが自身の型を認識できれば、正しい関数を呼び出せます。しかし、どうやって認識するのでしょうか？
 
-Remember that we have one Vtable shared amongst all instances of a type. Each instance, however, has a hidden member called the Vpointer, which the compiler points at construction to the correct Vtable. So a call to a virtual function simply dereferences that pointer, and then indexes into the Vtable to find the precise virtual function called.
+ある型のすべてのインスタンス間で、1つの仮想関数テーブル（Vtable）が共有されていることを覚えておいてください。 ただし、各インスタンスにはVポインタと呼ばれる隠れたメンバーが存在し、コンパイラはコンストラクタ実行時にこれを正しいVテーブルを指すように設定します。したがって、仮想関数の呼び出しは単にそのポインタを間接参照し、Vテーブルをインデックス付けして呼び出される正確な仮想関数を見つけます。
 
 ![VPointer](./figures/VirtualFunctions-VPointers.png)
 
-Now that we know what the compiler is doing to implement virtual functions, we'll look at why it doesn't work with GPU's.
+仮想関数を実装するためにコンパイラが何をしているのかがわかったので、次に、なぜそれが　GPU　では機能しないのかを見ていきましょう。
 
-Credit: the content of this section is adapted from [this article of Pablo Arias](https://pabloariasal.github.io/2017/06/10/understanding-virtual-tables/).
+Credit: the content of this section is adapted from [this article of Pablo Arias]クレジット：このセクションの内容は[Pablo Ariasのこの記事]を改訂したものです
+(https://pabloariasal.github.io/2017/06/10/understanding-virtual-tables/).
 
-## Then why doesn't the straightforward approach work?
+## では、なぜ直接的なアプローチがうまくいかないのか？
 
-The reason why the straightforward approach described above fails is that when dealing with GPU-compatible classes with virtual functions, there isn't one Vtable, but two. The first holds the host version of the virtual functions, while the second holds the device functions.
+上記の単純なアプローチが失敗する理由は、仮想関数を持つGPU互換クラスを扱う場合、仮想関数テーブル（Vtable）が1つではなく2つ存在するためです。 最初のものはホスト版の仮想関数を保持し、2つ目はデバイス関数を保持します。
 
 ![VTableDevice](./figures/VirtualFunctions-VTablesHostDevice.png)
 
-Since we construct the class instance on the host, its Vpointer points to the host Vtable.
+クラスインスタンスをホスト上で構築するため、その Vpointer はホストの Vtable を指します。
 
 ![VPointerToHost](./figures/VirtualFunctions-VPointerToHost.png)
 
-We faithfully copied all of the members of the class on the GPU memory, including the Vpointer happily pointing at host functions, which we then call on the device.
+クラスメンバー全体をGPUメモリに忠実にコピーし、ホスト関数を指し示すVポインタも含まれ、その後、デバイス上でこれらの関数を呼び出します。
 
-## Make it work
+## 解決策
 
-The problem here is that we are constructing the instance on the host.
-If we were constructing it on the device, we'd get the correct Vpointer, and thus the correct functions.
-Note that this would allow to call virtual functions on the device only, not on the host anymore.
+ここでの問題点は、インスタンスをホスト上で構築していることです。
+デバイス上で構築している場合、正しいVポインタを取得できるため、正しい関数が得られます。
+この変更により、仮想関数は、デバイス側でのみ呼び出せるようになり、ホスト側では呼び出せなくなります。
 
-Therefore, we first allocate memory on the device, then construct on the device using a technique called [*placement new*](https://en.cppreference.com/w/cpp/language/new#Placement_new):
+したがって、まずデバイス上でメモリを割り当て、次に[*配置型　new*](https://en.cppreference.com/w/cpp/language/new#Placement_new)　と呼ばれる手法を用いてデバイス上で構築します:
 
 ```cpp
 #include <Kokkos_Core.hpp>
 
-class Base {
-  public:
+クラスベース {
+  パブリック:
   void Foo() {}
 
   KOKKOS_FUNCTION
   virtual void Bar() {}
 };
 
-class Derived : public Base {
+class Derived : パブリックベース {
   public:
   KOKKOS_FUNCTION
   void Bar() override {}
@@ -109,77 +110,77 @@ int main(int argc, char *argv[])
   Kokkos::initialize(argc, argv);
   {
 
-  // create
-  void* deviceInstanceMemory = Kokkos::kokkos_malloc(sizeof(Derived)); // allocate memory on device
+  // 作成
+  void* deviceInstanceMemory = Kokkos::kokkos_malloc(sizeof(Derived)); // デバイス上でメモリを割り当て
   Kokkos::parallel_for("initialize", 1, KOKKOS_LAMBDA (const int i) {
-    new (static_cast<Derived*>(deviceInstanceMemory)) Derived(); // initialize on device
+    new (static_cast<Derived*>(deviceInstanceMemory)) Derived(); // デバイス上で初期化
   });
-  Base* deviceInstance = static_cast<Derived*>(deviceInstanceMemory); // declare on this memory
+  Base* deviceInstance = static_cast<Derived*>(deviceInstanceMemory); // 本メモリ上で宣言
 
-  // use
+  // 使用
   Kokkos::parallel_for("myKernel", 10, KOKKOS_LAMBDA (const int i) {
       deviceInstance->Bar();
   });
 
-  // cleanup
+  // クリーンアップ
   Kokkos::parallel_for("destroy", 1, KOKKOS_LAMBDA (const int i) {
     deviceInstance->~Base(); // destroy on device
   });
-  Kokkos::kokkos_free(deviceInstanceMemory); // free
+  Kokkos::kokkos_free(deviceInstanceMemory); // フリー
 
   }
   Kokkos::finalize();
 }
 ```
 
-We first use the `KOKKOS_FUNCTION` macro to make the methods callable from a kernel.
-When creating the instance, note that we introduce a distinction between the *memory* that it uses, and the actual instantiated *object*.
-The object instance is constructed on the device, within a single-iteration `parallel_for`, using [placement new](https://en.cppreference.com/w/cpp/language/new#Placement_new).
-Since the kernel does not have a return type, we use a static cast to associate the object type with the memory allocation.
+まず、`KOKKOS_FUNCTION` マクロを使用して、カーネルからメソッドを呼び出せるようにします
+インスタンスを作成する際、そのインスタンスが使用する　*メモリ*　と、実際にインスタンス化された　*オブジェクト*　との区別を導入することに、注意してください。
+オブジェクトインスタンスは、デバイス上で単一反復の`parallel_for`　内で、[配置新規]　(https://en.cppreference.com/w/cpp/language/new#Placement_new)　を使用して構築されます
+カーネルには戻り値の型がないため、オブジェクトの型とメモリ割り当てを関連付けるために、静的キャストを使用します。
 
-For not [trivially destructible](https://en.cppreference.com/w/cpp/language/destructor#Trivial_destructor) objects the destructor must explicitly be called on the device.
-After destructing the object in a single-iteration `parallel_for`, the memory allocation can be finally release with `kokkos_free`.
+[破棄可能な]　(https://en.cppreference.com/w/cpp/language/destructor#Trivial_destructor)　オブジェクトの場合、デストラクタはデバイス上で明示的に呼び出さなければなりません。
+単一反復の　`parallel_for`　でオブジェクトを破棄した後、`kokkos_free`　でメモリ割り当てを最終的に解放できます。
 
-This code is extremely ugly, but leads to functional virtual function calls on the device. The Vpointer now points to the device Vtable.
-Remember that those virtual functions cannot be called on the host anymore!
+このコードは非常に見苦しいですが、デバイス上で仮想関数の呼び出しを機能させます。Vpointerは現在、デバイスのVtableを指しています。
+それらの仮想関数は、もはやホスト上で呼び出せなくなることに注意してください！
 
 ![VPointerToDevice](./figures/VirtualFunctions-VPointerToDevice.png)
 
-For a full working example, see [the example in the repo](https://github.com/kokkos/kokkos/blob/master/example/virtual_functions/main.cpp).
+完全な動作例については、 [ repo　内の例](https://github.com/kokkos/kokkos/blob/master/example/virtual_functions/main.cpp)　を参照してください。
 
-## What if I need a setter that works with host values?
+## ホスト値と連動するセッターが必要な場合はどうするべきですか？
 
-The first problem people run into with this is when they want to set some fields based on host data. As the object instance resides in device memory, it might not be accessible by the host. But the fields can be set within a `parallel_for` on the device. Nevertheless, this requires that the lambda or functor that sets the fields on the device must have access to the host data.
-The most productive solution we've found in these cases is to allocate the object instance in `SharedSpace`, which allows to have the object constructed on the device, and then to set fields on the host:
+この方法を使う際に最初に直面する問題は、ホストデータに基づいて特定のフィールドを設定したい場合です。オブジェクトインスタンスは、デバイスメモリに存在するため、ホストからアクセスできない可能性があります。　ただし、フィールドはデバイス上の`parallel_for`　内で設定できます。 しかしながら、これには、デバイス上でフィールドを設定するラムダ式またはファンクタがホストデータにアクセスできる必要があります。
+これらのケースで私たちが発見した最も効率的な解決策は、オブジェクトインスタンスを　`SharedSpace`　に割り当てることです。これにより、オブジェクトをデバイス上で構築した後、ホスト上でフィールドを設定することが可能になります:
 
 ```c++
-// create
-void* deviceInstanceMemory = Kokkos::kokkos_malloc<Kokkos::SharedSpace>(sizeof(Derived)); // allocate on shared space
+// 作成
+void* deviceInstanceMemory = Kokkos::kokkos_malloc<Kokkos::SharedSpace>(sizeof(Derived)); //　共有スペース上に配置
 // ...
-deviceInstance->setAField(someHostValue); // set on host
+deviceInstance->setAField(someHostValue); // ホスト上に設定
 ```
 
-The setter is still called on the host.
-Beware that this is only valid for backends that support `SharedSpace`.
+セッターは依然としてホスト上で呼び出されます。
+これは、`SharedSpace`　をサポートするバックエンドでのみ有効であることに注意してください。
 
-Keep in mind that, despite using a "unified" `SharedSpace`, you still have to resort to placement new in order to have the correct Vpointer and hence Vtable on the device!
+"統一された"　`SharedSpace`　を使用しているにもかかわらず、デバイス上で正しい　Vpointer（そしてそれゆえの Vtable ）を得るためには、依然として配置 new に頼らなければならないことに注意してください！
 
-## But what if I do not really need the Vtables on the device side?
+## では、デバイス側で　Vtable が本当に必要ない場合はどうでしょうか？
 
-Consider the following example which calls the virtual function `Bar()` on the device from a pointer of derived class type.
+以下の例を考えてみましょう。これは、派生クラス型のポインタからデバイスに対して仮想関数　`Bar()`　を呼び出しています。
 One might think this should work because no Vtable lookup on the device is necessary.
 
 ```c++
 #include <Kokkos_Core.hpp>
 
-class Base {
-  public:
+クラスベース {
+  パブリック:
   KOKKOS_FUNCTION
   virtual void Bar() const = 0;
 };
 
-class Derived : Base {
-  public:
+派生クラス : ベース {
+  パブリック:
   KOKKOS_FUNCTION
   void Bar() const override {
     Kokkos::printf("Hello from Derived\n");
@@ -206,27 +207,28 @@ int main(int argc, char *argv[])
 }
 ```
 
-### Why is this not portable?
+### なぜこれが移植可能ではないのでしょうか？
 
-Inside the `parallel_for`, `Bar()` is called. As `Derived` derives from the pure virtual class `Base`, the `Bar()` function is marked `override`.
-On ROCm (at least up to 6.0) this results in a memory access violation.
-When executing the `this->Bar()` call, the runtime looks into the Vtable and dereferences a host function pointer on the device.
+parallel_for　内で、Bar()　が呼び出されます。 As `Derived` derives from the pure virtual class `Base`, the `Bar()` function is marked `override`.`Derived`　が純粋仮想クラス　`Base`　から派生しているため、`Bar()`　関数は　`override`　としてマークされています。
+ROCm（少なくとも6.0まで）では、これによりメモリアクセス違反が発生します。
+呼び出しを実行する際、ランタイムは　Vtable　を参照し、デバイス上のホスト関数ポインタを間接参照します。
 
-### But if that is the case, why does it work with NVCC?
+### しかし、その場合には、なぜNVCCでは動作するのでしょうか？
 
-Notice that the `parallel_for` is called from a pointer of type `Derived` and not a pointer of type `Base` pointing to an `Derived` object.
-Thus, no Vtable lookup for the `Bar()` would be necessary as it can be deduced from the context of the call that it will be `Derived::Bar()`.
-But here it comes down to how the compiler handles the lookup. NVCC understands that the call is coming from an `Derived` object and thinks: "Oh, I see, that you are calling from an `Derived` object, I know it will be the `Bar()` in this class scope, I will do this for you".
-ROCm, on the other hand, sees the call and thinks "Oh, this is a call to a virtual method, I will look that up for you", failing to dereference the host function pointer in the host virtual function table.
+`parallel_for` は、`Derived` オブジェクトを指す `Base` 型のポインタではなく、`Derived` 型のポインタから呼び出されていることに注意してください。
+したがって、呼び出しの文脈から、それが `Derived::Bar()` であることが推測できるため、`Bar()` の Vtable 参照は不要となります。
+しかし、ここでの問題はコンパイラがルックアップをどのように処理するかです。NVCCは、呼び出しが`Derived`オブジェクトから来ていることを理解し、次のように考えます: 「ああ、なるほど、`Derived`オブジェクトから呼び出しているのですね。このクラススコープでは`Bar()`になるのは承知しています。代わりに私が対応します。」
+一方、ROCm　はこの呼び出しを見て、「ああ、これは仮想メソッドへの呼び出しだ。代わりに調べてあげよう」と考え、ホスト仮想関数テーブル内のホスト関数ポインタの参照解除に失敗します。
 
-### How to solve this?
-Strictly speaking, the observed behavior on NVCC is an optimization that uses the context information to avoid the Vtable lookup.
-If the compiler does not apply this optimization, you can help in different ways by providing additional information. Unfortunately, none of these strategies are fully portable to all backends.
+### これをどうやって解決するのでしょう？
+厳密に言えば、NVCCで観察される動作は、コンテキスト情報を利用して仮想テーブルのルックアップを回避する最適化です。
+コンパイラがこの最適化を適用しない場合、追加情報を提供することで様々な方法で支援できます。 残念ながら、これらの戦略はいずれも、すべてのバックエンドに完全に移植できるものではありません。
 
-- Tell the compiler not to look up any function name in the Vtable when calling `Bar()` by using [qualified name lookup](https://en.cppreference.com/w/cpp/language/qualified_lookup). For this, you tell the compiler which function you want by spelling out the class scope in which the function should be found e.g. `this->Derived::Bar();`. This behavior is specified in the C++ standard. Nevertheless, some backends are not fully compliant to the standard.
-- Changing the `override` to `final` on the `Bar()` in the `Derived` class. This tells the compiler `Bar()` is not changing in derived objects. Many compilers do use this in optimization and deduce which function to call without the Vtable. Nevertheless, this might only work with certain compilers, as this effect of adding `final` is not specified in the C++ standard.
-- Similarly, the entire derived class `Derived` can be marked `final`. This is compiler dependent too, for the same reasons.
+- `Bar()`　を呼び出す際に、Vtable　内の関数名を検索しないようコンパイラに指示するには、[qualified name lookup](https://en.cppreference.com/w/cpp/language/qualified_lookup)　を使用します。 このため、コンパイラにどの関数を使用したいかを、例：`this->Derived::Bar()`;　等、その関数が存在するクラススコープを明示的に記述することで伝えます。この動作は、C++　標準で規定されています。しかしながら、一部のバックエンドは、標準に完全には準拠していません。
+- `Derived`　クラス内の　`Bar()`　メソッドの　`override`　を　`final`　に変更します。 これは、`Bar()`　が変更されていないことをコンパイラに伝えます。 
+- ただし、この効果は、C++　標準で規定されていないため、特定のコンパイラでのみ機能する可能性があります。
+- 同様に、派生クラス `Derived` 全体を `final` とマークすることも可能です。これも同じ理由でコンパイラ依存となります。
 
-## Questions/Follow-up
+## 問題/フォローアップ
 
-This is intended to be an educational resource for our users. If something doesn't make sense, or you have further questions, you'd be doing us a favor by letting us know on [Slack](https://kokkosteam.slack.com) or [GitHub](https://github.com/kokkos/kokkos).
+これは、当社ユーザー向けの教育リソースとして提供されるものです。何か不明点や追加の質問がある場合は、[Slack](https://kokkosteam.slack.com) または [GitHub](https://github.com/kokkos/kokkos) 上で知らせていただければ幸いです。
