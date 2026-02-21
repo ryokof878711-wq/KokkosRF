@@ -30,11 +30,11 @@
 
 実行ポリシーの中で、もっとも単純な形態は、 _範囲ポリシー_　です。それらは、範囲内の各要素に対して一度ずつ演算を実行するために使用されます。 There are no prescriptions of order of execution or concurrency, which means that it is not legal to synchronize different iterations.
 
-### Team Policies
+### チームポリシー
 
-Team policies are used to implement hierarchical parallelism. For that purpose Kokkos groups threads into _teams_. A _thread team_ is a collection of one or more parallel "threads" of execution. Kokkos allows an arbitrary number of teams - the _league size_. Hardware constrains the number of threads in a team - the _team size_. All threads in a team are guaranteed to run concurrently.
+チームポリシーは、階層的並列性を実装するために使用されます。 そのために、Kokkos　は、スレッドを　 _teams_　にグループ化します。 _thread team_ とは、1つ以上の並列な実行　"スレッド"　の集合体です。 Kokkos では、任意の数のチームの作成 - the _league size_　が可能です。 ハードウェアの制約により、チーム内のスレッド数 - the _team size_　は制限されます。 チーム内のすべてのスレッドは、確実に同時に実行されます
 
-Threads in a team can synchronize - they have a "barrier" primitive - and share a "scratch pad" memory which they may use for temporary storage. Note that not all forms of synchronization mechanisms are legal in Kokkos, in particular implementing "spin-locks" for threads in a team may result in dead locks. In Kokkos there is no forward progress guarantee for threads, meaning that a single thread spinning on a lock acquired by another thread of the team may use 100% of the compute engines resources. Calling the explicit Kokkos _team barrier_ is the only safe way to synchronize threads in a team.
+チーム内のスレッドは同期が可能です。これらは "barrier" プリミティブを備えており、一時的な保存に使用できる　"スクラッチパッド"　メモリを共有します。 Kokkos　ではすべての同期メカニズムが有効とは限らないことに注意してください。特に、チーム内のスレッドに対して、"スピンロック"　を実装すると、デッドロックが発生する可能性があります。 Kokkos　では、スレッドの順序保証は提供されておりません。つまり、チーム内の別のスレッドが取得したロックで待機状態にある単一のスレッドが、コンピューティングエンジンのリソースを、100%使用してしまう可能性があります。 明示的な Kokkos を、 _チームバリア_　と呼ぶことが、チーム内のスレッドを同期させるための唯一の安全な方法です。
 
 Scratch pad memory exists only during parallel operations; allocations in it do not persist across kernels. Teams themselves may run in any order, and may not necessarily run all in parallel. For example, if the user asks for _T_ teams, the hardware may choose to run them one after another in sequence, or in groups of up to _G_ teams at a time in parallel.
 
