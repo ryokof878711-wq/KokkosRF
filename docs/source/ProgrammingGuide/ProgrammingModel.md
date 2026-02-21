@@ -40,16 +40,16 @@
 
 ユーザーは、並列演算を　 _ネスト_ することができます。チームは、1つの並列操作（for、reduce、またはscan）を実行することができ、各チーム内のスレッドは別の、場合によっては異なる並列演算を実行できます。異なるチームは、全く異なることを行う場合があります。 例えば、あるチーム内のすべてのスレッドが、For example, all the threads in one team may execute a [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) を実行し、異なるチーム内のすべてのスレッドが、 [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行する場合があります。 チーム内の異なるスレッドは、それぞれ異なる処理を行う場合があります。ただし、チーム内のスレッドが動作において　"分岐"　した場合（例えば、ブランチの異なる側を選択した場合など）、パフォーマンスにばらつきが生じる可能性があります。 [Chapter 8 - Hierarchical Parallelism](HierarchicalParallelism) は、C++　実装における Kokkos のスレッドチーム公開方法について、説明しています。
 
-NVIDIA　の　CUDA　プログラミングモデルは、Kokkos　のスレッドチームモデルに影響を与えました The scratch pad memory corresponds with CUDA's per-team "shared memory." The "league/team" vocabulary comes from OpenMP 4.0 and has many aspects in common with our thread team model. We have found that programming to this model results in good performance, even on computer architectures that only implement parts of the full model. For example, most multicore processors in common use for high-performance computing lack "scratch pad" hardware. However, if users request a scratch pad size that fits comfortably in the largest cache shared by the threads in a team, programming as if a scratch pad exists forces users to address locality in their algorithms. This also reflects the common experience that rewriting a code for more restrictive hardware, then porting the code _back_ to conventional hardware, tends to improve performance relative to an unoptimized code.
+NVIDIA　の　CUDA　プログラミングモデルは、Kokkos　のスレッドチームモデルに影響を与えました。 スクラッチパッドメモリは、CUDAのチームごとの　"共有メモリ"　に対応しています。 "リーグ／チーム"　という用語は、OpenMP 4.0に由来するもので、当社のスレッドチームモデルと多くの共通点があります。 このモデルに向けたプログラミングは、完全なモデルの一部のみを実装するコンピュータアーキテクチャにおいても、良好な性能を発揮することが確認されております。 例えば、高性能コンピューティングで一般的に使用されているマルチコアプロセッサの多くは、"スクラッチパッド"　ハードウェアを備えておりません。 ただし、ユーザーがチーム内のスレッド間で共有される最大のキャッシュに収まるサイズのスクレイチパッドを要求した場合、スクレイチパッドが存在するかのようにプログラミングすることで、ユーザーはアルゴリズムにおいて局所性を考慮せざるを得なくなります。 これはまた、より制約の多いハードウェア向けにコードを書き直した後、そのコードを通常のハードウェアに　_逆_　移植することで、最適化されていないコードと比較してパフォーマンスが向上する傾向にあるという、一般的な経験則を反映しています。
 
-## Memory Spacesメモリ空間
+## メモリ空間
 
-Memory Spaces are the places _Where_ data resides. They specify physical location of data as well as certain access characteristics. Different physical locations correspond to things such as high bandwidth memory, on die scratch memory or non-volatile bulk storage. Different logical memory spaces allow for concepts such as UVM memory in the CUDA programming model, which is accessible from Host and GPU. Memory Spaces could also be used in the future to express remote memory locations. Furthermore, they encapsulate functionality such as consistency control and persistence scopes.
+メモリ空間とは、データが存在する場所　_Where_ です。 データの物理的な位置と、特定のアクセス特性を指定します。データの物理的な位置と特定のアクセス特性を指定します。 異なる物理的な場所には、高帯域幅メモリ、オンダイスクラッチメモリ、あるいは不揮発性バルクストレージといったものが対応します。  which is accessible from Host and GPU. 異なる論理メモリ空間により、CUDAプログラミングモデルにおける　UVM　メモリのような概念が可能となりますが、これはホストとGPUの両方からアクセスできます。将来的には、メモリ空間を用いてリモートメモリ位置を表現することも可能となるでしょう。 さらに、それらは整合性制御および永続性スコープといった機能を、カプセル化しております
 
-## Memory Layout
+## メモリレイアウト
 
-Layouts express the _mapping_ from logical (or algorithmically) indices to address offset for a data allocation. By adopting appropriate layouts for memory structures, an application can optimise data access patterns in a given algorithm. If an implementation provides polymorphic layouts (i.e. a data structure can be instantiated at compile or runtime with different layouts), an architecture dependent optimisation can be performed.
+レイアウトは、データ配置における論理的（またはアルゴリズム的）インデックスからアドレスオフセットへの _マッピング_ を表現します。 メモリ構造に適したレイアウトを採用することにより、アプリケーションは特定のアルゴリズムにおけるデータアクセスパターンを最適化することが可能です。 実装が多態的レイアウト（すなわち、データ構造がコンパイル時または実行時に異なるレイアウトでインスタンス化可能であること）を提供する場合には、アーキテクチャ依存の最適化を行うことが可能です。
 
-## Memory Traits
+## メモリ特性
 
-Memory Traits specify _how a data structure is accessed_ in an algorithm. Traits express usage scenarios such as atomic access, random access and streaming loads or stores. By putting such attributes on data structures, an implementation of the programming model can insert optimal load and store operations. If a compiler implements the programming model, it could reason about the access modes and use that to inform code transformations.
+メモリ特性とは、アルゴリズムにおいて 　_データ構造にどのようにアクセスするか_　を規定するものです。 特性は、アトミックアクセス、ランダムアクセス、ストリーム形式の読み込みまたは保存、といった使用シナリオを表現します。 データ構造にそのような属性を付与することで、 プログラミングモデルの実装では、最適な読み込みおよび保存演算を挿入することが可能です。コンパイラが、プログラミングモデルを実装している場合、アクセスモードについて推論を行い、それをコード変換の指針とすることが可能です。
