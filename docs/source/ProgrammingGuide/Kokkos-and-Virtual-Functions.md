@@ -4,60 +4,60 @@
 並列領域で仮想関数を使用することは、一般的に推奨されません。 パフォーマンスを低下させることが多く、GPU上で正しく実行するには特定のコードが必要であり、すべてのバックエンドで移植可能ではありません。可能な限り別の方法を使用することを推奨します。
 ```
 
-Due to oddities of GPU programming, the use of virtual functions in Kokkos parallel regions can be complicated. This document describes the problems you're likely to face, where they come from, and how to work around them.
+GPUプログラミングの特殊性により、Kokkosの並列領域における仮想関数の使用は複雑になり得ます。この文書では、直面する可能性のある問題、その原因、および回避策について説明します。
 
-Please note that virtual functions can be executed on the device for the following backends:
+以下のバックエンドにおいて、仮想関数はデバイス上で実行可能であることに、注意してください:
 
-- Cuda; and
-- HIP (with a limitation, as explained at the end).
+- Cuda; および
+- HIP (最後に説明の通りに、制限あり)。
 
-Especially, SYCL 2020 [cannot handle virtual functions](https://registry.khronos.org/SYCL/specs/sycl-2020/html/sycl-2020.html#architecture).
+特に、 SYCL 2020 [仮想関数処理不可能](https://registry.khronos.org/SYCL/specs/sycl-2020/html/sycl-2020.html#architecture).
 
-## The Problem
+## 問題
 
-In GPU programming, you might have run into the bug of calling a host function from the device. A similar thing can happen for subtle reasons in code using virtual functions. Consider the following serial code:
+GPU　プログラミングにおいて、デバイスからホスト関数を呼び出すバグに遭遇したことがあるかもしれません。 仮想関数を使用するコードでは、微妙な理由で同様の現象が発生する可能性があります。 次のシリアルコードについて考えてください:
 
 ```c++
-class Base {
-  public:
+クラスベース {
+  パブリック:
   void Foo() {}
 
   virtual void Bar() {}
 };
 
-class Derived : public Base {
+派生クラス : パブリックベース {
   public:
-  void Bar() override {}
+  void Bar() オーバーライド {}
 };
 
 
 int main(int argc, char *argv[]) {
-  // create
-  Base* instance = new Derived();
+  // 作成
+  ベース* インスタンス = new Derived();
 
-  // use
+  // 使用
   for (int i = 0; i < 10; i++) {
     instance->Bar();
   }
 
-  // cleanup
-  delete instance;
+  // クリーンアップ
+  インスタンス削除;
 }
 ```
 
-This code is more complex to port on GPU than it looks like.
-Using a straightforward approach, we would annotate functions with `KOKKOS_FUNCTION`, replace the `for` loop with `parallel_for` and copy `instance` on the GPU memory (not disclosing how for now).
-Then, we would call `Bar()` inside the `parallel_for`.
-At a glance this should be fine, but it will typically crash, however, because `instance` will call a host version of `Bar()`.
-To understand why, we need to understand a bit about how virtual functions are implemented.
+このコードは、見た目以上に、GPUへ移植するのが難しいです。
+単純なアプローチを使用して、関数を　`KOKKOS_FUNCTION`　でアノテーションし、`for`　ループを　`parallel_for`　に置き換え、`instance`　をGPUメモリにコピーします（具体的な方法は現時点では明示しません）。
+Then, we would call 次に、　`Bar()` inside the `parallel_for`　を呼び出します。
+一見問題ないように見えますが、`instance`がホスト版の`Bar()`を呼び出すため、通常はクラッシュします。
+その理由を理解するには、仮想関数がどのように実装されているかを少し理解する必要があります。
 
-## Vtables, Vpointers, Very annoying with GPUs
+## 仮想テーブル、仮想ポインタ、GPUでは非常に厄介
 
-Virtual functions allow a program to handle Derived classes through a pointer to their Base class and have things work as they should. To make this work, the compiler needs some way to identify whether a pointer which is nominally to a Base class really is a pointer to the Base, or whether it's really a pointer to any Derived class. This happens through Vpointers and Vtables. For every class with virtual functions, there is one Vtable shared among all instances, this table contains function pointers for all the virtual functions the class implements.
+仮想関数により、プログラムは基底クラスへのポインタを通じて派生クラスを扱い、期待通りの動作を可能にします。これを機能させるには、コンパイラが、名目上は基底クラスへのポインタであるものが、実際に基底クラスへのポインタなのか、それとも派生クラスへのポインタなのかを識別する何らかの方法が必要です。 これはVポインタと仮想関数テーブル（Vtable）を通じて実現されます。仮想関数を持つクラスごとに、全てのインスタンス間で共有される1つの　Vtable　が存在し、このテーブルにはそのクラスが実装する全ての仮想関数への関数ポインタが含まれています。 
 
 ![VTable](./figures/VirtualFunctions-VTables.png)
 
-Okay, so now we have Vtables, if a class knows what type it is, it could call the correct function. But how does it know?
+それでは、仮想関数テーブル（Vtable）について説明します。クラスが自身の型を認識できれば、正しい関数を呼び出せます。しかし、どうやって認識するのでしょうか？
 
 Remember that we have one Vtable shared amongst all instances of a type. Each instance, however, has a hidden member called the Vpointer, which the compiler points at construction to the correct Vtable. So a call to a virtual function simply dereferences that pointer, and then indexes into the Vtable to find the precise virtual function called.
 
