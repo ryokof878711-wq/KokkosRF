@@ -42,72 +42,73 @@
 機械モデルには二つの重要な構成要素があります:
 
 * *メモリ空間*、 その中では、データ構造の配置が可能です。
-* *実行空間*、 1つ以上のone or more *メモリ空間*　からのデータを使用して、並列演算を実行します。
+* *実行空間*、 1つ以上の *メモリ空間*　からのデータを使用して、並列演算を実行します。
 
 モチベーション
 -----------
 
-Kokkos is comprised of two orthogonal aspects. The first of these is an underlying
-*abstract machine model* which describes fundamental concepts required for the development of future portable and performant high performance computing applications; the second is a *concrete instantiation of the programming model* written in C++, which allows programmers to write to the concept machine model. It is important to treat these two aspects of Kokkos as distinct entities because the underlying model being used by Kokkos could, in the future, be instantiated in additional languages beyond C++ yet the algorithmic specification would remain valid.
+Kokkos には、機械モデルには二つの重要な構成要素があります。 その第一の要素は、
+将来の移植性と高性能を兼ね備えたハイパフォーマンスコンピューティングアプリケーションの開発に
+必要な基本概念を記述する、基盤となる　*抽象マシンモデル*　です; 第二の要素は、C++　で記述された　*プログラミングモデルの具体的な実装*　であり、これによりプログラマーは概念的なマシンモデルに対して記述することが可能となります。 Kokkos で使用されている基盤となるモデルは、将来的に、C++　以外の追加言語で実装される可能性がありますが、アルゴリズム仕様は有効なまま維持されているので、Kokkos という概念のこの二つの側面を、別個の存在として扱うことが重要です。 
 
-Kokkos Abstract Machine Model
+Kokkos 抽象機械モデル
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Kokkos assumes an *abstract machine model* for the design of future shared-memory computing architectures. The model (shown in Figure 2.1) assumes that there may be multiple execution units in a compute node. For a more general discussion of abstract machine models for Exascale computing the reader should consult reference Ang\ :sup:`1`. In the figure shown here, we have elected to show two different types of compute units - one which represents multiple latency-optimized cores, similar to contemporary processor cores, and a second source of compute in the form of an off die accelerator. Of note is that the processor and accelerator each have distinct memories, each with unique performance properties, that may or may not be accessible across the node (i.e. the memory may be reachable or *shared* by all execution units, but specific memory spaces may also be only accessible by specific execution units). The specific layout shown in Figure 2.1 is an instantiation of the Kokkos abstract machine model used to describe the potential for multiple types of compute engines and memories within a single node. In future systems, there may be a range of execution engines which are used in the node ranging from a single type of core, as in many/multicore processors found today, through to a range of execution units where many-core processors may be joined to numerous types of accelerator cores. In order to ensure portability to the potential range of nodes, an abstraction of the compute engines and available memories are required.
+Kokkos　は、将来の共有メモリコンピューティングアーキテクチャの設計において、*抽象マシンモデル*　を想定しています。 モデル (図 2.1に示す) は、1つの計算ノード内に、複数の実行ユニットが存在する場合があることを想定しています。 エクサスケール計算における抽象機械モデルに関するより一般的な議論については、参考文献　Ang\ :sup:`1`　を参照してください。ここで示す図においては、 2種類の異なる計算ユニットを表示することを選択しました  - 現代のプロセッサコアと同様に、複数のレイテンシ最適化コアを代表するもの、および オフダイアクセラレータという形態による、第二の演算リソースです。 特筆すべき点は、プロセッサとアクセラレータがそれぞれ独立したメモリを有しており、各メモリは固有の性能特性を備えていることです。これらのメモリはノード全体でアクセス可能である場合もあれば、そうでない場合もあります（つまり、メモリは全ての実行ユニットから到達可能、あるいは　*共有*　される可能性がありますが、特定のメモリ空間は、特定の実行ユニットのみがアクセス可能な場合もあります）。 図2.1に示された特定のレイアウトは、単一ノード内に複数のタイプの演算エンジンとメモリを実装する可能性を記述するために用いられる　Kokkos　抽象マシンモデルの具体例です。 将来のシステムにおいては、ノード内で使用される実行エンジンの種類が多様化する可能性がありますが、現在広く普及しているマルチコアプロセッサのように単一タイプのコアから始まり、マルチコアプロセッサが様々なタイプのアクセラレータコアと結合されるような、多様な実行ユニットに至るまで広がっていくでしょう。 潜在的なノードの範囲への移植性を確保するためには、計算エンジンと利用可能なメモリの抽象化が必要となります。
 
 -----
 
-:sup:`1` Ang, J.A., et. al., **Abstract Machine Models and Proxy Architectures for Exascale Computing**,
-2014, Sandia National Laboratories and Lawrence Berkeley National Laboratory, DOE Computer Architecture Laboratories Project
+:sup:`1` Ang, J.A., et. al., **エクサスケール計算のための抽象機械モデルとプロキシアーキテクチャ**,
+2014年, サンディア国立研究所およびローレンスバークレイ国立研究所、 DOE コンピュータアーキテクチャ研究所プロジェクト
 
 -----
 
-|node|
+|ノード|
 
-Figure 2.1 Conceptual Model of a Future High Performance Computing Node
+図 2.1 Conceptual Model of a Future High Performance Computing Node将来の高性能計算ノードの概念モデル
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Kokkos Spaces
+Kokkos 空間
 -------------
 
-Kokkos uses the term *execution spaces* to describe a logical grouping of computation units which share an identical set of performance properties. An execution space provides a set of parallel execution resources which can be utilized by the programmer using several types of fundamental parallel operation. For a list of the operations available see |Chap7ParallelDispatch|_. The term *memory spaces* is used to describe a logical distinct memory resource, which is available to allocate data.
+Kokkos では、同一の性能特性を共有する計算ユニットの論理的なグループ化を、*実行空間*　という用語で表現しています。実行空間は、プログラマーがいくつかの種類の基本的な並列操作を用いて利用できる、一連の並列実行リソースを提供します。 利用可能な演算のリストについては、 |Chap7ParallelDispatch|_　を参照してください。 *メモリ空間* という用語は、論理的に独立したメモリリソースを表すために使用され、それはデータ割り当てに使用できます。
 
-Execution Space Instances
+実行空間インスタンス
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An *instance* of an execution space is a specific instantiation of an execution space to which a programmer can target parallel work. By means of example, an execution space might be used to describe a multicore processor. In this example, the execution space contains several homogeneous cores which share some logical grouping. In a program written to the Kokkos model, an instance of this execution space would be made available on which parallel kernels could be executed. As a second example, if we were to add a GPU to the multicore processor so a second execution space type is available in the system, the application programmer would then have two execution space instances available to select from. The important consideration here is that the method of compiling code for different execution spaces and the dispatch of kernels to instances is abstracted by the Kokkos model. This allows application programmers to be free from writing algorithms in hardware specific languages.
+実行空間の *インスタンス* とは、プログラマが並列処理を割り当てることができる、実行空間の特定の具体化を指します。例を挙げますと、実行空間は、マルチコアプロセッサを記述するために使用される場合があります。本例においては、 実行空間には、いくつかの同種のコアが含まれており、それらは論理的なグループ分けを共有しています。 Kokkos　モデル用に書かれたプログラムでは、この実行空間のインスタンスが提供され、その上で並列カーネルを実行することが可能となります。 二番目の例として、マルチコアプロセッサにGPUを追加し、システム内で第二の実行空間タイプを利用可能とした場合、アプリケーションプログラマーは二つの実行空間インスタンスから選択できるようになります。 ここでの重要な考慮事項としては、異なる実行空間向けのコードコンパイル方法と、カーネルをインスタンスへディスパッチする処理が、Kokkosモデルによって抽象化されているということです。これにより、アプリケーションプログラマーはハードウェア固有の言語でアルゴリズムを記述する必要がなくなります。
 
-|execution-space|
+|実行-空間|
 
-Figure 2.2 Example Execution Spaces in a Future Computing Node
+図 2.2 次世代計算ノードの実行空間例
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Kokkos Memory Spaces
+Kokkos メモリ空間
 ~~~~~~~~~~~~~~~~~~~~
 
-The multiple types of memory which will become available in future computing nodes are abstracted by Kokkos through *memory spaces*. Each memory space provides a finite storage capacity at which data structures can be allocated and accessed. Different memory space types have different characteristics with respect to accessibility from execution spaces as well as their performance characteristics.
+将来の計算ノードで利用可能となる複数のメモリ型は、Kokkos　によって、*メモリ空間*　を通じて抽象化されます。 各メモリ空間は、データ構造を割り当ててアクセスできる有限の記憶容量を提供します。 異なるメモリ空間の種類は、実行空間からのアクセス可能性およびパフォーマンス特性に関して、それぞれ異なる特徴を有しています。
 
-Instances of Kokkos Memory Spaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Kokkos メモリ空間のインスタンス
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In much the same way execution spaces have specific instantiations through the availability of an *instance* so do memory spaces. An instance of a memory space provides a concrete method for the application programmer to request data storage allocations. Returning to the examples provided for execution spaces, the multicore processor may have multiple memory spaces available including on-package memory, slower DRAM and additional sets of non-volatile memories. The GPU may also provide an additional memory space through its local on-package memory. The programmer is free to decide where each data structure may be allocated by requesting these from the specific instance associated with that memory space. Kokkos provides the appropriate abstraction of the allocation routines and any associated data management operations including releasing the memory, returning it for future use, as well as for copy operations.
+実行空間が、*インスタンス*の可用性を通じて特定のインスタンス化を持つのと同様に、メモリ空間もまた同様の仕組みで特定のインスタンス化を持ちます。 メモリ空間のインスタンスは、アプリケーションプログラマーが、データ格納領域の割り当てを要求するための具体的な方法を提供します。 実行スペースの例に戻りますと、マルチコアプロセッサには、パッケージ内蔵メモリ、低速な　DRAM　、および追加の不揮発性メモリセットを含む、複数のメモリスペースが利用可能な場合があります。 GPU　は、パッケージ内蔵メモリを通じて、追加のメモリ領域を提供する場合があります。プログラマーは、各データ構造をどのメモリ領域に関連付けられた特定のインスタンスから要求するかによって、その配置場所を、自由に決定できます。 Kokkos は、メモリ割り当てルーチンおよび関連するデータ管理操作（メモリ解放、将来の使用のための返却、ならびにコピー操作を含む）の適切な抽象化を提供します。
 
-|memory-space|
+|メモリ-空間|
 
-Figure 2.3 Example Memory Spaces in a Future Computing Node
+図 2.3 次世代計算ノードのメモリ空間例
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Atomic accesses to Memory in Kokkos** In cases where multiple executing threads attempt to read a memory address, complete a computation on the item, and write it back to same address in memory, an ordering collision may occur. These situations, known as *race conditions* (because the data value stored in memory as the threads complete is dependent on which thread completes its memory operation last), are often the cause of non-determinism in parallel programs. A number of methods can be employed to ensure that race conditions do not occur in parallel programs including the use of locks (which allow only a single thread to gain access to data structure at a time), critical regions (which allow only one thread to execute a code sequence at any point in time) and *atomic* operations. Memory operations which are atomic guarantee that a read, simple computation, and write to memory are completed as a single unit. This might allow application programmers to safely increment a memory value for instance, or more commonly, to safely accumulate values from multiple threads into a single memory location.
+**Kokkosにおけるメモリへのアトミックアクセス** 複数の実行スレッドが同一のメモリアドレスを読み取り、その項目に対する計算を完了し、同じメモリアドレスに書き戻そうとする場合、順序衝突が発生する可能性があります。 これらの状況は、*競合状態*（スレッドが完了する際にメモリに格納されるデータ値が、どのスレッドが最後にメモリ操作を完了したかに依存するため）として知られており、並列プログラムにおける非決定性の原因となる場合が多くあります。 並列プログラムにおいて競合状態が発生しないようにするためには、ロック（一度に単一のスレッドのみがデータ構造にアクセスできるようにする）、クリティカルセクション（任意の時点で単一のスレッドのみがコードシーケンスを実行できるようにする）、および*アトミック*　演算の使用等、いくつかの方法が用いられます。 アトミックなメモリ演算は、メモリへの読み取り、単純な計算、書き込みが単一の単位として完了することを保証します。これにより、アプリケーションプログラマーは、例えばメモリ値を安全にインクリメントしたり、より一般的なケースとして、複数のスレッドからの値を単一のメモリ位置に安全に蓄積したりすることが可能になる場合があります。
 
-**Memory Consistency in Kokkos** Memory consistency models are a complex topic in and of themselves and usually rely on complex operations associated with hardware caches or memory access coherency (for more information see Hennessy and Paterson\ :sup:`2`). Kokkos does not *require* caches to be present in hardware and so assumes an extremely weak memory consistency model. In the Kokkos model, the programmer should not assume any specific ordering of memory operations being issued by a kernel. This has the potential to create race conditions between memory operations if these are not appropriately protected. In order to provide a guarantee that memory operations are completed, Kokkos provides a *fence* operation which forces the compute engine to complete all outstanding memory operations before any new ones can be issued. With appropriate use of fences, programmers are thereby able to ensure that guarantees can be made as to when data will *definitely* have been written to memory.
-
------
-
-:sup:`2` Hennessy J.L. and Paterson D.A., **Computer Architecture, Fifth Edition: A Quantitative Approach**, Morgan Kaufmann, 2011.
+**Kokkos　におけるメモリ一貫性** メモリ一貫性モデルは、それ自体が複雑なテーマであり、通常はハードウェアキャッシュやメモリアクセスの一貫性に関連する複雑な演算に依存しています（詳細については、へニッセイおよび パターソン\ :sup:`2`　ご参照してください）。Kokkos は、ハードウェアにキャッシュが存在することを　*要求*　せず、したがって非常に弱いメモリ一貫性モデルを前提としています。 Kokkos モデルにおいては、プログラマーはカーネルによって発行されるメモリ演算の特定の順序を想定すべきではありません。 これらの演算が適切に保護されていない場合、メモリ演算間で競合状態が発生する可能性があります。 メモリ操作が確実に完了することを保証するため、Kokkosでは、計算エンジンは新規のメモリ操作を発行する前に、未処理のメモリ演算をすべて完了させることを強制する　*フェンス*　演算を提供しております。フェンスを適切に使用することで、プログラマーはデータが確実にメモリに書き込まれるタイミングについて保証を確立することが可能となります。
 
 -----
 
-Program execution
+:sup:`2` へニッセイ J.L. およびパターソン D.A., **コンピュータアーキテクチャ、第5版 : 定量的アプローチ**, モーガン・カーフマン, 2011.
+
+-----
+
+プログラム実行
 -----------------
 
 It is tempting to try to define formally what it means for a processor to execute code. None of us authors have a background in logic or what computer scientists call "formal methods," so our attempt might not go very far! We will stick with informal definitions and rely on Kokkos' C++ implementation as an existence proof that the definitions make sense.
