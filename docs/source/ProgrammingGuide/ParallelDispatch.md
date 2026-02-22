@@ -33,7 +33,7 @@ KOKKOS_INLINE_FUNCTION void operator() (...) const;
 
 ### ラムダ
 
-2011年版のC++標準　("C++11")　では、新しい言語構文であるラムダ式（_ラムダ_）が提供されています。Kokkos　では、並列ループ本体をファンクタ（上記参照）またはラムダ式として指定することが可能です。 ラムダ関数は、自動的に生成されるファンクタのように機能します。 クラスと同様に、ラムダ式にも状態が存在する可能性があります。  The only difference is that with a lambda, the state comes in from the environment. (The name "closure" means that the function "closes over" state from the environment.) Just like with functors, lambdas must bring in state by "value" (copy), not by reference or pointer.
+2011年版のC++標準　("C++11")　では、新しい言語構文であるラムダ式（_ラムダ_）が提供されています。Kokkos　では、並列ループ本体をファンクタ（上記参照）またはラムダ式として指定することが可能です。 ラムダ関数は、自動的に生成されるファンクタのように機能します。 クラスと同様に、ラムダ式にも状態が存在する可能性があります。 唯一の違いは、ラムダ関数の場合、状態が環境から渡される点です。（　"closure" という名称は、関数が環境から状態を "closes over"　ことを意味します。）ファンクタによる場合と同様に、ラムダ式は状態を "value" で（コピーによって）取り込む必要があり、参照やポインタによって取り込むことはできません。 
 
 By default, lambdas capture nothing (as the default capture specifier `[]` specifies). This is not likely to be useful, since [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) generally works by its side effects. Because Kokkos reserves the right to make copies of the closure, and its operations are potentially asynchronous users must ``capture by value'' to be semantically correct. We recommend doing so via the KOKKOS_LAMBDA macro for the outermost level of parallelism (see [Chapter 8](HierarchicalParallelism)).
 For some backends, this just turns into the usual capture-by-value clause `[=]`. That captures variables from the surrounding scope by value. Do NOT capture them by reference! For other backends (e.g. CUDA and HIP), this macro may have a special definition
