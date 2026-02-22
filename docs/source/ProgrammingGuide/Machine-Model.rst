@@ -1,35 +1,35 @@
-Machine Model
+機械モデル
 =============
 
 .. role:: cpp(code)
    :language: cpp
 
 .. |node| image:: figures/kokkos-node-doc.png
-   :alt: Figure 2.1 Conceptual Model of a Future High Performance Computing Node
+   :alt: 図 2.1 次世代高性能計算ノードの概念モデル
 
 .. _Chap7ParallelDispatch: ParallelDispatch.html
-.. |Chap7ParallelDispatch| replace:: Chapter 7 - Parallel dispatch
+.. |Chap7ParallelDispatch| replace:: 第７章 - 並列ディスパッチ
 
 .. |execution-space| image:: figures/kokkos-execution-space-doc.png
-   :alt: Figure 2.2 Example Execution Spaces in a Future Computing Node
+   :alt: 図 2.2 次世代計算ノードの実行空間例
 
 .. |memory-space| image:: figures/kokkos-memory-space-doc.png
-   :alt: Figure 2.3 Example Memory Spaces in a Future Computing Node
+   :alt: 図2.3 次世代計算ノードのメモリ空間例
 
 .. _ViewAllocation: View.html
-.. |ViewAllocation| replace:: View allocation
+.. |ViewAllocation| replace:: ビュー配置
 
 .. _Initialization: Initialization.html
-.. |Initialization| replace:: Initialization
+.. |Initialization| replace:: 初期化
 
 .. _Section82: HierarchicalParallelism.html#hp-thread-teams
-.. |Section82| replace:: Section 8.2
+.. |Section82| replace:: セクション 8.2
 
 .. _Chap8HierarchicalParallelism: HierarchicalParallelism.html
-.. |Chap8HierarchicalParallelism| replace:: Chapter 8 - Hierarchical Parallelism
+.. |Chap8HierarchicalParallelism| replace:: 第8章 - 階層的並列
 
 .. _Section231: Machine-Model.html#thread-safety
-.. |Section231| replace:: Section 2.3.1
+.. |Section231| replace:: セクション 2.3.1
 
 .. _ParallelFor: ../API/core/parallel-dispatch/parallel_for.html
 .. |ParallelFor| replace:: ``parallel_for()``
@@ -37,14 +37,14 @@ Machine Model
 .. _Fence: ../API/core/parallel-dispatch/fence.html
 .. |Fence| replace:: ``fence()``
 
-After reading this chapter you will understand the abstract model of a parallel computing node which underlies the design choices and structure of the Kokkos framework. The machine model ensures the applications written using Kokkos will have portability across architectures while being performant on a range of hardware.
+ 本章を読めば、Kokkos　フレームワークの設計上の選択と構造の基盤となる、並列計算ノードの抽象モデルについて、理解できます。このマシンモデルにより、Kokkos　を使用して記述されたアプリケーションは、様々なハードウェア上で高いパフォーマンスを発揮しつつ、アーキテクチャ間の移植性を確保します。
 
-The machine model has two important components:
+機械モデルには二つの重要な構成要素があります:
 
-* *Memory spaces*, in which data structures can be allocated
-* *Execution spaces*, which execute parallel operations using data from one or more *memory spaces*.
+* *メモリ空間*、 その中では、データ構造の配置が可能です。
+* *実行空間*、 1つ以上のone or more *メモリ空間*　からのデータを使用して、並列演算を実行します。
 
-Motivations
+モチベーション
 -----------
 
 Kokkos is comprised of two orthogonal aspects. The first of these is an underlying
