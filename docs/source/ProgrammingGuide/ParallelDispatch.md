@@ -1,26 +1,25 @@
-# Parallel dispatch
+# 並列ディスパッチ
 
-You probably started reading this Guide because you wanted to learn how Kokkos can parallelize your code. This chapter will teach you different kinds of parallel operations that Kokkos can execute. We call these operations collectively _parallel dispatch_, because Kokkos "dispatches" them for execution by a particular execution space. Kokkos provides three different parallel operations:
+おそらく、Kokkosがどのようにコードの並列化を実現するのかを学びたいと考えられたので、本ガイドを読み始めたのでしょう。 本章では、Kokkos　が実行可能な各種の並列演算について解説いたします。 Kokkos　が特定の実行空間による実行のためにそれらを　"ディスパッチ"　するため、これらの操作を総称して、 _並列ディスパッチ_　と呼びます。 Kokkos　は、3つの異なる並列演算を提供します:
 
-* [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) implements a "for loop" with independent iterations.
-* [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce) implements a reduction.
-* [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan) implements a prefix scan.
+* [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) 独立した反復処理を持つ "forループ" を実装します。
+* [`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce) 還元を実装。
+* [`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan) プレフィックススキャンを実施。
 
-Kokkos gives users two options for defining the body of a parallel loop: functors and lambdas. It also lets users control how the parallel operation executes, by specifying an _execution policy_. Later chapters will cover more advanced execution policies that allow nested parallelism.
+Kokkos　は、並列ループの本体を定義する際に、ユーザーに2つの選択肢を提供します: ファンクタおよびラムダ。 また、ユーザーは　_実行ポリシー_　を指定することで、並列操作の実行方法を制御することも可能です。 後述の章では、ネストされた並列処理を可能にするより高度な実行ポリシーについて解説いたします。
 
-Important notes on syntax:
+構文に関する重要な注意事項:
 
-* Use the `KOKKOS_INLINE_FUNCTION` macro to mark a   functor's methods that Kokkos will call in parallel
-* Use the `KOKKOS_LAMBDA` macro to replace a lambda's capture clause when giving the lambda to Kokkos for parallel
-  execution
+* Kokkos　が並列で呼び出すファンクタのメソッドには、`KOKKOS_INLINE_FUNCTION`　マクロを使用して、明示的にマークしてください
+* `KOKKOS_LAMBDA` マクロを使用し、ラムダ式を Kokkos に並列実行のために渡す際に、ラムダのキャプチャ句を置き換えてください
 
-## Specifying the parallel loop body
+## 並列ループボディを指定
 
-### Functors
+### ファンクタ
 
-A _functor_ is one way to define the body of a parallel loop. It is a class or struct<sup>1</sup> with a public `operator()` instance method. That method's arguments depend on both which parallel operation you want to execute (for, reduce, or scan), and on the loop's execution policy (e.g., range or team). For an example of a functor see the section in this chapter for each type of parallel operation. In the most common case of a [`parallel_for()`](../API/core/parallel-dispatch/parallel_for), it takes an integer argument which is the for loop's index. Other arguments are possible; see [Chapter 8 - Hierarchical Parallelism](HierarchicalParallelism).
+ _ファンクタ_ は、並列ループの本体を定義する方法の一つです。 それは、パブリックな `operator()` インスタンスメソッドを持つクラスまたは　struct<sup>1</sup> です。 そのメソッドの引数は、実行したい並列操作（for、reduce、または　scan）、およびループの実行ポリc（例えば、範囲またはチーム）の両方に依存します。ファンク他の一例については、 各並列操作の種類についての、本章の該当セクションを参照してください。 最も一般的なケースである　[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　では、for　ループのインデックスである、整数型の引数を取ります。これはとなります。他の引数である可能性もあります; [Chapter 8 - Hierarchical Parallelism](HierarchicalParallelism)　を参照してください。
 
-The `operator()` method must be const, and must be marked with the `KOKKOS_FUNCTION` or `KOKKOS_INLINE_FUNCTION` macro. For some backends (such as CUDA and HIP) this macro is necessary to mark your method as suitable for running on both accelerator devices and the host. If not building with any backends requiring markup, `KOKKOS_INLINE_FUNCTION` expands to `inline`, and `KOKKOS_FUNCTION` is unnecessary but harmless. Here is an example of the signature of such a method:
+`operator()`　メソッドは、const　でなければならず、`KOKKOS_FUNCTION`　または　`KOKKOS_INLINE_FUNCTION`　マクロでマークされなければなりません。一部のバックエンド (CUDA および　HIP等) については、このマクロは、ご自身のメソッドがアクセラレータデバイスとホストの両方で実行可能であることを示すために必要です。 マークアップを必要とするバックエンドでビルドしない場合、`KOKKOS_INLINE_FUNCTION` は `inline` に展開され、そｓて and `KOKKOS_FUNCTION` は不要ですが、害はありません。 そのようなメソッドのシグネチャの例を以下に示します：
 
 ```c++
 KOKKOS_INLINE_FUNCTION void operator() (...) const;
