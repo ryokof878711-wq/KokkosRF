@@ -111,25 +111,25 @@ Kokkos メモリ空間のインスタンス
 プログラム実行
 -----------------
 
-It is tempting to try to define formally what it means for a processor to execute code. None of us authors have a background in logic or what computer scientists call "formal methods," so our attempt might not go very far! We will stick with informal definitions and rely on Kokkos' C++ implementation as an existence proof that the definitions make sense.
+プロセッサがコードを実行するという行為を形式的に定義しようとすることは試してみたくなる事柄です。 著者の中で誰も、論理学やコンピュータ科学者が、"公式手法"　と呼ぶ分野の専門知識を持っておりませんので、その試みにおいてはあまり成果を上げられないかもしれません。非公式な定義に固執し、その定義が意味をなすことの存在証明として、Kokkos　の　C++　実装に頼ります。
 
-Kokkos lets users tell execution spaces to execute parallel operations. These include parallel for, reduce, and scan (see |Chap7ParallelDispatch|_) as well as |ViewAllocation|_ and |Initialization|_. We name the class of all such operations *parallel dispatch*.
+Kokkos　は、ユーザーが実行スペースに対して並列演算を実行するよう指示することを可能にします。 これらには、並列処理の　for、reduce、scan（|Chap7ParallelDispatch|_ 参照）に加え、|ViewAllocation|_ および |Initialization|_ が含まれます。このような演算のすべてを総称して、*並列ディスパッチ*　と呼びます。
 
-From our perspective, there are three kinds of code:
+当方の見解では、コードには3種類あります:
 
-#. Code executing inside of a Kokkos parallel operation
-#. Code outside of a Kokkos parallel operation that asks Kokkos to do something (e.g., parallel dispatch itself)
-#. Code that has nothing to do with Kokkos
+#. Kokkos 並列演算の内部を実行するコード
+#. Kokkos に何かを依頼する　（例えば、並列ディスパッチそれ自体）Kokkos 並列演算の外部のコード
+#. Kokkos　に関係のないコード
 
-The first category is the most restrictive. |Section82|_ explains restrictions on inter-team synchronization. In general, we limit the ability of Kokkos-parallel code to invoke Kokkos operations (other than for nested parallelism; see |Chap8HierarchicalParallelism|_ and especially |Section82|_). We also forbid dynamic memory allocation (other than from the team's scratch pad) in parallel operations. Whether Kokkos-parallel code may invoke operating system routines or third-party libraries depends on the execution and memory spaces being used. Regardless, restrictions on inter-team synchronization have implications for things like filesystem access.
+第一のカテゴリーは最も制限の厳しいものです。 |セクション82|_では、チーム間の同期に関する制限事項について説明しています。 一般的に、Kokkos－並列コードがKokkos　演算を呼び出す機能は、制限されています（ネストされた並列処理を除外。詳細は |Chap8HierarchicalParallelism|_　および特に　|Section82|_　を参照してください）。 また、並列演算においては、チームの仮置き場からの割り当てを除き、動的メモリ割り当てを、禁止しています。Kokkos－並列コードが、オペレーティングシステムのルーチンおよびサードパーティ製ライブラリを呼び出せるかどうかは、使用されている実行環境とメモリ空間によって異なります。いずれにせよ、チーム間の同期に関する制限は、ファイルシステムへのアクセスなどにも影響を及ぼします。
 
-*Kokkos threads are for computing in parallel*, not for overlapping I/O and computation, and not for making graphical user interfaces responsive. Use other kinds of threads (e.g., operating system threads) for the latter two purposes. You may be able to mix Kokkos' parallelism with other kinds of threads; see |Section231|_. Kokkos' developers are also working on a task parallelism model that will work with Kokkos' existing data-parallel constructs.
+*Kokkos　スレッドは、並列コンピューティングのためのもの*　であり、I/Oと計算のオーバーラッピングのためでも、グラフィカルユーザーインターフェースの応答性を高めるためのものでもありません。 後者の二つの目的には、他の種類のスレッド（例：オペレーティングシステムのスレッド）をご利用ください。 コッコスの並列処理を、他の種類のスレッドと組み合わせることが可能かもしれません；詳細については、|セクション231|_を参照してください。 Kokkos　の開発者チームは、Kokkos　の既存のデータ―並列構造と連携するタスク並列モデルの開発にも取り組んでいます。
 
-**Reproducible reductions and scans** Kokkos promises *nothing* about the order in which the iterations of a parallel loop occur. However, it *does* promise that if you execute the same parallel reduction or scan, using the same hardware resources and run-time settings, then you will get the same results each time you run the operation. "Same results" even means "with respect to floating-point rounding error."
+**再現可能な還元およびスキャン** Kokkosは、並列ループの反復処理が実行される順序については、*一切*　保証しません。　ただし、同じ並列リダクションまたはスキャンを、同じハードウェアリソースと実行時設定を用いて実行した場合、その操作を実行するたびに毎回同じ結果が得られることを、*必ず*　保証します。 同じ結果となる"　とは、"浮動小数点丸め誤差に関して"　という意味も含みます。
 
-**Asynchronous parallel dispatch** This concerns the second category of code that calls Kokkos operations. In Kokkos, parallel dispatch executes *asynchronously*. This means that it may return "early," before it has actually completed. Nevertheless, it executes *in sequence* with respect to other Kokkos operations on the same execution or memory space. This matters for things like timing. For example, a |ParallelFor|_ may return "right away," so if you want to measure how long it takes, you must first call |Fence|_ on that execution space. This forces all functors to complete before |Fence|_ returns.
+**非同期並列ディスパッチ** これは、Kokkos　演算を呼び出すコードの第二のカテゴリーに関するものです。 Kokkosでは、並列ディスパッチは、*非同期的に*　実行されます。 これは、処理が実際に完了する前に、"早期"　に返り値を返す可能性があることを意味します。 ただし、同じ実行またはメモリ空間における他の　Kokkos　演算に対しては、*順次*　に実行されます。 タイミングなどの点において、これは重要です。 例えば、|ParallelFor|_ は、"すぐに"　戻ってくる可能性があります。そのため、その実行スペースで処理にかかる時間を計測したい場合は、まずその実行スペースに対して、|Fence|_ を呼び出す必要があります。これにより、すべてのファンクタは |Fence|_ が戻る前に完了する必要があります。
 
-Thread safety?
+スレッド安全性とは？
 ~~~~~~~~~~~~~~
 
-Users may wonder about "thread safety," that is, whether multiple operating system threads may safely call into Kokkos concurrently. Kokkos' thread safety depends on both its implementation and on the execution and memory spaces that the implementation uses. The C++ implementation has made great progress towards (non-Kokkos) thread safety of View memory management. For now, however, the most portable approach is for only one (non-Kokkos) thread of execution to control Kokkos. Also, be aware that operating system threads might interfere with Kokkos' performance depending on the execution space that you use.
+ユーザーは、"スレッド安全性" について疑問に思うかもしれませんが、それはつまり、複数のオペレーティングシステムスレッドが同時にKokkos　を安全に呼び出せるかどうかということです。 Kokkos　のスレッド安全性は、その実装と、その実装が使用する実行環境およびメモリ空間の両方に依存します。C++　実装は、ビューのメモリ管理における（Kokkos以外の）スレッド安全性に向けて、大きな進展を遂げております。ただし現時点では、最も移植性の高いアプローチは、Kokkos　を制御する実行スレッドを（Kokkos以外の）1つだけに限定することです。また、利用する実行空間によっては、オペレーティングシステムのスレッドが、Kokkos　の動作に影響を与える可能性がある点に注意してください。
