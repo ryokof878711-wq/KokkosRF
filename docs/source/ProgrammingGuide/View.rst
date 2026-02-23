@@ -15,21 +15,21 @@
 Kokkos が多次元配列を必要とする理由
 ----------------------------------------
 
-Many scientific and engineering codes spend a lot of time computing with arrays of data and programmers invest a lot of effort making these array computations as fast as possible. This effort is often intimately bound to details of the computer architecture, run-time environment, language, and programming model. For example, optimal array layout may differ based on the architecture, with a large integer factor penalty if wrong. Low-level issues like pointer alignment, array layout, indexing overhead, and initialization all affect performance. This is true even for sequential codes but thread parallelism adds even more pitfalls, like first-touch allocation and false sharing.
+多くの科学技術計算コードでは、データの配列を用いた計算に多くの時間を費やしており、プログラマーはこれらの配列計算を可能な限り高速化するために多大な努力を注いでいます。 この取り組みは、多くの場合に、コンピュータアーキテクチャ、実行環境、言語、プログラミングモデルの詳細と密接に結びついています。例えば、 最適な配列レイアウトは、アーキテクチャによって異なる可能性があり、誤った場合には、大きな整数倍のペナルティが生じます。 ポインタのアライメント、配列のレイアウト、インデックス処理のオーバーヘッド、初期化等、低レベルの問題が、いずれもパフォーマンスに影響を及ぼします。 これは、順次コードにおいてさえも真ですが、スレッド並列処理では、ファーストタッチ割り当てや偽の共有等、さらに多くの落とし穴を生じます。
 
-For best performance, coders need to tie details of how they manage arrays to details of how parallel code accesses and manages those arrays. Programmers who write architecture-specific code then need to mix low-level features of the architecture and programming model into high-level algorithms. This makes it hard to port codes between architectures, or to write a code that still performs well as architectures evolve.
+最高のパフォーマンスを得るためには、コーダーは、配列の管理方法の詳細を、並列コードがそれらの配列にアクセスし管理する方法の詳細と結びつける必要があります。 アーキテクチャ固有のコードを記述するプログラマーは、その後、アーキテクチャとプログラミングモデルの低レベルな特徴を、高レベルのアルゴリズムに組み込む必要があります。　これにより、アーキテクチャ間でコードを移植することが難しくなり、また、アーキテクチャが進化しても良好なパフォーマンスを維持するコードを書くことが難しくなります。
 
-Kokkos aims to relieve some of this burden by optimizing array management and access for the specific architecture. Tying arrays to shared-memory parallelism lets Kokkos optimize the former to the latter. For example, Kokkos can easily do first-touch allocation because it controls threads that it can use to initialize arrays. Kokkos' architecture-awareness lets it pick optimal layout and pad allocations for good alignment. Expert coders can also use Kokkos to access low-level or more architecture-specific optimizations in a more user-friendly way. For instance, Kokkos makes it easy to experiment with different array layouts.
+Kokkos　は、特定のアーキテクチャ向けに配列の管理とアクセスを最適化することで、この負担の一部を軽減することを目指しております配列を共有メモリ並列処理に結びつけることで、Kokkos　は、前者を後者に最適化することが可能となります。例えば、Kokkosは配列の初期化に使用できるスレッドを制御できるため、ファーストタッチ割り当てを容易に行うことができます。 Kokkos　のアーキテクチャ認識機能により、適切な配置とパディング割り当てを自動的に選択し、整列を最適化します。 熟練したコーダーによる、Kokkos　の活用により、さらにユーザーフレンドリーな方法で、低レベルあるいはアーキテクチャ固有の最適化にアクセスすることも可能です。 例えば、Kokkosでは様々な配列レイアウトを、簡単に試すことができます。
 
-Creating and using a View
+ビューの作成および使用
 -------------------------
 
 .. _Constructing_a_view:
 
-Constructing a View
+ビュー構築
 ~~~~~~~~~~~~~~~~~~~
 
-A View is an array of zero or more dimensions. Programmers set both the type of entries and the number of dimensions at compile time as part of the type of the View. For example, the following specifies and allocates a View with four dimensions for entries that have type `int`:
+ビューとは、ゼロ個以上の次元からなる配列です。プログラマーは、ビューの型の一部として、コンパイル時にエントリの型と次元の数を両方とも設定します。 例えば、以下は、型が　`int`　であるエントリに対して、4次元のビューを指定し割り当てます:
 
 .. code-block:: c++
 
@@ -37,7 +37,7 @@ A View is an array of zero or more dimensions. Programmers set both the type of 
   const size_t N1 = ...;
   const size_t N2 = ...;
   const size_t N3 = ...;
-  Kokkos::View<int****> a ("some label", N0, N1, N2, N3);
+  Kokkos::View<int****> a ("一部のレベル", N0, N1, N2, N3);
 
 The string argument is a label which Kokkos uses for debugging. Different Views may have the same label. The ellipses indicate some integer dimensions specified at run time. Users may also set some dimensions at compile time. For example, the following View has two dimensions where the first (represented by the asterisk) is a run-time dimension and the second (represented by [3]) is a compile-time dimension. Thus, the View is an N by 3 array of type double, where N is specified at run time in the View's constructor.
 
