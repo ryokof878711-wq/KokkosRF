@@ -9,10 +9,10 @@
 * Kokkosは、コンピューターアーキテクチャに応じて、最適で全体的なパフォーマンスを実現するため、コンパイル時に配列レイアウトを選択
 * 実行領域やレイアウトの低レベル制御についてのビューのオプションテンプレートパラメータの設定方法について、および　Kokkos　が配列要素にアクセスする方法
 
-In all code examples in this chapter, we assume that all classes in the `Kokkos` namespace have been imported into the working namespace.
+本章のすべてのコード例において、`Kokkos`　名前空間内のすべてのクラスが、作業名前空間にインポート済みであることを前提としています。
 
 
-Why Kokkos needs multidimensional arrays
+Kokkos が多次元配列を必要とする理由
 ----------------------------------------
 
 Many scientific and engineering codes spend a lot of time computing with arrays of data and programmers invest a lot of effort making these array computations as fast as possible. This effort is often intimately bound to details of the computer architecture, run-time environment, language, and programming model. For example, optimal array layout may differ based on the architecture, with a large integer factor penalty if wrong. Low-level issues like pointer alignment, array layout, indexing overhead, and initialization all affect performance. This is true even for sequential codes but thread parallelism adds even more pitfalls, like first-touch allocation and false sharing.
