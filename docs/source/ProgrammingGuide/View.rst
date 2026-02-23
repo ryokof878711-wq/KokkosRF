@@ -1,4 +1,4 @@
-View: Multidimensional array
+ビュー: 多次元配列
 ============================
 
 After reading this chapter, you should understand the following:
