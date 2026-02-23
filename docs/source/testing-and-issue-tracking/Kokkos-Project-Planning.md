@@ -1,6 +1,6 @@
-# Kokkos Project Planning
+# Kokkosプロジェクトプラニング
 
-## Requirements Gathering
+## 要件定義
 
 There are four requirement categories for the Kokkos Core project:
 
