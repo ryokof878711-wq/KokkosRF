@@ -39,60 +39,60 @@ Kokkos　は、特定のアーキテクチャ向けに配列の管理とアク�
   const size_t N3 = ...;
   Kokkos::View<int****> a ("一部のレベル", N0, N1, N2, N3);
 
-The string argument is a label which Kokkos uses for debugging. Different Views may have the same label. The ellipses indicate some integer dimensions specified at run time. Users may also set some dimensions at compile time. For example, the following View has two dimensions where the first (represented by the asterisk) is a run-time dimension and the second (represented by [3]) is a compile-time dimension. Thus, the View is an N by 3 array of type double, where N is specified at run time in the View's constructor.
+文字列引数は、Kokkosがデバッグに使用するラベルです。 異なるビューが同じラベルを持つ場合があります。 省略記号は、実行時に指定される整数次元の値を示しています。 ユーザーは、コンパイル時に一部の次元を設定することも可能です。 例えば、以下のビューには二つの次元がありますが、最初の次元（アスタリスクで示されています）は実行時次元であり、二番目の次元（[3]で示されています）はコンパイル時次元です。　このように、 ビューは、N×3　の　double　型の配列であり、ここで　N　は、ビューのコンストラクタ内で実行時に指定されます。
 
 .. code-block:: c++
 
   const size_t N = ...;
   Kokkos::View<double*[3]> b ("another label", N);
 
-Views may have up to (at most) 8 dimensions and any number of these may be run-time or compile-time. The only limitation is that the run-time dimensions (if any) must appear first followed by all the compile-time dimensions (if any). For example, the following are valid three-dimensional View types:
+ビューは、最大で8次元まで持つことができ、これらのうち任意の数が実行時またはコンパイル時に定義される可能性があります。 唯一の制限事項は、実行時次元（存在する場合）を最初に記述し、その後すべてのコンパイル時次元（存在する場合）を記述しなければならないという点です。 例えば、以下のものが、有効な三次元ビュータイプです:
 
 * `View<int***>`  (3 run-time dimensions)
 * `View<int**[8]>`  (2 run-time, 1 compile-time)
 * `View<int*[3][8]>`  (1 run-time, 2 compile-time)
 * `View<int[4][3][8]>`  (3 compile-time)
 
-and the following are *not* valid three-dimensional View types:
+以下のものは、有効な三次元ビュータイプでは、*ありません*:
 
 * `View<int[4]**>`
 * `View<int[4][3]*>`
 * `View<int[4]*[8]>`
 * `View<int*[3]*>`
 
-This limitation comes from the implementation of View using C++ templates. View's first template parameter must be a valid C++ type.
+この制限は、ビューが　C++　テンプレートを用いて実装されていることに起因します。ビューの最初のテンプレートパラメータは、有効な　C++　型でなければなりません。
 
-Note that the above used constructor is not necessarily available for all view types; specific Layouts or Memory Spaces may require more specialized allocators. This is discussed later.
+なお、上記で使用したコンストラクタは、すべてのビュータイプで必ずしも利用可能とは限りません; 特定のレイアウトやメモリ空間には、より専門的なアロケーターが必要となる場合があります. これについては、後ほど説明します。
 
-Another important thing to keep in mind is that a `View` handle is a stateful object. It is not legal to create a `View` handle from raw memory by typecasting a pointer. To call any operator on a `View,` including the assignment operator, its constructor must have been called before. If it is necessary to initialize raw memory with a `View` handle, one can legally do so using placement new. The above has nothing to do with the data a `View` is referencing. It is completely legal to give a typecast pointer to the constructor of an unmanaged `View`.
+もう一つ重要な点は、`ビュー`　ハンドルは、状態を保持するオブジェクトであるということです。 ポインタの型変換によって、生のメモリから`View`ハンドルを作成することは、法的に認められていません。 `ビュー` の演算子（代入演算子を含む）を呼び出すには、事前にそのコンストラクタが呼び出されている必要があります。 生のメモリ領域を、`ビュー`　ハンドルで初期化する必要がある場合、配置newを使用して合法的に行うことが可能です。 上記の内容は、`ビュー`　が参照しているデータとは、一切関係ありません。 管理対象外の`ビュー`　のコンストラクタに型キャストされたポインタを渡すことは、完全に法的に正当なものです。
 
 .. code-block:: c++
 
   Kokkos::View<int*> *a_ptr = (Kokkos::View<int*>*) malloc(10*sizeof(View<int*);
-  a_ptr[0] = Kokkos::View<int*>("A0",1000); // This is illegal
-  new(&a_ptr[1]) Kokkos::View<int*>("A1",10000); // This is legal 
+  a_ptr[0] = Kokkos::View<int*>("A0",1000); // これは違法
+  new(&a_ptr[1]) Kokkos::View<int*>("A1",10000); // これは合法
 
 .. _view_types_of_data:
 
-What types of data may a View contain?
+ビューにはどのような種類のデータを含めることができますか？
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-C++ lets users construct data types that may "look like" numbers in terms of syntax but do arbitrarily complicated things inside. Some of those things may not be thread safe, like unprotected updates to global state. Others may perform badly in parallel, like fine-grained dynamic memory allocation. Therefore, it is strongly advised to use only simple data types inside Kokkos Views. Users may always construct a View whose entries are
+C++　では、ユーザーが、構文上は数値のように見えるかもしれませんが、内部では任意に複雑な処理を実行するデータ型を構築することが可能です。 それらの処理の中には、グローバル状態への保護されていない更新等、スレッドセーフでないものも含まれる可能性があります。 他のものは、並行処理において、例えば細かい動的メモリ割り当て等、うまく機能しない場合があります。　そのため、Kokkos　のビュー内では、シンプルなデータ型のみの使用を強く推奨します。ユーザーは、常にエントリが以下の形式であるビューを構築することが可能です
 
-* built-in data types ("plain old data"), like `int` or `double`, or
-* structs of built-in data types.
+* `int`　および　`double`　等、組み込みデータ型（"プレーン・オールド・データ"）、あるいは
+* 組み込みデータ型の構造体。
 
-While it is in principle possible to have Kokkos Views of arbitrary objects, Kokkos imposes restrictions on the set of types `T` for which one can construct a `View<T*>`.  For example:
+原則として、任意のオブジェクトに対して　Kokkos　ビューを作成することは可能ですが、Kokkos　では　`View<T*>`　を構築できる型　`T`　の集合に対して制限を設けています。例えば:
 
-* `T` must not have virtual methods.
-* `T`'s default constructor and destructor must not allocate or deallocate data, and must be thread safe. 
-* `T`'s assignment operators as well as its default constructor and deconstructor must be marked with the `KOKKOS_INLINE_FUNCTION` or `KOKKOS_FUNCTION` macro.
+* `T` 、仮想メソッドを保有してはいけません
+* `T`のデフォルトコンストラクタおよびデストラクタは、データの割り当てや割り当て解除を行ってはならず、スレッドセーフである必要があります。 
+* `T`　の代入演算子ならびにデフォルトコンストラクタおよびデコンストラクタは、`KOKKOS_INLINE_FUNCTION` または `KOKKOS_FUNCTION` マクロでマークする必要があります。
 
-All those restrictions come from the requirement that `View<T*>` work with every execution and memory space. The constructor of `View<T*>` does not just allocate memory; by default, it also initializes the allocation with `T`'s default value for each entry. Hence, `T`'s default constructor needs to be correct to call on the `ExecutionSpace` associated with the `MemorySpace` of the `View`. Keep in mind that the semantics of the resulting `View` are a combination of the `Views 'view'` semantics and the behavior of the element type.
+これらの制限はすべて、`View<T*>` がすべての実行環境およびメモリ空間で動作するという要件に、起因しています。 `View<T*>`　のコンストラクタは、単にメモリを割り当てるだけではありません; デフォルトでは、各エントリに対して　`T`　のデフォルト値で割り当てを初期化します。 したがって、`T`　のデフォルトコンストラクタは、`ビュー`　の　`MemorySpace`　に関連付けられた　`ExecutionSpace`　を呼び出すために正しく設定されている必要があります。結果として生成される　`ビュー`　の意味論は、`ビューの 'ビュー'`　のセマンティクスおよび要素型の動作の組み合わせであることに、留意してください。
 
-The requirement that the destructor of `T` not deallocate memory technically disallows `T` being a managed View, or a structure which directly or indirectly contains a managed View. In extreme cases we do allow users to have managed Views in their type `T`, so long as a non-parallel loop is used to safely deallocate the Views contained in each `T` prior to the deallocation of the `View<T>` itself. This can be done by assigning to each contained View a default-constructed View of the same type. Having managed Views in `T` is not recommended.
+`T`　のデストラクタがメモリの割り当てを解除するという要件は、技術的に　`T`　が、管理対象のビューであること、または直接的・間接的に管理対象のビューを含む構造体であることを禁止します。極端なケースにおいては、`View<T>` 自体の割り当て解除前に、各 `T` に含まれるビューを安全に解除するための非並列ループが使用されている限りにおいて、ユーザーが型 `T` に対して管理対象ビューを保持することを許可しております。これは、各内包ビューに対して、同じ型のデフォルトコンストラクタで生成されたビューを割り当てることにより、可能となります。`T`内でビューを管理対象とすることは、推奨されません。
 
-Finally, note that virtual functions are technically allowed, but calling them is subject to further restrictions; developers should consult the discussions in Chapter 13, Kokkos and Virtual Functions (under development).
+最後に、仮想関数は技術的には許可されていますが、それらを呼び出す際にはさらなる制限の対象となる点に、注意してください; デベロッパーの方は、第13章　「Kokkosと仮想関数」（開発中）の議論を参照してください。
 
 Can I make a View of Views?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
