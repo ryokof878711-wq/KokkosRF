@@ -1,13 +1,13 @@
 ビュー: 多次元配列
 ============================
 
-After reading this chapter, you should understand the following:
+本章を読んだ後に、以下を理解する必要があります:
 
-* A Kokkos View is an array of zero or more dimensions
-* How to use View's first template parameter to specify the type of entries, the number of dimensions, and whether the dimensions are determined at run time or compile time
-* Kokkos handles array deallocation automatically
-* Kokkos chooses array layout at compile time for best overall performance as a function of the computer architecture
-* How to set optional template parameters of View for low-level control of execution space, layout, and how Kokkos accesses array entries
+* Kokkos Viewは、ゼロ個以上の次元を持つ配列。
+* ビューの最初のテンプレートパラメータを使用して、エントリの型、次元の数、および次元が実行時かコンパイル時に決定されるかを指定する方法
+* Kokkos　は配列の割り当て処理の解除を自動的に行います
+* Kokkosは、コンピューターアーキテクチャに応じて、最適で全体的なパフォーマンスを実現するため、コンパイル時に配列レイアウトを選択
+* 実行領域やレイアウトの低レベル制御についてのビューのオプションテンプレートパラメータの設定方法について、および　Kokkos　が配列要素にアクセスする方法
 
 In all code examples in this chapter, we assume that all classes in the `Kokkos` namespace have been imported into the working namespace.
 
