@@ -2,7 +2,7 @@
 
 ## 要件定義
 
-There are four requirement categories for the Kokkos Core project:
+コアプロジェクトには、4つの要件カテゴリが存在します:
 
 - provide a stable, well-tested API avoiding breakage
 - support all relevant compute platforms, at the time of their fielding
