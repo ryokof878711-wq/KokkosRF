@@ -94,87 +94,87 @@ C++　では、ユーザーが、構文上は数値のように見えるかも�
 
 最後に、仮想関数は技術的には許可されていますが、それらを呼び出す際にはさらなる制限の対象となる点に、注意してください; デベロッパーの方は、第13章　「Kokkosと仮想関数」（開発中）の議論を参照してください。
 
-Can I make a View of Views?
+Views の全体像を見ることはできますか？
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. warning::
+.. 警告::
 
-  NOVICES: THE ANSWER FOR YOU IS "NO."  PLEASE SKIP THIS SECTION.  
+  初心者の方へ: 答えは、"ノー"  です。本セクションをスキップしてください。 
 
-A "View of Views" is a special case of View, where the type of each entry is itself a View. It is possible to make this, but before you try, please see below.
+ "ビューのビュー" とは、ビューの特殊なケースであり、各エントリの型自体がビューであるものです。これは可能ではありますが、試す前に、以下を見てください。 
 
-You probably don't want this
+おそらくこれは望まないでしょう。
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you really just want a multidimensional array, please don't do this.  Instead, see :ref:`Constructing_a_view` above for the correct syntax.
+もし本当に多次元配列をご希望であれば、この方法は避けてください。代わりに、 正しい構文について、上記　:ref:`Constructing_a_view` を参照してください。
 
-If you want to represent an array of arrays, and the inner arrays have fixed length or a fixed upper bound on length, consider instead using a *compressed sparse row* data structure. Kokkos' Containers subpackage has a `StaticCrsGraph` class that you may use for this purpose.
+配列の配列を表現したい場合で、内側の配列が固定長である、または長さに固定の上限がある場合には、代わりに、*圧縮疎行列*　データ構造の使用をご検討ください。 Kokkos　のコンテナサブパッケージには、この目的で使用できる　`StaticCrsGraph`　クラスがあります。
 
-If you want a hash table, Kokkos' Containers subpackage has an `UnorderedMap` class that you may use for this purpose.
+If you want a hash table, Kokkos' Containers subpackage has an `UnorderedMap` class that you may use for this purpose.ハッシュテーブル希望の場合には、、Kokkos　のコンテナサブパッケージに、この目的で使用可能な　`UnorderedMap`クラスがあります。
 
-One reason you might *actually* want a View of Views is because you need a representation of a "ragged" array of arrays -- where the inner arrays have widely varying length -- and you need to be able to reallocate the inner arrays dynamically.
+ビュー・オブ・ビューを　*実際*に必要とする理由の一つとしては、配列のうち、　"不規則な"　配列を表現する必要がある場合で、内部の配列の長さが大きく異なる場合が、挙げられます -- そして、内包された配列を動的に再割り当てできるようになる必要があります。
 
-You might also want a View of some class that itself contains Views. If you want this, first think about how to reorganize your data structures for better efficiency.
+また、ビュー自体を含むクラスのビューも必要になるかもしれません。これを実現したいのであれば、まずは効率向上のためにデータ構造を再構築する方法について、検討してください。 
 
-What's the problem with a View of Views?
+ビューのビューという概念について、何か問題があるのでしょうか？
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-A View of Views would have an "outer View," with zero or more "inner Views." :ref:`view_types_of_data` above explains how the outer View's constructor would work.  The outer View's constructor does not just allocate memory; it also initializes the allocation with `T`'s default value for each entry. If the View's execution space is `Cuda`, then that means the entry type's default constructor needs to be correct to call on device. That is a problem, because the entry type in this case is itself `View`. `View`'s constructor wants to allocate memory, and thus does not work on device. If the outer `View` does not allow access on Host, one must go through extra mechanisms to allocate the inner `View` (e.g. a host mirror of the outer `View`). Kokkos parallel regions generally forbid memory allocation.
+ビューのビューでは、"外側ビュー"　を有し、ゼロ個以上の　"内側ビュー"　を含みます。上記:ref:`view_types_of_data` が、外側のビューのコンストラクターがどのように動作するかを説明します。 外部ビューのコンストラクタは、単にメモリを割り当てるだけではありません; また、各エントリに対して`T`のデフォルト値で割り当てを初期化します。 ビューの実行スペースが `Cuda` である場合、エントリ型のデフォルトコンストラクタは、デバイス上で呼び出すために正しく設定されている必要があります。 この場合のエントリタイプ自体が　`ビュー`　なので、それは問題です。`ビュー`　のコンストラクタは、メモリの割り当てを必要とするため、デバイス上では動作しません。 外側の　`ビュー`　がホスト上でのアクセスを許可しない場合、内側の　`ビュー`　を割り当てるには、追加の仕組みを経由する必要があります（例：外側の　`ビュー`　のホストミラー）。Kokkos　の並列領域では、一般的にメモリ割り当てが禁止されています。
 
-You could create the outer View without initializing, like this:
+初期化を行わずに、次のように、外部ビューを作成することができます:
 
 .. code-block:: c++
 
-  using Kokkos::View;
-  using Kokkos::view_alloc;
-  using Kokkos::WithoutInitializing;
+  Kokkos::View　を使用;
+  Kokkos::view_alloc　を使用;
+  Kokkos::WithoutInitializing　を使用;
 
-  // Need an std::string here, because the compiler may get confused
-  // if you pass view_alloc a char* as its first argument.
+  // コンパイラが混乱する可能性があるため、ここにstd::stringが必要
+  // view_alloc関数の最初の引数として、char*　を渡す場合。
   const std::string label ("v_outer");
-  View<View<int*>> v_outer (view_alloc (label, WithoutInitializing));
+  View<View<int*>> v_outer (view_alloc (ラベル, WithoutInitializing));
 
-However, that leaves the inner Views in an undefined state.  You can't legally assign to them or call their destructors.  (Remember that View assignment updates the assignee's reference count.)  You'll need to do more than just this in order to create valid inner Views and ensure their safe deallocation.
+しかしながら、それにより内部ビューは未定義の状態となります。それらへの代入やデストラクタの呼び出しは法的に許可されません    (ビューの割り当ては、割り当て先の参照カウントを更新することを覚えておいてください。)  有効な内部ビューを作成し、安全な解放を保証するためには、これ以上の作業が必要となります。
 
-You'll have worse problems if the outer View's memory space is `CudaSpace`.  Allocating View construction must run on host in order to allocate memory, but you won't be able to assign the resulting constructed View to any element of the outer View.
+外側のビューのメモリ空間が `CudaSpace` の場合、より深刻な問題が発生する可能性があります。  ビューの構築は、メモリを割り当てるためにホスト上で実行する必要がありますが、生成されたビューを外部ビューのいずれかの要素に割り当てることはできません。
 
-Another issue is that View construction in a Kokkos parallel region does not update the View's reference count.  Thus, the inner Views must be created in sequential host code, not inside of a `Kokkos::parallel_*`.
+もう一つの問題は、Kokkos　の並列領域内でのビュー構築が、ビューの参照カウントを更新しないことです。 したがって、内部ビューは`Kokkos::parallel_*`内部ではなく、順次実行されるホストコード内で作成する必要があります。
 
-I really want a View of Views; what do I do?
+本当にビューのビューを望んでいますがです；どうすればよろしいでしょうか？
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here is how to create a View of Views, where each inner View has a separate owning allocation:
+各内部ビューが独立した所有アロケーションを持つ、ビューのビューを作成する方法を、説明します:
 
-1. The outer View must have a memory space that is both host and device accessible, such as :cpp:type:`SharedSpace`.
-2. Create the outer View using the :cpp:type:`SequentialHostInit` property.
-3. Create inner Views in a sequential host loop.  (Prefer creating the inner Views uninitialized.  Creating the inner Views initialized launches one device kernel per inner View.  This is likely much slower than just initializing them all yourself from a single kernel over the outer View.)
-4. At this point, you may access the outer and inner Views on device.
-5. Get rid of the outer View as you normally would.
+1. 外部ビューには、:cpp:type:`SharedSpace`　等、ホストとデバイスの両方がアクセス可能なメモリ領域が必要です。
+2. :cpp:type:`SequentialHostInit` プロパティを使用して、外部ビューを作成してください。
+3. 順次ホストループ内で内部ビューを作成します。（内部ビューは初期化されていない状態で作成することを推奨します。）  .  初期化された内部ビューを作成すると、内部ビューごとに1つのデバイスカーネルが起動されます。  これは、外側のビューに対して単一のカーネルからすべてを初期化する方法と比べると、はるかに遅くなる可能性が高いです。)
+4. この時点で、端末上の外部ビューと内部ビューにアクセスすることが可能です
+5. 通常通りに外側のビューを非表示にしてください
 
-Here is an example:
+ここに一例があります:
 
 .. code-block:: c++
 
-  using Kokkos::SharedSapce;
-  using Kokkos::View;
-  using Kokkos::view_alloc;
-  using Kokkos::SequentialHostInit;
-  using Kokkos::WithoutInitializing;
+  Kokkos::SharedSapce　を使用;
+  Kokkos::View　を使用;
+  Kokkos::view_alloc　を使用;
+  Kokkos::SequentialHostInit　を使用;
+  Kokkos::WithoutInitializing　を使用;
 
-  using inner_view_type = View<double*>;
-  using outer_view_type = View<inner_view_type*, SharedSpace>;
+  inner_view_type = View<double*>　を使用;
+  outer_view_type = View<inner_view_type*, SharedSpace>　を使用
 
   const int numOuter = 5;
   const int numInner = 4;
   outer_view_type outer (view_alloc (std::string ("Outer"), SequentialHostInit), numOuter);
 
-  // Create inner Views on host, outside of a parallel region, uninitialized
+  // ホスト上で、並列領域の外側において、初期化されていない内部ビューを作成
   for (int k = 0; k < numOuter; ++k) {
     const std::string label = std::string ("Inner ") + std::to_string (k);
     outer(k) = inner_view_type (view_alloc (label, WithoutInitializing), numInner);
   }
 
-  // Outer and inner views are now ready for use on device
+  // 外側と内側のビューが、デバイス上で利用可能
 
   Kokkos::RangePolicy<> range (0, numOuter);
   Kokkos::parallel_for ("my kernel label", range,
@@ -186,46 +186,46 @@ Here is an example:
     });
   Kokkos::fence();
 
-  // Destroy the View of Views - this will call destructors sequentially on the host!
+  // ビューのビューを破棄します - これにより、ホスト上でデストラクタが順次呼び出されます！
   outer = outer_view_type ();
 
-Another approach is to create the inner Views as nonowning, from a single pool of memory. This makes it unnecessary to invoke their destructors.
+別の方法として、内部ビューを非所有型として、単一のメモリプールから作成する方法があります。これにより、それらのデストラクタを呼び出す必要がなくなります
 
-.. warning::
+.. 警告::
 
-  `SequentialHostInit` was added in version 4.4.01. Prior to that the process was more involved.
+  `SequentialHostInit` は、バージョン 4.4.01　に追加されました。 それ以前には、そのプロセスは、より複雑でした。
 
-1. The outer View must have a memory space that is both host and device accessible, such as `SharedSpace`.
-2. Create the outer View without initializing it.
-3. Create inner Views using placement new, in a sequential host loop.  (Prefer creating the inner Views uninitialized.  Creating the inner Views initialized launches one device kernel per inner View.  This is likely much slower than just initializing them all yourself from a single kernel over the outer View.)
-4. At this point, you may access the outer and inner Views on device.
-5. Before deallocating inner Views, fence to ensure all device kernels that access them have finished.
-6. Destroy the inner Views explicitly.  (Otherwise, Step 7 will leak the inner Views' memory.)
-7. Get rid of the outer View as you normally would.
+1. 外部ビューには、`SharedSpace`のように、ホストとデバイスの両方がアクセス可能なメモリ領域が必要です。
+2. 初期化せずに外側のビューを作成します。
+3. 順次ホストループ内で、配置を新しくして、内部ビューを作成します。（内部ビューは初期化されていない状態で作成することを推奨します。  初期化された内部ビューを作成すると、内部ビューごとに1つのデバイスカーネルが起動されます。  これは、外側のビューに対して単一のカーネルからすべてを初期化する方法と比べると、はるかに遅くなる可能性が高いです。) 
+4. この時点で、端末上の外部ビューと内部ビューにアクセスすることが可能です。
+5. 内部ビューの割り当てを解除する前に、それらにアクセスするすべてのデバイスカーネルが処理を完了したことを確認するため、フェンスを行ってください。
+6. 内部ビューを明示的に破棄してください。  (そうでない場合、ステップ7では、内部ビューのメモリがリークする可能性があります。)
+7. 通常通りに外側のビューを非表示にしてください。
 
-Here is an example:
+以下に一例を示します:
 
 .. code-block:: c++
 
-  using Kokkos::SharedSpace;
-  using Kokkos::View;
-  using Kokkos::view_alloc;
-  using Kokkos::WithoutInitializing;
+  Kokkos::SharedSpace　を使用;
+  Kokkos::View　を使用;
+  Kokkos::view_alloc　を使用;
+  Kokkos::WithoutInitializing　を使用;
 
-  using inner_view_type = View<double*>;
-  using outer_view_type = View<inner_view_type*, SharedSpace>;
+  inner_view_type = View<double*>　を使用;
+  outer_view_type = View<inner_view_type*, SharedSpace>　を使用;
 
   const int numOuter = 5;
   const int numInner = 4;
   outer_view_type outer (view_alloc (std::string ("Outer"), WithoutInitializing), numOuter);
 
-  // Create inner Views on host, outside of a parallel region, uninitialized
+  // ホスト上で、並列領域の外側において、初期化されていない内部ビューを作成
   for (int k = 0; k < numOuter; ++k) {
     const std::string label = std::string ("Inner ") + std::to_string (k);
     new (&outer(k)) inner_view_type (view_alloc (label, WithoutInitializing), numInner);
   }
 
-  // Outer and inner views are now ready for use on device
+  // 外側と内側のビューが、デバイス上で利用可能
 
   Kokkos::RangePolicy<> range (0, numOuter);
   Kokkos::parallel_for ("my kernel label", range, 
@@ -236,39 +236,39 @@ Here is an example:
       }
     });
 
-  // Fence before deallocation on host, to make sure 
-  // that the device kernel is done first.
+  // ホスト側で割り当て解除処理を行う前にフェンスを実行し、
+  // デバイスカーネル側の処理が完了していることを確認します。
   Kokkos::fence ();
 
-  // Destroy inner Views, again on host, outside of a parallel region.
+  // 内部ビューを、これもホスト上で、並列領域の外側において、破棄します。
   for (int k = 0; k < 5; ++k) {
     outer(k).~inner_view_type ();
   }
 
-  // You're better off disposing of outer immediately.
+  // すぐに外装を処分することを推奨します。
   outer = outer_view_type ();
 
-Const Views
+Constビュー
 ~~~~~~~~~~~
 
-A view can have const data semantics (i.e. its entries are read-only) by specifying a `const` data type. It is a compile-time error to assign to an entry of a "const View". Assignment semantics are equivalent to a pointer to const data. A const View means the *entries* are const; you may still assign to a const View. `View<const double*>` corresponds exactly to `const double*`, and `const View<double*>` to `double* const`. Therefore, it does not make sense to allocate a const View since you could not obtain a non-const view of the same data and you can not assign to it. You can however assign a non-const view to a const view. Here is an example:
+ビューは、`const`データ型を指定することで、constデータセマンティクス（すなわち、そのエントリは読み取り専用）を持つことができます。 "const View"　のエントリへの代入はコンパイル時エラーとなります。 代入セマンティクスは、定数データのポインタと同等のものです。 const ビューとは、その　*エントリ*　がconstであることを意味します; Viewに対しては、依然として代入を行うことが可能です。 `View<const double*>` は `const double*` と完全に一致し、`const View<double*>` は `double* const` と一致します。 したがって、同じデータの非　const　ビューを取得できず、また代入もできないため、const　ビュー　を割り当てることは意味がありません。 ただし、非　const　ビューを　const　ビューに代入することは可能です。 以下に一例を示します:
 
 .. code-block:: c++
 
   const size_t N0 = ...;
   Kokkos::View<double*> a_nonconst ("a_nonconst", N0);
 
-  // Assign a nonconst View to a const View
+  // 非　const　のビューを　const　のビューに代入する
   Kokkos::View<const double*> a_const = a_nonconst;
-  // Pass the const View to some read-only function.
+  // const ビューを、何らかの読み取り専用関数に渡してください。
   const double result = readOnlyFunction (a_const);
 
-Const Views often enables the compiler to optimize more aggressively by allowing it to reason about possible write conflicts and data aliasing. For example, in a vector update `a(i+1)+=b(i)` with skewed indexing, it is safe to vectorize if `b` is a View of const data.
+constビューを指定することで、コンパイラは書き込み競合やデータのエイリアシングの可能性について推論できるようになるため、より積極的な最適化が可能となります。例えば、偏ったインデックス付けを用いたベクトル更新 `a(i+1)+=b(i)` において、`b` が const データのビューである場合、ベクトル化を行っても安全です。
 
-Accessing entries (indexing)
+エントリのアクセス（インデックス付け）
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You may access an entry of a View using parentheses enclosing a comma-delimited list of integer indices. This looks just like a Fortran multidimensional array access. For example:
+ビューのエントリには、カンマ区切りの整数インデックスのリストを括弧で囲んでアクセスすることができます。 これは、Fortranの多次元配列へのアクセスによく似ています。　例えば:
 
 .. code-block:: c++
 
@@ -282,20 +282,19 @@ You may access an entry of a View using parentheses enclosing a comma-delimited 
     /* rest of the loop body */
   });
 
-Note how in the above example, we only access the View's entries in a parallel loop body. In general, you may only access a View's entries in an execution space which is allowed to access that View's memory space. For example, if the default execution space is `Cuda`, a View for which no specific Memory Space was given may not be accessed in host code [#footnotecudauvm]_.
+上記の例では、ビューのエントリへのアクセスを並列ループ本体内でのみ行っている点に、注意してください。一般的に、ビューのエントリにアクセスできるのは、そのビューのメモリ空間へのアクセスが許可されている実行空間のみとなります。 例えば、デフォルトの実行スペースが `Cuda` の場合、特定のメモリスペースが指定されていないビューは、ホストコードからアクセスできない可能性があります [#footnotecudauvm]_。
 
-Furthermore, access costs (e.g., latency and bandwidth) may vary, depending on the View's "native" memory and execution spaces and the execution space from which you access it. CUDA UVM may work, but it may also be slow, depending on your access pattern and performance requirements. Thus, best practice is to access the View only in a Kokkos parallel for, reduce, or scan, using the same execution space as the View. This also ensures that access to the View's entries respect first-touch allocation. The first (leftmost) dimension of the View is the *parallel dimension* over which it is most efficient to do parallel array access if the default memory layout is used (e.g. if no specific memory layout is
-specified).
+さらに、アクセスにかかるコスト（例えば、レイテンシや帯域幅など）は、ビューの「ネイティブ」メモリおよび実行領域、ならびにアクセス元の実行領域によって異なる場合があります。 CUDA UVMは動作する可能性がありますが、アクセスパターンや性能要件によっては、動作が遅くなる場合もございます。 したがって、ベストプラクティスとしては、ビューと同じ実行スペースを使用し、Kokkosの並列処理（for、reduce、またはscan）においてのみビューにアクセスすることが推奨されます。これにより、ビューのエントリへのアクセスがファーストタッチ割り当てを遵守することも、保証されます。 ビューの最初の（左端の）次元は、デフォルトのメモリレイアウトが使用される場合（例えば、特定のメモリレイアウトが指定されていない場合）、並列配列アクセスを最も効率的に実行できる　*並列次元*　です。
 
-.. [#footnotecudauvm] An exemption is if you specified for CUDA compilation that the default memory space is CudaUVMSpace, which can be accessed from the host.
+.. [#footnotecudauvm] 例外として、CUDAコンパイル時にデフォルトのメモリ空間を CudaUVMSpace と指定した場合、ホストからアクセスすることが可能です。
 
 
-Reference counting
+例外として、CUDAコンパイル時にデフォルトのメモリ空間をCudaUVMSpaceと指定した場合、ホストからアクセスすることが可能です
 ~~~~~~~~~~~~~~~~~~
 
-Kokkos automatically manages deallocation of Views through a reference-counting mechanism.  Otherwise, Views behave like raw pointers. Copying or assigning a View does a shallow copy, and changes the reference count. (The View copied has its reference count incremented, and the assigned-to View has its reference count decremented.) A View's destructor (called when the View falls out of scope or during a stack unwind due to an exception) decrements the reference count. Once the reference count reaches zero, Kokkos may deallocate the View.
+Kokkos は参照カウントメカニズムを通じて、ビューの解放を自動的に管理します。それ以外の場合、ビューは生のポインタと同様の挙動を示し、ビューのコピーまたは代入は浅いコピーを行い、参照カウントを変更します。 (コピーされたビューの参照カウントは増加し、代入先のビューの参照カウントは減少します。) ビューのデストラクタ（ビューがスコープ外になった時、または例外によるスタックアンワインド中に呼び出されます）は、参照カウントを減算します。参照カウントがゼロになると、Kokkos　はビューの割り当てを解除する場合があります。
 
-For example, the following code allocates two Views, then assigns one to the other. That assignment may deallocate the first View, since it reduces its reference count to zero. It then increases the reference count of the second View, since now both Views point to it.
+例えば、以下のコードでは2つのビューを割り当てた後、一方を他方に割り当てます。 その代入は、参照カウントをゼロに減少させるため、最初のビューの割り当てを解除する可能性があります。 その後、両方のビューがそのビューを指すようになったため、2つ目のビューの参照カウントが増加します。
 
 .. code-block:: c++
 
@@ -303,22 +302,22 @@ For example, the following code allocates two Views, then assigns one to the oth
   Kokkos::View<int*> b ("b", 10);
   a = b; // assignment does shallow copy
 
-For efficiency, View allocation and reference counting turn off inside of Kokkos' parallel for, reduce, and scan operations. This affects what you can do with Views inside of Kokkos' parallel operations.
+効率化のため、Kokkosの並　for　ループ、reduce、および　scan　演算内では、ビューの割り当てと参照カウントを無効化します。これは、Kokkosの並列演算内におけるビューの処理内容に影響を及ぼします。
 
-Lifetime
+存続期間
 ~~~~~~~~
 
-The lifetime of an allocation begins when a View is constructed by an allocating constructor such as
+割り当ての存続期間は、以下の様な、割り当てコンストラクタ（例：`View(new View)`）によってビューが構築された時点で開始されます。
 
 .. code-block:: c++
 
   Kokkos::View<int*> b("b", 10);
 
-The lifetime of an allocation ends when there are no more Views which reference that allocation (see reference counting above).
+割り当ての存続期間は、その割り当てを参照するビューが一切存在しなくなった時点で終了します（上記の参照カウントを参照してください）。
 
-Kokkos requires that the lifetime of all allocations ends before the call to :ref:`Kokkos::finalize<kokkos_finalize>`.
+Kokkos　では、すべての割り当ての存続期間が終了してから、:ref:`Kokkos::finalize<kokkos_finalize>`　を呼び出す必要があります。
 
-For example, the following is incorrect usage of Kokkos:
+例えば、以下のKokkosの使用法は誤りです：
 
 .. code-block:: c++
 
@@ -326,40 +325,40 @@ For example, the following is incorrect usage of Kokkos:
     Kokkos::initialize();
     Kokkos::View<double*> p("constructed view", 100);
     Kokkos::finalize();
-    // p is destroyed here, after Kokkos::finalize
+    // Kokkos::finalize　の後、p はここで破棄されます
   }
 
-Resizing
+サイズ変更
 ~~~~~~~~
 
-Kokkos Views can be resized using the `resize` non-member function. It takes an existing view as its input by reference and the new dimension information corresponding to the constructor arguments. A new view with the new dimensions will be created and a kernel will be run in the view's execution space to copy the data element by element from the old view to the new one. Note that the old allocation is only deleted if the view to be resized was the *only* view referencing the underlying allocation.
+Kokkos ビュー は、`resize` 非メンバ関数を使用して、サイズを変更することができます。 既存のビューを参照渡しで入力として受け取り、コンストラクタ引数に対応する新しい次元情報を渡します。 古いビューから新しいビューへ、データ要素を一つずつコピーするために、新しい次元を持つ新しいビューが作成され、そのビューの実行空間内でカーネルが実行されます。　サイズ変更されるビューがその基盤となる割り当てを参照する　*唯一の*　ビューであった場合に限り、古い割り当ては削除されることに注意してください。
 
 .. code-block:: c++
 
-  // Allocate a view with 100x50x4 elements
+  // 100x50x4 要素を使って、ビューを割り当て
   Kokkos::View<int**[4]> a( "a", 100,50);
       
-  // Resize a to 200x50x4 elements; the original allocation is freed
+  // 200x50x4 要素に、a のサイズを変更; 元の割り当てを解除
   Kokkos::resize(a, 200,50);
       
-  // Create a second view b viewing the same data as a
+  // ビューaと同じデータを表示する、第二のビューbを作成
   Kokkos::View<int**[4]> b = a;
-  // Resize a again to 300x60x4 elements; b is still 200x50x4
+  //  a を、300x60x4要素にサイズ変更; b は 200x50x4のまま留まる
   Kokkos::resize(a,300,60);
 
-Layout
+レイアウト
 ------
 
-Strides and dimensions
+ストライドおよび次元
 ~~~~~~~~~~~~~~~~~~~~~~
 
-*Layout* refers to the mapping from a logical multidimensional index *(i, j, k, . . .)* to a physical memory offset. Different programming languages may have different layout conventions. For example, Fortran uses *column-major* or "left" layout, where consecutive entries in the same column of a 2-D array are contiguous in memory. Kokkos calls this `LayoutLeft`. C, C++, and Java use *row-major* or "right" layout, where consecutive entries in the same row of a 2-D array are contiguous in memory. Kokkos calls this `LayoutRight`.
+*レイアウト*　とは、論理的な多次元インデックス *(i, j, k, . . .)* から物理メモリオフセットへの対応関係を指します。 プログラミング言語によって、レイアウトの慣習が異なる場合があります。 例えば、Fortran　では、*列主*　または　"左"　レイアウトが採用されており、2次元配列の同一列における連続する要素はメモリ上で連続して配置されます。 Kokkos は、この `LayoutLeft`を呼び出します。 C、C++、およびJavaは*行優先*または「右」レイアウトを採用しており、2次元配列の同一行にある連続した要素はメモリ上で連続して配置されます。 Kokkos は、この `LayoutRight`　を呼び出します。
 
-The generalization of both left and right layouts is "strided." For a strided layout, each dimension has a *stride*. The stride for that dimension determines how far apart in memory two array entries are, whose indices in that dimension differ only by one, and whose other indices are all the same. For example, with a 3-D strided view with strides *(s_1, s_2, s_3)*, entries *(i, j, k)* and *(i, j+1, k)* are *s_2* entries (not bytes) apart in memory. Kokkos calls this `LayoutStride`.
+左右両方のレイアウトの一般化は、"ストライド"されます。 ストライドされたレイアウトのためには、各次元が *ストライド*　を保有します。 その次元のストライドは、2つの配列エントリが、メモリ上でどれほど離れているか、その次元のインデックスが1つだけ異なり、その他のインデックスがすべて同じであることを決定します。例えば、ストライド *(s_1, s_2, s_3)* の 3次元ストライドビューを伴って、エントリ *(i, j, k)* と *(i, j+1, k)* は、メモリ上で離れている　*s_2* エントリ（バイトではなく）です。Kokkos はこれを `LayoutStride` と呼んでいます。
 
-Strides may differ from dimensions. For example, Kokkos reserves the right to pad each dimension for cache or vector alignment. You may access the dimensions of a View using the (ISO/C++ form) `extent` method, which takes the index of the dimension.
+ストライドは、次元とは異なる場合があります。例えば、Kokkos　はキャッシュやベクトルアラインメントのために、各次元のデータを詰め込む権利を保有します。 ビューの次元には、(ISO/C++形式) `extent` メソッドを使用してアクセスできますが、このメソッドは次元のインデックスを引数として選択します。
 
-Strides are accessed using the `stride` method. It takes a raw integer array, and only fills in as many entries as the rank of the View. For example:
+ストライドは、`stride` メソッドを使用してアクセスします。このメソッドは、生の整数配列を受け取り、ビューのランクと同じ数のエントリのみを満たします。 例えば:
 
 .. code-block:: c++
 
@@ -368,35 +367,35 @@ Strides are accessed using the `stride` method. It takes a raw integer array, an
   const size_t N2 = ...;
   Kokkos::View<int***> a ("a", N0, N1, N2);
       
-  int dim1 = a.extent (1); // returns dimension 1
+  int dim1 = a.extent (1); // 次元 1を返す
   size_t strides[3]
-  a.stride (strides); // fill 'strides' with strides
+  a.stride (strides); // 'ストライド' をストライドで埋める
 
 .. code-block:: c++
 
   const size_t n0 = a.extent (0);
   const size_t n2 = a.extent (2);
 
-Note the return type of `extent(N)` is the `size_type` of the views memory space. This causes some issues if warning-free compilation should be achieved since it will typically be necessary to cast the return value. In particular, in cases where the `size_type` is more conservative than required, it can be beneficial to cast the value to `int` since signed 32-bit integers typically give the best performance when used as index types. In index heavy codes, this performance difference can be significant compared to using `size_t` since the vector length on many architectures is twice as long for 32 bit values as for 64 bit values and signed integers have less stringent overflow testing requirements than unsigned integers.
+`extent(N)` の戻り値の型は、ビューのメモリ領域の `size_type` であることに注意してください。 警告のないコンパイルを実現する場合、通常は戻り値の型変換が必要となるため、いくつかの問題が生じます。特に、符号付き32ビット整数は、インデックス型として使用する際、一般的に最高のパフォーマンスを発揮するため、`size_type`が必要以上に保守的な場合、値を　`int`　型にキャストすることが有益です。 多くのアーキテクチャにおいて、32ビット値のベクトル長は64ビット値の2倍の長さであり、また符号付き整数は符号なし整数に比べてオーバーフロー検査の要件が厳密ではないため、インデックスを多用するコードでは、このパフォーマンスの差は `size_t` を使用する場合と比較して顕著になる可能性があります。
 
-Users of the BLAS and LAPACK libraries may be familiar with the ideas of layout and stride. These libraries only accept matrices in column-major format. The stride between consecutive entries in the same column is 1, and the stride between consecutive entries in the same row is `LDA` ("leading dimension of the matrix A"). The number of rows may be less than `LDA`, but may not be greater.
+BLASおよびLAPACKライブラリのユーザーは、レイアウトやストライドといった概念に、精通しているかもしれません。 これらのライブラリは、列主形式の行列のみを受け付けます。 同一列内の連続するエントリ間のストライドは1であり、同一行内の連続するエントリ間のストライドは、`LDA`（行列Aの先頭次元）となります。 行数は `LDA` 未満である可能性がありますが、それ以上になることはありません。
 
-Other layouts
+その他のレイアウト
 ~~~~~~~~~~~~~
 
-Other layouts are possible.  For example, Kokkos has a "tiled" layout, where a tile's entries are stored contiguously (in either row- or column-major order) and tiles have compile-time dimensions. One may also use Kokkos to implement Morton ordering or variants thereof. In order to write a custom layout one has to define a new layout class and specialise the `ViewMapping` class for that layout. The `ViewMapping` class implements the offset operator as well as stride calculation for regular layouts. A good way to start such a customization is by copying the implementation of `LayoutLeft` and its associated `ViewMapping` specialization, renaming the layout and then change the offset operator.
+その他のレイアウトも利用可能です。 例えば、Kokkos　は"タイル"レイアウトを採用しており、タイルのエントリは連続的に（行優先または列優先の順序で）格納され、タイルはコンパイル時に次元が決まります。また、モートン順序やその変数を実装するために Kokkos の使用することも可能です。 カスタムレイアウトを作成するには、新しいレイアウトクラスを定義し、そのレイアウト用に`ViewMapping`クラスを特化させる必要があります。 `ViewMapping`　クラスは、オフセット演算子および規則的なレイアウトにおけるストライド計算を実装しています。 `LayoutLeft`の実装とその関連する`ViewMapping`の特殊化をコピーし、レイアウトの名前を変更した後、オフセット演算子を変更することが、このようなカスタマイズ開始には適した方法です。
 
-Default layout depends on execution space
+デフォルトレイアウトは実行空間に依存
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Kokkos selects a View's default layout for optimal parallel access over the leftmost dimension based on its execution space. For example, `View<int**, Cuda>` has `LayoutLeft`, so that consecutive threads in the same warp access consecutive entries in memory. This *coalesced access* gives the code better memory bandwidth.
+Kokkos は、実行スペースに基づいて、左端の次元における最適な並列アクセスを実現するため、ビューのデフォルトレイアウトを選択します。例えば、`View<int**, Cuda>` は 、同一ワープ内の連続するスレッドがメモリ内の連続するエントリにアクセスできるように、`LayoutLeft` を持ちます。この　*結合アクセス*　により、コードのメモリ帯域幅が向上します。
 
-In contrast, `View<int**, OpenMP>` has `LayoutRight`, so that a single thread accesses contiguous entries of the array. This avoids wasting cache lines and helps prevent false sharing of a cache line between threads. In :ref:`Managing_Data_Placement` more details will be discussed.
+一方、`View<int**, OpenMP>` は、単一のスレッドが配列の連続した要素にアクセスするために、 `LayoutRight` を保有します。 これにより、キャッシュラインの無駄遣いを避け、スレッド間でキャッシュラインの偽の共有が発生するのを防ぐことができます。 詳細については、:ref:`Managing_Data_Placement` において、記述されています。
 
-Explicitly specifying layout
+レイアウトを明示的に指定
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We prefer that users let Kokkos determine a View's layout, based on its execution space. However, sometimes you really need to specify the layout. For example, the BLAS and LAPACK libraries only accept column-major arrays.  If you want to give a View to the BLAS or LAPACK library, that View must be `LayoutLeft`. You may specify the layout as a template parameter of View. For example:
+実行スペースに基づいて、Kokkos　がビューのレイアウトを決定することを、ユーザーに推奨します。 しかしながら、レイアウトを指定する必要が生じる場合があります。例えば、BLASおよびLAPACKライブラリは、列主順配列のみを受け付けます。 BLASまたはLAPACKライブラリにビューを渡す場合、そのビューは　`LayoutLeft`　でなければなりません。レイアウトについては、Viewのテンプレートパラメータとして指定することができます。 例えば:
 
 .. code-block:: c++
 
@@ -405,11 +404,11 @@ We prefer that users let Kokkos determine a View's layout, based on its executio
   Kokkos::View<double**, Kokkos::LayoutLeft> A ("A", N0, N1);
       
   // Get 'LDA' for BLAS / LAPACK
-  int strides[2]; // any integer type works in stride()
+  int strides[2]; // stride() 関数では、任意の整数型が使用可能
   A.stride (strides);
   const int LDA = strides[1];
 
-You may ask a View for its layout via its `array_layout` typedef. This can be helpful for C++ template metaprogramming. For example:
+ビューに対して、その　`array_layout`　という型定義を介してレイアウトを問い合わせることができます。これは、C++　テンプレートのメタプログラミングにおいて有用です。例えば:
 
 .. code-block:: c++
 
@@ -425,37 +424,36 @@ You may ask a View for its layout via its `array_layout` typedef. This can be he
 
 .. _Managing_Data_Placement:
 
-Managing Data Placement
+データ配置管理
 -----------------------
 
-Memory spaces
+Memory spacesメモリ空間
 ~~~~~~~~~~~~~
 
-Views are allocated by default in the default execution space's default memory space. You may access the View's execution space via its `execution_space` typedef, and its memory space via its `memory_space` typedef. You may also specify the memory space explicitly as a template parameter. For example, the following allocates a View in CUDA device memory:
+ビューはデフォルトで、デフォルトの実行スペースのデフォルトのメモリスペースに割り当てられます。ビューの実行領域には、その`execution_space`　型定義を介してアクセスできます。また、そのメモリ領域には、その`memory_space`　型定義を介してアクセスできます。テンプレートパラメータとしてメモリ領域を明示的に指定することも可能です。 例えば、以下のコードはCUDAデバイスメモリ内にビューを割り当てます:
 
 .. code-block:: c++
 
   Kokkos::View<int*, Kokkos::CudaSpace> a ("a", 100000);
 
-and the following allocates a View in "host" memory, using the default host execution space for first-touch initialization:
+そして、以下は　"ホスト"メモリ内にビューを割り当て、初回初期化にはデフォルトのホスト実行領域を使用します:
 
 .. code-block:: c++
 
   Kokkos::View<int*, Kokkos::HostSpace> a ("a", 100000);
 
-Since there is no bijective association between execution spaces and memory spaces, Kokkos provides a way to explicitly provide both to a View as a `Device`.
+実行空間と記憶空間の間には一対一対応が存在しないため、Kokkos　では両方を明示的に　`Device`　としてViewに提供する方法を提供しております。
 
 .. code-block:: c++
 
   Kokkos::View<int*, Kokkos::Device<Kokkos::Cuda,Kokkos::CudaUVMSpace> > a ("a", 100000);
   Kokkos::View<int*, Kokkos::Device<Kokkos::OpenMP,Kokkos::CudaUVMSpace> > b ("b", 100000);
 
-In this case `a` and `b` will live in the same memory space, but `a` will be initialized on the GPU while `b` will be
-initialized on the host. The `Device` type can be accessed as a view's `device_type` typedef. A `Device` has only three typedef members: `device_type`, `execution_space` and `memory_space`. The `execution_space` and `memory_space` typedefs are the same for a view as the `device_type` typedef.
+この場合、`a`　と　`b`　は同じメモリ空間に存在しますが、`a`　は　GPU　上で初期化され、`b`　はホスト上で初期化されます。 `Device`　型は、ビューの　`device_type`　という型定義としてアクセスできます。Device` には、`device_type`、`execution_space`、`memory_space` の3つの 型定義メンバーのみが存在します。 ビューにおける`execution_space`および`memory_space`の型定義は、`device_type`の型定義と同様の仕様となります。
 
-It is important to understand that accessibility of a View does not depend on its execution space directly. It is only determined by its memory space. Therefore both `a` and `b` have the same access properties. They differ only in how they are initialized and in where parallel kernels associated with operations such as resizing or deep copies are run.
+ビューのアクセス可能性は、その実行スペースに直接依存するものではないことを理解することが重要です。 それは、そのメモリ容量によってのみ決定されます。 したがって、`a`　と　`b`　の両方が同じアクセス権限を持っています。 それらにおいては、初期化の方法と、サイズ変更やディープコピーなどの演算に関連する並列カーネルが実行される場所のみが異なります。T
 
-The following is the accessibility matrix for execution and memory spaces:
+以下は、実行空間およびメモリ空間に関するアクセシビリティマトリックスです:
 
 .. csv-table::
 
@@ -465,18 +463,18 @@ The following is the accessibility matrix for execution and memory spaces:
   CudaUVMSpace,        :octicon:`check` , :octicon:`check` , :octicon:`check` , :octicon:`check` ,
   CudaHostPinnedSpace, :octicon:`check` , :octicon:`check` , :octicon:`check` , :octicon:`check` ,
 
-This relationship can be queried via the `SpaceAccessibility` class:
+この関係性については、`SpaceAccessibility`クラスを通じて照会することが可能です:
 
 .. code-block:: c++
 
   template< typename AccessSpace , typename MemorySpace >
-  struct SpaceAccessibility {
+  構造体 SpaceAccessibility {
     enum { accessible };  // AccessSpace can access MemorySpace
     enum { assignable };  // Can assign View<...,AccessSpace,...> = View<...,MemorySpace,...>
     enum { deep_copy };  // Can deep copy to AccessSpace::memory_space from MemorySpace
   };
 
-A typical use case would be:
+通常の使用ケースは以下の通りです：
 
 .. code-block:: c++
 
@@ -484,45 +482,42 @@ A typical use case would be:
      parallel_for(RangePolicy<ExecSpace>, functor);
   }
 
-Initialization
+初期化
 ~~~~~~~~~~~~~~
 
-A View's entries are initialized to zero by default. Initialization happens in parallel for first-touch allocation over the first (leftmost) dimension of the View using the execution space of the View.
+ビューのエントリは、デフォルトでゼロに初期化されます。 初期化は、ビューの実行領域を使用し、ビューの最初の（左端の）次元におけるファーストタッチ割り当てに対して並行して行われます。
 
-You may allocate a View without initializing. For example:
+ビュー　を初期化せずに割り当てることが可能です。 例えば:
 
 .. code-block:: c++
 
   Kokkos::View<int*> x (Kokkos::view_alloc(Kokkos::WithoutInitializing, label), 100000);
 
-This is mainly useful in cases when the initial values of the view are not important because
-they will be overwritten without ever being read.
-It is still important that the first write to each location be done within a parallel kernel
-in a way that reflects how first-touch affinity to threads is desired.
-Typically it is sufficient to use the parallel iteration index as the index of the location in the
-view to write to.
+これは主に、ビューの初期値が重要でない場合に有用です。なぜなら、それらは読み取られることなく上書きされてしまうからです。
+各ロケーションへの最初の書き込みは、スレッドへのファーストタッチアフィニティの希望を反映した方法で、
+並列カーネル内で実行されることが、依然として重要です。
+通常、書き込むビュー内の位置のインデックスとして、並列反復インデックスを使用すれば十分です。
 
-.. warning::
+.. 警告::
 
-  :cpp:`WithoutInitialization` implies that the destructor of each element of the :cpp:`View` **will not be called**.
-  For instance, if the :cpp:`View`'s value type is not trivially destructible,
-  you **should not use** :cpp:`WithoutInitialization` unless you are taking care of calling the destructor manually before the :cpp:`View` deallocates its memory.
+  :cpp:`WithoutInitialization` は、:cpp:`View` の各要素のデストラクタが **呼び出されない** ことを意味します。
+  例えば、:cpp:`View`の値の型が単純に破棄できない場合、:cpp:`View`がメモリを解放する前にデストラクタの手動での呼び出しを確実に行わない限り、:cpp:`WithoutInitialization`　を　**使用すべきではありません**。
 
-  The mental model is that whenever placement new is used to call the constructor, the destructor also isn't called before the memory is deallocated but it needs to be called manually.
+  このメンタルモデルでは、コンストラクタを呼び出すために新たな配置が使用される場合、デストラクタもメモリが解放される前に自動的に呼び出されるわけではなく、手動で呼び出す必要があるというものです。
 
-Deep copy and HostMirror
+ディープコピーおよびHostMirror
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Copying data from one view to another, in particular between views in different memory spaces, is called deep copy.
-Kokkos never performs a hidden deep copy. To do so a user has to call the `deep_copy` function. For example:
+一つのビューから別のビューへ、特に異なるメモリ空間にあるビュー間でデータをコピーすることを、ディープコピーと呼びます。
+Kokkos　は隠れた深部コピーを実行することはありません。深部コピーを行うには、ユーザーが`deep_copy`関数を呼び出す必要があります。例えば:
 
 .. code-block:: c++
 
   Kokkos::View<int*> a ("a", 10);
   Kokkos::View<int*> b ("b", 10);
-  Kokkos::deep_copy (a, b); // copy contents of b into a
+  Kokkos::deep_copy (a, b); //  b　のコピー内容を a　へ
 
-Deep copies can only be performed between views with an identical memory layout and padding. For example the following two operations are not valid:
+ディープコピーは、メモリレイアウトとパディングが同一のビュー間でのみ実行可能です。例えば、以下の2つの操作は無効となります。:
 
 .. code-block:: c++
 
@@ -534,49 +529,49 @@ Deep copies can only be performed between views with an identical memory layout 
   Kokkos::View<int*[3], Kokkos::LayoutLeft, Kokkos::HostSpace> d ("d", 10);
   Kokkos::deep_copy (c, d); // This might give a runtime error
 
-The first one will not work because the default layouts of `CudaSpace` and `HostSpace` are different. The compiler will catch that since no overload of the `deep_copy` function exists to copy view from one layout to another. The second case will fail at runtime if padding settings are different for the two memory spaces. This would result in different allocation sizes and thus prevent a direct memcopy.
+`CudaSpace`と`HostSpace`のデフォルトのレイアウトが異なるため、最初の方法は機能しません。 コンパイラは、ビューを一つのレイアウトから別のレイアウトへコピーするための`deep_copy`関数のオーバーロードが存在しないためこれを検出します。 2つ目のケースでは、2つのメモリ領域のパディング設定が異なる場合、実行時にエラーが発生します。これにより、異なる割り当てサイズが生じ、直接的なメモリコピーが妨げられます。
 
-The reasoning for allowing only direct bitwise copies is that a deep copy between different memory spaces would otherwise require a temporary copy of the data to which a bitwise copy is performed followed by a parallel kernel to transfer the data element by element.
+異なるメモリ空間間での完全なコピーを許可しない理由は、そうでない場合、ビット単位のコピーを行うデータの一時的なコピーが必要となり、その後、データを要素ごとに転送するための並列カーネルが必要となるという点です。
 
-Kokkos provides the following way to work around those limitations. Firstly, views have a `HostMirror` typedef which is a view type with compatible layout inside the `HostSpace`. Additionally, there is a `create_mirror` and `create_mirror_view` function which allocate views of the `HostMirror` type of view. The difference between the two is that `create_mirror` will always allocate a new view, while `create_mirror_view` will only create a new view if the original one is not in `HostSpace`.
+Kokkos は、これらの制限事項を回避するために、以下の方法を提供してす。 まず、ビューには`HostMirror`という型定義が行われていますが、これは　`HostSpace`　内で互換性のあるレイアウトを持つビューの型です。　さらに、 `create_mirror`　および`create_mirror_view`　という関数がありますが、これらは`HostMirror`　型のビューを割り当てます。 両者の違いとしては、`create_mirror` は常に新しいビューを割り当てるのに対し、`create_mirror_view` は、元のビューが `HostSpace` に存在しない場合にのみ、新しいビューを作成する、という点にあります。
 
 .. code-block:: c++
 
   Kokkos::View<int*[3], MemorySpace> a ("a", 10);
-  // Allocate a view in HostSpace with the layout and padding of a
+  // HostSpaceにおいて、a のレイアウトとパディングを使ってビューを割り当てる
   typename Kokkos::View<int*[3], MemorySpace>::HostMirror b =
       create_mirror(a);
-  // This is always a memcopy
+  // これは常にメモリコピー
   Kokkos::deep_copy (b, a);
       
   typename Kokkos::View<int*[3]>::HostMirror c =
   Kokkos::create_mirror_view(a);
-  // This is a no-op if MemorySpace is HostSpace
+  // MemorySpace　が　HostSpace　の場合、これは何もしない処理
   Kokkos::deep_copy (c, a)
 
-How do I get the raw pointer?
+生のポインタを取得するには？
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We discourage access to a View's "raw" pointer. This circumvents reference counting, that is, the memory may be deallocated once the View's reference count goes to zero so holding on to a raw pointer may result in invalid memory access. Furthermore, it may not even be possible to access the View's memory from a given execution space. For example, a View in the `Cuda` space points to CUDA device memory. Also using raw pointers would normally defeat the usability of polymorphic layouts and automatic padding. Nevertheless, for instances where you really need access to the pointer, we provide the `data()` method. For example:
+ビューの　"生の"　ポインタへのアクセスは推奨しておりません。 これにより、参照カウントが回避されます。つまり、ビューの参照カウントがゼロになるとメモリが解放される可能性があるため、生のポインタを保持していると不正なメモリアクセスを引き起こす恐れがあります。 さらに、特定の実行空間からビューのメモリにアクセスすること自体が不可能な場合もあります。　例えば、`Cuda`空間内のビューは、CUDAデバイスのメモリを指します。 また、生のポインタを使用することは、通常、ポリモーフィックレイアウトと自動パディングの利便性を損なうことになります。　ただし、ポインタへのアクセスがどうしても必要な場合には、`data()`　メソッドをご用意しております。 例えば:
 
 .. code-block:: c++
 
-  // Legacy function that takes a raw pointer.
+  // 生のポインタを選択するレガシー関数。
   extern void legacyFunction (double* x_raw, const size_t len);
     
-  // Your function that takes a View.
+  // ビューを選択する関数。
   void myFunction (const Kokkos::View<double*>& x) {
-    // DON'T DO THIS UNLESS YOU MUST
+    // 以下を必要としない場合には、これを行わない
     double* x_raw = x.data();
     const size_t N = x.extent(0);
     legacyFunction (x_raw, N);
   }
 
-A user is in most cases also allowed to obtain a pointer to a specific element via the usual `&` operator. For example
+ユーザーは、通常の場合、通常の　`&`　演算子を用いて特定の要素へのポインタを取得することも可能です。 例えば
 
 .. code-block:: c++
 
-  // Legacy function that takes a raw pointer.
+  // 生ポインタを選択するレガシー関数。
   void someLibraryFunction (double* x_raw);
       
   KOKKOS_INLINE_FUNCTION
@@ -584,12 +579,12 @@ A user is in most cases also allowed to obtain a pointer to a specific element v
     someLibraryFunction(&x(3));
   }
 
-This is only valid if a Views reference type is an `lvalue`. That property can be queried statically at compile time from the view through its `reference_type_is_lvalue` member.
+これは、Views参照型が　`lvalue`　である場合にのみ有効です。 そのプロパティは、コンパイル時にビューからその `reference_type_is_lvalue` メンバを通じて静的に問い合わせることが可能です。
 
-Memory access traits
+メモリアクセス特性
 --------------------
 
-Another way to get optimized data accesses is to specify memory traits. These traits are used to declare intended use of the particular view of an allocation. For example, a particular kernel might use a view only for streaming writes. By declaring that intention, Kokkos can insert the appropriate store intrinsics on each architecture if available. Access traits are specified through an optional template parameter which comes last in the list of parameters. Multiple traits can be combined with binary OR operators:
+最適化されたデータアクセスを実現する別の方法は、メモリ特性を指定することです。 これらの特性は、割り当ての特定のビューの意図された使用を宣言するために使用されます。 例えば、特定のカーネルでは、書き込みのストリーミング専用にビューを使用する場合があります。 その意図を宣言することで、Kokkosは各アーキテクチャ上で利用可能な場合、適切なストア固有命令を挿入することが可能です アクセス特性は、パラメータリストの最後に位置するオプションのテンプレートパラメータを通じて指定されます。複数の特性は、二項OR演算子を用いて組み合わせることが可能です:
 
 .. code-block:: c++
 
@@ -599,51 +594,51 @@ Another way to get optimized data accesses is to specify memory traits. These tr
   Kokkos::View<int*, MemorySpace, Kokkos::MemoryTraits<SomeTrait | SomeOtherTrait> > d;
   Kokkos::View<int*, Kokkos::LayoutLeft, MemorySpace, Kokkos::MemoryTraits<SomeTrait> > e;
 
-Unmanaged Views
+管理対象外ビュー
 ~~~~~~~~~~~~~~~
 
 .. _MemoryTraits: ../API/core/view/memoryTraits.html
 
 .. |MemoryTraits| replace:: memory traits
 
-It's always better to let Kokkos control memory allocation, but sometimes you don't have a choice. You might have to work with an application or an interface that returns a raw pointer, for example. Kokkos lets you wrap raw pointers in an *unmanaged View*. "Unmanaged" means that Kokkos does *neither* reference counting *nor* automatic deallocation for those Views. The following example shows how to create an unmanaged View of host memory. You may do this for CUDA device memory too, or indeed for memory allocated in any memory space, by specifying the View's execution or memory space accordingly. Note that the pointer to the allocation has to be provided to the constructor.
+メモリの割り当ては、常にKokkosに制御させる方が望ましいのですが、選択の余地がない場合もあります。 えば、生のポインタを返すアプリケーションやインターフェースを扱う必要があるかもしれません。 Kokkos　では、生のポインタを　*管理対象外ビュー*　でラップすることができます。 "管理対象外" とは、Kokkos　がそれらのビューに対して参照カウントも自動割り当て解除も行わないことを意味します。 以下の例は、ホストメモリの管理対象外ビューを作成する方法を示しています。 可能であり、または、ビューの実行領域またはメモリ領域を適切に指定することで、任意のメモリ空間に割り当てられたメモリに対しても同様の操作が可能です。割り当て先へのポインタはコンストラクタに提供する必要があることに、注意してください。
 
-We would like to highlight that in Kokkos, Views are managed by default. In other words, if a View is not created as an unmanaged View, then it is managed, irrespective of other memory traits. Thus, an explicit memory trait for managed Views (with an alias called ``Kokkos::MemoryManaged``), has been deprecated in Kokkos 4.7. Since, it has no practical value. See the API reference on |MemoryTraits|_. 
+Kokkosでは、ビューはデフォルトで管理されていることを強調したいと思います。 言い換えれば、ビューが管理対象外ビューとして作成されない場合、他のメモリ特性にかかわらず、管理ビューとなります。 したがって、マネージドビュー向けの明示的なメモリ特性（別名「Kokkos::MemoryManaged」と呼ばれるもの）は、Kokkos 4.7 において非推奨となりました。それ以来、それに実用価値はありません。 |MemoryTraits|_　に関しては、API参考文献を参照してください。 
 
 .. code-block:: c++
 
-  // Sometimes other code gives you a raw pointer, ...
+  // 時折、他のコードから生のポインタが渡されることがあります、 ...
   const size_t N0 = ...;
   double* x_raw = malloc (N0 * sizeof (double));
   {
-    // ... but you want to access it with Kokkos.
+    // ... だが、Kokkos　を使ってそれにアクセスすることを望む
     //
     // malloc() returns host memory, so we use the host memory space HostSpace.  
-    // Unmanaged Views have no label because labels work with the reference counting system.
+    // ラベルは参照カウントシステムと連携するため管理対象外ビューにはラベルがない。
     Kokkos::View<double*, Kokkos::HostSpace, Kokkos::MemoryTraits<Kokkos::Unmanaged> >
       x_view (x_raw, N0);
   
     functionThatTakesKokkosView (x_view);
     
-    // It's safest for unmanaged Views to fall out of scope before freeing their memory.
+    // 管理対象外ビューのメモリを解放するには、スコープから外れることが最も安全です。
   }
   free (x_raw);
 
-Random Access
+ランダムアクセス
 ~~~~~~~~~~~~~
 
-The `RandomAccess` trait declares the intent to access a View irregularly (in particular non consecutively). If the default execution space is `Cuda`, access to a `RandomAccess` View may use `CUDA` texture fetches. In more detail, if used for a ``const`` View in the `CudaSpace` or `CudaUVMSpace`, Kokkos will use texture fetches for accesses when executing in the `Cuda` execution space. For example:
+`RandomAccess`　特性は、ビューを不規則な順序（特に連続しない順序）でアクセスする意図を宣言します。 デフォルトの実行スペースが `Cuda` の場合、`RandomAccess` ビューへのアクセスには `CUDA` テクスチャフェッチが使用される可能性があります。 具体的には、`CudaSpace` または `CudaUVMSpace` 内の ``const`` ビューに対して使用される場合、Kokkos は `Cuda` 実行空間で実行される際に、アクセス操作に対してテクスチャフェッチを利用します。 例えば:
 
 .. code-block:: c++
 
   const size_t N0 = ...;
   Kokkos::View<int*> a_nonconst ("a", N0); // allocate nonconst View
-  // Assign to const, RandomAccess View
+  // constに代入、 RandomAccess ビュー
   Kokkos::View<const int*, Kokkos::MemoryTraits<Kokkos::RandomAccess>> a_ra = a_nonconst;
 
-Note that texture fetches are not cache-coherent with respect to writes, so you must use read-only access. The texture cache is optimized for noncontiguous access since it has a shorter cache line than the regular cache.
+テクスチャのフェッチ操作は書き込みに対してキャッシュコヒーレンスがないため、読み取り専用アクセスを使用する必要があることに注意してください。 テクスチャキャッシュは、通常のキャッシュよりも短いキャッシュラインを持つため、非連続アクセスに最適化されています。
 
-While `RandomAccess` is valid for other execution spaces, currently no specific optimizations are performed. But in the future a view allocated with the `RandomAccess` attribute might for example, use a larger page size, and thus reduce page faults in the memory system.
+`RandomAccess`　は他の実行空間においても有効ですが、現時点では特定の最適化は行われておりません。 しかし将来的に、`RandomAccess`属性で割り当てられたビューは、例えば、より大きなページサイズを使用することで、メモリシステムにおけるページフォールトを低減する可能性があります。
 
 .. _Atomic: ../API/core/atomics.html
 
@@ -652,50 +647,50 @@ While `RandomAccess` is valid for other execution spaces, currently no specific 
 |Atomic|_ Access
 ~~~~~~~~~~~~~~~~
 
-The `Atomic` access trait lets you create a View of data such that every read or write to any entry uses an atomic update. Kokkos supports atomics for all data types independent of size. Restrictions are that you are
+`Atomic`アクセストレイトを使用すると、データのビューを作成可能となり、これにより、どのエントリへの読み取りまたは書き込みにおいても、アトミックな更新が使用されます。 Kokkos　は、サイズに関わらず全てのデータ型に対してアトミック演算をサポートしております。 制約は以下の通りです Restrictions are that you are
 
-#. not allowed to alias data for which atomic operations are performed, and 
-#. the results of non-atomic accesses (including read) to data which is at the same time atomically accessed is not defined.
+#.  アトミック演算が行われるデータに対して、別名の設定不可能、および
+#. 同時に行われる非原子的アクセス（読み取りを含む）の結果を未定義
 
-Performance characteristics of atomic operations depend on the data type. Some types (in particular integer types) are natively supported and might even provide asynchronous atomic operations. Others (such as 32 bit and 64 bit atomics for non-integer types) are often implemented using compare-and-swap (CAS) loops of integers. Everything else is implemented with a locking approach where an atomic operation acquires a lock based on a hash of the pointer value of the data element.
+アトミック操作の性能特性はデータ型によって異なります。一部の型（特に整数型）はネイティブでサポートされており、非同期アトミック操作を提供する場合もあります。その他のもの（例えば、非整数型向けの32ビットおよび64ビットのアトミック演算等）は、整数の比較交換（CAS）ループを用いて実装されることが多くあります。その他のすべては、ロック方式で実装されていますが、具体的には、アトミック操作がデータ要素のポインタ値のハッシュ値に基づいてロックを取得します。
 
-Types for which atomic access are performed must support the necessary operators such as =, +=, -=, +, - etc. as well as have a number of `volatile` overloads of functions such as assign and copy constructors defined. 
+アトミックアクセスが行われる型は、`=`、`+=`、`-=`、`+`、`-`　などの必要な演算子をサポートする必要があり、また代入やコピーコンストラクタなどの関数に対して、複数の　`予期せず変更される`　オーバーロードが定義されている必要があります。 
 
 .. code-block:: c++
 
   Kokkos::View<int*> a("a" , 100);
   Kokkos::View<int*, Kokkos::MemoryTraits<Kokkos::Atomic> > a_atomic = a;
       
-  a_atomic(1) += 1; // This access will do an atomic addition
+  a_atomic(1) += 1; // This access will do an atomic additionこのアクセスはアトミックな加算を実行
 
-Restrict
+制約
 ~~~~~~~~
 
-The `Restrict` trait indicates that the memory of this View doesn't alias/overlap with another data structure in the current scope. This enables compiler optimizations.
+`Restrict`　特性は、このビューのメモリが現在のスコープ内の他のデータ構造とエイリアス/重複しないことを示します。これによりコンパイラの最適化が可能となります。
 
-Aligned
+整合
 ~~~~~~~
 
-Allocation of Kokkos Views is 64-byte aligned. The exception being the allocation of unmanaged Views, which may or may not be aligned. The `Aligned` trait can be used to indicate to the compiler that it can expect the memory allocation of the View to be aligned by 64-bytes. The compiler can perform optimizations accordingly.
+コッコスのビューの割り当ては、64バイト単位で整合されます。 ただし、管理対象外ビューの割り当てについては例外であり、整合される場合とされない場合があります。`整合`　特性は、コンパイラに対して、ビューのメモリ割り当てが64バイト単位で整合されることが予測できることを示すために使用可能です。 コンパイラはそれに応じて最適化を行うことができます。
 
-Note that it is not possible to specify this trait for sub-Views. Sub-Views may or not be aligned depending on their parent View. Assigning a View with the `Aligned` trait to an unaligned sub-View will lead to a run-time error.
+ブビューに対してこの特性を指定することはできないことに注意してください。この属性はサブビューに対して指定することはできませんので、注意してください。サブビューは、親ビューにより、整合される場合とされない場合があります。 `整合`　特性を持つビューを整合されていないサブビューに割り当てると、実行時エラーが発生します。
 
-Standard idiom for specifying access traits
+アクセスの特性を指定する標準的イディオム
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The standard idiom for View is to pass it around using as few template parameters as possible. Then, assign to a View with the desired access traits only at the "last moment" when those access traits are needed just before entering a computational kernel. This lets you template C++ classes and functions on the View type without proliferating instantiations. Here is an example:
+Viewの標準的イディオムとしては、可能な限り少ないテンプレートパラメータを使用して渡すことが推奨されます。 その後、必要なアクセストラットが計算カーネルに入る直前にのみ必要となる　"最後の瞬間"　に限り、望ましいアクセス特性を備えたビューに代入してください。 これにより、View型に対して　C++　のクラスや関数をテンプレート化することが可能となり、インスタンス化の増加を回避できます。以下に例を示します:
 
 .. code-block:: c++
 
-  // Compute a sparse matrix-vector product, for a sparse
-  // matrix stored in compressed sparse row (CSR) format.
+  // 圧縮疎行列（CSR）形式で格納された疎行列の
+  // 疎行列・ベクトル積を計算します。
   void spmatvec (const Kokkos::View<double*>& y,
         const Kokkos::View<const size_t*>& ptr,
         const Kokkos::View<const int*>& ind,
         const Kokkos::View<const double*>& val,
         const Kokkos::View<const double*>& x)
   {
-    // Access to x has less locality than access to y.
+    // x　へのアクセスは、y　へのアクセスよりも局所性の低いものとなります。
     Kokkos::View<const double*, Kokkos::MemoryTraits<Kokkos::RandomAccess>> x_ra = x;
     typedef Kokkos::View<const size_t*>::size_type size_type;
       
@@ -717,33 +712,34 @@ Not all view types can be assigned to each other. Requirements are:
 * the layout must be compatible and 
 * the memory space has to match.
 
-Examples illustrating the rules are:
+規則を説明する例は以下の通り:
 
-#. Data Type and Rank has to Match
+#. データの型およびランクは一致しなければならない
 
    .. code-block:: c++
 
     int*       -> int*       // ok
     int*       -> const int* // ok
-    const int* -> int*       // not ok, const violation
-    int**      -> int*       // not ok, rank mismatch
+    const int* -> int*       // okではない, const 違反
+    int**      -> int*       // okではない, ランク不一致
     int*[3]    -> int**      // ok
-    int**      -> int*[3]    // ok if runtime dimension check matches
-    int*       -> long*      // not ok, type mismatch
+    int**      -> int*[3]    // 実行時の次元チェックが一致する場合にok 
+    int*       -> long*      // okではない, 型不一致
 
-#. Layouts must be compatible
+#. レイアウトには互換性がなければならない。
 
    .. code-block:: c++
 
     LayoutRight  -> LayoutRight   // ok
-    LayoutLeft   -> LayoutRight   // not ok except for 1D Views
+    LayoutLeft   -> LayoutRight   // 1D ビューの場合を除き、okではない
     LayoutLeft   -> LayoutStride  // ok
-    LayoutStride -> LayoutLeft    // ok if runtime dimensions allow assignment
+    LayoutStride -> LayoutLeft    // 実行時次元が代入を可能にする場合、ok
 
-#. Memory Spaces must match
+#. メモリ空間は一致しなければならない
 
    .. code-block:: c++
 
-    Kokkos::View<int*> -> Kokkos::View<int*,HostSpace> // ok if default memory space is HostSpace
+    Kokkos::View<int*> -> Kokkos::View<int*,HostSpace> // デフォルトメモリ空間が　HostSpace　である場合、ok  
 
-#. Memory Traits
+#. メモリ特性
+
