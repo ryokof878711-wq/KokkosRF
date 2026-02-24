@@ -1,31 +1,28 @@
-# Requirements, Issues and Feedback
+# Requirements, Issues and Feedback要件、課題およびフィードバック
 
-Kokkos manages its customer interactions primarily via [Kokkos Issues](https://github.com/kokkos/kokkos/issues) and the [KokkosTeam Slack](https://kokkosteam.slack.com) channel. The Slack channel is used for informal questions, requests and feedback. 
-If the slack communication requires tracking, (especially if it requires code changes to Kokkos) 
-a github.com issue will be opened. 
-Issues must be opened for bug reports, enhancement requests and feature requests.
-Prioritization of issues is performed during the weekly Kokkos developer meeting.
+Kokkosでは、お客様とのやり取りを主に　[Kokkos Issues](https://github.com/kokkos/kokkos/issues)　および　[KokkosTeam Slack](https://kokkosteam.slack.com)　チャンネルを通じて管理しております。 Slack　チャンネルは、気軽な質問やご要望、フィードバックにご利用いただけます。
+もし、コミュニケーションの遅れを追跡する必要がある場合（特に　Kokkos　へのコード変更が必要な場合）、github.com　の問題を開きます。
+バグ報告、機能改善のご要望、および新機能のご要望につきましては、必ず課題を開ください。
+毎週開催されるKokkos開発者会議において、課題の優先順位付けを、行います。
 
-## Requirements
+## 要件
 
-Customer requirements for new capabilities and improvements for existing capabilities are tracked via github.com issues. 
-Issues are assigned to a milestone roughly corresponding with a release cycle based on prioritization by the Kokkos team and after considering the customer needs.
-They are also assigned to a Kokkos developer, who will be responsible to communicate with the customer
-to determine the details of the requirement. 
-To successfully satisfy a new requirement it must be implemented, appropriate unit and performance 
-tests must be written and the customer must agree his needs are met.
+顧客からの新機能への要望や既存機能の改善に関する要望は、github.com　のを通じて管理されています。
+課題は、Kokkos　チームによる優先順位付けと顧客のを考慮した上で、おおよそのリリースサイクルに対応するマイルストーンに割り当てられます。
+また、顧客の要望の詳細を確定するため、お客様との連絡を担当する　Kokkos　開発者にも割り当てられます。
+新たな要望を確実に満たすためには、その要望を実装し、適切なユニットテストおよび性能テストを作成し、顧客自身のニーズが満たされていることに同意する必要があります。
 
-## Reporting an Issue
+## 課題を報告
 
-Problems with Kokkos both in correctness and performance are tracked via bug issues and sometimes via enhancement requests. 
-The Kokkos team will assign a developer as response partner, and track progress on a resolution in the github issue. 
-After assessing the severity and expected developer time the issue will be slotted into the priority list and assigned to a milestone.
-Bug reports require implementation of a unit test which can reproduce the issue prior to applying a fix.
-This shall be documented in the issue. 
+Kokkos　の正確性およびパフォーマンスに関する問題は、バグ報告を通じて追跡され、場合によっては、機能強化リクエストを通じて追跡されます
+Kokkos チームは、対応担当者として開発者を割り当て、GitHub　の課題において解決に向けた進捗状況を追跡します。 
+問題の深刻度と開発者による対応時間を評価した後、課題は優先度リストに組み入れられ、マイルストーンに割り当てられます。
+バグ報告には、修正を適用する前に問題を再現できるユニットテストの実装が必要となります。
+本件は、問題報告に記載されることとなります。
 
-## Feedback
+## フィードバック
 
-Feedback can be provided on the slack channel or in issues.
-The Kokkos team will assess whether the feedback requires actions for improvement on the Kokkos side
-and if so create the corresponding github issues.
-Furthermore every two years a Kokkos usergroup meeting will be organized to provide customers with a platform to discuss Kokkos issues, provide feedback and contribute to the priority list of the Kokkos project.  
+フィードバックを、Slackのチャンネルまたは課題にて、投稿できます。
+チームは、フィードバックに対して、Kokkos　側での改善措置が必要かどうかを評価いたします。
+必要と判断された場合には、対応する　GitHub　課題報告書を作成いたします。
+さらに、2年ごとにKokkos　ユーザーグループミーティングを開催し、顧客がKokkosに関する課題について議論し、フィードバックを提供し、Kokkos　プロジェクトの優先順位リストに貢献できる場を提供します。 
