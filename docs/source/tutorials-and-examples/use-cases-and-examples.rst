@@ -1,4 +1,4 @@
-Use Cases and Examples
+ユースケースおよび例
 ######################
 
 .. toctree::
