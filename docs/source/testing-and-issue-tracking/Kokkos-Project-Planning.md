@@ -116,55 +116,55 @@ Kokkos　のリリースは、"catch the train" モデルに基づいていま�
 
 [Kokkos project plan](https://github.com/orgs/kokkos/projects/1) は、7カテゴリーのうちの1つに、問題を割り当てます:
 
-- *未割り当て:*  チームメンバーにまだ割り当てられていない問題。
-- *未割り当て - 優先事項:* チームメンバーにまだ割り当てられていないが、優先度が高い問題。これらの問題は、次回の週例開発者会議にて、割り当てられる必要があります。
-- *To Do:* Issue was assigned to a team member but is not yet actively worked on.
-- *To Do - Priority:* Issue was assigned to a team member, but is not yet actively worked on. It is expected to be the next item in the queue of the assigned developer. If this item does not transition to *In Progress* by the next developer meeting, reassignment is considered.
-- *In Progress:* Issue is getting worked on.
-- *In Progress - Priority:* Issue is getting worked on. Code reviews for this issue are considered a priority, in order to get this resolved as soon as possible.
-- *Done:* Issue is addressed via merged pull request, or was closed because of new information which made it obsolete. For merged pull requests it is ensured that a changelog entry was generated, if appropriate, before removing the item from the project plan.
+- *未割り当て:*  チームメンバーにまだ割り当てられていない課題。
+- *未割り当て - 優先事項:* チームメンバーにまだ割り当てられていませんが、優先度が高い課題。これらの問題は、次回の週例開発者会議にて、割り当てられる必要があります。
+- *実装予定:* 課題はチームメンバーに割り当てられているが、現時点では積極的には取り組まれていません。
+- *実装予定 - 優先事項:* 課題はチームメンバーに割り当てられているが、現時点では積極的には取り組まれていません。 担当者の次の作業項目として予定されてます。次回の開発者会議までに、この項目が　*対応中*　の状態に移行しない場合、担当者の再割り当てが検討されます。
+- *対応中:* 課題については、現在対応中です。
+- *対応中 - 優先事項:* 課題については、現在対応中です。 本件に関するコードレビューは、早急に解決を図るため、優先的に実施されるものとします。
+- *完了:* 課題はマージされたプルリクエストにより処理されました。あるいは、新たな情報により不要となったためクローズされました。 マージされたプルリクエストについては、プロジェクト計画から項目を削除する前に、必要に応じて、変更履歴エントリが生成されていることを確認します。
 
 
-## Issue Prioritization
+## 課題の優先順位付け
 
-Issue prioritization is performed via two avenues:
-- Kokkos Leadership meeting
-- General Kokkos developer meeting.
+課題の優先順位付けは、二つの方法によって行われます:
+- Kokkos リーダーシップ会議
+- Kokkos 開発者全体会議。
 
-The Leadership meeting happens every week on Mondays.
-It serves multiple purposes:
-- determine urgent action items for the week
-- go through new issue list, and triage criticality
-- work through Kokkos planning items
-- perform preliminary team assignments for new action items
-- generate a draft for the developer meeting agenda
+リーダーシップ会議は毎週月曜日に開催されます。
+それは、複数の目的を果たします:
+- 週の緊急対応事項を決定
+- 新規課題リストを確認し、重要度の優先順位付けを実施
+- Kokkos の計画項目について検討
+- 新規活動項目についての予備的なチーム割り当てを実施
+- 開発者会議議題の草案を作成
 
-Prioritization of items is recorded in the [Kokkos project plan](https://github.com/orgs/kokkos/projects/1)
+[Kokkos project plan](https://github.com/orgs/kokkos/projects/1)　内に項目の優先順位付けを記録します。
 
-Meeting notes are kept in a private repository: [internal repository](https://github.com/kokkos/internal-documents)
+会議の議事録は、非公開のリポジトリに保管されています: [internal repository](https://github.com/kokkos/internal-documents)
 
-Further issue prioritization happens at the developer meeting discussed below.
+さらに優先順位付けが行われるのは、下記の開発者会議においてです。
 
-## Developer Coordination
+## 開発者の調整
 
-The team primarily use the #nucleus channel on Slack to communicate.
-Members are added by Christian or Damien once they have joined [Slack](https://kokkosteam.slack.com).
-Developers can have both public and private conversations with each other.
-They can ask questions about parts of the code they are less familiar with or
-ask for feedback on any ongoing issue.
-Conversations on Slack are to be considered as ephemeral.  Messages older than 90 days are deleted (unpaid plan).
-If something needs to be referenceable longer term, then it needs to be discussed on GitHub wherever appropriate.
-Private information may be hosted on the [internal repository](https://github.com/kokkos/internal-documents) but do not post NDA data on there.
+チームは主に、Slack　の　#nucleus　チャネルで連絡を取っています。
+メンバーは、[Slack](https://kokkosteam.slack.com)　にご参加後、クリスチャンまたはダミアンにより追加されます。
+開発者同士は、公開の会話と非公開の会話の両方を行うことができます。
+彼らは、あまり詳しくないコードの部分について質問する、あるいは
+進行中の問題についてフィードバックを求めることができます。
+Slack上での会話は一時的なものとみなされます。 90日以上経過したメッセージは削除されます（無料プランの場合）。 
+何かを長期的に参照可能にする必要がある場合は、適切な場合であれば、GitHub上で議論する必要があります。
+個人情報は、[内部リポジトリ](https://github.com/kokkos/internal-documents)　に保管される場合がありますが、NDAデータは、そこには投稿しないでください。
 
-Kokkos developer meeting held once a week on Wednesdays 2pm ET / 12 pm MT / 18:00 UTC on Zoom.
-The agenda is posted on the internal repository ahead of time (it can be found under the [`meeting-notes/`](https://github.com/kokkos/internal-documents/tree/master/meeting-notes/2023) directory).
-Developers are allowed to edit the agenda and add topics or issues that they would like to be discussed at the meeting.
+2pm ET / 12 pm MT / 18:00 UTC  Zoom上で、週一回毎水曜日に開催される、Kokkos 開発者会議 
+議題は、事前に社内リポジトリに掲載されています（[`meeting-notes/`](https://github.com/kokkos/internal-documents/tree/master/meeting-notes/2023) ディレクトリ内で確認できます）。
+開発者の方々は、議題を編集し、会議で議論したいトピックや課題を追加することが可能です。
 
-## Release Process
+## リリースプロセス
 
-The release process has six steps:
+リリースプロセスは、6つのステップで構成されています:
 
-- create release candidate branch
+- リリース候補ブランチを作成
 - perform integration tests with release candidate
 - resolve issues and cherry-pick fixes to release candidate
 - check Changelog
