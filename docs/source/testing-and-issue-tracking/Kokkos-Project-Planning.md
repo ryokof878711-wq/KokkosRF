@@ -165,39 +165,34 @@ Slack上での会話は一時的なものとみなされます。 90日以上経
 リリースプロセスは、6つのステップで構成されています:
 
 - リリース候補ブランチを作成
-- perform integration tests with release candidate
-- resolve issues and cherry-pick fixes to release candidate
-- check Changelog
-- tag a release
-- conduct release briefing for user community
+- リリース候補版を用いた統合テストを実施
+- 問題を解決し、リリース候補版に向けて修正箇所を厳選
+- Changelogを確認
+- リリースにタグ付け
+- ユーザーコミュニティ向けのリリース説明会を実施
 
-When nearing a desired release date, the release candidate branch will be created from the Kokkos develop branch.
-Before creating the release candidate, possible delay reasons will be discussed at the developer meeting.
-This could include important bug fixes, or an important feature being in the last phase of code review,
-but is generally done under exceptional circumstances.
-Furthermore, merging major new features into the development branch may be delayed until after the creation
-of the release candidate.
-This ensures that major new features have a period of testing in the develop branch before they are shipped.
+リリース候補ブランチは、目標リリース日に近づいた時点で、Kokkos　の開発ブランチから作成されます。
+リリース候補版を作成する前に、開発者会議において遅延の可能性がある理由について議論します。
+これには重要なバグ修正や、重要な機能がコードレビューの最終段階にある場合などが含まれますが、
+通常は例外的な状況下でのみ行われます。
+さらに、主要な新機能を開発ブランチにマージする作業は、リリース候補版の作成後まで延期される可能性があります。
+これにより、主要な新機能はリリースされる前に、開発ブランチでテスト期間が確保されます。
 
-After creating the release candidate branch integration testing is started.
-This includes internal testing by the Kokkos team with selected customer codes, as well as partnering
-with some primary customers who will try the release candidate in their testing processes.
+リリース候補ブランチの作成後、統合テストが開始されます。
+これには、Kokkosチームによる選定済み顧客コードを用いた内部テストに加え、
+主要顧客数社との連携も含まれ、これらの顧客は、自社テストプロセスにおいてリリース候補版を試行する予定です。
 
-The release candidate creation is also announced on the Slack channel, inviting the general Kokkos
-user community to test it, and provide feedback.
+リリース候補版の公開についても、Slackチャンネルで知らせ、一般の　Kokkos　ユーザーコミュニティにテストとフィードバックの提供を依頼しています。
 
-Defect reports (both functionality and performance) are collected as GitHub issues and marked with
-"Blocks Promotion".
-These items are then assigned to Kokkos team members at highest priority.
+"Blocks Promotion".不具合報告（機能面およびパフォーマンス面の両方）は、GitHub　の課題として収集され、
+"プロモーションをブロックする"　とマークされます。
+これらの項目は、最優先事項としてKokkos チームのメンバーに割り当てられます。
 
-Defect resolutions are merged into the develop branch first, and then cherry picked onto the
-release candidate branch, ensuring that no regression remains unaddressed on the primary development
-branch.
+不具合の修正は、まず開発ブランチにマージされ、その後リリース候補ブランチに厳選され、これにより、主要な開発ブランチ上で未解決の回帰現象が残らないことが保証されます。
 
-Upon resolution of all defect reports the release candidate branch is used to create a GitHub release tag,
-after checking and merging the Changelog.
+すべての不具合報告解決の際、変更履歴の確認とマージを完了した後に、リリース候補ブランチを用いてGitHubのリリースタグを作成します。
 
-After the release is created a Release Briefing date is set approximately two to three weeks after the release,
-providing an overview of new capabilities to users.
-The release briefing also serves as an additional point for feedback collection.
+リリースが作成された後、リリースブリーフィングの日程がリリースから約2～3週間後に設定され、
+ユーザーに新機能の概要を提供します。
+リリース説明会では、フィードバック収集のための追加の場としても機能します。
 
