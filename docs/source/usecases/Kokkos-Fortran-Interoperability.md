@@ -1,11 +1,11 @@
-# Fortran Interop Use Case
+# Fortran相互運用性使用事例
 
 ## Operations on multidimensional fortran allocated arrays using Kokkos 
 
-This example demonstrates usage of the `Fortran Language Compatibility Layer (FLCL)` in the context of performing a DAXPY (double precision A * X + Y) using Kokkos from a simple Fortran program. Such a use case occurs when using Kokkos for performance portability within a Fortran application. 
+本例は、単純な　Fortran　プログラムから　Kokkos　を用いてDAXPY（倍精度浮動小数点演算 A * X + Y）を実行する際に、`Fortran　言語互換レイヤー（FLCL）`の使用方法を示しています。 このような使用事例は、Fortran　アプリケーション内でパフォーマンスの移植性を実現するために　Kokkos　を使用する場合に発生します。 
 
-## Program structure 
-This example uses the Kokkos Fortran interop utilities in [FLCL](https://github.com/kokkos/kokkos-fortran-interop). 
+## プログラミング構成
+本例では、[FLCL](https://github.com/kokkos/kokkos-fortran-interop) に含まれる Kokkos Fortran 相互運用ユーティリティを使用しています。
 This includes a set of Fortran routines for converting Fortran allocated arrays into a ndarray and a set of C++ functions for converting a ndarray into a Kokkos unmanaged view. 
 
 The ndarray type (flcl_ndarray_t) is a simple struct that captures the rank, dimensions, strides (equivalent to a dope vector) along with the flattened data. This is defined and implemented in [flcl-cxx.hpp](https://github.com/kokkos/kokkos-fortran-interop/blob/master/src/flcl-cxx.hpp)
