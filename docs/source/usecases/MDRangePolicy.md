@@ -1,32 +1,32 @@
-# MDRangePolicy Use Case
+# MDRangePolicy使用事例
 
-## Operations on multi-dimensional arrays
+## 多次元配列に関する演算
 
-This example demonstrates usage of the [`MDRangePolicy`](../API/core/policies/MDRangePolicy) in the context of performing operations on multidimensional arrays or tensor data.
-Such a use case occurs for example when working on numerical solution to PDEs such as finite element methods, where discretization of the space may result in `C` cells (elements), and definition of basis functions that take `P` evaluation points as input arguments and return output whose rank and dimensions `D` depend on the field rank `F` of the basis function.
-
-
-## Problem formulation
-
-**Input**:
-  `inputData(C,P,D,D)` - a rank 4 View
-  `inputField(C,F,P,D)` - a rank 4 View
+本例は、多次元配列またはテンソルデータに対する演算を実行するコンテクストにおける　[`MDRangePolicy`](../API/core/policies/MDRangePolicy)　の使用方法を示しています。
+このような使用事例は、例えば有限要素法などの偏微分方程式の数値解法に取り組む際、空間の離散化により、`C`　個のセル（要素）が生成される場合、および　`P`　個の評価点を引数として受け取り、そのランクと次元　`D`　が基底関数のフィールドランク　`F`　に依存する出力を返す基底関数の定義に発生します。
 
 
-**Return**:
-  `outputField(C,F,P,D)` - a rank 4 View
+## 問題の形式化
+
+**入力**:
+  `inputData(C,P,D,D)` - ランク4ビュー
+  `inputField(C,F,P,D)` - ランク4ビュー
 
 
-**Computation**: 
-  For each triple in `C,F,P` compute an output field from the two input views:
+**戻し**:
+  `outputField(C,F,P,D)` - ランク4ビュー
+
+
+**計算**: 
+  `C,F,P`の各トリプルについて、2つの入力ビューから出力フィールドを計算します:
   
 ``` c++
-for each (c,f,p) in (C,F,P)
-  compute the product inputData(c,p,:,:) * inputField(c,f,p,:)
-  store result in outputField(c,f,p,:)
+ (C,F,P)における各 (c,f,p) について
+  積 inputData(c,p,:,:) * inputField(c,f,p,:)　を計算
+  outputField(c,f,p,:)　に結果を格納
 ```
 
-## Serial implementation
+## シリアル実装
 
 ``` c++
 
@@ -35,9 +35,9 @@ for (int f = 0; f < F; ++f)
 for (int p = 0; p < P; ++p)
 {
 
-  auto result = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
-  auto left   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
-  auto right  = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
+  自動結果 = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
+  自動左   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
+  自動右  = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
   
   for (int i=0;i<D;++i) {
   
@@ -52,11 +52,11 @@ for (int p = 0; p < P; ++p)
 
 ```
 
-## Parallelization with Kokkos
+## Kokkos　を使った並列化
 
-### Initial implementation - `RangePolicy`
+### 初期実装 - `RangePolicy`
 
-The most straightforward way to parallelize the serial code above is to convert the outer `for` loop over cells with the sequential iteration pattern into a parallel for loop using a [`RangePolicy`](../API/core/policies/RangePolicy)
+上記のシリアルコードを並列化するための、最も直接的な方法は、セルを順次反復する外側の　`for`　ループを、[`RangePolicy`](../API/core/policies/RangePolicy)　を使用した並列　for　ループに変換することです。
 
 ``` c++
 
@@ -67,9 +67,9 @@ Kokkos::parallel_for("for_all_cells",
      for (int p = 0; p < P; ++p)
      {
 
-      auto result = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
-      auto left   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
-      auto right  = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
+      自動結果 = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
+      自動左   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
+      自動右  = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
   
       for (int i=0;i<D;++i) {
   
@@ -86,25 +86,25 @@ Kokkos::parallel_for("for_all_cells",
 ```
 
 
-If the number of cells is large enough to merit parallelization, that is the overhead for parallel dispatch plus computation time is less than total serial execution time, then the simple implementation above will result in improved performance.
+セル数が十分に多く、並列化が有効となる場合、すなわち並列ディスパッチのオーバーヘッドと計算時間の合計が、シリアル実行の総時間よりも短い場合には、上記のシンプルな実装によりパフォーマンスが向上します。
 
-There is more parallelism to exploit, particularly within the for loops over fields `F` and points `P`. One way to accomplish this would involve taking the product of the three iteration ranges, `C*F*P`, and performing a [`parallel_for`](../API/core/parallel-dispatch/parallel_for) over that product. However, this would require extraction routines to map between indices from the flattened iteration range, `C*F*P`, and the multidimensional indices required by data structures in this example. In addition, to achieve performance portability the mapping between the 1-D product iteration range and multidimensional 3-D indices would require architecture-awareness, akin to the notion of [`LayoutLeft`](../API/core/view/layoutLeft) and [`LayoutRight`](../API/core/view/layoutRight) used in Kokkos to establish data access patterns.
+特に、体 `F` と点 `P` に対する for ループ内において、さらに活用できる並列処理の余地がございます。 これを実現する一つの方法は、3つの反復範囲の積である`C*F*P`を取り、その積に対して[`parallel_for`](../API/core/parallel-dispatch/parallel_for)　を実行することです。 ただし、これには抽出ルーチンが必要となります。具体的には、平坦化された反復範囲 `C*F*P` のインデックスと、この例におけるデータ構造が要求する多次元インデックスとの間の対応付けを行う必要があります。 さらに、パフォーマンスの移植性を実現するためには、1次元積分反復範囲と多次元3Dインデックス間のマッピングにアーキテクチャ認識が必要となりますが、これは、Kokkosでデータアクセスパターンを確立するために使用される　[`LayoutLeft`](../API/core/view/layoutLeft)　および[`LayoutRight`](../API/core/view/layoutRight)　の概念に類似したものです。
 
-The [`MDRangePolicy`](../API/core/policies/MDRangePolicy) provides a natural way to accomplish the goal of parallelize over all three iteration ranges without requiring manually computing the product of the iteration ranges and mapping between 1-D and 3-D multidimensional indices. The [`MDRangePolicy`](../API/core/policies/MDRangePolicy) is suitable for use with tightly-nested for loops and provides a method to expose additional parallelism in computations beyond simply parallelize in a single dimension, as was shown in the first implementation using the [`RangePolicy`](../API/core/policies/RangePolicy).
+ [`MDRangePolicy`](../API/core/policies/MDRangePolicy) は、反復範囲の積を手動で計算したり、1次元と3次元の多次元インデックス間のマッピングを行ったりする必要なく、3つの反復範囲すべてに対して並列化を行うという目標を達成するための自然な方法を提供します。[`MDRangePolicy`](../API/core/policies/MDRangePolicy) は、最初の実装である [`RangePolicy`](../API/core/policies/RangePolicy) の使用例で示された内容の通り、きっちりと入れ子になった for ループでの使用に適しており、単一次元での並列化を超える計算における追加の並列性を実現する手法を提供します。
 
-### Implementation - `MDRangePolicy`
+### 実装　- `MDRangePolicy`
 
 ``` c++
 Kokkos::parallel_for("mdr_for_all_cells", 
   Kokkos::MDRangePolicy< Kokkos::Rank<3> > ({0,0,0}, {C,F,P}),
    KOKKOS_LAMBDA (const int c, const int f, const int p) {
-    auto result = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
-    auto left   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
-    auto right  = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
+    自動結果 = Kokkos::subview(outputField, c, f, p, Kokkos::ALL);
+    自動左   = Kokkos::subview(inputData, c, p, Kokkos::ALL, Kokkos::ALL);
+    自動右 = Kokkos::subview(inputField, c, f, p, Kokkos::ALL);
   
     for (int i=0;i<D;++i) {
   
-      double tmp(0);
+      ダブル tmp(0);
     
       for (int j=0;j<D;++j)
         tmp += left(i, j)*right(j);
@@ -114,28 +114,28 @@ Kokkos::parallel_for("mdr_for_all_cells",
   });
 ```
 
-## MDRangePolicy usage
+## MDRangePolicy使用例
 
-The [`MDRangePolicy`](../API/core/policies/MDRangePolicy) accepts the same template parameters as the [`RangePolicy`](../API/core/policies/RangePolicy), but also requires an additional type - the `Kokkos::Rank<R>` parameter, where `R` is the rank, that is the number of nested for-loops, and must be provided at compile-time.
+[`MDRangePolicy`](../API/core/policies/MDRangePolicy) は、　[`RangePolicy`](../API/core/policies/RangePolicy) と同じテンプレートパラメータを受け付けますが、また追加の型である `Kokkos::Rank<R>` パラメータを必要とします。そこでは、 `R` がランクであり、 入れ子になった　for-loops　の数であり、コンパイル時に提供される必要があります。 
 
-The policy requires two arguments:
-  1) An initializer list, or `Kokkos::Array`, of "begin" indices
-  2) An initializer list, or `Kokkos::Array`, of "end" indices
+ポリシーには、以下の2つの引数が必要です:
+  1) "begin"　インデックスの、初期化子リスト、または　Kokkos::Array`
+  2) "end" インデックスの、初期化子リスト、または　Kokkos::Array`
 
-Internally the [`MDRangePolicy`](../API/core/policies/MDRangePolicy) uses tiling over the multidimensional iteration space. For customization an optional third argument may be passed to the policy - an initializer list of tile dimension sizes. This argument might become important when performance tuning, as simple default sizes can be problem-dependent and difficult to determine automatically.
+内部的には、[`MDRangePolicy`](../API/core/policies/MDRangePolicy) は多次元反復空間に対してタイリングを使用します。カスタマイズのため、ポリシーにはオプションの第三引数を渡すことが可能ですーこれはタイル寸法サイズの初期化子リストとなります。 単純なデフォルトサイズは問題に依存する場合があり、自動的に決定することが難しいため、この引数は、パフォーマンスチューニングの際には重要となる可能性があります。
 
-The signature of the lambda (or access operator of the functor) requires an argument for each rank.
+ラムダ関数の署名（またはファンクタのアクセス演算子）は、各ランクごとに引数を必要とします。
 
-The [`MDRangePolicy`](../API/core/policies/MDRangePolicy) can be used with both the [`parallel_for`](../API/core/parallel-dispatch/parallel_for) and [`parallel_reduce`](../API/core/parallel-dispatch/parallel_reduce) patterns in Kokkos.
+[`MDRangePolicy`](../API/core/policies/MDRangePolicy) は、Kokkos の [`parallel_for`](../API/core/parallel-dispatch/parallel_for) および [`parallel_reduce`](../API/core/parallel-dispatch/parallel_reduce) パターン双方で使用可能です。
 
 
-## References
+## 資料
 
-The API reference for the [`MDRangePolicy`](../API/core/policies/MDRangePolicy) is available on the Kokkos wiki:
-  [wiki link](https://github.com/kokkos/kokkos/wiki/Kokkos%3A%3AMDRangePolicy)
+[`MDRangePolicy`](../API/core/policies/MDRangePolicy) の　API　資料は、Kokkos　の　Wiki　でご覧いただけます：
+[Wikiリンク](https://github.com/kokkos/kokkos/wiki/Kokkos%3A%3AMDRangePolicy)。
  
-The use case that this example is based on comes from the Intrepid2 package of Trilinos. For more examples, check out code in Trilinos in files at: `Trilinos/packages/intrepid2/src/Shared/Intrepid2_ArrayToolsDef*.hpp`.
+この例が基づいている使用事例は、Trilinos の Intrepid2 パッケージに由来するものです。 具体例については、Trilinos　のコードを以下のファイルでご確認ください：`Trilinos/packages/intrepid2/src/Shared/Intrepid2_ArrayToolsDef*.hpp`。
 
-This link provides some overview of the Intrepid package: 
-  [documentation link](https://trilinos.org/packages/intrepid/)
+以下のリンクは、Intrepid　パッケージの概要をいくつか紹介しています: 
+  [documentation link](https://trilinos.org/packages/intrepid/)。
 
