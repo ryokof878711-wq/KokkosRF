@@ -1,24 +1,21 @@
 # MPI Halo Exchange
 
-Kokkos and MPI are complementary programming models: Kokkos is designed to handle
-parallel programming within a shared-memory space, and MPI is designed to handle parallel programming
-between multiple distributed memory spaces.
-In order to create a fully scalable parallel program, it is often necessary to use both
-Kokkos and MPI.
-This Use Case document walks through an example of how MPI and Kokkos can work together.
+Kokkos　と　MPI　は相互補完的なプログラミングモデルであり、Kokkos　は共有メモリ空間内での並列プログラミングを扱うために設計されており、MPI　は複数の分散メモリ空間間での並列プログラミングを扱うために設計されています。
+完全に拡張性のある並列プログラムを作成するためには、
+多くの場合、Kokkos　と　MPI　を併用する必要がある場合がしばしばあります。
+This Use Case document walks through an example of how MPI and Kokkos can work together.本使用事例文書では、MPI　とKokkos　が連携して動作する例について説明しています。
 
-## Sending a single message
+## 単一メッセージ送信
 
-MPI is based around message-passing semantics, and one of the simplest operations in MPI is sending
-a single message.
-Typically, this message is contained in a single contiguous memory allocation, and consists of some
-number of values of the same type (for example, double-precision floating-point values).
-Notice that this definition of a message is very similar to the definition of a `Kokkos::View`:
-a collection of values of the same type, which is often contiguous.
-As such, it is often straightforward to send the contents of a `Kokkos::View` as a single MPI message.
-The way to do this is to obtain what MPI needs: a pointer to the start of the message allocation via `Kokkos::View::data()`
-and the number of items in the message via `Kokkos::View::size()`.
-Here is an example that sends `double` values from one rank to another.
+MPI はメッセージパッシングセマンティクスに基づいており、MPIにおける最も単純な演算の一つが、
+単一メッセージ送信です。
+通常、このメッセージは単一の連続したメモリ領域に格納され、
+同じ型の値（例えば、倍精度浮動小数点値）が複数個含まれています。
+このメッセージの定義は、`Kokkos::View` の定義と非常に似ていることに注意してください：
+同じ型の値の集合であり、多くの場合連続しています。
+したがって、`Kokkos::View` の内容を単一の MPI メッセージとして送信することは、多くの場合、非常に簡単です。
+これを行う方法は、MPIが必要とするものを取得ですることです：メッセージ割り当ての先頭へのポインタを `Kokkos::View::data()` 経由で、メッセージ内の項目の数を `Kokkos::View::size()` 経由で取得します。
+以下は、あるランクから別のランクへ`double`値を送信する例です。
 
 ```c++
 int source_rank = 1;
@@ -36,7 +33,7 @@ if (my_rank == source_rank) {
 }
 ```
 
-## CUDA-Aware MPI
+## CUDA　対応　MPI
 
 One common concern for programmers who are using CUDA GPU parallelism through Kokkos as well as MPI is
 how to use MPI to communicate between two ranks which are each using CUDA parallelism.
