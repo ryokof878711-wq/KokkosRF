@@ -1,6 +1,6 @@
-# Kokkos Testing Processes and Change Process
+# Kokkos テストプロセスおよび変更プロセス
 
-Kokkos testing falls into three categories:
+Kokkos のテストは、以下の3つのカテゴリーに属します:
 
  - Pull Request Testing
  - Nightly Testing
