@@ -1,20 +1,16 @@
-# ScatterView averaging elements to nodes
+# ScatterViewの要素をノードに平均化
 
-In order to demonstrate a typical use case for [`Kokkos::ScatterView`](../API/containers/ScatterView), we can think of
-a finite element program where the only information available is a mapping from elements
-to nodes, and we would like to average some quantity from the elements to the nodes.
-This average is the ratio of two sums, namely the sum of the adjacent element quantities
-divided by the sum of adjacent elements.
+ [`Kokkos::ScatterView`](../API/containers/ScatterView)　について典型的な使用事例を示すために、有限要素法プログラムにおいて、利用可能な情報が要素から節点への対応関係のみである場合を考えることが可能であり、要素からノードへ、ある量を平均化したいと思います。
+この平均値は、二つの和の比率、つまり、隣接する要素の量の和を
+隣接する要素の和で割ったものです。
 
-## Computing the number of adjacent elements
 
-Even just computing the number of elements adjacent to a node will already demonstrate most
-of the necessary workflow around [`Kokkos::ScatterView`](../API/containers/ScatterView).
-The algorithm is as follows: we will iterate over mesh elements, in parallel, and each mesh
-element will identify its nodes and add one to an array entry specific to that node.
-Those entries are ultimately stored in a [`Kokkos::View`](../API/core/view/view) with one entry per node, but
-during the algorithm they will be accessed through a [`Kokkos::ScatterView`](../API/containers/ScatterView) in order to
-prevent data races.
+## 隣接する要素の数を計算
+
+ノードに隣接する要素の数を計算するだけでも、[`Kokkos::ScatterView`](../API/containers/ScatterView) に関する必要なワークフローの大半が明らかになります。
+アルゴリズムは以下の通りです: メッシュ要素を並列に反復処理し、並行して、各メッシュ要素は自身のノードを特定し、そのノード固有の配列エントリに1を加算します。
+それらのエントリは最終的に、ノードごとに1つのエントリを持つ　[`Kokkos::View`](../API/core/view/view)　に格納されますが、
+アルゴリズムの間に、 データ競合を防止するため、これらは、[`Kokkos::ScatterView`](../API/containers/ScatterView)　を介してアクセスされます。
 
 ```c++
 Kokkos::View<int*> count_adjacent_elements(Kokkos::View<int**> elements_to_nodes, int number_of_nodes) {
@@ -32,10 +28,9 @@ Kokkos::View<int*> count_adjacent_elements(Kokkos::View<int**> elements_to_nodes
 }
 ```
 
-## Computing the value sums at nodes
+## ノードにおける値の合計を計算
 
-Computing the sum of the element values adjacent to a node is almost identical to computing
-the number of elements around a node:
+ノードに隣接する要素の値の合計を計算することは、ノード周辺の要素の数を計算することとほぼ同じです:
 
 ```c++
 Kokkos::View<double*> sum_to_nodes(Kokkos::View<int**> elements_to_nodes, int number_of_nodes,
@@ -54,12 +49,11 @@ Kokkos::View<double*> sum_to_nodes(Kokkos::View<int**> elements_to_nodes, int nu
 }
 ```
 
-## Computing the full average
+## 完全な平均値の計算
 
-Now that we have two sums at each node, it is sufficient to use one final loop over nodes
-to take the ratio of these two sums and define the average.
-This function will be structured by assuming that the number of elements adjacent to each
-node has been pre-computed.
+各ノードで2つの合計値が得られたため、ノードを最終的に1回ループ処理し、
+これら2つの合計値の比率を求め、平均値を定義すれば十分です。
+この関数は、各ノードに隣接する要素の数が事前に計算済みであると仮定した上で構成されます。.
 
 ```c++
 Kokkos::View<double*> average_to_nodes(Kokkos::View<int**> elements_to_nodes, int number_of_nodes,
@@ -69,6 +63,6 @@ Kokkos::View<double*> average_to_nodes(Kokkos::View<int**> elements_to_nodes, in
   Kokkos::parallel_for(number_of_nodes, KOKKOS_LAMBDA(int node) {
     node_values[node] /= elements_per_node[node];
   });
-  return node_values;
+  node_values　を返す;
 }
 ```
