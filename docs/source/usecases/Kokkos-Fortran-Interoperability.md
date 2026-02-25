@@ -1,6 +1,6 @@
 # Fortran相互運用性使用事例
 
-## Operations on multidimensional fortran allocated arrays using Kokkos 
+## Kokkosを用いた多次元　Fortran　割り当て配列に対する演算
 
 本例は、単純な　Fortran　プログラムから　Kokkos　を用いてDAXPY（倍精度浮動小数点演算 A * X + Y）を実行する際に、`Fortran　言語互換レイヤー（FLCL）`の使用方法を示しています。 このような使用事例は、Fortran　アプリケーション内でパフォーマンスの移植性を実現するために　Kokkos　を使用する場合に発生します。 
 
