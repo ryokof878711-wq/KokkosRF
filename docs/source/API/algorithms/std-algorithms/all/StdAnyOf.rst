@@ -88,33 +88,28 @@
 
 - ``view``:
 
-  - must be rank-1, and have ``LayoutLeft``, ``LayoutRight``, or ``LayoutStride``
+  - 必ずランク-1であり、``LayoutLeft``　、  ``LayoutRight``　、または ``LayoutStride``　を持たなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
-- ``pred``: *unary* functor returning ``true`` if an argument satisfies the desired condition.
+- ``pred``:  *二項関数*　で、引数が望ましい条件を満たす場合に　``真``　を返します。
 
-  ``pred(v)`` must be valid to be called from the execution space passed, or the execution space
-  associated with the team handle, and convertible to bool for every argument ``v``
-  of type ``value_type``, where ``value_type`` is the value type of ``IteratorType`` or ``view``
-  and must not modify ``v``.
+  ``pred(v)`` は、引数として渡された実行空間から呼び出されるためには、有効でなければならない、またはチームハンドルに関連付けられた実行空間でなければならず、そして 型　value_type　の引数　``v``　のすべてのペアについて、bool型に変換可能で、そこでは、``value_type``が、``IteratorType``　の値型、または ``view``であり、  ``v``　を変更してはいけません。
 
-  - must conform to:
+  - 以下に一致しなければなりません:
 
   .. code-block:: cpp
 
-     struct CustomPredicate
+     構造体 CustomPredicate
      {
        KOKKOS_INLINE_FUNCTION
-       bool operator()(const value_type & v) const {
-         return /* true if v satisfies your desired condition */;
+       ブール operator()(const value_type & v) const {
+         返し /* vが望ましい条件　*/　を満たす場合に真 */;
        }
      };
 
 
-Return Value
+返し値
 ~~~~~~~~~~~~
 
-Returns ``true`` if the unary predicate returns ``true`` for at least one element
-in the range or ``view``. Returns ``false`` if no such element is found, or
-if the range or ``view`` are empty.
+範囲または　``ビュー``　内の全要素について、一項述語が　少なくとも1つの要素について、範囲内または　``ビュー``　内において、``真``　を返します。そのような要素が認められない場合、または範囲またはまたは　``ビュー``が空の場合、``偽``　を返します。
