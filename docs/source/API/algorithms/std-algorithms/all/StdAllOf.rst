@@ -69,29 +69,29 @@
 
 - ``teamHandle``: TeamPolicyを使用する際、並列領域内で指定されたチームハンドルインスタンス
 
-- ``label``: string forwarded to internal parallel kernels for debugging purposes
+- ``label``: デバッグ目的で内部の並列カーネルに転送された文字列
 
-  - 1: The default string is "Kokkos::all_of_iterator_api_default".
+  - 1: デフォルト文字列は、 "Kokkos::all_of_iterator_api_default".
 
-  - 3: The default string is "Kokkos::all_of_view_api_default".
+  - 3: デフォルト文字列は、 "Kokkos::all_of_view_api_default".
 
-  - NOTE: overloads accepting a team handle do not use a label internally
+  - 注意事項: チームハンドルを受け取るオーバーロードは、内部でラベルを使用しません。
 
-- ``first, last``: range of elements to search in
+- ``first, last``: 検索対象となる要素の範囲
 
-  - must be *random access iterators*, e.g., returned from ``Kokkos::Experimental::(c)begin/(c)end``
+  - *ランダムアクセスイテレータ*である必要があり、例えば、 ``Kokkos::Experimental::(c)begin/(c)end``から返されなければなりません。
 
-  - must represent a valid range, i.e., ``last >= first``
+  - 有効な範囲を表す必要があり、つまり、 ``last >= first``　でなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
 - ``view``:
 
-  - must be rank-1, and have ``LayoutLeft``, ``LayoutRight``, or ``LayoutStride``
+  - 必ずランク-1であり、``LayoutLeft``　、  ``LayoutRight``　、または ``LayoutStride``　を持たなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
-- ``pred``: *unary* functor returning ``true`` if an argument satisfies the desired condition.
+- ``pred``: *二項関数*　で、引数が望ましい条件を満たす場合に　``真``　を返します。
 
   ``pred(v)`` must be valid to be called from the execution space passed, or the execution space
   associated with the team handle, and convertible to bool for every argument ``v``
