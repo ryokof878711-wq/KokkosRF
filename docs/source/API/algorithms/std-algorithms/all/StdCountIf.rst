@@ -2,12 +2,12 @@
 ``count_if``
 ============
 
-Header: ``<Kokkos_StdAlgorithms.hpp>``
+ヘッダー: ``<Kokkos_StdAlgorithms.hpp>``
 
-Description
+ディスクリプション
 -----------
 
-Returns the number of elements in a range or in rank-1 ``View`` that satisfy a given unary prediate.
+指定された一項述語を満たす範囲またはランク1の　``ビュー``　内の要素数を返します。Returns the number of elements in a range or in rank-1 ``View`` that satisfy a given unary prediate.
 
 Interface
 ---------
