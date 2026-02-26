@@ -82,9 +82,9 @@
 
   - *ランダムアクセスイテレータ*　である必要があり、例えば、 ``Kokkos::Experimental::(c)begin/(c)end``から返されなければなりません。
 
-  - must represent a valid range, i.e., ``last >= first``
+  - 有効な範囲を表す必要があり、つまり、 ``last >= first``　でなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
 - ``view``:
 
