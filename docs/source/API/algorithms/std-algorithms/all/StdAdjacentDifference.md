@@ -1,33 +1,33 @@
 
 # `adjacent_difference`
 
-Header File: `Kokkos_StdAlgorithms.hpp`
+ヘッダーファイル: `Kokkos_StdAlgorithms.hpp`
 
 ```c++
 namespace Kokkos{
 namespace Experimental{
 
-template <class ExecutionSpace, class InputIteratorType, class OutputIteratorType>
+テンプレート <class ExecutionSpace, class InputIteratorType, class OutputIteratorType>
 OutputIteratorType adjacent_difference(const ExecutionSpace& exespace,                    (1)
                                        InputIteratorType first_from,
                                        InputIteratorType last_from,
                                        OutputIteratorType first_dest);
 
-template <class ExecutionSpace, class InputIteratorType, class OutputIteratorType, class BinaryOp>
+テンプレート <class ExecutionSpace, class InputIteratorType, class OutputIteratorType, class BinaryOp>
 OutputIteratorType adjacent_difference(const ExecutionSpace& exespace,                    (2)
                                        InputIteratorType first_from,
                                        InputIteratorType last_from,
                                        OutputIteratorType first_dest,
                                        BinaryOp bin_op);
 
-template <class ExecutionSpace, class InputIteratorType, class OutputIteratorType>
+テンプレート <class ExecutionSpace, class InputIteratorType, class OutputIteratorType>
 OutputIteratorType adjacent_difference(const std::string& label,                          (3)
                                        const ExecutionSpace& exespace,
                                        InputIteratorType first_from,
                                        InputIteratorType last_from,
                                        OutputIteratorType first_dest);
 
-template <class ExecutionSpace, class InputIteratorType, class OutputIteratorType, class BinaryOp>
+テンプレート <class ExecutionSpace, class InputIteratorType, class OutputIteratorType, class BinaryOp>
 OutputIteratorType adjacent_difference(const std::string& label,                          (4)
                                        const ExecutionSpace& exespace,
                                        InputIteratorType first_from,
@@ -35,63 +35,61 @@ OutputIteratorType adjacent_difference(const std::string& label,                
                                        OutputIteratorType first_dest,
                                        BinaryOp bin_op);
 
-template <
-  class ExecutionSpace,
-  class DataType1, class... Properties1,
-  class DataType2, class... Properties2>
-auto adjacent_difference(const ExecutionSpace& exespace,                                  (5)
+テンプレート <
+  クラス ExecutionSpace,
+  クラス DataType1, class... Properties1,
+  クラス DataType2, class... Properties2>
+自動 adjacent_difference(const ExecutionSpace& exespace,                                  (5)
                          const ::Kokkos::View<DataType1, Properties1...>& view_from,
                          const ::Kokkos::View<DataType2, Properties2...>& view_dest);
 
-template <
-  class ExecutionSpace,
-  class DataType1, class... Properties1,
-  class DataType2, class... Properties2,
-  class BinaryOp>
-auto adjacent_difference(const ExecutionSpace& exespace,                                  (6)
+テンプレート <
+  クラス ExecutionSpace,
+  クラス DataType1, class... Properties1,
+  クラス DataType2, class... Properties2,
+  クラス BinaryOp>
+自動 adjacent_difference(const ExecutionSpace& exespace,                                  (6)
                          const ::Kokkos::View<DataType1, Properties1...>& view_from,
                          const ::Kokkos::View<DataType2, Properties2...>& view_dest,
                          BinaryOp bin_op);
 
-template <
-  class ExecutionSpace,
-  class DataType1, class... Properties1,
-  class DataType2, class... Properties2>
-auto adjacent_difference(const std::string& label,                                        (7)
+テンプレート <
+  クラス ExecutionSpace,
+  クラス DataType1, class... Properties1,
+  クラス DataType2, class... Properties2>
+自動 adjacent_difference(const std::string& label,                                        (7)
                          const ExecutionSpace& exespace,
                          const ::Kokkos::View<DataType1, Properties1...>& view_from,
                          const ::Kokkos::View<DataType2, Properties2...>& view_dest);
 
-template <
-  class ExecutionSpace,
-  class DataType1, class... Properties1,
-  class DataType2, class... Properties2,
-  class BinaryOp>
-auto adjacent_difference(const std::string& label,                                        (8)
+テンプレート <
+  クラス ExecutionSpace,
+  クラス DataType1, class... Properties1,
+  クラス DataType2, class... Properties2,
+  クラス BinaryOp>
+自動 adjacent_difference(const std::string& label,                                        (8)
                          const ExecutionSpace& exespace,
                          const ::Kokkos::View<DataType1, Properties1...>& view_from,
                          const ::Kokkos::View<DataType2, Properties2...>& view_dest,
                          BinaryOp bin_op);
 
-} //end namespace Experimental
-} //end namespace Kokkos
+} //エンド 名前空間 実験的
+} //エンド 名前空間 Kokkos
 ```
 
-## Description
+## ディスクリプション
 
-- (1,3,5,7): First, a copy of `*first_from` is written to `*first_dest` for (1,3),
-  or a copy of `view_from(0)` is written to `view_dest(0)` for (5,7).
-  Second, it computes the *difference* between the second and the first
-  of each adjacent pair of elements of the range `[first_from, last_from)` for (1,3)
-  or in `view_from` for (5,7), and writes them to the range beginning at `first_dest + 1` for (1,3),
-  or `view_dest` for (5,7).
+- (1,3,5,7): 第一に、 `*first_from` のコピーは、(1,3)　について`*first_dest` に書き込まれ、
+  または、 `view_from(0)` のコピーは、 (5,7)　について `view_dest(0)` に書き込まれます。
+  第二に、それは、(1,3)　について、または、 (5,7)　について `view_from` において、範囲`[first_from, last_from)` の要素の各隣接ペアの二番目及び一番目の *差* を計算し、
+   それらを (1,3)　について、または  (5,7)　について `view_dest``first_dest + 1`　において範囲の初めに書き込みます。 
 
-- (2,4,6,8): First, a copy of `*first_from` is written to `*first_dest` for (2,4),
-  or a copy of `view_from(0)` is written to `view_dest(0)` for (6,8).
-  Second, it calls the binary functor with the second and the first elements
-  of each adjacent pair of elements of the range `[first_from, last_from)` for (2,4)
-  or in `view_from` for (6,8), and writes them to the range beginning at `first_dest + 1` for (2,4),
-  or `view_dest` for (6,8).
+- (2,4,6,8): 第一に、 `*first_from`  のコピーは、 (2,4)　について　`*first_dest` に書き込まれ、
+  または、`view_from(0)` のコピーは、 (6,8)　について `view_dest(0)` に書き込まれます。
+  第二に、it calls the binary functor with the second and the first elements
+  of each adjacent pair of elements of the range for (2,4)　について範囲　`[first_from, last_from)` の、または、 (6,8)　について  `view_from`　において、要素の各隣接ペアの二番目及び一番目を使ったバイナリファンクタを呼び出し、それらを
+   `first_dest + 1` for (2,4)　について、または (6,8)　について `view_dest`　において、範囲の初めに書き込みます。 
+
 
 
 ## Parameters and Requirements
