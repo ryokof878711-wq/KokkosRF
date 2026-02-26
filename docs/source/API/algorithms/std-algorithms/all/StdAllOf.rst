@@ -67,7 +67,7 @@
 
 - ``exespace``: 実行空間インスタンス
 
-- ``teamHandle``: team handle instance given inside a parallel region when using a TeamPolicy
+- ``teamHandle``: TeamPolicyを使用する際、並列領域内で指定されたチームハンドルインスタンス
 
 - ``label``: string forwarded to internal parallel kernels for debugging purposes
 
