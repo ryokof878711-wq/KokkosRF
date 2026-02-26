@@ -1,26 +1,25 @@
-# Tagged Operators
+# タグ付き演算
 
-## Dealing with pre-C++17
+## C++17以前のバージョンへの対応
 
-Many applications and libraries in HPC are written using an Object-Oriented design.
-This has numerous advantages in terms of code organization and potentially reuse.
-Unfortunately it comes with a significant drawback as far as using Kokkos is concerned,
-if C++17 is not an option.
+HPC分野の多くのアプリケーションやライブラリは、オブジェクト指向設計を用いて作成されています。
+これには、コードの整理および再利用の可能性という点で、多くの利点があります。
+残念ながら、C++17が利用できない場合、　Kokkos　の使用に関して重大な欠点が生じます。
 
-Consider an application for simulating the time evolution of a particle system.
-In an Object-Oriented design, it would likely contain something like a class `ParticleInteractions`,
-which holds references to data structures for particles and interaction potentials.
-It would also contain some member function `compute`, which would loop over the particles
-and calculate the interactions:
+粒子系の時間発展をシミュレートするアプリケーションについて検討します。
+オブジェクト指向設計においては、おそらく`ParticleInteractions`　クラスのようなものが含まれる可能性が高く、
+このクラスは、粒子および相互作用ポテンシャルのデータ構造への参照を保持します。
+また、メンバー関数`compute`も含まれており、この関数は粒子をループ処理し
+相互作用を計算します:
 
 ```c++
-class ParticleInteractions {
+クラス ParticleInteractions {
   ParticlePositions pos;
   ParticleForces forces;
   ParticleNeighbors neighbors;
   PairForce force;
 
-public:
+パブリック:
   void compute() {
     for(int i=0; i<pos.extent(0); i++) {
       for(int j=0; j<neighbors.count(i); j++) {
@@ -31,10 +30,10 @@ public:
 };
 ```
 
-A simple way of parallelising this is to add a [`parallel_for`](../API/core/parallel-dispatch/parallel_for) inside the member function `compute`.
+この処理を並列化する簡単な方法は、メンバ関数 `compute` の内部に [`parallel_for`](../API/core/parallel-dispatch/parallel_for) を追加することです。
 
 ```c++
-class ParticleInteractions {
+クラス ParticleInteractions {
   ...
   void compute() {
     parallel_for("Compute", KOKKOS_LAMBDA (const int i) {
@@ -46,16 +45,14 @@ class ParticleInteractions {
 };
 ```
 
-And indeed on non-accelerator based systems this would work. But on systems where the [`parallel_for`](../API/core/parallel-dispatch/parallel_for)
-dispatches work to an accelerator, this approach would likely fail with an access error.
+実際、非アクセラレータベースのシステムでは、これは機能するでしょう。しかし、[`parallel_for`](../API/core/parallel-dispatch/parallel_for)　がアクセラレータに作業を分散させるシステムでは、この手法はアクセスエラーで失敗する可能性が高いです。
 
-The reason for that is, that lambdas inside a class member function do not capture other
-class members individually, they capture the entire class as a whole.
-More precisely, in pre-C++17 they capture the `this` pointer at the scope of `compute`.
+その理由は、クラスメンバ関数内のラムダ式は他のクラスメンバを個別にキャプチャせず、クラス全体をキャプチャするためです。
+より正確に言えば、C++17　以前のバージョンでは、`compute`のスコープ内で　`this`　ポインタをキャプチャします。
 
-In effect, it is as if one had written:
+実際には、以下の通りに書かれたかのようです：
 ```c++
-class ParticleInteractions {
+クラス ParticleInteractions {
   ...
   void compute() {
     parallel_for("Compute", KOKKOS_LAMBDA (const int i) {
@@ -66,15 +63,15 @@ class ParticleInteractions {
   }
 };
 ```
-If `this` is not dereferenceable in the scope of the execution space, the execution will fail.
+実行空間の範囲内で、`this`　の参照解除ができない場合、実行は失敗します。
 
-In C++17 the situation can be rectified by using the `[*this]` capture clause. In that case,
-the whole class instance will be captured and copied to the accelerator as part of the dispatch.
+C++17　では、`[*this]` キャプチャ句を使用することでこの状況を修正できます。 その場合、
+ディスパッチの一環として、クラスインスタンス全体がキャプチャされ、アクセラレータにコピーされます。
 
-One way to deal with this situation pre-C++17 is to simply make a corresponding operator for the
-compute function, and dispatch the class itself as a functor:
+C++17　以前の状況に対処する一つの方法としては、単純に
+compute　関数に対応する演算子を作成し、クラス自体をファンクタとしてディスパッチすることがあります。:
 ```c++
-class ParticleInteractions {
+クラス ParticleInteractions {
   ...
   void compute() {
     parallel_for("Compute", *this);
@@ -88,20 +85,18 @@ class ParticleInteractions {
 };
 ```
 
-In fact this may even have clarity enhancing qualities, since it separates the work items of the parallel operation,
-from the dispatch itself and its associated pre- and post-launch work.
+実際、並列操作の作業項目を、ディスパッチ自体およびそれに伴う事前および事後処理作業から分離するため、この手法には明瞭さを高める特性さえあるかもしれません。
 
-But what if you have more than one parallel operation in a class?
-This is where Kokkos's tagged dispatch comes into play.
-In order for a class to have multiple operators, Kokkos allows these operators to have an unused additional parameter
-which is used in overload resolution.
-This parameter is given as an additional template parameter to the execution policy during dispatch.
-A good practice is to create `Tag-Classes` as nested definitions inside the original object:
+では、クラス内に複数の並列処理が存在する場合は、どうでしょうか？
+ここで、Kokkos のタグ付きディスパッチが役立ちます。
+クラスが複数の演算子を持つ場合、Kokkosではこれらの演算子に、オーバーロード解決に使用される、未使用の追加パラメータを持たせることが可能です。
+本パラメータは、ディスパッチ時に、実行ポリシーへの追加テンプレートパラメータとして指定されます。
+推奨される方法は、元のオブジェクト内にネストされた定義として`タグクラス`を作成することです:
 
 ```c++
-class ParticleInteractions {
-  class TagPhase1 {};
-  class TagPhase2 {};
+クラス ParticleInteractions {
+  クラス TagPhase1 {};
+  クラス TagPhase2 {};
   ...
 
   void compute() {
@@ -119,7 +114,7 @@ class ParticleInteractions {
 };
 ```
 
-## Templating Operators
+## テンプレート演算子
 
-Another useful application of the tagged interface is the opportunity to template operators.
-A particular use case has been the conversion of runtime loop parameters into compile time ones:
+タグ付きインターフェースのもう一つの有用な応用例は、演算子をテンプレート化する機会です。
+特定の使用事例として、実行時ループパラメータをコンパイル時パラメータに変換することが挙げられます:
