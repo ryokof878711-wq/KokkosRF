@@ -92,50 +92,48 @@ OutputIteratorType adjacent_difference(const std::string& label,                
 
 
 
-## Parameters and Requirements
+## パラメータおよび要件
 
 - `exespace`:
-  - execution space instance
-- `label`:
-  - used to name the implementation kernels for debugging purposes
-  - for 1,2 the default string is: "Kokkos::adjacent_difference_iterator_api_default"
-  - for 5,6 the default string is: "Kokkos::adjacent_difference_view_api_default"
+  - 実行空間インスタンス
+- `ラベル`:
+  - デバッグ目的で実装カーネルに名前を付けるために使用されます
+  - 1,2　について、 デフォルトストリングは、以下の通りです: "Kokkos::adjacent_difference_iterator_api_default"
+  - 5,6　について、 デフォルトストリングは、以下の通りです: "Kokkos::adjacent_difference_view_api_default"
 - `first_from`, `last_from`, `first_dest`:
-  - range of elements to read from `*_from` and write to `first_dest`
-  - must be *random access iterators*
-  - must represent a valid range, i.e., `last_from >= first_from` (checked in debug mode)
-  - must be accessible from `exespace`
+  -  `*_from` から読み取り、`first_dest`　に書き込むための要素の範囲
+  -  *ランダムアクセスイテレータ*　でなければなりません
+  - 有効な範囲を表す必要があります。すなわち、`last_from >= first_from` であること（デバッグモードでチェックされます）
+  - `exespace`　からアクセス可能でなければなりません。
 - `view_from`, `view_dest`:
-  - views to read elements from `view_from` and write to `view_dest`
-  - must be rank-1, and have `LayoutLeft`, `LayoutRight`, or `LayoutStride`
-  - must be accessible from `exespace`
+  - `view_from` から読み取り、`view_dest`　に書き込むためのビュー
+  - ランク-1であり、`LayoutLeft`, `LayoutRight`, または `LayoutStride`　を持たなければなりません。
+  - `exespace`　からアクセス可能でなければなりません。
 - `bin_op`:
-  - *binary* functor representing the operation to apply to each pair of elements.
-  Must be valid to be called from the execution space passed, and callable with
-  two arguments `a,b` of type (possible const) `value_type`, where `value_type`
-  is the value type of `InputIteratorType` (for 1,2,3,4) or the value type
-  of `view_from` (for 5,6,7,8), and must not modify `a,b`.
-  - must conform to:
+  - 各要素のペアに対して適用する演算を表す　*バイナリ* ファンクタ。
+  渡された実行空間より呼び出され、そこでは `value_type`が
+  `InputIteratorType`の価値型 (1,2,3,4について) または、 `view_from`　の価値型 (5,6,7,8について)　であり、 `a,b`　を修正しなければなりません。
+  - 以下に一致しなければなりません:
   ```c++
-  struct BinaryOp
+  構造体 BinaryOp
   {
      KOKKOS_INLINE_FUNCTION
      return_type operator()(const value_type & a,
 	                        const value_type & b) const {
-       return /* ... */;
+       返し /* ... */;
      }
 
-     // or, also valid
+     // または、また有効
      return_type operator()(value_type a,
 	                        value_type b) const {
-       return /* ... */;
+       返し /* ... */;
      }
   };
   ```
-  The return type `return_type` must be such that an object of type `OutputIteratorType` for (1,2,3,4)
-  or an object of type `value_type` where `value_type` is the value type of `view_dest` for (5,6,7,8)
-  can be dereferenced and assigned a value of type `return_type`.
+  返し型 `return_type` は、 (1,2,3,4)　については、型のオブジェクト `OutputIteratorType` 
+  または、 `value_type` が、 (5,6,7,8)　については、 `view_dest`　の価値型である型のオブジェクトが、参照解除可能であり、
+  型 `return_type`　の値が割り当て可能であるようになければなりません。
 
-## Return
+## 返し
 
-Iterator to the element *after* the last element written.
+書き込まれた最後の要素の　*後の*　要素へのイテレータ。
