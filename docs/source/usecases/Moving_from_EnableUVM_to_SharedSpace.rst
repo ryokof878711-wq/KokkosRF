@@ -1,4 +1,4 @@
-Moving code from requiring ``Kokkos_ENABLE_CUDA_UVM`` to using ``SharedSpace``
+コードを、``Kokkos_ENABLE_CUDA_UVM`` を必要とする状態から　``SharedSpace` を使用する状態へ移行
 ==============================================================================
 
 .. role:: cpp(code)
@@ -16,23 +16,24 @@ Moving code from requiring ``Kokkos_ENABLE_CUDA_UVM`` to using ``SharedSpace``
 .. _KokkosSharedSpace: ../API/core/memory_spaces.html#kokkos-sharedspace
 .. |KokkosSharedSpace| replace:: ``Kokkos::SharedSpace``
 
-With Kokkos 4.0 ``Kokkos_ENABLE_CUDA_UVM`` is deprecated and can only be used with ``Kokkos_ENABLE_DEPRECATED_CODE_4``. The main reason for the deprecation was, that using the option changed the ``memory_space`` of the ``Cuda`` ``ExecutionSpace``. This lead to several problems. For example: The driver is allowed to move chunks of this memory to the device or host depending on the access at any time without notice.
-The accesses in ``parallel_for``, ``parallel_reduce``, or ``parallel_scan`` do not occur in any guaranteed order and furthermore depend on other kernels running on the same GPU. This makes debugging tedious. Especially, if the memory an allocation resides in is not apparent but dependent on the options when running ``cmake``.
+Kokkos 4.0 では、``Kokkos_ENABLE_CUDA_UVM`` は非推奨となり、``Kokkos_ENABLE_DEPRECATED_CODE_4`` と組み合わせてのみ使用可能となります。　非推奨となった主な理由は、このオプションの使用により　Cuda　実行空間のmemory_spaceを変更したことです。 これにより、いくつかの問題が生じました。 例えば：ドライバは、アクセス状況に応じて、予告なしにいつでもこのメモリの領域をデバイスまたはホストに移動することが認められています。
+``parallel_for``、``parallel_reduce``、または``parallel_scan``におけるアクセスは、いかなる保証された順序でも発生せず、さらに同じ　GPU　上で実行される他のカーネルに依存します。 これによりデバッグ作業が煩雑になります。特に、割り当てられたメモリがどの領域にあるかが明確ではなく、``cmake``　の実行時のオプションに依存している場合には、さらに煩雑になります。
 
-The alternative
+代替方法
 ---------------
 
-We introduced a new alias named |SharedSpace|_ in Kokkos 4.0. This always points to memory that is accessible by every |ExecutionSpace|_ and is migrated without user interaction to the accessing ``ExecutionSpace`` on demand. After migration the memory is accessed locally.
-Using the alias e.g. in ``Views`` is expressive and thus easier to read. Furthermore, it is portable to every backend that can automatically migrate memory between ``ExecutionSpaces``.
-Furthermore, we introduced the alias |SharedHostPinnedSpace|_ which points to memory that is accessible by all enabled ``ExecutionSpaces`` but always resides in the memory of the host.
+Kokkos 4.0 では、新しいエイリアス「|SharedSpace|_」を導入しています。これは常に、すべての　|ExecutionSpace|_　からアクセス可能なメモリを指示し、ユーザー演算を必要とせず、要求に応じてアクセス元の　|ExecutionSpace|_　へ自動的に移行されます。移行後は、そのメモリは、局所的にアクセスされます。
+別名を使用することで、例えば、　``Views``　において表現力に富み、それゆえ読みやすくなります。さらに、これは　``ExecutionSpaces``　間でメモリを自動的に移行できるあらゆるバックエンドに対して移植性があります。
+さらに、すべての有効な「実行スペース」からアクセス可能でありながら、常にホストのメモリ内に存在するメモリを指すエイリアス　|SharedHostPinnedSpace|_　を導入しています。
 
-The transition
+移行
 --------------
 
-Basically it comes down to spelling |KokkosSharedSpace|_ as a template argument in all allocations.
-Below is an example of a transition:
+基本的には、すべての割り当てにおいて、最終的には、テンプレート引数として、|KokkosSharedSpace|_ を指定することとなります。
+以下に遷移の例を示します。
+以下が以降の一例です:
 
-* Code requiring ``Kokkos_ENABLE_CUDA_UVM`` at configure time (until 4.0)
+* 設定時に　``Kokkos_ENABLE_CUDA_UVM``　を必要とするコード (4.0まで)
 
 .. code-block:: cpp
 
@@ -41,7 +42,7 @@ Below is an example of a transition:
    int main (){
      Kokkos::initialize();
      {
-       unsigned int N = 100;
+       未署名 int N = 100;
        Kokkos::View<int*> myView("myView",N);
        void* c_style_memory = Kokkos::kokkos_malloc("c_style_alloc",N*sizeof(double));
 
@@ -50,10 +51,10 @@ Below is an example of a transition:
        Kokkos::kokkos_free(c_style_memory);
      }
      Kokkos::finalize();
-     return 0;
+     返し 0;
    }
 
-* Code using ``SharedSpace`` (since 4.0)
+* ``SharedSpace`` を使用するコード　(4.0以降)
 
 .. code-block:: cpp
 
@@ -64,7 +65,7 @@ Below is an example of a transition:
      {
        static_assert(Kokkos::has_shared_space,"code only works on backends with SharedSpace");
 
-       unsigned int N = 100;
+       未署名 int N = 100;
        Kokkos::View<int*,Kokkos::SharedSpace> myView("myView",N);
        void* c_style_memory = Kokkos::kokkos_malloc<Kokkos::SharedSpace>("c_style_alloc",N*sizeof(double));
 
@@ -73,5 +74,5 @@ Below is an example of a transition:
        Kokkos::kokkos_free<Kokkos::SharedSpace>(c_style_memory);
      }
      Kokkos::finalize();
-     return 0;
+     返し 0;
    }
