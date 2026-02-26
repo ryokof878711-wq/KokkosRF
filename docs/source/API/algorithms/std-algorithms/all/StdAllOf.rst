@@ -2,15 +2,15 @@
 ``all_of``
 ==========
 
-Header: ``<Kokkos_StdAlgorithms.hpp>``
+ヘッダー: ``<Kokkos_StdAlgorithms.hpp>``
 
-Description
+ディスクリプション
 -----------
 
-Returns ``true`` if all the elements in a range or rank-1 ``View`` satisfy
-a target unary predicate.
+範囲またはランク1の　``ビュー``　内の全要素が
+一項述語を満たす場合、`true`を返します。
 
-Interface
+インターフェイス
 ---------
 
 .. warning:: This is currently inside the ``Kokkos::Experimental`` namespace.
@@ -20,25 +20,25 @@ Overload set accepting execution space
 
 .. code-block:: cpp
 
-   template <class ExecutionSpace, class InputIterator, class Predicate>
-   bool all_of(const ExecutionSpace& exespace,                                       (1)
+   テンプレート <class ExecutionSpace, class InputIterator, class Predicate>
+   ブール all_of(const ExecutionSpace& exespace,                                       (1)
                InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class InputIterator, class Predicate>
-   bool all_of(const std::string& label, const ExecutionSpace& exespace,             (2)
+   テンプレート <class ExecutionSpace, class InputIterator, class Predicate>
+   ブール all_of(const std::string& label, const ExecutionSpace& exespace,             (2)
 	       InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class DataType, class... Properties,
+   テンプレート <class ExecutionSpace, class DataType, class... Properties,
 	     class Predicate>
-   bool all_of(const ExecutionSpace& exespace,
+   ブール all_of(const ExecutionSpace& exespace,
 	       const ::Kokkos::View<DataType, Properties...>& view,                  (3)
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class DataType, class... Properties,
+   テンプレート <class ExecutionSpace, class DataType, class... Properties,
 	     class Predicate>
-   bool all_of(const std::string& label, const ExecutionSpace& exespace,             (4)
+   ブール all_of(const std::string& label, const ExecutionSpace& exespace,             (4)
 	       const ::Kokkos::View<DataType, Properties...>& view,
 	       Predicate predicate);
 
