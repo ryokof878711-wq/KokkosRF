@@ -1,60 +1,55 @@
-# Overlapping Host and Device work 
+# ホストとデバイスの作業の重複
 
-When using architectures that allow host execution to concur with device execution Kokkos supports 
-overlapping host operations with device operations which can produce significant speedup depending 
-on the algorithm.  This use case describes the conditions and the design of algorithms that take advantage of
-overlapping device execution with host execution.
+ホスト実行とデバイス実行を並行して実行できるアーキテクチャを使用する場合、Kokkosはホスト操作とデバイス操作のオーバーラッピングをサポートします。これにより、アルゴリズムによっては大幅な速度向上が期待できます。 本使用事例では、デバイス実行とホスト実行のオーバーラッピングを活用するアルゴリズムの条件と設計について説明します。
 
-## Actors
- - Algorithm with different set of kernels where some are best executed on the host and some 
-are better executed on an accelerator device
- - Algorithm where communication or serialization operations can be staggered with computational kernels
- - Algorithm where work can be divided between host and device without contention to resources
+## アクター
+ - 異なるカーネルのセットを用いたアルゴリズムであり、一部のカーネルはホスト上で実行するのが最適であり、一部のカーネルはアクセラレータデバイス上で実行するのがより効果的。
+ - 通信またはシリアライゼーション操作を計算カーネルと交互に行うことができるアルゴリズム。
+ - リソースの競合なしにホストとデバイス間で作業を分割できるアルゴリズム。
  
-## Subjects
- - Kokkos Execution Spaces
- - Kokkos Execution Policies
- - Kokkos Memory Spaces
+## サブジェクト
+ - Kokkos 実行空間
+ - Kokkos 実行ポリシー
+ - Kokkos メモリ空間
 
-## Assumptions
- - There is little or no contention with host accessible memory while a device kernel is executing
+## 仮定
+ - デバイスカーネルが実行中である間は、ホストがアクセス可能なメモリとの競合はほとんど、あるいは全く発生しません。
     
-## Constraints
- - Kernels are non-blocking
+## 制約
+ - カーネルは、ノンブロッキングです。
     
-## Preconditions
- - Execution "kernel" implemented in the form of C++ functor
+## 前提条件
+ - C++ファンクタの形式で実装されている　"実行カーネル"。
     
-## Usage Pattern 1 - overlapping computational kernels
+## 使用例パターン1 - 重複する計算カーネル
 
 ```
-|--- Allocate Device and Host Memory
-|--- Initialize Host and Device Memory
+|--- デバイスおよびホストメモリを割り当て
+|--- デバイスおよびホストメモリを初期化
 |------------------------------------------------
-|- Perform host operation 0
-|--- iteration loop -----------------------------
-    |->----------- global barrier -----------------
-    |  |- Synchronize host and device data
-    |  |- Perform device operation N \
-    |  |- Perform host operation N+1 / asynchronous
+|- ホスト演算 0　を実行
+|--- 反復処理 -----------------------------
+    |->----------- グローバルバリア -----------------
+    |  |- ホストおよびデバイスデータを同期
+    |  |- デバイス演算 N \　を実行
+    |  |- ホスト演算 N+1 / 非同期　を実行
     |-<--------------------------------------------
 ```
 
-## Example Code
-Perform setup of host data needed for iteration n+1 while device is performing
-operation on iteration n
+## コード例
+デバイスが反復処理 n において、演算を実行している間、反復処理 n+1 に必要なホストデータのセットアップを実行します。
 
 ```c++
-typedef double value_type;
-typedef Kokkos::OpenMP   HostExecSpace;
-typedef Kokkos::Cuda     DeviceExecSpace;
-typedef Kokkos::RangePolicy<DeviceExecSpace>  device_range_policy;
-typedef Kokkos::RangePolicy<HostExecSpace>    host_range_policy;
-typedef Kokkos::View<double*, Kokkos::CudaSpace>   ViewVectorType;
-typedef Kokkos::View<double**, Kokkos::CudaSpace>  ViewMatrixType;
+型定義 ダブル value_type;
+型定義 Kokkos::OpenMP   HostExecSpace;
+型定義 Kokkos::Cuda     DeviceExecSpace;
+型定義 Kokkos::RangePolicy<DeviceExecSpace>  device_range_policy;
+型定義 Kokkos::RangePolicy<HostExecSpace>    host_range_policy;
+型定義 Kokkos::View<double*, Kokkos::CudaSpace>   ViewVectorType;
+型定義 Kokkos::View<double**, Kokkos::CudaSpace>  ViewMatrixType;
 
-// Setup data on host  
-// use parameter xVal to demonstrate variability between iterations
+// ホスト上のデータをセットアップ
+// 反復処理間の変動性の論証のため、パラメータ xVal を使用
 void init_src_views(ViewVectorType::HostMirror p_x,
                   ViewMatrixType::HostMirror p_A,
                   const value_type xVal ) {
@@ -79,11 +74,11 @@ ViewVectorType::HostMirror h_x = Kokkos::create_mirror_view( x );
 ViewMatrixType::HostMirror h_A = Kokkos::create_mirror_view( A );
   
 for ( int repeat = 0; repeat < nrepeat; repeat++ ) {
-  init_src_views( h_x, h_A, repeat+1);  // setup data for next device launch
+  init_src_views( h_x, h_A, repeat+1);  // 次回のデバイス起動に向けた設定データの準備
   
-  Kokkos::fence(); // barrier used to synch between device and host before copying data
+  Kokkos::fence(); // デバイスとホスト間でデータをコピーする前に同期するために使用するバリア
     
-  // Deep copy host data needed for this iteration to device.
+  // この反復処理において必要となる、デバイスへのホストデータのディープコピー
   Kokkos::deep_copy( h_y, h );
   Kokkos::deep_copy( x, h_x );
   Kokkos::deep_copy( A, h_A );  // implicit barrier
@@ -99,46 +94,38 @@ for ( int repeat = 0; repeat < nrepeat; repeat++ ) {
     y( j ) = temp2;
   } );
     
-  // note that there is no barrier here, so the host thread will loop
-  // back around and call ini_src_views while the kernel is still running
+  // なお、ここにはバリアが存在しないことに注意。
+  //　したがって、カーネルがまだ実行中の間、ホストスレッドはループして　ini_src_views　を呼び出す。
 }
 ```
 
-**Important note**:  In theory, the order in which the host kernel and the device kernel are
-launched is not important, but in practice the device kernel must be launched first.  Most 
-host backends do not leave a "main" thread free while the kernel is running. Once the 
-host parallel kernel is launched, the main thread is occupied until that thread's 
-contribution to the kernel is complete.  Because the device execution is in a different context, 
-the host thread is free immediately after the kernel is launched.  Attention must 
-also be paid to the contract associated with the parallel execution pattern.  If the pattern
-requires a synchronization prior to completion (such as a reduction), then there is no opportunity to 
-overlap host and device operations.  Thus, taking advantage of a host/device
-overlapping pattern may require modifications to the overall algorithm.
+**重要注意事項**:  理論上、ホストカーネルとデバイスカーネルの起動順序は重要ではありませんが、実際には、最初にデバイスカーネルを起動する必要があります。 ほとんどのホストバックエンドは、カーネルが動作している間、"メイン"　スレッドを空いたままにしません。 ホスト並列カーネルが起動されると、そのスレッドがカーネルへの貢献を完了するまで、メインスレッドは占有された状態となります。 デバイス実行は異なるコンテキストで行われるため、カーネル起動直後にはホストスレッドは解放されます。 並列実行パターンに関連する契約についても
+注意を払う必要があります。 パターンが、完了前に同期化を必要とする場合（例えば、リダクションなど）、ホストとデバイスの操作を
+重複させる機会はありません。 したがって、ホスト／デバイスのオーバーラッピングパターンを活用するには、アルゴリズム全体の修正が必要となる場合があります。
 
-## Usage pattern 2 - perform serialized operation on host while device is executing kernel
+## Usage pattern使用例パターン2 - デバイスがカーネルを実行している間ホスト上でシリアル化された演算を実行
 
 ```
-|--- Allocate Device and Host Memory
-|--- Initialize Host and Device Memory
-|---------- global barrier ------------------------------
-|- Synchronize host and device data
+|--- デバイスおよびホストメモリを割り当て
+|--- デバイスおよびホストメモリを初期化
+|---------- グローバルバリア  ------------------------------
+|- ホストおよびデバイスデータを同期
 |--------------------------------------------------------
-    |->|- Perform device operation N         \ asynchronous
-    |  |- Serialize host data from N to disk /
-    |  |------------ global barrier -----------------------
-    |  |- Synchronize host and device data for start of N+1
+    |->|- デバイス演算 N を実行        \ 非同期
+    |  |- ホストデータをNからディスクへシリアル化 /
+    |  |------------ グローバルバリア -----------------------
+    |  |- N+1の開始に向け、ホストとデバイスのデータを同期
     |-<----------------------------------------------------
 ```
 
-Data serialized to disk is behind by 1 iteration, but it can be performed 
-asynchronously with the device operation.  Device data for N+1 is copied after
-iteration N which is why the barrier is need before the synchronization
+ディスクにシリアル化されたデータは1回の反復分遅れていますが、デバイス操作と非同期で実行することが可能です。 N+1のデバイスデータは
+反復Nの後にコピーされるため、同期の前にバリアが必要となります。
 
-## example code
+## コード例
 
 ```c++
-typedef Kokkos::RangePolicy<>    range_policy;
-typedef Kokkos::View<double*>    ViewVectorType;
+型定義 Kokkos::RangePolicy<>    range_policy;
+型定義 Kokkos::View<double*>    ViewVectorType;
 
 ViewVectorType V_r;
 ViewVectorType V_r1;
@@ -155,9 +142,9 @@ for (int r = 0; r < R; r++) {
      V_r1(i) = get_RHS_func(V_r);  //return V_r1(i) for RHS from V_r
   });
 
-  serialize_state(h_V); // serialize data still in host view_r
+  serialize_state(h_V); // ホスト　view_r　にまだ存在するデータをシリアライズ
  
-  Kokkos::fence();  // synchronize between host and device
+  Kokkos::fence();  // ホストおよびデバイス間を同期
  
   Kokkos::deep_copy(h_V, V_r1);  // update for next iteration
   Kokkos::deep_copy(V_r, h_V);
