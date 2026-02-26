@@ -2,85 +2,85 @@
 ``any_of``
 ==========
 
-Header: ``<Kokkos_StdAlgorithms.hpp>``
+ヘッダー: ``<Kokkos_StdAlgorithms.hpp>``
 
-Description
+ディスクリプション
 -----------
 
-Returns ``true`` if at least one element in a range or rank-1 ``View`` satisfies
-a target unary predicate.
+範囲またはランク1の　ビュー　内の全要素が 一項述語を満たす場合、`true`　を返します。
 
-Interface
+インターフェイス
 ---------
 
-.. warning:: This is currently inside the ``Kokkos::Experimental`` namespace.
+.. 警告:: これは、現在 ``Kokkos::Experimental`` 名前空間内部にあります。
 
-Overload set accepting execution space
+実行空間を受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
-   template <class ExecutionSpace, class InputIterator, class Predicate>
-   bool any_of(const ExecutionSpace& exespace,                                (1)
+   テンプレート <class ExecutionSpace, class InputIterator, class Predicate>
+   ブール any_of(const ExecutionSpace& exespace,                                (1)
                InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class InputIterator, class Predicate>
-   bool any_of(const std::string& label, const ExecutionSpace& exespace,      (2)
+   テンプレート <class ExecutionSpace, class InputIterator, class Predicate>
+   ブール any_of(const std::string& label, const ExecutionSpace& exespace,      (2)
 	       InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class DataType, class... Properties,
+   テンプレート <class ExecutionSpace, class DataType, class... Properties,
 	     class Predicate>
-   bool any_of(const ExecutionSpace& exespace,                                (3)
+   ブール any_of(const ExecutionSpace& exespace,                                (3)
 	       const ::Kokkos::View<DataType, Properties...>& v,
 	       Predicate predicate);
 
-   template <class ExecutionSpace, class DataType, class... Properties,
+   テンプレート <class ExecutionSpace, class DataType, class... Properties,
 	     class Predicate>
-   bool any_of(const std::string& label, const ExecutionSpace& exespace,      (4)
+   ブール any_of(const std::string& label, const ExecutionSpace& exespace,      (4)
 	       const ::Kokkos::View<DataType, Properties...>& v,
 	       Predicate predicate);
 
-Overload set accepting a team handle
+チームハンドルを受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 4.2
 
 .. code-block:: cpp
 
-   template <class TeamHandleType, class InputIterator, class Predicate>
+   テンプレート <class TeamHandleType, class InputIterator, class Predicate>
    KOKKOS_FUNCTION
-   bool any_of(const TeamHandleType& teamHandle,                              (5)
+   ブール any_of(const TeamHandleType& teamHandle,                              (5)
                InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class TeamHandleType, class DataType, class... Properties,
+   テンプレート <class TeamHandleType, class DataType, class... Properties,
 	     class Predicate>
    KOKKOS_FUNCTION
-   bool any_of(const TeamHandleType& teamHandle,                              (6)
+   ブール any_of(const TeamHandleType& teamHandle,                              (6)
 	       const ::Kokkos::View<DataType, Properties...>& v,
 	       Predicate predicate);
 
 
-Parameters and Requirements
+パラメータおよび要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``exespace``: execution space instance
+- ``exespace``: 実行空間インスタンス
 
-- ``teamHandle``: team handle instance given inside a parallel region when using a TeamPolicy
+- ``teamHandle``: TeamPolicyを使用する際、並列領域内で指定されたチームハンドルインスタンス
 
-- ``label``: string forwarded to internal parallel kernels for debugging purposes
 
-  - 1: The default string is "Kokkos::any_of_iterator_api_default".
+- ``label``: デバッグ目的で内部の並列カーネルに転送された文字列
 
-  - 3: The default string is "Kokkos::any_of_view_api_default".
+  - 1: デフォルト文字列は、 "Kokkos::any_of_iterator_api_default".
 
-  - NOTE: overloads accepting a team handle do not use a label internally
+  - 3: デフォルト文字列は、 "Kokkos::any_of_view_api_default".
 
-- ``first, last``: range of elements to search in
+  - 注意事項: チームハンドルを受け取るオーバーロードは、内部でラベルを使用しません。
 
-  - must be *random access iterators*, e.g., returned from ``Kokkos::Experimental::(c)begin/(c)end``
+- ``first, last``: 検索対象となる要素の範囲
+
+  - *ランダムアクセスイテレータ*　である必要があり、例えば、 ``Kokkos::Experimental::(c)begin/(c)end``から返されなければなりません。
 
   - must represent a valid range, i.e., ``last >= first``
 
