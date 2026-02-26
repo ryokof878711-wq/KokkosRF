@@ -95,20 +95,19 @@
 
   ``pred(v)`` は、引数として渡された実行空間から呼び出されるためには、有効でなければならない、またはチームハンドルに関連付けられた実行空間でなければならず、そして 型　value_type　の引数　``v``　のすべてのペアについて、bool型に変換可能で、そこでは、``value_type``が、``IteratorType``　の値型、または ``view``であり、  ``v``　を変更してはいけません。
 
-  - must conform to:
+  - 以下に一致しなければなりません:
 
   .. code-block:: cpp
 
-     struct CustomPredicate{
+     構造体 CustomPredicate{
        KOKKOS_INLINE_FUNCTION
-       bool operator()(const value_type & v) const {
-         return /* true if v satisfies your desired condition */;
+       ブール operator()(const value_type & v) const {
+         返し /* vが望ましい条件　*/　を満たす場合に真 ;
        }
      };
 
 
-Return Value
+返し値
 ~~~~~~~~~~~~
 
-Returns ``true`` if the unary predicate returns ``true`` for all elements in the range or ``view``,
-or the range or ``view`` are empty. Returns ``false`` otherwise.
+範囲または　``ビュー``　内の全要素について、一項述語が　``真``　を返す場合、または範囲または、``ビュー``　が空の場合、``真``　を返します。それ以外の場合は、``偽``　を返します。
