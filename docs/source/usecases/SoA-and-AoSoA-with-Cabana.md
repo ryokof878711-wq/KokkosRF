@@ -1,65 +1,65 @@
-# Array of Structures and Structure of Arrays with Cabana
+# カバナを用いた構造体の配列および配列の構造
 
-[Cabana](https://github.com/ECP-copa/Cabana) is a MPI+Kokkos performance portable library for particle-based simulations.  It provides particle data structures, algorithms, and utilities to enable simulations on a variety of platforms including many-core architectures and GPUs.
+[Cabana](https://github.com/ECP-copa/Cabana) は、粒子ベースのシミュレーション向けに設計された、MPI+Kokkos 対応のパフォーマンスポータブルライブラリです。 本ソフトウェアは、マルチコアアーキテクチャおよび　GPU　を含む、様々なプラットフォーム上でのシミュレーションを有効化するため、粒子データ構造、アルゴリズム、およびユーティリティを提供します。
 
-This use case describes the SoA and AoSoA classes provided by Cabana.  Their goal is to provide a vectorization-friendly collections of contiguous elements that exhibit good alignment.
+本使用事例では、Cabana　が提供する　SoA　クラスおよび　AoSoA　クラスについて説明します。 その目的は、良好なアラインメントを示す連続した要素から構成される、ベクトル化に適したコレクションを提供することです。
 
-## Structure of Arrays (SoA)
+## 配列の構造 (SoA)
 
 ### `Cabana::SoA`
-Defined in header [`<Cabana_SoA.hpp>`](https://github.com/ECP-copa/Cabana/blob/master/core/src/Cabana_SoA.hpp)
+ヘッダー [`<Cabana_SoA.hpp>`](https://github.com/ECP-copa/Cabana/blob/master/core/src/Cabana_SoA.hpp)　に定義。
 ```C++
-template <typename DataTypes, int VectorLength>
-struct SoA;
+テンプレート <typename DataTypes, int VectorLength>
+構造体 SoA;
 ```
 
-`Cabana::SoA` is a struct template that provides a way to store a fixed-size collection of heterogeneous arrays whose size is the specified vector length.
+`Cabana::SoA` は、指定されたベクトル長を持つ異種配列の固定サイズのコレクションを格納する方法を提供する構造体テンプレートです。
 
-Conceptually `Cabana::SoA<Cabana::MemberTypes<float[3], char>, 8>` is equivalent to `std::tuple<float[3][8], char[8]>`.
+概念的には、`Cabana::SoA<Cabana::MemberTypes<float[3], char>, 8>` は `std::tuple<float[3][8], char[8]>` と同等です。
 
-The data structure keeps a separate, homogeneous data array for each particle field, each having the same number of elements.  The motivation is easier vectorization for the compiler.
+データ構造は、各粒子フィールドごとに独立した均質なデータ配列を保持し、それぞれが同じ要素数を有します。そのモチベーションは、コンパイラによるベクトル化を容易にすることです。
 
-#### Template parameters
-`DataTypes`
-: The types of the elements that the SoA stores as fixed size arrays.
-It is required to be a specialization of `Cabana::MemberTypes` which is defined as
-```C++
-template <typename... Types>
+#### テンプレートパラメータ
+`データ型`
+: SoAが固定サイズの配列として格納する要素の型。
+`Cabana::MemberTypes` の特殊化であることが求められ、それは、```C++　と定義されます。
+
+テンプレート <typename... Types>
 MemberTypes<Types...>;
 ```
 
-`VectorLength`
-: The number of elements stored in contiguous memory locations for each data type.
+`ベクトル長`
+: 各データ型ごとに連続したメモリ位置に格納される要素の数。
 
-#### Non-member functions
+#### 非メンバー関数
 `Cabana::get`
-: accesses the specified element of the SoA.
+: SoA　の指定された要素にアクセス
 
-## Array of Structures of Arrays (AoSoA)
+## 配列構造の配列 (AoSoA)
 
 ### Cabana::AoSoA
-Defined in header [`<Cabana_AoSoA.hpp>`](https://github.com/ECP-copa/Cabana/blob/master/core/src/Cabana_AoSoA.hpp)
+ヘッダー [`<Cabana_AoSoA.hpp>`](https://github.com/ECP-copa/Cabana/blob/master/core/src/Cabana_AoSoA.hpp)　に定義。
 
 ```C++
-template <class DataTypes, class MemorySpace,
+テンプレート <class DataTypes, class MemorySpace,
           int VectorLength = DEDUCED-FROM-MEMORY-SPACE,
           class MemoryTraits = Kokkos::MemoryManaged>
-class AoSoA;
+クラス AoSoA;
 ```
 
-#### Template parameters
-`DataTypes`
-: The types of the elements stored in the underlying `Cabana::SoA`s.
+#### テンプレートパラメータ
+`データ型`
+: 基盤となる `Cabana::SoA` に格納される要素の型。
 
-`MemorySpace`
-: The Kokkos memory space that carries information about where to allocate storage.
+`メモリ空間`
+: ストレージをどこに割り当てるかについての情報を保持する　Kokkos のメモリ空間。
 
-`VectorLength`
-: The vector length for the structure of arrays (optional). If not specified, a default (defined per memory space) is used; this value may need to be modified for optimal performance.
+`ベクトル長`
+: 配列構造のベクトル長（任意）。 指定がない場合、デフォルト値（メモリ空間ごとに定義されたもの）が使用されます; この値は、最適なパフォーマンスを得るために変更する必要があるかもしれません。
 
-`MemoryTraits`
-: The Kokkos memory traits that tells who controls memory allocation and deallocation (optional).
+`メモリ特性`
+: Kokkos　のメモリ特性は、メモリの割り当てと割り当て解除を管理する主体を示します（オプション）。
 
-#### Non-member functions
-`slice`
-: accesses the particle data fields.
+#### 非メンバー関数
+`スライス`
+: 粒子データフィールドにアクセス。
