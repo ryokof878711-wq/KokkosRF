@@ -1,106 +1,104 @@
-# Kokkos Tasking Use Case
+# Kokkos タスク割当て使用事例
 
-> Deprecated since Kokkos 4.5.
+>  Kokkos 4.5以降非推奨
 
-Kokkos provides an execution pattern that enables end-user code to dynamically execute a body of work that 
-is not easily prescribed to structured flat or hierarchical parallelism.  This use case describes the characteristics
-of an end-user program that is best designed using a tasking execution pattern, and provides examples of program structure
-and usage of the Kokkos API.
+Kokkos　は、エンドユーザーコードが、構造化された平坦または階層的な並列処理に容易に規定できない作業群を動的に実行することを可能にする実行パターンを提供します。 この使用事例では、タスク実行パターンを用いて設計するのが最適である、エンドユーザープログラムの特徴を説明し、
+プログラム構造の例と　Kokkos API　の使用例を提供します。
 
-## Actors
- - Algorithm without predetermined concurrency or parallelism
-   - Algorithm where results are accumulative based on recursion
-   - Or Algorithm where work is divided dynamically through logical tree
+## アクター
+ - 事前定義された並行性や並列性を持たないアルゴリズム
+   - 再帰に基づいて、結果が累積されるアルゴリズム
+   - または、論理ツリーを通じて作業が動的に分割されるアルゴリズム
     
-## Subjects
- - Kokkos Execution Space
- - Kokkos Task Scheduler
- - Kokkos Task Queue
+## サブジェクト
+ - Kokkos 実行空間
+ - Kokkos Task タスクスケジューラ
+ - Kokkos タスクキュー
 
-## Assumptions
- - Number of tasks required cannot be determined before starting
+## 仮定
+ - 必要なタスクの数は、開始する前に確定できません。
     
-## Constraints
- - Number of threads and memory are limited by execution and memory space
+## 制約
+ - スレッド数とメモリは、実行環境とメモリ領域によって制限されます。
     
-## Preconditions
- - Task Scheduler and queue must be selected by end-user application
- - Task "kernel" implemented in the form of C++ functor
+## 前提条件
+ - タスク スケジューラーとキューは、エンドユーザーアプリケーションによって選択されなければなりません。
+ - ファンクタの形式で実装されるタスク "カ－ネル" 
     
-## Usage Pattern
- - Launch Head task either on host or task queue
-   - Spawn one or more surrogate tasks
-   - wait for surrogate tasks to complete
-   - roll-up/accumulate result
- - Surrogate tasks may spawn one or more surrogate tasks
-   - wait for spawned tasks to complete
-   - roll-up/accumulate result
+## 使用例パターン
+ - ホストまたはタスクキュー上でヘッドタスクを起動
+   - 1つ以上の代理タスクを生成
+   - 代理タスクの完了を待機
+   - 結果をロールアップ/集計
+ - 代理タスクは、1つ以上の代理タスクを生成する場合がある。
+   - 生成されたタスクの完了を待機
+   - 結果をロールアップ/集計
 
 ```
-[Start Task Head]
-     |-------------- Inside 'head' functor ------------------
-     | [Spawn task a]
-     |     |------------- Inside 'a' functor ----------------
-     |     | *Spawn task a1
-     |     | *Spawn task a2
-     |     | *Spawn task a3
-     |     | Add {a1,a2,a3} to waiting list
-     |     | Respawn -- wait until waiting list is complete
-     |     |------------ re-enter 'a' functor ---------------
-     |     | combine results from {a1,a2,a3} and return
+[スタートタスクヘッド]
+     |--------------  'ヘッド' ファンクタ内部 ------------------
+     | [タスク a　生成]
+     |     |-------------  'a' ファンクタ内部 ----------------
+     |     | *生成されたタスク a1
+     |     | *生成されたタスク a2
+     |     | *生成されたタスク a3
+     |     |  {a1,a2,a3}　を待機リストに追加 
+     |     | 再生成 -- 待機リストが完成するまで待機
+     |     |------------  'a' ファンクタ再入力---------------
+     |     | {a1,a2,a3} からの結果を組み合わせて、返す
      |     |-------------------------------------------------
-     | [Spawn task b]
-     |     |------------- Inside 'b' functor ----------------
-     |     | *Spawn task b1
-     |     | *Spawn task b2
-     |     | *Spawn task b3
-     |     | Add {b1,b2,b3} to waiting list
-     |     | Respawn -- wait until waiting list is complete
-     |     |------------ re-enter 'b' functor ---------------
-     |     | combine results from {b1,b2,b3} and return
+     | [生成されたタスク b]
+     |     |-------------  'b' ファンクタ内部  ----------------
+     |     | *生成されたタスク b1
+     |     | *生成されたタスク b2
+     |     | *生成されたタスク b3
+     |     |  {b1,b2,b3} を待機リストに追加
+     |     | 再生成 -- 待機リストが完成するまで待機
+     |     |------------  'b' ファンクタ再入力 ---------------
+     |     | {b1,b2,b3} からの結果を組み合わせて、返す
      |     |-------------------------------------------------
-     | Add {a,b} to waiting list
-     | Respawn -- wait until waiting list is complete
-     |-------------- re-enter head functor ------------------
-     | combine results from {a,b} and return
+     | {a,b} を待機リストに追加
+     | 再生成 -- 待機リストが完成するまで待機
+     |-------------- ヘッドファンクタを再入力 ------------------
+     | {a,b} からの結果を組み合わせて、返す
      |-------------------------------------------------------
 ```
 
-## Post conditions
- - Completed tasks return results via Kokkos::future
- - futures of surrogate task (in wait list) are guaranteed to be set when parent functor is re-entered (after respawning)
+## 事後条件
+ - 完了したタスクは、Kokkos::futureを介して結果を返します
+ - 親ファンクタが再入力された際（再起動後）、待機リスト内の代理タスクのフューチャは確実に設定されます。
 
-## Examples
+## 例
 
-## Recursive Example - Fibonacci Sequence
+## Recursive Example - Fibonacci Sequence再帰的な例 - フィボナッチ数列
 
- - Recursive Algorithm 
+ - 再帰アルゴリズム
    - F<sub>n</sub> = F<sub>n-1</sub> + F<sub>n-2</sub>
    - F<sub>0</sub> = 0 and F<sub>1</sub>=1
 
-### Task Functor
+### タスクファンクタ
 
 ```c++
-struct Fib {
+構造体 Fib {
   
-  using future_type = Kokkos::BasicFuture<return_type, Scheduler>;
+  future_type = Kokkos::BasicFuture<return_type, Scheduler>　を使用;
   int N = 0;
   future_type f1;
   future_type f2;
 
   operator() (team_member & member, return_type & return) {
-    auto scheduler = member.scheduler();
+    自動スケジューラ = member.scheduler();
     if (N < 2) {
-        return = N;
+        返し = N;
     } else if (f1.is_ready() && f2.is_ready()) {
-        return = f1.get() + f2.get();
+        返し = f1.get() + f2.get();
     } else{
         f1 = Kokkos::task_spawn( Kokkos::TaskSingle(scheduler),
                                  Fib{N-1} );
         f2 = Kokkos::task_spawn( Kokkos::TaskSingle(scheduler),
                                  Fib{N-2} );
          Kokkos::BasicFuture<void, Scheduler> wait_list[] = { f1, f2 };
-         auto fall = scheduler.when_all(wait_list);
+         自動フォール = scheduler.when_all(wait_list);
          Kokkos::respawn(this, fall);
     }
   }
@@ -108,68 +106,61 @@ struct Fib {
 };
 ```
 
-### Example flow for N = 3
+###  N = 3　のフロー例
 ``` 
-[Start head task A(N=3)]
-   A_f1 = [Spawn task B N = 2]
+[ヘッドタスク A(N=3)　開始]
+   A_f1 = [生成されたタスク B N = 2]
    |      |  B_f1 = [Spawn task N = 1]
-   |      |  | - return 1
+   |      |  | - 返し 1
    |      |  B_f2 = [Spawn task N = 0]
-   |      |  | - return 0
-   |      | - wait for f1 and f2, then respawn
+   |      |  | - 返し 0
+   |      | - f1 および f2　を待機、次に再生成
    |      | ----------- re-enter B functor ----------------
-   |      | - return (0) + (1)  [result from B_f1 and B_f2]
-   A_f2 = [Spawn task C N = 1]
-   |      | - return 1
-   | - wait for A_f1 and A_f2, then respawn
-   | --------- re-enter A functor -------------------------
-   | - return (1) + (1)  [result from A_f1 and A_f2] 
+   |      | - 返し (0) + (1)  [result from B_f1 および B_f2　からの結果]
+   A_f2 = [生成されたタスク C N = 1]
+   |      | - 返し 1
+   | - wait for A_f1 および A_f2　を待機、次に再生成
+   | ---------  A ファンクタを再入力 -------------------------
+   | - 返し (1) + (1)  [result from A_f1 および A_f2　からの結果] 
 ```
 
-## Work divided through graph
+## グラフによる作業分担
 
-### Top Down BFS Algorithm
+### トップダウン探索アルゴリズム
 
-Given league of size LS each, team member TM will pull a vertex off of the search 
-queue for that team. Subteam member workers are then spawned to visit each of the
-vertices attached to the visited node.  The task is further split if the number of 
-vertices exceeds a threshold (256).  When an unvisited (new) node is encountered
-then the vertices attached to that node are appended to the team queue.  Work is 
-complete when all the queues are empty and the nodes have all been visited.
+各チームの規模が　LS　である場合、チームメンバー　TM　は、そのチームの検索キューから頂点を1つ取り出します。サブチームのメンバーワーカーが生成され、訪問済みのノードに接続されている各頂点を順に訪問します。 頂点の数がある閾値（256）を超えた場合、タスクはさらに分割されます。  未訪問（新規）ノードに遭遇した場合、そのノードに接続されている頂点をチームキューに追加します。すべてのキューが空になり、ノードがすべて訪問された時点で、作業は完了となります。
 
 ```
-   [Start Task Head]
-        |-------------- Inside 'head' functor ------------------------------------------------
-        | [Spawn task T = 0]
-        |     |------------- Inside 'T=0' functor --------------------------------------------
-        |     | *Spawn task TM=0       |
-        |     |     ...                |  - Team members added to 
-        |     |                        |    wait list
-        |     | *Spawn task TM=TS-1    |
-        |     |------------------ Inside TM functor ------------------------------------------
-        |     | - atomically update frontier queue and retrieve next vertex  
-        |     |   |  Spawn Search task ST = 0 - Memory Limit
-        |     |   |    |-------------- Inside Search Task functor ----------------------------
-        |     |   |    |     | - if edge list from vertex is small, visit each node
-        |     |   |    |     | - if edge list is large spawn edge list workers for 
-        |     |   |    |     |   every 256 edges
-        |     |   |    |     | ---- return after visiting or respawn to wait for edge workers
-        |     |   |---------Repeat until queue is empty -------------------------------------
-        |     |   | Add each search task to wait queue
-down to |     |   |- Respawn -- wait until waiting list is complete
+   [タスクヘッド開始]
+        |-------------- 'ヘッド' ファンクタ内部 ------------------------------------------------
+        | [生成されたタスク T = 0]
+        |     |------------- 'T=0' ファンクタ内部 --------------------------------------------
+        |     | *生成されたタスク TM=0       |
+        |     |     ...                |  -  待機リストに追加されたチームメンバー
+        |     |                        |    
+        |     | *生成されたタスク TM=TS-1    |
+        |     |------------------ TM ファンクタ内部 ------------------------------------------
+        |     | - フロンティアキューを原子的に更新し、次の頂点を取得  
+        |     |   |  生成された探索タスク ST = 0 - メモリーリミット
+        |     |   |    |-------------- 探索タスクファンクタ内部 ----------------------------
+        |     |   |    |     | - 頂点からの辺のリストが少ない場合、各ノードを訪問
+        |     |   |    |     | - エッジリストが大きい場合、エッジリストワーカーを 
+        |     |   |    |     |   エッジごとに生成
+        |     |   |    |     | ---- 訪問後に返す、またはエッジワーカーを待つために再生成
+        |     |   |---------キューが空になるまで反復 -------------------------------------
+        |     |   | キュー待機のために各探索タスクを追加
+　　至 　|     |   |- 再生成 -- 待機リストが完成するまで待機
         |     |------------ ------------------------------- ---------------------------------
-        |     | Wait for each team member an respawn
+        |     | 各チームメンバーが再生成するまで待機
         |     |------------------------------------------------------------------------------
-        | [Spawn task T = LS-1]
-        |     |  (same as above )
+        | [生成されたタスク T = LS-1]
+        |     |  (上記と同じ )
         |     |------------------------------------------------------------------------------
-        | Add Teams to waiting list
-        | Respawn -- wait until waiting list is complete
-        |-------------- re-enter head functor -----------------------------------------------
-        | combine results from {Teams} and return
+        | チームを待機リストに追加
+        | 再生成 -- 待機リストが完成するまで待機
+        |-------------- ヘッドファンクタを再入力 -----------------------------------------------
+        |  {チーム}　からの結果を組み合わせて、 返す
         |------------------------------------------------------------------------------------
 ```
 
-Note that with this algorithm, the queue position, the queue itself, and the data indicating whether
-a node has been visited must all be updated atomically.  Thus, the league size will greatly determine
-the contention for queue resources.
+このアルゴリズムでは、キューの位置、キュー自体、およびノードが訪問済みかどうかを示すデータは、すべてアトミックに更新されなければならないことに注意してください。 したがって、リーグの規模が、キューリソースの競合を大きく左右することになります。 
