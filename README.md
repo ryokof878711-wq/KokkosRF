@@ -1,34 +1,34 @@
-# kokkos-core-documentation-website
-Welcome to the Kokkos Documentation repository.  This is the source for https://kokkos.github.io/kokkos-core-wiki/.
+# Kokkos　コア文書ウェブサイト
+Kokkos ドキュメンテーションレポジトリにようこそ。  これは、 https://kokkos.github.io/kokkos-core-wiki/.のソースです。
 
-## Requirements to build html page locally
+## ローカル環境で　HTML　ページを作成するための要件
 
-This is needed just for local render of documentation, so it can be checked before push.
-Requirements are in `build_requirements.txt`
-Could be installed with: `pip install -r build_requirements.txt`
+これはドキュメントのローカルレンダリング専用に必要なもので、プッシュ前に確認できるようになります。
+要件は、 `build_requirements.txt`にあります。
+以下を使って、インストール可能です: `pip install -r build_requirements.txt`
 
-## Build
+## ビルド
 
 ```
 cd docs
 make html
 ```
 
-To clean:
+クリーンのため:
 ```
 cd docs
-make clean
+コードをきれいにする
 ```
 
-## Displaying the site locally
+## サイトをローカルで表示
 
-`docs/generated_docs/index.html` can be opened in a web browser, or alternatively you can use python's built-in http server:
+ウェブブラウザで、`docs/generated_docs/index.html` を開くことが可能で、または、その代わりに、python　に組み込まれた  http サーバーを使用できます:
 
 ```bash
 cd docs/generated_docs
 python3 -m http.server
 ```
 
-Then, navigate to http://localhost:8000
+次に、 http://localhost:8000　に移動してください。
 
-Alternatively, if you would like to auto refresh every time you run make, the documentation works with [httpwatcher](https://pypi.org/project/httpwatcher/).
+その代わりに、あるいは、make　を実行するたびに自動更新を希望する場合は、[httpwatcher](https://pypi.org/project/httpwatcher/) と組み合わせて、ドキュメンテーションを利用できます。
