@@ -2,17 +2,17 @@
 ``adjacent_find``
 =================
 
-Header: ``<Kokkos_StdAlgorithms.hpp>``
+ヘッダー: ``<Kokkos_StdAlgorithms.hpp>``
 
 Description
 -----------
 
 Searches a given range or rank-1 ``View`` for two consecutive equal elements.
 
-Interface
+インターフェイス
 ---------
 
-.. warning:: This is currently inside the ``Kokkos::Experimental`` namespace.
+.. :: This is currently inside the ``Kokkos::Experimental`` namespace.
 
 
 Overload set accepting execution space
