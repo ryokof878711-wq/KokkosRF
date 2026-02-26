@@ -12,7 +12,7 @@ Searches a given range or rank-1 ``View`` for two consecutive equal elements.指
 インターフェイス
 ---------
 
-.. :: これは、現在 ``Kokkos::Experimental`` 名前空間内部にあります。
+.. 警告:: これは、現在 ``Kokkos::Experimental`` 名前空間内部にあります。
 
 
 実行空間を受け入れるオーバーロードセット
