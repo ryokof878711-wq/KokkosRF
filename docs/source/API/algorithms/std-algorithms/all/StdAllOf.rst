@@ -13,7 +13,7 @@
 インターフェイス
 ---------
 
-.. 警告:: This is currently inside the ``Kokkos::Experimental`` namespace.
+.. 警告:: これは、現在 ``Kokkos::Experimental`` 名前空間内部にあります。
 
 実行空間を受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,30 +42,30 @@
 	       const ::Kokkos::View<DataType, Properties...>& view,
 	       Predicate predicate);
 
-Overload set accepting a team handle
+チームハンドルを受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 4.2
 
 .. code-block:: cpp
 
-   template <class TeamHandleType, class InputIterator, class Predicate>
+   テンプレート <class TeamHandleType, class InputIterator, class Predicate>
    KOKKOS_FUNCTION
-   bool all_of(const TeamHandleType& teamHandle,                                     (5)
+   ブール all_of(const TeamHandleType& teamHandle,                                     (5)
                InputIterator first, InputIterator last,
 	       Predicate predicate);
 
-   template <class TeamHandleType, class DataType, class... Properties,
+   テンプレート <class TeamHandleType, class DataType, class... Properties,
 	     class Predicate>
    KOKKOS_FUNCTION
-   bool all_of(const TeamHandleType& teamHandle,                                     (6)
+   ブール all_of(const TeamHandleType& teamHandle,                                     (6)
 	       const ::Kokkos::View<DataType, Properties...>& view,
 	       Predicate predicate);
 
-Parameters and Requirements
+パラメータおよび要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``exespace``: execution space instance
+- ``exespace``: 実行空間インスタンス
 
 - ``teamHandle``: team handle instance given inside a parallel region when using a TeamPolicy
 
