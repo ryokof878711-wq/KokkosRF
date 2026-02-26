@@ -93,10 +93,7 @@
 
 - ``pred``: *二項関数*　で、引数が望ましい条件を満たす場合に　``真``　を返します。
 
-  ``pred(v)`` must be valid to be called from the execution space passed, or the execution space
-  associated with the team handle, and convertible to bool for every argument ``v``
-  of type ``value_type``, where ``value_type`` is the value type of ``IteratorType`` or ``view``
-  and must not modify ``v``.
+  ``pred(v)`` は、引数として渡された実行空間から呼び出されるためには、有効でなければならない、またはチームハンドルに関連付けられた実行空間でなければならず、そして 型　value_type　の引数　``v``　のすべてのペアについて、bool型に変換可能で、そこでは、``value_type``が、``IteratorType``　の値型、または ``view``であり、  ``v``　を変更してはいけません。
 
   - must conform to:
 
