@@ -99,7 +99,7 @@
 
 - ``view_from``, ``view_to``: 要素のコピー元およびコピー先である、ソースおよび宛先
 
-  - must be rank-1, and have ``LayoutLeft``, ``LayoutRight``, or ``LayoutStride``
+  - 必ずランク-1であり、``LayoutLeft``　、  ``LayoutRight``　、または ``LayoutStride``　を持たなければなりません。
 
   - 必ずランク-1であり、``LayoutLeft``、 ``LayoutRight``、または ``LayoutStride``を持たなければなりません。
 
