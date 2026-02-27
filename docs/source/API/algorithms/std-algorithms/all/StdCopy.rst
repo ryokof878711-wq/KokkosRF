@@ -79,9 +79,9 @@
 
 - ``label``:  デバッグ目的で内部の並列カーネルに名付けるために使用
 
-  - for 1, デフォルト文字列は、: "Kokkos::copy_iterator_api_default"
+  - 1　について、 デフォルト文字列は、: "Kokkos::copy_iterator_api_default"
 
-  - for 3, デフォルト文字列は、: "Kokkos::copy_view_api_default"
+  - 3　について、 デフォルト文字列は、: "Kokkos::copy_view_api_default"
 
   - 注意事項: チームハンドルを受け取るオーバーロードは、内部でラベルを使用しません。
 
@@ -89,7 +89,7 @@
 
   - *ランダムアクセスイテレータ*　でなければなりません。
 
-  - ``last_from >= first_from``有効な範囲を表す必要があり、つまり、``last >= first`` でなければなりません。
+  - 有効な範囲、つまり、``last_from >= first_from`` を表さなければなりません。
 
   - 必ず　``exespace``　またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
