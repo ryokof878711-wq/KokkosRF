@@ -106,8 +106,8 @@
 
      構造体 CustomPredicate{
        KOKKOS_INLINE_FUNCTION
-       bool operator()(const value_type & v) const {
-         return /* true if v satisfies your desired condition */;
+       ブール operator()(const value_type & v) const {
+         返し /*  v が望ましい条件を満たす場合、真 */;
        }
      };
 
