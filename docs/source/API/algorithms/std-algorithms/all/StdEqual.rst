@@ -184,67 +184,63 @@
 
   - 必ずランク-1であり、``LayoutLeft``　、  ``LayoutRight``　、または ``LayoutStride``　を持たなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
-- ``pred``: *binary* functor returning ``true`` if two arguments should be considered "equal".
+- ``pred``:　*二項*　ファンクタ　で、二つの引数が　"等しい"　と見なされる場合に　``真``　を返します。
 
-  ``pred(a,b)`` must be valid to be called from the execution space passed, or
-  the execution space associated with the team handle, and convertible to bool
-  for every pair of arguments ``a,b`` of type ``ValueType1`` and ``ValueType2``,
-  respectively, ``ValueType1`` and ``ValueType{1,2}`` are the value types of
-  ``IteratorType{1,2}`` or ``view{1,2}``, and must not modify ``a,b``.
+  ``pred(a,b)`` は、引数として渡された実行空間から呼び出されるためには、有効でなければならない、またはチームハンドルに関連付けられた実行空間でなければならず、そして 型　``ValueType1`` および ``ValueType2``　の引数が、それぞれ　　のすべてのペアについて、bool型に変換可能で、そこでは、``ValueType1`` および ``ValueType{1,2}``が、 ``IteratorType{1,2}`` または ``view{1,2}``　の値型、または ``view``　であり、  ``a,b``　を変更してはいけません。
 
-  - must conform to:
+  - 以下に一致しなければなりません:
 
   .. code-block:: cpp
 
-     template <class ValueType1, class ValueType2 = ValueType1>
-     struct IsEqualFunctor {
+     テンプレート <class ValueType1, class ValueType2 = ValueType1>
+     構造体 IsEqualFunctor {
       KOKKOS_INLINE_FUNCTION
       bool operator()(const ValueType1& a, const ValueType2& b) const {
-        return (a == b);
+        返し (a == b);
       }
      };
 
-Return Value
+返し値
 ~~~~~~~~~~~~
 
-If the elements of the two ranges or Views are equal, returns ``true``, otherwise ``false``.
+2つの範囲またはビューの要素が等しい場合には、``真``　を返し、そうでない場合には、 ``偽``　を返します。
 
-Corner cases when ``false`` is returned:
+``偽`` が返される特殊なケース:
 
-- if ``view1.extent(0) != view2.extent(1)`` for all overloads accepting Views
+- ビューを受け入れるすべてのオーバーロードについて、``view1.extent(0) != view2.extent(1)`` である場合
 
-- if the length of the range ``[first1, last)`` is not equal to length of ``[first2,last2)``
+- 範囲 ``[first1, last)`` の長さが、is not equal to length of ``[first2,last2)``　の長さに等しくない場合。
 
 
-Example
+例
 -------
 
 .. code-block:: cpp
 
-   namespace KE = Kokkos::Experimental;
+   名前空間 KE = Kokkos::Experimental;
 
-   template <class ValueType1, class ValueType2 = ValueType1>
-   struct IsEqualFunctor {
+   テンプレート <class ValueType1, class ValueType2 = ValueType1>
+   構造体 IsEqualFunctor {
      KOKKOS_INLINE_FUNCTION
-     bool operator()(const ValueType1& a, const ValueType2& b) const {
+     ブール operator()(const ValueType1& a, const ValueType2& b) const {
        return (a == b);
      }
    };
 
-   auto exespace = Kokkos::DefaultExecutionSpace;
-   using view_type = Kokkos::View<exespace, int*>;
+   自動 exespace = Kokkos::DefaultExecutionSpace;
+   view_type = Kokkos::View<exespace, int*>　を使用;
    view_type a("a", 15);
    view_type b("b", 15);
-   // fill a,b somehow
+   // a,b　を何らかの方法で満たす 
 
-   // create functor
+   // ファンクタ作成
    IsEqualFunctor<int,int> p();
 
-   bool isEqual = KE::equal(exespace, KE::begin(a), KE::end(a),
+   ブール isEqual = KE::equal(exespace, KE::begin(a), KE::end(a),
                             KE::begin(b), KE::end(b) p);
 
-   // To run explicitly on the host (assuming a and b are accessible on Host)
+   // ホスト上で明示的に実行（aとbがホスト上でアクセス可能であることを想定）
    bool isEqual = KE::equal(Kokkos::DefaultHostExecutionSpace(), KE::begin(a), KE::end(a),
                             KE::begin(b), KE::end(b), p);
