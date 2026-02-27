@@ -2,189 +2,187 @@
 ``equal``
 =========
 
-Header: ``<Kokkos_StdAlgorithms.hpp>``
+ヘッダー: ``<Kokkos_StdAlgorithms.hpp>``
 
-Description
+ディスクリプション
 -----------
 
-Returns true if two ranges or two rank-1 ``View`` s are equal.
+2つの範囲または2つのランク-1 ``ビュー`` 　が等しい場合、真を返します。
 
-Interface
+インターフェイス
 ---------
 
-.. warning:: This is currently inside the ``Kokkos::Experimental`` namespace.
+.. 警告:: これは、現在 ``Kokkos::Experimental`` 名前空間内部にあります。
 
 
-Overload set accepting execution space
+実行空間を受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2>
-   bool equal(const ExecutionSpace& exespace,                                        (1)
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2>
+   ブール equal(const ExecutionSpace& exespace,                                        (1)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,              (2)
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2>
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,              (2)
 	      IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2,
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
-   bool equal(const ExecutionSpace& exespace,                                        (3)
+   ブール equal(const ExecutionSpace& exespace,                                        (3)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2,
 	      BinaryPredicateType predicate);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2,
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,              (4)
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,              (4)
 	      IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2,
 	      BinaryPredicateType predicate);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2>
-   bool equal(const ExecutionSpace& exespace, IteratorType1 first1,                  (5)
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2>
+   ブール equal(const ExecutionSpace& exespace, IteratorType1 first1,                  (5)
               IteratorType1 last1, IteratorType2 first2,
 	      IteratorType2 last2);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,              (6)
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2>
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,              (6)
 	      IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2, IteratorType2 last2);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2,
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
-   bool equal(const ExecutionSpace& exespace,                                        (7)
+   ブール equal(const ExecutionSpace& exespace,                                        (7)
 	      IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2, IteratorType2 last2,
 	      BinaryPredicateType predicate);
 
-   template <class ExecutionSpace, class IteratorType1, class IteratorType2,
+   テンプレート <class ExecutionSpace, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,              (8)
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,              (8)
 	      IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2, IteratorType2 last2,
 	      BinaryPredicateType predicate);
 
-   template <class ExecutionSpace, class DataType1, class... Properties1,
+   テンプレート <class ExecutionSpace, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2>
-   bool equal(const ExecutionSpace& exespace,                                        (9)
+   ブール equal(const ExecutionSpace& exespace,                                        (9)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
               const Kokkos::View<DataType2, Properties2...>& view2);
 
-   template <class ExecutionSpace, class DataType1, class... Properties1,
+   テンプレート <class ExecutionSpace, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,             (10)
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,             (10)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
 	      const Kokkos::View<DataType2, Properties2...>& view2);
 
-   template <class ExecutionSpace, class DataType1, class... Properties1,
+   テンプレート <class ExecutionSpace, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2, class BinaryPredicate>
-   bool equal(const ExecutionSpace& exespace,                                       (11)
+   ブール equal(const ExecutionSpace& exespace,                                       (11)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
 	      const Kokkos::View<DataType2, Properties2...>& view2,
 	      BinaryPredicate pred);
 
-   template <class ExecutionSpace, class DataType1, class... Properties1,
+   テンプレート <class ExecutionSpace, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2, class BinaryPredicate>
-   bool equal(const std::string& label, const ExecutionSpace& exespace,             (12)
+   ブール equal(const std::string& label, const ExecutionSpace& exespace,             (12)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
 	      const Kokkos::View<DataType2, Properties2...>& view2,
 	      BinaryPredicate pred);
 
-Overload set accepting a team handle
+チームハンドルを受け入れるオーバーロードセット
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 4.2
 
 .. code-block:: cpp
 
-   template <class TeamHandleType, class IteratorType1, class IteratorType2>
+   テンプレート <class TeamHandleType, class IteratorType1, class IteratorType2>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (13)
+   ブール equal(const TeamHandleType& teamHandle,                                     (13)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2);
 
-   template <class TeamHandleType, class IteratorType1, class IteratorType2,
+   テンプレート <class TeamHandleType, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (14)
+   ブール equal(const TeamHandleType& teamHandle,                                     (14)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2,
 	      BinaryPredicateType predicate);
 
-   template <class TeamHandleType, class IteratorType1, class IteratorType2>
+   テンプレート <class TeamHandleType, class IteratorType1, class IteratorType2>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (15)
+   ブール equal(const TeamHandleType& teamHandle,                                     (15)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2, IteratorType2 last2);
 
-   template <class TeamHandleType, class IteratorType1, class IteratorType2,
+   テンプレート <class TeamHandleType, class IteratorType1, class IteratorType2,
 	     class BinaryPredicateType>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (16)
+   ブール equal(const TeamHandleType& teamHandle,                                     (16)
               IteratorType1 first1, IteratorType1 last1,
 	      IteratorType2 first2, IteratorType2 last2,
 	      BinaryPredicateType predicate);
 
-   template <class TeamHandleType, class DataType1, class... Properties1,
+   テンプレート <class TeamHandleType, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (17)
+   ブール equal(const TeamHandleType& teamHandle,                                     (17)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
 	      const Kokkos::View<DataType2, Properties2...>& view2);
 
-   template <class TeamHandleType, class DataType1, class... Properties1,
+   テンプレート <class TeamHandleType, class DataType1, class... Properties1,
 	     class DataType2, class... Properties2, class BinaryPredicate>
    KOKKOS_FUNCTION
-   bool equal(const TeamHandleType& teamHandle,                                     (18)
+   ブール equal(const TeamHandleType& teamHandle,                                     (18)
 	      const Kokkos::View<DataType1, Properties1...>& view1,
 	      const Kokkos::View<DataType2, Properties2...>& view2,
 	      BinaryPredicate pred);
 
 
-Overload Set Detailed Description
+オーバーロードセット詳細ディスクリプション
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- (1,2,3,4,13,14): returns true if the range ``[first1, last1)`` is equal to the
-  range ``[first2, first2 + (last1 - first1))``, and false otherwise
+- (1,2,3,4,13,14): 範囲　``[first1, last1)`` が
+  範囲 ``[first2, first2 + (last1 - first1))``　に等しい場合には、真を返し、そうでない場合には、偽を返します。
 
-- (5,6,7,8,15,16): returns true if the range ``[first1, last1)`` is equal
-  to the range ``[first2, last2)``, and false otherwise
+- (5,6,7,8,15,16): 範囲 ``[first1, last1)`` が 範囲 ``[first2, last2)``　に等しい場合には、真を返し、そうでない場合には、偽を返します。
 
-- (9,10,11,12,17,18): returns true if ``view1`` and ``view2`` are equal and false otherwise
+- (9,10,11,12,17,18):  ``view1`` および ``view2`` が等しい場合には、真を返し、そうでない場合には、偽を返します。
 
-- where applicable, the binary predicate ``pred`` is used to check equality between
-  two elements, otherwise ``operator ==`` is used
+- 該当する場合、二項述語　``pred``　は、二つの要素間の等価性を確認するために使用されます。そうでない場合には、``operator ==`` が使用されます。
 
-Parameters and Requirements
+パラメータおよび要件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- ``exespace``: execution space instance
+- ``exespace``: 実行空間インスタンス
 
-- ``teamHandle``: team handle instance given inside a parallel region when using a TeamPolicy
+- ``teamHandle``: TeamPolicyを使用する際、並列領域内で指定されたチームハンドルインスタンス
 
-- ``label``: string forwarded to internal parallel kernels for debugging purposes
+- ``ラベル``: デバッグ目的で内部の並列カーネルに転送された文字列
 
-  - (1,3,5,7): The default string is "Kokkos::equal_iterator_api_default"
+  - (1,3,5,7): デフォルト文字列は、 "Kokkos::equal_iterator_api_default"
 
-  - (9,11): The default string is "Kokkos::equal_view_api_default"
+  - (9,11): デフォルト文字列は、 "Kokkos::equal_view_api_default"
 
-  - NOTE: overloads accepting a team handle do not use a label internally
+  - 注意事項: チームハンドルを受け取るオーバーロードは、内部でラベルを使用しません。
 
-- ``first1``, ``last1``, ``first2``, ``last2``: iterators defining the ranges to read and compare
+- ``first1``, ``last1``, ``first2``, ``last2``: 読み取りおよび比較を行う範囲を定義するイテレータ
 
-  - must be *random access iterators*, e.g., returned from ``Kokkos::Experimental::(c)begin/(c)end``
+  - *ランダムアクセスイテレータ*　である必要があり、例えば、 ``Kokkos::Experimental::(c)begin/(c)end``　から返されなければなりません。
 
-  - must represent a valid range, i.e., ``last1 >= first1``
+  - 有効な範囲を表す必要があり、つまり、 ``last >= first``　でなければなりません。
 
-  - must be accessible from ``exespace`` or from the execution space associated with the team handle
+  - 必ず　`exespace`` またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
-- ``view1``, ``view2``: views to compare
+- ``view1``, ``view2``: 比較するためのビュー
 
-  - must be rank-1, and have ``LayoutLeft``, ``LayoutRight``, or ``LayoutStride``
+  - 必ずランク-1であり、``LayoutLeft``　、  ``LayoutRight``　、または ``LayoutStride``　を持たなければなりません。
 
   - must be accessible from ``exespace`` or from the execution space associated with the team handle
 
