@@ -67,7 +67,7 @@
 
    .. cpp:function:: bool full() const
 
-      :returns: もし、そして試行されたレポートの数が :cpp:any:`capacity()` に等しいか、それを超える場合にのみ、``true`` 。
+      :returns: もし、そして試行されたレポートの数が :cpp:any:`capacity()` に等しいか、それを超える場合にのみ、``真`` 。
 
    .. cpp:function:: void clear() const
 
