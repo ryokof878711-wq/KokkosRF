@@ -93,8 +93,7 @@
        要求された要素数 `n` を格納するのに十分な `chunk_size` のメモリチャンクで、ダイナミックビューをリサイズします。
        この方法は並列領域の外側からのみ呼び出し可能です。
        ``n`` は、DynamicView コンストラクタに渡された ``max_extent`` 値よりも小さい値に制限されます。
-       コンストラクタが　``chunk_size`` および ``max_extent``　について要求サイズを設定するので、このメソッドはDynamicViewの構築後に呼び出さなければなりませんが、 実際の使
-用メモリ量についての入力は選択しません。
+       コンストラクタが　``chunk_size`` および ``max_extent``　について要求サイズを設定するので、このメソッドはDynamicViewの構築後に呼び出さなければなりませんが、 実際の使用メモリ量についての入力は選択しません。
 
     .. cpp:function:: KOKKOS_INLINE_FUNCTION size_t allocation_extent() const noexcept;
 
