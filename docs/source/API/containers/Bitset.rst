@@ -42,7 +42,7 @@
 
     :cpp:`BIT_SCAN_REVERSE_MOVE_HINT_BACKWARD`: When passed as :cpp:`scan_direction` to :cpp:`find_any_set_near(...)`又は :cpp:`find_any_reset_near(...)`は、 逆（減少するインデックス）方向のビットをスキャンします。ビットが見つからなかった場合、現在のヒントの前にある新しいヒントを選択します。
 
-  .. rubric:: コンストラクタ
+  .. rubric:: 逆（減少するインデックス）方向のビットをスキャンします。 ビットが見つからなかった場合、現在のヒントの先にある新しいヒントを選択します。
 
   .. cpp:function:: Bitset(符号なしarg_size = 0u)
 
@@ -81,7 +81,7 @@
 
   .. cpp:function:: unsigned max_hint() const
 
-    ホスト/デバイス: used with :cpp:`find_any_set_near(...)` & :cpp:`find_any_reset_near(...)` functions.
+    ホスト/デバイス: used with :cpp:`find_any_set_near(...)` および :cpp:`find_any_reset_near(...)` 関数により.
 
     利用可能なビットを検索する際に、それらの関数を呼び出すべき最大回数を返します。
 
@@ -125,11 +125,11 @@
 クラスインターフェース
 ---------------
 
-.. cpp:class:: template <typename Device> ConstBitset
+.. cpp:class:: テンプレート <型名　デバイス> ConstBitset
 
-  :tparam Device: Device that physically contains the bits.
+  :tparam Device: 物理的にビットを含むデバイス。
 
-  .. rubric:: constructor/assignment 
+  .. rubric:: コンストラクタ/代入 
 
   .. cpp:function:: ConstBitset()
 
