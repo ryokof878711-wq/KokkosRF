@@ -104,7 +104,7 @@
      {
        KOKKOS_INLINE_FUNCTION
        ブール operator()(const value_type & v) const {
-         返し /* vが望ましい条件　*/　を満たす場合に真 */;
+         返し /* vが所望の条件を満たす場合に真 */;
        }
      };
 
