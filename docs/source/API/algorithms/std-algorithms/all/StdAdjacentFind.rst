@@ -107,7 +107,7 @@ Searches a given range or rank-1 ``View`` for two consecutive equal elements.指
 
   - *ランダムアクセスイテレータ*である必要があり、例えば、``Kokkos::Experimental::(c)begin/(c)end``から返されなければなりません。
 
-  - 有効な範囲を表す必要があり、つまり、``last >= first`` でなければなりません。
+  - 有効な範囲、つまり、``last >= first`` でなければなりません。
 
   - 必ず　``exespace``　またはチームハンドルに関連付けられた実行空間からアクセス可能である必要があります。
 
