@@ -155,7 +155,7 @@ Kokkos　の無順序マップは、数万件の同時挿入を効率的に処�
 
    :tparam ValueTypeView: UnorderedMap 値配列型。
 
-   :tparam ValuesIdxType: The index type for lookups in the value array.
+   :tparam ValuesIdxType: 配列内での検索に使用されるインデックスタイプ。
 
    .. rubric:: *Public* 挿入演算子の型
 
@@ -219,12 +219,12 @@ Insertion using ``UnorderedMapInsertOpTypes::AtomicAdd``を用いた挿入
 
  Kokkosの　``UnorderedMap``　を反復することは、標準的なコンテナに対するイテレーションとは異なります。パターンとしては、マップの容量を反復し、現在のインデックスが有効かどうかを確認します。
 
-Example
+例
 ~~~~~~~
 
 .. code-block:: cpp
 
-    // assume umap is an existing Kokkos::UnorderedMap
+    // umap が既存の Kokkos::UnorderedMap であると仮定します
     parallel_for(umap.capacity(), KOKKOS_LAMBDA (uint32_t i) {
         if( umap.valid_at(i) ) {
             auto key   = umap.key_at(i);
