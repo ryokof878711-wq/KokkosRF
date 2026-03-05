@@ -4,7 +4,7 @@
 .. role:: cpp(code)
     :language: cpp
 
-``add`` operation演算を行う `ReducerConcept <ReducerConcept.html>`_　の具体的な実装。
+``add`` 演算を行う `ReducerConcept <ReducerConcept.html>`_　の具体的な実装。
 
 ヘッダーファイル: ``<Kokkos_Core.hpp>``
 
@@ -99,7 +99,7 @@
 
 * ``Sum<T,S>::value_type`` は、 非定数 ``T``　です。
 
-* ``Sum<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。 S(メモリ空間)は結果が存在する空間と同じでなければならないことに、ご注意ください。
+* ``Sum<T,S>::result_view_type`` は、 ``Kokkos::View<T,S,Kokkos::MemoryTraits<Kokkos::Unmanaged>>``　です。 S(メモリ空間)は結果が存在する空間と同じでなければならないことに、注意してください。
 
 * 必要条件: ``Scalar`` は、 定義した　``operator =`` および ``operator +=``　を持ちます。``Kokkos::reduction_identity<Scalar>::sum()`` は、有効な式です。
 
