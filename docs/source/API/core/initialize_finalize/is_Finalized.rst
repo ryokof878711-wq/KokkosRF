@@ -9,7 +9,7 @@
 インターフェイス
 ---------
 
-.. cpp:function:: bool is_finalized() noexcept
+.. cpp:function:: ブール is_finalized() noexcept
 
     Kokkos　の最終処理完了ステータスを照会し、Kokkos　の最終処理が完了している場合は、``true``　を、最終処理が完了していない場合は、``false``　を返します。  Kokkos の初期化または最終処理完了前後に、この関数を呼び出すことが可能です。
    
