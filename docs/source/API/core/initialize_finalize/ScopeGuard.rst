@@ -92,8 +92,7 @@
 - Kokkos バージョン 3.7以来、 ``ScopeGuard`` は与えられた引数を無条件に`Kokkos::initialize <initialize.html#kokkosinitialize>`_　
   に転送し、それは、それらが同じ必須条件を持つことを
   意味します。  バージョン3.7まで、 ``ScopeGuard``は、
- ``Kokkos::is_initialized()`` が 　``false``　であった場合にのみ、そのコンストラクタにおいて ``Kokkos::initialize`` を呼び出しており、
- それは、そのコンストラクタにおいて、
+ ``Kokkos::is_initialized()`` が 　``false``　であった場合にのみ、そのコンストラクタにおいて ``Kokkos::initialize`` を呼び出しており、それは、そのコンストラクタにおいて、
 　``Kokkos::initialize``　を呼び出した場合にのみ、``Kokkos::finalize``　をそのデストラクタにおいて呼び出していました。
 
   古いビヘイビアについてのサポートを停止しましが。それが実際に必要であるとお考えでしたら、そう考えて構いません:
