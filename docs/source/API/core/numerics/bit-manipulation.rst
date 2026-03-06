@@ -1,25 +1,25 @@
-Bit manipulation
+ビット操作
 ================
 
-.. role::cpp(code)
+.. ロール::cpp(code)
     :language: cpp
 
-.. role:: strike
-    :class: strike
+.. ロール:: ストライク
+    :クラス: ストライク
 
 .. _KokkosBitManipulation: https://github.com/kokkos/kokkos/blob/4.1.00/core/src/Kokkos_BitManipulation.hpp
 
-.. |KokkosBitManipulation| replace:: ``<Kokkos_BitManipulation.hpp>``
+.. |KokkosBitManipulation| 置換:: ``<Kokkos_BitManipulation.hpp>``
 
 .. _StandardLibraryHeaderBit: https://en.cppreference.com/w/cpp/header/bit
 
-.. |StandardLibraryHeaderBit| replace:: ``<bit>``
+.. |StandardLibraryHeaderBit| 置換:: ``<bit>``
 
-Defined in header |KokkosBitManipulation|_ which is included from ``<Kokkos_Core.hpp>``
+ ``<Kokkos_Core.hpp>``に含まれる ヘッダー　 |KokkosBitManipulation|_ に定義。
 
-Provides function templates from the standard library header |StandardLibraryHeaderBit|_ (since C++20).
+標準ライブラリヘッダー |StandardLibraryHeaderBit|_ から関数テンプレートを提供します(C++20　以降)。
 
-Bit manipulation function templates are defined in the ``Kokkos::`` namespace since Kokkos 4.1
+ Kokkos 4.1ビット演算関数テンプレートは、Kokkos 4.1以降、Kokkos:: 名前空間で定義されています。
 
 .. _bit_cast: https://en.cppreference.com/w/cpp/numeric/bit_cast
 
@@ -74,18 +74,18 @@ Bit manipulation function templates are defined in the ``Kokkos::`` namespace si
 .. |popcount| replace:: ``popcount``
 
 ================== ============================================================
-|bit_cast|_        reinterpret the object representation of one type as that of another (see note below)
-|byteswap|_        reverses the bytes in the given integer value 
-|has_single_bit|_  checks if a number is an integral power of two 
-|bit_ceil|_        finds the smallest integral power of two not less than the given value
-|bit_floor|_       finds the largest integral power of two not greater than the given value
-|bit_width|_       finds the smallest number of bits needed to represent the given value
-|rotl|_            computes the result of bitwise left-rotation
-|rotr|_            computes the result of bitwise right-rotation
-|countl_zero|_     counts the number of consecutive 0 bits, starting from the most significant bit
-|countl_one|_      counts the number of consecutive 1 bits, starting from the most significant bit
-|countr_zero|_     counts the number of consecutive 0 bits, starting from the least significant bit
-|countr_one|_      counts the number of consecutive 1 bits, starting from the least significant bit
+|bit_cast|_        あるタイプのオブジェクト表現を別のタイプのものとして再解釈します　(下記の注参照)
+|byteswap|_        与えられた整数値のバイトを反転します
+|has_single_bit|_  数が2の整数乗であるかどうかを検証します
+|bit_ceil|_        与えられた値より小さい2の最小積分べき乗を求めます
+|bit_floor|_       与えられた値より大きくない2の最大の積分冪を求めます
+|bit_width|_       与えられた値を表現するために必要な最小ビット数を見つけます
+|rotl|_            ビットごとに左回転した結果を計算します。
+|rotr|_            ビットごとに右回転した結果を計算します。
+|countl_zero|_     最上位ビットから連続した0ビットの数を数えます
+|countl_one|_      最上位ビットから連続した1ビットの数を数えます
+|countr_zero|_     連続した0ビットの数を、下位ビットから数えます
+|countr_one|_      counts the number of consecutive 1 bits, starting from the least significant bit下位ビットから連続した1ビットの数を数えます
 |popcount|_        counts the number of 1 bits in an unsigned integer
 ================== ============================================================
 
