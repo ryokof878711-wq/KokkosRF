@@ -309,7 +309,7 @@
 
    :tparam IntType: 整数型
 
-   :param space: 
+   :param space: スクラッチメモリハンドル
      一般的には、``TeamPolicy`` カーネル内の、:cpp:func:`team_shmem`, :cpp:func:`team_scratch`, または、 :cpp:func:`thread_scratch` から返されます。
 
    :param extents: Extents of the :cpp:class:`View`.
@@ -584,7 +584,7 @@
 
 .. cpp:function:: constexpr bool is_allocated() const;
 
-   :return: ビューが、有効なメモリ位置付けを指す場合には、真。
+   :return:ビュ ーが、有効なメモリ位置付けを指す場合には、真。
 
    この関数は、管理ビューと管理対象外ビューの両方で機能します。
    管理対象外ビューでは、参照されるアドレスが有効であることが保証されるのではなく、単にヌルポインタでないことのみが保証されます。
@@ -633,7 +633,7 @@ mdspanへの変換
 
 .. _api-view-assignment:
 
-代入ルール
+代入規則
 ----------------
 
 代入規則は、代入演算子とコピーコンストラクタの両方に適用されます。
