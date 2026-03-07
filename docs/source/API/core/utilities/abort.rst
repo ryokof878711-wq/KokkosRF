@@ -17,6 +17,6 @@
 
 .. _KokkosAbort: https://github.com/kokkos/kokkos/blob/4.2.00/core/src/Kokkos_Abort.hpp
 
-.. |KokkosAbort| replace:: ``<Kokkos_Abort.hpp>``
+.. |KokkosAbort| :: ``<Kokkos_Abort.hpp>``
 
 * Since バージョン　4.2　より、  ``<Kokkos_Core.hpp>``　の代わりに、|KokkosAbort|_　が含まれる場合があります。
