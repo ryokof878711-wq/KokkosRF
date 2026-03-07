@@ -44,15 +44,15 @@
 
    * 有効な引数は、以下の型です:
 
-     - 真である　``std::pair<iType,iType>`` with ``std::is_integral<iType>::value`` 。
+     -  ``std::is_integral<iType>::value`` を伴う、真である　``std::pair<iType,iType>`` 。
 
-     - 真である　``Kokkos::pair<iType,iType>`` with ``std::is_integral<iType>::value`` 。
+     -  ``std::is_integral<iType>::value`` を伴う、真である　``Kokkos::pair<iType,iType>`` 。
 
-     - 真である　``iType`` with ``std::is_integral<iType>::value`` 。
+     - 　``std::is_integral<iType>::value`` を伴う、真である　``iType`` 。
 
      - ``std::remove_const_t< decltype(``\ |KokkosAll|_ ``)>``
 
-   *  ``r``\ th 引数 ``arg_r`` がis of type ``std::pair<iType,iType>`` または ``Kokkos::pair<iType,iType>`` の型である場合には、以下を満たす必要があります:
+   *  ``r``\ th 引数 ``arg_r`` が 　``std::pair<iType,iType>`` または ``Kokkos::pair<iType,iType>`` の型である場合には、以下を満たす必要があります:
 
      - ``arg_r.first >= 0``
 
