@@ -315,6 +315,6 @@ Kokkos　は、利便性型特性　``Kokkos::is_execution_space<T>``　を提�
 
 * ``template<class MS> struct is_execution_space;``: クラスが実行空間であるかどうかを確認するための型特性。
 
-* ``template<class S1, class S2> struct SpaceAccessibility;``: は、2つのスペースが互換性があるか（割り当て可能、deep_copy可能、アクセス可能）を確認するための型特性。 ( |KokkosSpaceAccessibility|_　を参照。)
+* ``template<class S1, class S2> struct SpaceAccessibility;``: 2つのスペースが互換性があるか（割り当て可能、deep_copy可能、アクセス可能）を確認するための型特性。 ( |KokkosSpaceAccessibility|_　を参照。)
 
 * ``bool operator==(const execution_space& lhs, const execution_space& rhs)``: 2つの空間インスタンス（同じ型）が同一であるかどうかをテスト。
