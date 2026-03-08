@@ -18,7 +18,7 @@ class basic_simd;
 
 ### Template Parameters
 
-The first template parameter `T` should be a C++ fundamental type for which the current platform supports vector intrinsics. Kokkos supports the following types for `T`:
+The first template parameter `T` should be a C++ fundamental type for which the current platform supports vector intrinsics. Kokkos supports the following types for `T`:最初のテンプレートパラメータ `T` は、現在のプラットフォームがベクトル組み込み関数をサポートする C++ の基本型である必要があります。Kokkos は `T` に対して以下の型をサポートしています：
  - `float`
  - `double`
  - `std::int32_t`
