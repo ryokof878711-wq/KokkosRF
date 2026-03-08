@@ -28,7 +28,7 @@ library mathematical functions, such as ``fabs``, ``sqrt``, and ``sin``.
 
    numerics/bit-manipulation.md
 
-ヘッダー ``<Kokkos_BitManipulation.hpp>`` は、is a backport of the C++20 標準ライブラリヘッダー ``<bit>`` のバックポートであり、
+ヘッダー ``<Kokkos_BitManipulation.hpp>`` は、 C++20 標準ライブラリヘッダー ``<bit>`` のバックポートであり、
 個々のビットおよびビットシーケンスにアクセス、操作および処理するためのいくつかの関数テンプレートを提供します。
 
 .. toctree::
