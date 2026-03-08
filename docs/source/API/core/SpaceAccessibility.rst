@@ -1,12 +1,12 @@
 空間アクセシビリティ
 ===================
 
-.. role::cpp(code)
+.. ロール::cpp(code)
     :language: cpp
 
 .. _ExecutionSpace: execution_spaces.html#executionspaceconcept
 
-.. |ExecutionSpace| replace:: ``ExecutionSpace``
+.. |ExecutionSpace| 置換:: ``ExecutionSpace``
 
 .. _MemorySpace: memory_spaces.html#memoryspaceconcept
 
