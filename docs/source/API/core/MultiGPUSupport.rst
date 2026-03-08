@@ -35,7 +35,7 @@ CUDAバックエンドについては、ユーザーは　``cudaStream_t``　オ
     cudaSetDevice(N);
     cudaStreamCreate(&stream);
 
-    // ストリームを保証するためにスコープ実行領域を特定。
+    // 実行空間の範囲を指定し、
     // 実行空間　*後に*　破棄。
     {
       // 実行空間を作成。
@@ -65,7 +65,7 @@ HIP backend　について、  CUDAを使うなど、ユーザーは、``hipStre
     int n_devices;
     hipGetDeviceCount(&n_devices);
 
-    // 0 <= N < n_devices　を選択。
+    //　0 <= N < n_devices　を選択。
     int N = ...;
 
     // デバイス N　上にストリームを作成。
