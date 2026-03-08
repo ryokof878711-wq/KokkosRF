@@ -1,6 +1,6 @@
 # 階層的並列処理
 
-本章では、Kokkos　を使用して複数のレベルの共有メモリ並列性を活用する方法について説明します。　これらのレベルには、スレッドチーム、チーム内のスレッド、およびベクトルレーンが含まれます。 これらの並列処理レベルをネストし、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　および　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。各レベルで　[`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce)　または　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。 構文は実行ポリシーのみが異なり、これは`parallel_*`　演算の最初の引数です。Kokkos　は、また "scratch pad" メモリを公開しており、スレッド固有およびチーム固有の割り当てを提供します。
+本章では、Kokkos　を使用して複数のレベルの共有メモリ並列性を活用する方法について説明します。　これらのレベルには、スレッドチーム、チーム内のスレッド、およびベクトルレーンが含まれます。 これらの並列処理レベルをネストし、[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　および　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。各レベルで　[`parallel_reduce()`](../API/core/parallel-dispatch/parallel_reduce)　または　[`parallel_scan()`](../API/core/parallel-dispatch/parallel_scan)　を実行できます。 構文は実行ポリシーのみが異なり、これは　`parallel_*`　演算の最初の引数です。Kokkos　は、また "scratch pad" メモリを公開しており、スレッド固有およびチーム固有の割り当てを提供します。
 
 ## モチベーション
 
