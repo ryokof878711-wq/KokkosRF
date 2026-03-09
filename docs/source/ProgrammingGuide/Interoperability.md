@@ -122,7 +122,7 @@ void MyKokkosFunction(double* a, const double** b, int n, int m) {
 }
 ```
 
-あるいは、外部割り当てを直接参照するビューを作成することもできます。 そのデータが多次元ビューである場合、レイアウトを明示的に指定することが重要です。さらに、すべてのデータは同じ割り当ての一部でなければなりません。
+代わりに、外部割り当てを直接参照するビューを作成することもできます。 そのデータが多次元ビューである場合、レイアウトを明示的に指定することが重要です。さらに、すべてのデータは同じ割り当ての一部でなければなりません。
 
 ```c++
 void MyKokkosFunction(int* a, const double* b, int n, int m) {
@@ -132,7 +132,7 @@ void MyKokkosFunction(int* a, const double* b, int n, int m) {
                MemoryTraits<Unmanaged>> t_3d_view;
   // Unmanaged views cannot have labels管理対象外のビューのラベル保持は不可能
 
-  // Create a 1D view of the external allocation外部割り当ての1Dビューを作成
+  // 外部割り当ての1Dビューを作成
   t_1d_view d_a(a,n);
 
   // 2番目の外部割り当ての3Dビューを作成
