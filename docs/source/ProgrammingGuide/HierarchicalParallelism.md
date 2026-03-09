@@ -48,7 +48,7 @@ Kokkosは、　[`Kokkos::TeamPolicy`](../API/core/policies/TeamPolicy)　実行�
 Kokkos::TeamPolicy<>
         policy( league_size, team_size );
 
-// Using  a specific execution space to特定実行を使用
+// Using  a specific execution space to特定実行空間を使用
 // チームサイズを選択する　n_workset　並列処理を、Kokkos を使用して実行
 Kokkos::TeamPolicy<ExecutionSpace>
         policy( league_size, Kokkos::AUTO() );
@@ -155,7 +155,7 @@ struct functor構造体ファンクタ {
 ```
 [`TeamPolicy`](../API/core/policies/TeamPolicy) の `set_scratch_size` 関数は、2つまたは3つの引数を取ります。 最初の引数は、特定のサイズが要求されるスクラッチ階層内のレベルを指定します。 様々なレベルには、様々名制約があります。 一般的に、第1レベルは数十キロバイト程度に制限され、おおむねL1キャッシュサイズに対応します。 第2レベルは、数ギガバイト規模の全チームに対する集計値を取得するために使用でき、これは高帯域メモリの空き領域に対応します。 第3レベルは、主にノード内の容量メモリに依存します。 2番目と3番目の引数は、スクラッチメモリのスレッド単位またはチーム単位のサイズです。
 
-ここにいくつかの例があります:
+以下にいくつかの例があります:
 
 ```c++
 TeamPolicy<> policy_1 = TeamPolicy<>(league_size, team_size).
@@ -214,7 +214,7 @@ Kokkos::parallel_for(Kokkos::TeamPolicy<>(league_size,team_size).
 ただし、通常、パフォーマンスが向上するため、リリースビルドでは、"capture by reference"　が推奨されます。
 ラムダ式が　[`TeamThreadRange`](../API/core/policies/TeamThreadRange)　ループ内で`const`と見なされるため、コンパイラは、コンパイル時に　`const`　違反として不正なアクセスを検出します。
 
-The simplest use case is to have another [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) nested inside a kernel.最も単純な使用例は、カーネル内に別の　[`parallel_for()`](../API/core/parallel-dispatch/parallel_for)　をネストさせることです。
+The simplest use case is to have another [`parallel_for()`](../API/core/parallel-dispatch/parallel_for) nested inside a kernelー
 
 ```c++
 Kokkos::parallel_for　を使用;
