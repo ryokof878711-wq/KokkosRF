@@ -1,7 +1,7 @@
-Deprecations
+非推奨
 ************
 
-Deprecated in Kokkos 4.x
+Deprecated in Kokkos 4.x　において非推奨
 ===========================
 
 Deprecated in Kokkos 4.7
